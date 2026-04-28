@@ -1,0 +1,34 @@
+<section
+  class="app-window"
+  [class.is-active]="window.active"
+  [class.is-hidden]="window.minimized"
+  [style.width.px]="window.width"
+  [style.height.px]="window.height"
+  [style.top.px]="window.top"
+  [style.left.px]="window.left"
+  (mousedown)="onActivate()"
+>
+  <header class="app-window__titlebar" (mousedown)="onStartDrag($event)">
+    <div class="app-window__title">
+      <span
+        class="material-icons window-icon my-1"
+        [style.background]="getTheme(window.action).bg"
+        [style.color]="getTheme(window.action).color"
+      >
+        {{ getTheme(window.action).icon }}
+      </span>
+      <span>{{ window.title }}</span>
+    </div>
+    <div class="app-window__actions">
+      <button type="button" (click)="onMinimize()">_</button>
+      <button type="button" (click)="onMaximize()">
+        {{ window.maximized ? "❐" : "☐" }}
+      </button>
+      <button type="button" class="danger" (click)="onClose()">X</button>
+    </div>
+  </header>
+
+  <div class="app-window__body">
+    <ng-container *ngComponentOutlet="window.component"></ng-container>
+  </div>
+</section>

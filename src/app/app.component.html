@@ -1,0 +1,8 @@
+<p-toast position="top-right"></p-toast>
+
+<router-outlet></router-outlet>
+<p-confirmDialog></p-confirmDialog>
+
+<ng-container *ngIf="loader.isLoading | async">
+  <app-spinner></app-spinner>
+</ng-container>

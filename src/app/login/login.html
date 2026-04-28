@@ -1,0 +1,74 @@
+<section>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="avatar mb-5">
+      <img
+        src="/photos/logoHR.png"
+        alt="Logo"
+        class="border border-3 border-danger rounded-circle"
+      />
+    </div>
+
+    <div class="password">
+      <input
+        type="text"
+        formControlName="username"
+        class="form-control"
+        placeholder="اسم المستخدم"
+        dir="rtl"
+      />
+      <div
+        *ngIf="
+                loginForm.get('username')?.touched &&
+                loginForm.get('username')?.invalid
+              "
+        class="text-danger small mt-1 text-end"
+      >
+        اسم المستخدم مطلوب
+      </div>
+    </div>
+    <div class="password">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+        class="form-control ps-5 text-end"
+        placeholder="كلمة المرور"
+        dir="rtl"
+      />
+      <button
+        type="button"
+        class="btn btn-link p-0 position-absolute start-0 ms-3"
+        style="top: 50%; transform: translateY(-10%)"
+        (click)="togglePassword()"
+        tabindex="-1"
+      >
+        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+      </button>
+      <div
+        *ngIf="
+                loginForm.get('password')?.touched &&
+                loginForm.get('password')?.invalid
+              "
+        class="text-danger small mt-1 text-end"
+      >
+        كلمة المرور مطلوبة
+      </div>
+    </div>
+    <div class="d-grid">
+      <button
+        class="power-btn btn btn-warning" 
+        type="submit"
+      >
+        <i class="bi bi-power"></i>
+      </button>
+    </div>
+  </form>
+  <div class="bottom-right">
+    <span class="text-muted"> جميع الحقوق محفوظة لشركة أوبشن لتطوير البرمجيات © 2026
+        </span> 
+  </div>
+  <div class="bottom-left">
+        <span class="text-muted">Software Version 1.0.0</span>
+
+
+    </div>
+</section>
