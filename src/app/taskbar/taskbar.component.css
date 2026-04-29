@@ -28,7 +28,7 @@
 }
 
 .taskbar__logo {
-  height: 55px;
+  height: 70px;
   cursor: pointer;
   transition: transform 160ms ease, background-color 160ms ease;
 }
