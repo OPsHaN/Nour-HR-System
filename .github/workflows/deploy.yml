@@ -24,7 +24,7 @@ jobs:
 
       # 3. Install deps
       - name: Install dependencies
-        run: npm ci
+        run:  npm install --force
 
       # 4. Build Angular
       - name: Build
