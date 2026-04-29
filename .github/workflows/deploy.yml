@@ -43,7 +43,7 @@ jobs:
 
       # 7. Build on Vercel (optimized)
       - name: Vercel Build
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       # 8. Deploy Preview
       - name: Deploy Preview
