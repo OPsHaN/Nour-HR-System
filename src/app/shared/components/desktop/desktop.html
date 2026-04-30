@@ -1,0 +1,26 @@
+<div class="desktop" [class.dark]="isDark">
+  <div class="desktop__surface">
+      <h3 class="desktop__greeting">أهلا و سهلاً بك يا {{ userName }}</h3>
+    <app-shortcuts (shortcutClick)="openShortcut($event)"></app-shortcuts>
+    <div class="Logo"><img src="/photos/nour.png" alt="Logo"></div>
+
+    @for (window of windows; track trackByWindowId($index, window)) {
+      <app-window
+        [window]="window"
+        (activate)="activateWindow($event)"
+        (minimize)="minimizeWindow($event)"
+        (maximize)="toggleMaximize($event)"
+        (close)="closeWindow($event)"
+        (startDrag)="startDrag($event)"
+      ></app-window>
+    }
+  </div>
+
+  <app-taskbar
+    [windows]="windows"
+    [isDark]="isDark"
+    (taskClick)="toggleTask($event)"
+    (themeChange)="handleThemeChange($event)"
+  ></app-taskbar>
+</div>
+

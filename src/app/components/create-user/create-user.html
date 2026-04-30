@@ -1,0 +1,38 @@
+<div class="panel">
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+
+    <input
+      type="text"
+      placeholder="Username"
+      formControlName="Username"
+    />
+
+    <input
+      type="password"
+      placeholder="Password"
+      formControlName="Password"
+    />
+
+    <input
+      type="text"
+      placeholder="Name"
+      formControlName="Name"
+    />
+
+    <select formControlName="Role">
+      <option value="">Select Role</option>
+      <option value="HR">HR</option>
+      <option value="Admin">Admin</option>
+      <option value="User">User</option>
+    </select>
+
+    <button type="submit" [disabled]="loading" >
+      {{ loading ? 'جارى التسجيل...' : 'تسجيل' }}
+    </button>
+
+    <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+  </form>
+</div>

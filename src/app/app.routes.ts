@@ -10,12 +10,12 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('../app/login/login').then((m) => m.Login),
+      import('./components/login/login').then((m) => m.Login),
   },
   {
     path: 'desktop',
     loadComponent: () =>
-      import('../app/desktop/desktop').then((m) => m.Desktop),
+      import('./shared/components/desktop/desktop').then((m) => m.Desktop),
     canActivate: [AuthGuard],
   },
 ];

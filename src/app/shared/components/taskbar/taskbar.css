@@ -1,0 +1,188 @@
+.taskbar {
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 5px 15px;
+  border: 1px solid var(--taskbar-border);
+  background: var(--taskbar);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.taskbar__start {
+  min-width: 88px;
+  min-height: 38px;
+  padding: 0 16px;
+  font-weight: 700;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  color: inherit;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.taskbar__logo {
+  height: 70px;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.taskbar__start:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.taskbar__tasks {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+  overflow: auto;
+}
+
+.taskbar__task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 0 14px;
+  white-space: nowrap;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  color: inherit;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.taskbar__task:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.taskbar__task.is-active {
+  background: rgba(49, 120, 246, 0.18);
+}
+
+.taskbar__tray {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.theme-toggle,
+.clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.theme-toggle input {
+  accent-color: var(--accent);
+}
+
+.clock {
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0;
+  min-width: 72px;
+}
+
+.clock small {
+  color: var(--text-soft);
+}
+
+.window-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff, #cadbf8);
+  color: #133469;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.w11-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* hide checkbox */
+.w11-toggle input {
+  display: none;
+}
+
+/* track */
+.slider {
+  width: 44px;
+  height: 24px;
+  background: #cfcfcf;
+  border-radius: 999px;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+}
+
+/* thumb */
+.thumb {
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* checked state */
+.w11-toggle input:checked + .slider {
+  background: #4f9cff;
+}
+
+.w11-toggle input:checked + .slider .thumb {
+  transform: translateX(20px);
+}
+
+/* label */
+.label {
+  font-size: 14px;
+  color: #333;
+}
+
+.power-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: 0.2s ease;
+}
+
+.power-btn:hover {
+  transform: scale(1.05);
+}

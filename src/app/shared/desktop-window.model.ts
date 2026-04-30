@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { WindowAction } from '../shortcuts/shortcuts.component';
+import { WindowAction } from './components/shortcuts/shortcuts';
 
 export interface DesktopWindow {
   id: number;
