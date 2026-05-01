@@ -6,8 +6,6 @@ import {
 } from "@angular/core";
 
 import { Router, RouterOutlet } from "@angular/router";
-import { MessageService } from "primeng/api";
-import { Subject } from "rxjs";
 import { LoadingService } from "./services/loading.service";
 import { Toast } from "primeng/toast";
 import { SpinnerComponent } from "./shared/spinner/spinner.component";
@@ -20,7 +18,6 @@ import { ConfirmDialog } from "primeng/confirmdialog";
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.css",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MessageService],
 })
 export class AppComponent {
 

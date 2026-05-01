@@ -1,17 +1,21 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { MessageService } from "primeng/api";
-import { ToastModule } from "primeng/toast";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
 import { finalize } from "rxjs";
 
 @Component({
   selector: "app-login",
-    standalone: true,
+  standalone: true,
 
-  imports: [CommonModule, ReactiveFormsModule, ToastModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: "./login.html",
   styleUrl: "./login.css",
 })
@@ -53,8 +57,7 @@ export class Login {
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
-
-          console.log(res.token)
+          console.log(res.token);
 
           // حفظ البيانات في localStorage
           localStorage.setItem("name", res.name);
@@ -62,7 +65,7 @@ export class Login {
           // localStorage.setItem("img", res.Img || "");
           localStorage.setItem("role", res.role);
 
-         this.authService.onLoginSuccess(res.token);
+          this.authService.onLoginSuccess(res.token);
 
           this.showSuccess("تم تسجيل الدخول بنجاح");
           this.router.navigate(["/desktop"]);
@@ -80,8 +83,7 @@ export class Login {
       });
   }
 
-
-    showError(msg: string) {
+  showError(msg: string) {
     this.messageService.add({
       severity: "error",
       // summary: "خطأ",
@@ -90,8 +92,7 @@ export class Login {
     });
   }
 
-
-    showSuccess(msg: string) {
+  showSuccess(msg: string) {
     this.messageService.add({
       severity: "success",
       // summary: "تم بنجاح",
@@ -99,6 +100,4 @@ export class Login {
       life: 3000,
     });
   }
-
-
 }

@@ -1,25 +1,17 @@
 import { HttpInterceptorFn } from "@angular/common/http";
 import { inject } from "@angular/core";
-import { Router } from "@angular/router";
-import { catchError, finalize, throwError } from "rxjs";
+import { catchError, throwError } from "rxjs";
 import { AuthService } from "../../services/auth.service";
-import { LoadingService } from "src/app/services/loading.service";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem("token");
   const authService = inject(AuthService);
-  const loader = inject(LoadingService);
 
-  // ✅ استثناء login و logout من الـ interceptor
   const skipAuth =
     req.url.includes("login") ||
     req.url.includes("logout");
-    
-  if (skipAuth) {
-    return next(req);
-  }
 
-  loader.show();
+  if (skipAuth) return next(req);
 
   let clonedReq = req;
   if (token) {
@@ -33,12 +25,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(clonedReq).pipe(
     catchError((error) => {
       if (error.status === 401) {
-        if (!skipAuth) {
-          authService.logout(); // هنا redirect لل login
-        }
+        authService.logout();
       }
       return throwError(() => error);
-    }),
-    finalize(() => loader.hide())
+    })
   );
 };

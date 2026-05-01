@@ -1,12 +1,5 @@
-import { inject, Injectable } from "@angular/core";
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpHandlerFn,
-  HttpInterceptor,
-  HttpInterceptorFn,
-  HttpRequest,
-} from "@angular/common/http";
+import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
+import { inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { finalize } from "rxjs";
 import { LoadingService } from "src/app/services/loading.service";
@@ -34,6 +27,3 @@ export const loadingInterceptor: HttpInterceptorFn = (
     })
   );
 };
-
-
-

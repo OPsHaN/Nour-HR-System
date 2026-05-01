@@ -4,7 +4,7 @@ import {
   PLATFORM_BROWSER_ID,
   getDOM,
   setRootDomAdapter
-} from "./chunk-ZVNL2S2D.js";
+} from "./chunk-FZNNPS64.js";
 import {
   XhrFactory,
   parseCookieValue
@@ -45,7 +45,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-2WEJVZXG.js";
+} from "./chunk-LVESTRRP.js";
 import {
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
@@ -1221,4 +1221,4 @@ export {
   platformBrowser,
   BrowserModule
 };
-//# sourceMappingURL=chunk-NKJQIH7C.js.map
+//# sourceMappingURL=chunk-OTPYG4GX.js.map

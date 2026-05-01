@@ -20,13 +20,13 @@
 /* 🔥 form container بنفس list */
 .form {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* 🔥 نفس شكل list__item */
 .form input,
 .form select {
-  padding: 14px 16px;
+  padding: 10px 10px;
   border: 1px solid var(--surface-border);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.08);
@@ -60,22 +60,84 @@
   background: rgba(22, 119, 255, 0.35);
 }
 
+.form select option {
+  background: var(--surface);
+}
+
 .form button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* messages بنفس الستايل */
-.success {
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(82, 196, 26, 0.15);
-  border: 1px solid rgba(82, 196, 26, 0.4);
+.submit-btn {
+  width: 50%;
+  margin:auto;
+  
 }
 
-.error {
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(255, 77, 79, 0.15);
-  border: 1px solid rgba(255, 77, 79, 0.4);
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.field label {
+  color: var(--text-soft);
+  padding-inline-start: 6px;
+}
+
+
+.password-field .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-inline-end: 40px; /* مساحة للأيقونة */
+}
+
+/* أيقونة العين */
+.password-field i {
+  position: absolute;
+  left: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-soft);
+  transition: 0.2s;
+}
+
+.password-field i:hover {
+  color: #1677ff;
+}
+
+/* grid layout */
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* يخلي العنصر ياخد الصف كله */
+.full {
+  grid-column: span 2;
+}
+
+/* field */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* responsive (مهم 🔥) */
+@media (max-width: 600px) {
+  .grid-form {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: span 1;
+  }
 }

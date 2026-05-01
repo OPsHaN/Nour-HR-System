@@ -1,38 +1,77 @@
 <div class="panel">
+  <form [formGroup]="form" (ngSubmit)="Submit()" class="form grid-form">
+    <!-- Username -->
+    <div class="field">
+      <label
+        >إسم المستخدم
+  <span class="required text-danger" *ngIf="isRequired('Username')">*</span>
+</label
+      >
+      <input type="text" formControlName="Username" />
+    </div>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <!-- Password -->
+    <div class="field password-field">
+      <label
+        >الرقم السرى
+        <span
+          class="required text-danger"
+          *ngIf="isRequired('Password')"
+        >
+          *
+        </span></label
+      >
 
-    <input
-      type="text"
-      placeholder="Username"
-      formControlName="Username"
-    />
+      <div class="input-wrapper">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="Password"
+          placeholder="الرقم السرى"
+        />
 
-    <input
-      type="password"
-      placeholder="Password"
-      formControlName="Password"
-    />
+        <i
+          class="pi"
+          [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
+          (click)="togglePassword()"
+        ></i>
+      </div>
+    </div>
 
-    <input
-      type="text"
-      placeholder="Name"
-      formControlName="Name"
-    />
+    <!-- Name -->
+    <div class="field">
+      <label
+        >الاسم الكامل
+        <span
+          class="required text-danger"
+          *ngIf="isRequired('Name')"
+        >
+          *
+        </span></label
+      >
+      <input type="text" formControlName="Name" />
+    </div>
 
-    <select formControlName="Role">
-      <option value="">Select Role</option>
-      <option value="HR">HR</option>
-      <option value="Admin">Admin</option>
-      <option value="User">User</option>
-    </select>
+    <!-- Role -->
+    <div class="field">
+      <label
+        >منصب الموظف
+        <span
+          class="required text-danger"
+          *ngIf="isRequired('Role')"
+        >
+          *
+        </span></label
+      >
+      <select formControlName="Role">
+        <option value="">اختر المنصب</option>
+        <option value="HR">HR</option>
+        <option value="Admin">Admin</option>
+        <option value="User">User</option>
+      </select>
+    </div>
 
-    <button type="submit" [disabled]="loading" >
+    <button type="submit" [disabled]="loading || form.invalid" class="submit-btn full">
       {{ loading ? 'جارى التسجيل...' : 'تسجيل' }}
     </button>
-
-    <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
-    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
-
   </form>
 </div>
