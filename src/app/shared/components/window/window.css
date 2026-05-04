@@ -68,7 +68,7 @@
 }
 
 .app-window__actions .danger {
-  background: rgba(244, 84, 84, 0.2);
+  /* background: rgba(244, 84, 84, 0.2); */
   color: var(--danger);
 }
 

@@ -2,7 +2,7 @@ import {
   A,
   FilterMatchMode,
   G,
-  Y,
+  Y2 as Y,
   _t,
   a,
   i,
@@ -12,7 +12,7 @@ import {
   s,
   s2,
   z2 as z
-} from "./chunk-XVHYPLNJ.js";
+} from "./chunk-J2D3YFFI.js";
 import {
   DOCUMENT,
   Injectable,
@@ -364,7 +364,7 @@ var S = { defaults: { variable: { prefix: "p", selector: ":root,:host", excluded
 } };
 
 // node_modules/@primeuix/styles/dist/base/index.mjs
-var style = "\n    *,\n    ::before,\n    ::after {\n        box-sizing: border-box;\n    }\n\n    .p-collapsible-enter-active {\n        animation: p-animate-collapsible-expand 0.2s ease-out;\n        overflow: hidden;\n    }\n\n    .p-collapsible-leave-active {\n        animation: p-animate-collapsible-collapse 0.2s ease-out;\n        overflow: hidden;\n    }\n\n    @keyframes p-animate-collapsible-expand {\n        from {\n            grid-template-rows: 0fr;\n        }\n        to {\n            grid-template-rows: 1fr;\n        }\n    }\n\n    @keyframes p-animate-collapsible-collapse {\n        from {\n            grid-template-rows: 1fr;\n        }\n        to {\n            grid-template-rows: 0fr;\n        }\n    }\n\n    .p-disabled,\n    .p-disabled * {\n        cursor: default;\n        pointer-events: none;\n        user-select: none;\n    }\n\n    .p-disabled,\n    .p-component:disabled {\n        opacity: dt('disabled.opacity');\n    }\n\n    .pi {\n        font-size: dt('icon.size');\n    }\n\n    .p-icon {\n        width: dt('icon.size');\n        height: dt('icon.size');\n    }\n\n    .p-overlay-mask {\n        background: var(--px-mask-background, dt('mask.background'));\n        color: dt('mask.color');\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n    }\n\n    .p-overlay-mask-enter-active {\n        animation: p-animate-overlay-mask-enter dt('mask.transition.duration') forwards;\n    }\n\n    .p-overlay-mask-leave-active {\n        animation: p-animate-overlay-mask-leave dt('mask.transition.duration') forwards;\n    }\n\n    @keyframes p-animate-overlay-mask-enter {\n        from {\n            background: transparent;\n        }\n        to {\n            background: var(--px-mask-background, dt('mask.background'));\n        }\n    }\n    @keyframes p-animate-overlay-mask-leave {\n        from {\n            background: var(--px-mask-background, dt('mask.background'));\n        }\n        to {\n            background: transparent;\n        }\n    }\n\n    .p-anchored-overlay-enter-active {\n        animation: p-animate-anchored-overlay-enter 300ms cubic-bezier(.19,1,.22,1);\n    }\n\n    .p-anchored-overlay-leave-active {\n        animation: p-animate-anchored-overlay-leave 300ms cubic-bezier(.19,1,.22,1);\n    }\n\n    @keyframes p-animate-anchored-overlay-enter {\n        from {\n            opacity: 0;\n            transform: scale(0.93);\n        }\n    }\n\n    @keyframes p-animate-anchored-overlay-leave {\n        to {\n            opacity: 0;\n            transform: scale(0.93);\n        }\n    }\n";
+var style = "\n    *,\n    ::before,\n    ::after {\n        box-sizing: border-box;\n    }\n\n    /* Non vue overlay animations */\n    .p-connected-overlay {\n        opacity: 0;\n        transform: scaleY(0.8);\n        transition:\n            transform 0.12s cubic-bezier(0, 0, 0.2, 1),\n            opacity 0.12s cubic-bezier(0, 0, 0.2, 1);\n    }\n\n    .p-connected-overlay-visible {\n        opacity: 1;\n        transform: scaleY(1);\n    }\n\n    .p-connected-overlay-hidden {\n        opacity: 0;\n        transform: scaleY(1);\n        transition: opacity 0.1s linear;\n    }\n\n    /* Vue based overlay animations */\n    .p-connected-overlay-enter-from {\n        opacity: 0;\n        transform: scaleY(0.8);\n    }\n\n    .p-connected-overlay-leave-to {\n        opacity: 0;\n    }\n\n    .p-connected-overlay-enter-active {\n        transition:\n            transform 0.12s cubic-bezier(0, 0, 0.2, 1),\n            opacity 0.12s cubic-bezier(0, 0, 0.2, 1);\n    }\n\n    .p-connected-overlay-leave-active {\n        transition: opacity 0.1s linear;\n    }\n\n    /* Toggleable Content */\n    .p-toggleable-content-enter-from,\n    .p-toggleable-content-leave-to {\n        max-height: 0;\n    }\n\n    .p-toggleable-content-enter-to,\n    .p-toggleable-content-leave-from {\n        max-height: 1000px;\n    }\n\n    .p-toggleable-content-leave-active {\n        overflow: hidden;\n        transition: max-height 0.45s cubic-bezier(0, 1, 0, 1);\n    }\n\n    .p-toggleable-content-enter-active {\n        overflow: hidden;\n        transition: max-height 1s ease-in-out;\n    }\n\n    .p-disabled,\n    .p-disabled * {\n        cursor: default;\n        pointer-events: none;\n        user-select: none;\n    }\n\n    .p-disabled,\n    .p-component:disabled {\n        opacity: dt('disabled.opacity');\n    }\n\n    .pi {\n        font-size: dt('icon.size');\n    }\n\n    .p-icon {\n        width: dt('icon.size');\n        height: dt('icon.size');\n    }\n\n    .p-overlay-mask {\n        background: dt('mask.background');\n        color: dt('mask.color');\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n    }\n\n    .p-overlay-mask-enter {\n        animation: p-overlay-mask-enter-animation dt('mask.transition.duration') forwards;\n    }\n\n    .p-overlay-mask-leave {\n        animation: p-overlay-mask-leave-animation dt('mask.transition.duration') forwards;\n    }\n\n    @keyframes p-overlay-mask-enter-animation {\n        from {\n            background: transparent;\n        }\n        to {\n            background: dt('mask.background');\n        }\n    }\n    @keyframes p-overlay-mask-leave-animation {\n        from {\n            background: dt('mask.background');\n        }\n        to {\n            background: transparent;\n        }\n    }\n";
 
 // node_modules/primeng/fesm2022/primeng-usestyle.mjs
 var _id = 0;
@@ -561,18 +561,12 @@ var ThemeProvider = class _ThemeProvider {
   // @todo define type for theme
   theme = signal(void 0, ...ngDevMode ? [{
     debugName: "theme"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   csp = signal({
     nonce: void 0
   }, ...ngDevMode ? [{
     debugName: "csp"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   isThemeChanged = false;
   document = inject(DOCUMENT);
   baseStyle = inject(BaseStyle);
@@ -660,59 +654,41 @@ var ThemeProvider = class _ThemeProvider {
 var PrimeNG = class _PrimeNG extends ThemeProvider {
   ripple = signal(false, ...ngDevMode ? [{
     debugName: "ripple"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   platformId = inject(PLATFORM_ID);
   /**
    * @deprecated Since v20. Use `inputVariant` instead.
    */
   inputStyle = signal(null, ...ngDevMode ? [{
     debugName: "inputStyle"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   inputVariant = signal(null, ...ngDevMode ? [{
     debugName: "inputVariant"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   overlayAppendTo = signal("self", ...ngDevMode ? [{
     debugName: "overlayAppendTo"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   overlayOptions = {};
   csp = signal({
     nonce: void 0
   }, ...ngDevMode ? [{
     debugName: "csp"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
+  /**
+   * Indicates whether the component should be rendered without styles.
+   *
+   * @experimental
+   * This property is not yet implemented. It will be available in a future release.
+   */
   unstyled = signal(void 0, ...ngDevMode ? [{
     debugName: "unstyled"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   pt = signal(void 0, ...ngDevMode ? [{
     debugName: "pt"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   ptOptions = signal(void 0, ...ngDevMode ? [{
     debugName: "ptOptions"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
+  }] : []);
   filterMatchModeOptions = {
     text: [FilterMatchMode.STARTS_WITH, FilterMatchMode.CONTAINS, FilterMatchMode.NOT_CONTAINS, FilterMatchMode.ENDS_WITH, FilterMatchMode.EQUALS, FilterMatchMode.NOT_EQUALS],
     numeric: [FilterMatchMode.EQUALS, FilterMatchMode.NOT_EQUALS, FilterMatchMode.LESS_THAN, FilterMatchMode.LESS_THAN_OR_EQUAL_TO, FilterMatchMode.GREATER_THAN, FilterMatchMode.GREATER_THAN_OR_EQUAL_TO],
@@ -942,4 +918,4 @@ export {
   PRIME_NG_CONFIG,
   providePrimeNG
 };
-//# sourceMappingURL=chunk-HK66CCMQ.js.map
+//# sourceMappingURL=chunk-6YQJDJ7W.js.map

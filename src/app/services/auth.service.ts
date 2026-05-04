@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { BehaviorSubject, Observable } from "rxjs";
 import { MessageService } from "primeng/api";
 
 export interface LoginRequest {
@@ -10,13 +10,12 @@ export interface LoginRequest {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AuthService {
+  private baseUrl = "https://hrnourtest.runasp.net/api/auth/";
 
-    private baseUrl = "https://hrnourtest.runasp.net/api/auth/";
-
-    private _isLoggedIn = new BehaviorSubject<boolean>(false);
+  private _isLoggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this._isLoggedIn.asObservable();
   private _userType = new BehaviorSubject<number>(0); // رقم الدور
   userType$ = this._userType.asObservable();
@@ -25,44 +24,42 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     public router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     const token = localStorage.getItem("token");
     if (token) {
       this._isLoggedIn.next(true);
       this.initUserTypeFromToken();
     }
-
   }
 
-getDecodedToken(): any {
-  const token = localStorage.getItem("token");
+  getDecodedToken(): any {
+    const token = localStorage.getItem("token");
 
-  if (!token) return null;
+    if (!token) return null;
 
-  const parts = token.split('.');
-  if (parts.length !== 3) return null; // مش JWT صحيح
+    const parts = token.split(".");
+    if (parts.length !== 3) return null; // مش JWT صحيح
 
-  const payload = parts[1];
+    const payload = parts[1];
 
-  try {
-    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-    const decodedPayload = atob(base64);
+    try {
+      const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+      const decodedPayload = atob(base64);
 
-
-    return JSON.parse(decodedPayload);
-  } catch (e) {
-    console.error("Invalid token format", e);
-    return null;
+      return JSON.parse(decodedPayload);
+    } catch (e) {
+      console.error("Invalid token format", e);
+      return null;
+    }
   }
-}
-  
+
   initUserTypeFromToken() {
-  const decoded = this.getDecodedToken();
-  if (decoded?.Type) {
-    this._userType.next(decoded.Type);
+    const decoded = this.getDecodedToken();
+    if (decoded?.Type) {
+      this._userType.next(decoded.Type);
+    }
   }
-}
 
   login(data: LoginRequest): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}login`, data);
@@ -72,7 +69,7 @@ getDecodedToken(): any {
     return this.http.post<any>(
       `${this.baseUrl}Regsiter
 `,
-      data
+      data,
     );
   }
 
@@ -134,5 +131,3 @@ getDecodedToken(): any {
     });
   }
 }
-
-

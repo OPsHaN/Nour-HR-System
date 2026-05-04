@@ -11,8 +11,8 @@ export const SHORTCUTS_CONFIG = {
     bg: "#ff4d4f",
     size: { width: 360, height: 500 },
   },
-  browser: {
-    title: "الموظفين",
+  employees: {
+    title: "المستخدمين",
     icon: "groups",
     bg: "#1677ff",
     size: { width: 860, height: 600 },

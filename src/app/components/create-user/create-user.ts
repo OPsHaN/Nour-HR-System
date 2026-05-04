@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { MessageService } from "primeng/api";
 import { Apiservice } from "src/app/services/api.service";
 
 @Component({
@@ -39,15 +38,14 @@ export class CreateUser {
     // Component initialization logic if needed
   }
 
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 
-togglePassword() {
-  this.showPassword = !this.showPassword;
-}
-
-isRequired(controlName: string): boolean {
-  const control = this.form.get(controlName);
-  return control?.hasValidator(Validators.required) ?? false;
-}
+  isRequired(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return control?.hasValidator(Validators.required) ?? false;
+  }
 
   Submit() {
     if (this.form.invalid) {

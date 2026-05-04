@@ -1,1 +1,130 @@
-<p>employees works!</p>
+<p-table
+  [value]="employees"
+  dataKey="id"
+  editMode="row"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[5,10,20]"
+  [tableStyle]="{ 'min-width': '60rem' }"
+  [responsiveLayout]="'scroll'"
+  [paginatorDropdownAppendTo]="'body'"
+  dir="rtl"
+>
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>إسم الموظف</th>
+      <th>إسم المستخدم</th>
+      <th>المنصب</th>
+      <th>الحالة</th>
+      <th>الإجراءات</th>
+    </tr>
+  </ng-template>
+
+  <!-- BODY -->
+  <ng-template pTemplate="body" let-emp let-editing="editing" let-ri="rowIndex">
+    <tr [pEditableRow]="emp">
+      <td>{{ ri + 1 }}</td>
+
+      <!-- NAME -->
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText [(ngModel)]="emp.name" />
+          </ng-template>
+          <ng-template pTemplate="output"> {{ emp.name }} </ng-template>
+        </p-cellEditor>
+      </td>
+
+      <!-- USERNAME -->
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText [(ngModel)]="emp.username" />
+          </ng-template>
+          <ng-template pTemplate="output"> {{ emp.username }} </ng-template>
+        </p-cellEditor>
+      </td>
+
+      <!-- ROLE -->
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <input pInputText [(ngModel)]="emp.role" />
+          </ng-template>
+          <ng-template pTemplate="output"> {{ emp.role }} </ng-template>
+        </p-cellEditor>
+      </td>
+
+      <!-- STATUS -->
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <select [(ngModel)]="emp.isActive">
+              <option [value]="true">نشيط</option>
+              <option [value]="false">غير نشيط</option>
+            </select>
+          </ng-template>
+
+          <ng-template pTemplate="output">
+            <p-tag
+              [value]="emp.isActive ? 'نشيط' : 'غير نشيط'"
+              [severity]="emp.isActive ? 'success' : 'danger'"
+            >
+            </p-tag>
+          </ng-template>
+        </p-cellEditor>
+      </td>
+
+      <!-- ACTIONS -->
+      <td>
+        <!-- Edit -->
+        <button
+          *ngIf="!editing"
+          pButton
+          icon="pi pi-pencil"
+          class="btn btn-sm btn-success mx-1"
+          pInitEditableRow
+        >
+          <i class="pi pi-pencil"></i>
+        </button>
+
+        <!-- Save -->
+        <button
+          *ngIf="editing"
+          pButton
+          icon="pi pi-check"
+          class="btn btn-sm btn-success mx-1"
+          (click)="onRowEditSave(emp)"
+        >
+          <i class="pi pi-check"></i>
+        </button>
+
+        <!-- Cancel -->
+        <button
+          *ngIf="editing"
+          pButton
+          icon="pi pi-times"
+          class="btn btn-sm btn-danger mx-1"
+          pCancelEditableRow
+        >
+          <i class="pi pi-times"></i>
+        </button>
+
+        <!-- Delete -->
+        <button
+          *ngIf="!editing"
+          pButton
+          icon="pi pi-trash"
+          class="btn btn-sm btn-danger mx-1"
+          (click)="confirmDelete(emp)"
+        >
+          <i class="pi pi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- <p-confirmDialog></p-confirmDialog> -->

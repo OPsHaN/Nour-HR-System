@@ -3,8 +3,8 @@ import {
   PrimeNG,
   ThemeProvider,
   providePrimeNG
-} from "./chunk-HK66CCMQ.js";
-import "./chunk-XVHYPLNJ.js";
+} from "./chunk-6YQJDJ7W.js";
+import "./chunk-J2D3YFFI.js";
 import "./chunk-FZNNPS64.js";
 import "./chunk-U44TYWUZ.js";
 import "./chunk-LVESTRRP.js";

@@ -17,7 +17,7 @@ export class Apiservice {
     return this.http.post(`${this.baseUrl}CreateUser`, userData);
   }
 
-  getAllUsers(pagesize: number, page: number) {
+  getAllUsers(page: number, pagesize: number) {
     return this.http.get(
       `${this.baseUrl}users?page=${page}&pageSize=${pagesize}`,
     );

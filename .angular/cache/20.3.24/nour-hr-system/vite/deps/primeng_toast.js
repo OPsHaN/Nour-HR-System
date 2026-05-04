@@ -1,19 +1,21 @@
 import {
-  BaseComponent,
-  Bind,
+  zindexutils
+} from "./chunk-2FSC2UTL.js";
+import {
   CheckIcon,
   ExclamationTriangleIcon,
   InfoCircleIcon,
-  MotionDirective,
-  MotionModule,
-  PARENT_INSTANCE,
   TimesCircleIcon,
-  TimesIcon,
-  zindexutils
-} from "./chunk-YS72CYKF.js";
+  TimesIcon
+} from "./chunk-XTLXXFBV.js";
+import {
+  BaseComponent,
+  Bind,
+  PARENT_INSTANCE
+} from "./chunk-OM3BQQTE.js";
 import {
   BaseStyle
-} from "./chunk-HK66CCMQ.js";
+} from "./chunk-6YQJDJ7W.js";
 import {
   MessageService,
   PrimeTemplate,
@@ -21,7 +23,16 @@ import {
   _t,
   l,
   s3 as s
-} from "./chunk-XVHYPLNJ.js";
+} from "./chunk-J2D3YFFI.js";
+import {
+  animate,
+  animateChild,
+  query,
+  state,
+  style,
+  transition,
+  trigger
+} from "./chunk-42VGZS34.js";
 import {
   CommonModule,
   NgClass,
@@ -44,14 +55,9 @@ import {
   Output,
   ViewEncapsulation,
   booleanAttribute,
-  computed,
-  effect,
   inject,
-  input,
   numberAttribute,
-  output,
   setClassMetadata,
-  signal,
   ɵɵHostDirectivesFeature,
   ɵɵInheritDefinitionFeature,
   ɵɵProvidersFeature,
@@ -81,6 +87,7 @@ import {
   ɵɵproperty,
   ɵɵpureFunction1,
   ɵɵpureFunction2,
+  ɵɵpureFunction4,
   ɵɵqueryRefresh,
   ɵɵresetView,
   ɵɵrestoreView,
@@ -91,19 +98,27 @@ import {
   ɵɵtextInterpolate1
 } from "./chunk-LVESTRRP.js";
 import "./chunk-RSS3ODKE.js";
-import {
-  __spreadValues
-} from "./chunk-WDMUDEB6.js";
+import "./chunk-WDMUDEB6.js";
 
 // node_modules/@primeuix/styles/dist/toast/index.mjs
-var style = "\n    .p-toast {\n        width: dt('toast.width');\n        white-space: pre-line;\n        word-break: break-word;\n    }\n\n    .p-toast-message {\n        margin: 0 0 1rem 0;\n        display: grid;\n        grid-template-rows: 1fr;\n    }\n\n    .p-toast-message-icon {\n        flex-shrink: 0;\n        font-size: dt('toast.icon.size');\n        width: dt('toast.icon.size');\n        height: dt('toast.icon.size');\n    }\n\n    .p-toast-message-content {\n        display: flex;\n        align-items: flex-start;\n        padding: dt('toast.content.padding');\n        gap: dt('toast.content.gap');\n        min-height: 0;\n        overflow: hidden;\n        transition: padding 250ms ease-in;\n    }\n\n    .p-toast-message-text {\n        flex: 1 1 auto;\n        display: flex;\n        flex-direction: column;\n        gap: dt('toast.text.gap');\n    }\n\n    .p-toast-summary {\n        font-weight: dt('toast.summary.font.weight');\n        font-size: dt('toast.summary.font.size');\n    }\n\n    .p-toast-detail {\n        font-weight: dt('toast.detail.font.weight');\n        font-size: dt('toast.detail.font.size');\n    }\n\n    .p-toast-close-button {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        overflow: hidden;\n        position: relative;\n        cursor: pointer;\n        background: transparent;\n        transition:\n            background dt('toast.transition.duration'),\n            color dt('toast.transition.duration'),\n            outline-color dt('toast.transition.duration'),\n            box-shadow dt('toast.transition.duration');\n        outline-color: transparent;\n        color: inherit;\n        width: dt('toast.close.button.width');\n        height: dt('toast.close.button.height');\n        border-radius: dt('toast.close.button.border.radius');\n        margin: -25% 0 0 0;\n        right: -25%;\n        padding: 0;\n        border: none;\n        user-select: none;\n    }\n\n    .p-toast-close-button:dir(rtl) {\n        margin: -25% 0 0 auto;\n        left: -25%;\n        right: auto;\n    }\n\n    .p-toast-message-info,\n    .p-toast-message-success,\n    .p-toast-message-warn,\n    .p-toast-message-error,\n    .p-toast-message-secondary,\n    .p-toast-message-contrast {\n        border-width: dt('toast.border.width');\n        border-style: solid;\n        backdrop-filter: blur(dt('toast.blur'));\n        border-radius: dt('toast.border.radius');\n    }\n\n    .p-toast-close-icon {\n        font-size: dt('toast.close.icon.size');\n        width: dt('toast.close.icon.size');\n        height: dt('toast.close.icon.size');\n    }\n\n    .p-toast-close-button:focus-visible {\n        outline-width: dt('focus.ring.width');\n        outline-style: dt('focus.ring.style');\n        outline-offset: dt('focus.ring.offset');\n    }\n\n    .p-toast-message-info {\n        background: dt('toast.info.background');\n        border-color: dt('toast.info.border.color');\n        color: dt('toast.info.color');\n        box-shadow: dt('toast.info.shadow');\n    }\n\n    .p-toast-message-info .p-toast-detail {\n        color: dt('toast.info.detail.color');\n    }\n\n    .p-toast-message-info .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.info.close.button.focus.ring.color');\n        box-shadow: dt('toast.info.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-info .p-toast-close-button:hover {\n        background: dt('toast.info.close.button.hover.background');\n    }\n\n    .p-toast-message-success {\n        background: dt('toast.success.background');\n        border-color: dt('toast.success.border.color');\n        color: dt('toast.success.color');\n        box-shadow: dt('toast.success.shadow');\n    }\n\n    .p-toast-message-success .p-toast-detail {\n        color: dt('toast.success.detail.color');\n    }\n\n    .p-toast-message-success .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.success.close.button.focus.ring.color');\n        box-shadow: dt('toast.success.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-success .p-toast-close-button:hover {\n        background: dt('toast.success.close.button.hover.background');\n    }\n\n    .p-toast-message-warn {\n        background: dt('toast.warn.background');\n        border-color: dt('toast.warn.border.color');\n        color: dt('toast.warn.color');\n        box-shadow: dt('toast.warn.shadow');\n    }\n\n    .p-toast-message-warn .p-toast-detail {\n        color: dt('toast.warn.detail.color');\n    }\n\n    .p-toast-message-warn .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.warn.close.button.focus.ring.color');\n        box-shadow: dt('toast.warn.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-warn .p-toast-close-button:hover {\n        background: dt('toast.warn.close.button.hover.background');\n    }\n\n    .p-toast-message-error {\n        background: dt('toast.error.background');\n        border-color: dt('toast.error.border.color');\n        color: dt('toast.error.color');\n        box-shadow: dt('toast.error.shadow');\n    }\n\n    .p-toast-message-error .p-toast-detail {\n        color: dt('toast.error.detail.color');\n    }\n\n    .p-toast-message-error .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.error.close.button.focus.ring.color');\n        box-shadow: dt('toast.error.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-error .p-toast-close-button:hover {\n        background: dt('toast.error.close.button.hover.background');\n    }\n\n    .p-toast-message-secondary {\n        background: dt('toast.secondary.background');\n        border-color: dt('toast.secondary.border.color');\n        color: dt('toast.secondary.color');\n        box-shadow: dt('toast.secondary.shadow');\n    }\n\n    .p-toast-message-secondary .p-toast-detail {\n        color: dt('toast.secondary.detail.color');\n    }\n\n    .p-toast-message-secondary .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.secondary.close.button.focus.ring.color');\n        box-shadow: dt('toast.secondary.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-secondary .p-toast-close-button:hover {\n        background: dt('toast.secondary.close.button.hover.background');\n    }\n\n    .p-toast-message-contrast {\n        background: dt('toast.contrast.background');\n        border-color: dt('toast.contrast.border.color');\n        color: dt('toast.contrast.color');\n        box-shadow: dt('toast.contrast.shadow');\n    }\n    \n    .p-toast-message-contrast .p-toast-detail {\n        color: dt('toast.contrast.detail.color');\n    }\n\n    .p-toast-message-contrast .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.contrast.close.button.focus.ring.color');\n        box-shadow: dt('toast.contrast.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-contrast .p-toast-close-button:hover {\n        background: dt('toast.contrast.close.button.hover.background');\n    }\n\n    .p-toast-top-center {\n        transform: translateX(-50%);\n    }\n\n    .p-toast-bottom-center {\n        transform: translateX(-50%);\n    }\n\n    .p-toast-center {\n        min-width: 20vw;\n        transform: translate(-50%, -50%);\n    }\n\n    .p-toast-message-enter-active {\n        animation: p-animate-toast-enter 300ms ease-out;\n    }\n\n    .p-toast-message-leave-active {\n        animation: p-animate-toast-leave 250ms ease-in;\n    }\n\n    .p-toast-message-leave-to .p-toast-message-content {\n        padding-top: 0;\n        padding-bottom: 0;\n    }\n\n    @keyframes p-animate-toast-enter {\n        from {\n            opacity: 0;\n            transform: scale(0.6);\n        }\n        to {\n            opacity: 1;\n            grid-template-rows: 1fr;\n        }\n    }\n\n     @keyframes p-animate-toast-leave {\n        from {\n            opacity: 1;\n        }\n        to {\n            opacity: 0;\n            margin-bottom: 0;\n            grid-template-rows: 0fr;\n            transform: translateY(-100%) scale(0.6);\n        }\n    }\n";
+var style2 = "\n    .p-toast {\n        width: dt('toast.width');\n        white-space: pre-line;\n        word-break: break-word;\n    }\n\n    .p-toast-message {\n        margin: 0 0 1rem 0;\n    }\n\n    .p-toast-message-icon {\n        flex-shrink: 0;\n        font-size: dt('toast.icon.size');\n        width: dt('toast.icon.size');\n        height: dt('toast.icon.size');\n    }\n\n    .p-toast-message-content {\n        display: flex;\n        align-items: flex-start;\n        padding: dt('toast.content.padding');\n        gap: dt('toast.content.gap');\n    }\n\n    .p-toast-message-text {\n        flex: 1 1 auto;\n        display: flex;\n        flex-direction: column;\n        gap: dt('toast.text.gap');\n    }\n\n    .p-toast-summary {\n        font-weight: dt('toast.summary.font.weight');\n        font-size: dt('toast.summary.font.size');\n    }\n\n    .p-toast-detail {\n        font-weight: dt('toast.detail.font.weight');\n        font-size: dt('toast.detail.font.size');\n    }\n\n    .p-toast-close-button {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        overflow: hidden;\n        position: relative;\n        cursor: pointer;\n        background: transparent;\n        transition:\n            background dt('toast.transition.duration'),\n            color dt('toast.transition.duration'),\n            outline-color dt('toast.transition.duration'),\n            box-shadow dt('toast.transition.duration');\n        outline-color: transparent;\n        color: inherit;\n        width: dt('toast.close.button.width');\n        height: dt('toast.close.button.height');\n        border-radius: dt('toast.close.button.border.radius');\n        margin: -25% 0 0 0;\n        right: -25%;\n        padding: 0;\n        border: none;\n        user-select: none;\n    }\n\n    .p-toast-close-button:dir(rtl) {\n        margin: -25% 0 0 auto;\n        left: -25%;\n        right: auto;\n    }\n\n    .p-toast-message-info,\n    .p-toast-message-success,\n    .p-toast-message-warn,\n    .p-toast-message-error,\n    .p-toast-message-secondary,\n    .p-toast-message-contrast {\n        border-width: dt('toast.border.width');\n        border-style: solid;\n        backdrop-filter: blur(dt('toast.blur'));\n        border-radius: dt('toast.border.radius');\n    }\n\n    .p-toast-close-icon {\n        font-size: dt('toast.close.icon.size');\n        width: dt('toast.close.icon.size');\n        height: dt('toast.close.icon.size');\n    }\n\n    .p-toast-close-button:focus-visible {\n        outline-width: dt('focus.ring.width');\n        outline-style: dt('focus.ring.style');\n        outline-offset: dt('focus.ring.offset');\n    }\n\n    .p-toast-message-info {\n        background: dt('toast.info.background');\n        border-color: dt('toast.info.border.color');\n        color: dt('toast.info.color');\n        box-shadow: dt('toast.info.shadow');\n    }\n\n    .p-toast-message-info .p-toast-detail {\n        color: dt('toast.info.detail.color');\n    }\n\n    .p-toast-message-info .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.info.close.button.focus.ring.color');\n        box-shadow: dt('toast.info.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-info .p-toast-close-button:hover {\n        background: dt('toast.info.close.button.hover.background');\n    }\n\n    .p-toast-message-success {\n        background: dt('toast.success.background');\n        border-color: dt('toast.success.border.color');\n        color: dt('toast.success.color');\n        box-shadow: dt('toast.success.shadow');\n    }\n\n    .p-toast-message-success .p-toast-detail {\n        color: dt('toast.success.detail.color');\n    }\n\n    .p-toast-message-success .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.success.close.button.focus.ring.color');\n        box-shadow: dt('toast.success.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-success .p-toast-close-button:hover {\n        background: dt('toast.success.close.button.hover.background');\n    }\n\n    .p-toast-message-warn {\n        background: dt('toast.warn.background');\n        border-color: dt('toast.warn.border.color');\n        color: dt('toast.warn.color');\n        box-shadow: dt('toast.warn.shadow');\n    }\n\n    .p-toast-message-warn .p-toast-detail {\n        color: dt('toast.warn.detail.color');\n    }\n\n    .p-toast-message-warn .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.warn.close.button.focus.ring.color');\n        box-shadow: dt('toast.warn.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-warn .p-toast-close-button:hover {\n        background: dt('toast.warn.close.button.hover.background');\n    }\n\n    .p-toast-message-error {\n        background: dt('toast.error.background');\n        border-color: dt('toast.error.border.color');\n        color: dt('toast.error.color');\n        box-shadow: dt('toast.error.shadow');\n    }\n\n    .p-toast-message-error .p-toast-detail {\n        color: dt('toast.error.detail.color');\n    }\n\n    .p-toast-message-error .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.error.close.button.focus.ring.color');\n        box-shadow: dt('toast.error.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-error .p-toast-close-button:hover {\n        background: dt('toast.error.close.button.hover.background');\n    }\n\n    .p-toast-message-secondary {\n        background: dt('toast.secondary.background');\n        border-color: dt('toast.secondary.border.color');\n        color: dt('toast.secondary.color');\n        box-shadow: dt('toast.secondary.shadow');\n    }\n\n    .p-toast-message-secondary .p-toast-detail {\n        color: dt('toast.secondary.detail.color');\n    }\n\n    .p-toast-message-secondary .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.secondary.close.button.focus.ring.color');\n        box-shadow: dt('toast.secondary.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-secondary .p-toast-close-button:hover {\n        background: dt('toast.secondary.close.button.hover.background');\n    }\n\n    .p-toast-message-contrast {\n        background: dt('toast.contrast.background');\n        border-color: dt('toast.contrast.border.color');\n        color: dt('toast.contrast.color');\n        box-shadow: dt('toast.contrast.shadow');\n    }\n\n    .p-toast-message-contrast .p-toast-detail {\n        color: dt('toast.contrast.detail.color');\n    }\n\n    .p-toast-message-contrast .p-toast-close-button:focus-visible {\n        outline-color: dt('toast.contrast.close.button.focus.ring.color');\n        box-shadow: dt('toast.contrast.close.button.focus.ring.shadow');\n    }\n\n    .p-toast-message-contrast .p-toast-close-button:hover {\n        background: dt('toast.contrast.close.button.hover.background');\n    }\n\n    .p-toast-top-center {\n        transform: translateX(-50%);\n    }\n\n    .p-toast-bottom-center {\n        transform: translateX(-50%);\n    }\n\n    .p-toast-center {\n        min-width: 20vw;\n        transform: translate(-50%, -50%);\n    }\n\n    .p-toast-message-enter-from {\n        opacity: 0;\n        transform: translateY(50%);\n    }\n\n    .p-toast-message-leave-from {\n        max-height: 1000px;\n    }\n\n    .p-toast .p-toast-message.p-toast-message-leave-to {\n        max-height: 0;\n        opacity: 0;\n        margin-bottom: 0;\n        overflow: hidden;\n    }\n\n    .p-toast-message-enter-active {\n        transition:\n            transform 0.3s,\n            opacity 0.3s;\n    }\n\n    .p-toast-message-leave-active {\n        transition:\n            max-height 0.45s cubic-bezier(0, 1, 0, 1),\n            opacity 0.3s,\n            margin-bottom 0.3s;\n    }\n";
 
 // node_modules/primeng/fesm2022/primeng-toast.mjs
-var _c0 = (a0, a1) => ({
+var _c0 = (a0, a1, a2, a3) => ({
+  showTransformParams: a0,
+  hideTransformParams: a1,
+  showTransitionParams: a2,
+  hideTransitionParams: a3
+});
+var _c1 = (a0) => ({
+  value: "visible",
+  params: a0
+});
+var _c2 = (a0, a1) => ({
   $implicit: a0,
   closeFn: a1
 });
-var _c1 = (a0) => ({
+var _c3 = (a0) => ({
   $implicit: a0
 });
 function ToastItem_Conditional_2_ng_container_0_Template(rf, ctx) {
@@ -117,7 +132,7 @@ function ToastItem_Conditional_2_Template(rf, ctx) {
   }
   if (rf & 2) {
     const ctx_r1 = ɵɵnextContext();
-    ɵɵproperty("ngTemplateOutlet", ctx_r1.headlessTemplate)("ngTemplateOutletContext", ɵɵpureFunction2(2, _c0, ctx_r1.message, ctx_r1.onCloseIconClick));
+    ɵɵproperty("ngTemplateOutlet", ctx_r1.headlessTemplate)("ngTemplateOutletContext", ɵɵpureFunction2(2, _c2, ctx_r1.message, ctx_r1.onCloseIconClick));
   }
 }
 function ToastItem_Conditional_3_ng_container_1_Conditional_1_Template(rf, ctx) {
@@ -218,15 +233,12 @@ function ToastItem_Conditional_3_ng_container_1_Template(rf, ctx) {
     ɵɵconditional(ctx_r1.message.icon ? 1 : 2);
     ɵɵadvance(2);
     ɵɵproperty("pBind", ctx_r1.ptm("messageText"))("ngClass", ctx_r1.cx("messageText"));
-    ɵɵattribute("data-p", ctx_r1.dataP);
     ɵɵadvance();
     ɵɵproperty("pBind", ctx_r1.ptm("summary"))("ngClass", ctx_r1.cx("summary"));
-    ɵɵattribute("data-p", ctx_r1.dataP);
     ɵɵadvance();
     ɵɵtextInterpolate1(" ", ctx_r1.message.summary, " ");
     ɵɵadvance();
     ɵɵproperty("pBind", ctx_r1.ptm("detail"))("ngClass", ctx_r1.cx("detail"));
-    ɵɵattribute("data-p", ctx_r1.dataP);
     ɵɵadvance();
     ɵɵtextInterpolate(ctx_r1.message.detail);
   }
@@ -287,7 +299,7 @@ function ToastItem_Conditional_3_Conditional_3_Template(rf, ctx) {
     const ctx_r1 = ɵɵnextContext(2);
     ɵɵadvance();
     ɵɵproperty("pBind", ctx_r1.ptm("closeButton"));
-    ɵɵattribute("class", ctx_r1.cx("closeButton"))("aria-label", ctx_r1.closeAriaLabel)("data-p", ctx_r1.dataP);
+    ɵɵattribute("class", ctx_r1.cx("closeButton"))("aria-label", ctx_r1.closeAriaLabel);
     ɵɵadvance();
     ɵɵconditional(ctx_r1.message.closeIcon ? 2 : 3);
   }
@@ -295,8 +307,8 @@ function ToastItem_Conditional_3_Conditional_3_Template(rf, ctx) {
 function ToastItem_Conditional_3_Template(rf, ctx) {
   if (rf & 1) {
     ɵɵelementStart(0, "div", 4);
-    ɵɵtemplate(1, ToastItem_Conditional_3_ng_container_1_Template, 8, 12, "ng-container", 5)(2, ToastItem_Conditional_3_ng_container_2_Template, 1, 0, "ng-container", 3);
-    ɵɵconditionalCreate(3, ToastItem_Conditional_3_Conditional_3_Template, 4, 5, "div");
+    ɵɵtemplate(1, ToastItem_Conditional_3_ng_container_1_Template, 8, 9, "ng-container", 5)(2, ToastItem_Conditional_3_ng_container_2_Template, 1, 0, "ng-container", 3);
+    ɵɵconditionalCreate(3, ToastItem_Conditional_3_Conditional_3_Template, 4, 4, "div");
     ɵɵelementEnd();
   }
   if (rf & 2) {
@@ -306,13 +318,13 @@ function ToastItem_Conditional_3_Template(rf, ctx) {
     ɵɵadvance();
     ɵɵproperty("ngIf", !ctx_r1.template);
     ɵɵadvance();
-    ɵɵproperty("ngTemplateOutlet", ctx_r1.template)("ngTemplateOutletContext", ɵɵpureFunction1(7, _c1, ctx_r1.message));
+    ɵɵproperty("ngTemplateOutlet", ctx_r1.template)("ngTemplateOutletContext", ɵɵpureFunction1(7, _c3, ctx_r1.message));
     ɵɵadvance();
     ɵɵconditional((ctx_r1.message == null ? null : ctx_r1.message.closable) !== false ? 3 : -1);
   }
 }
-var _c2 = ["message"];
-var _c3 = ["headless"];
+var _c4 = ["message"];
+var _c5 = ["headless"];
 function Toast_p_toastItem_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = ɵɵgetCurrentView();
@@ -321,14 +333,14 @@ function Toast_p_toastItem_0_Template(rf, ctx) {
       ɵɵrestoreView(_r1);
       const ctx_r1 = ɵɵnextContext();
       return ɵɵresetView(ctx_r1.onMessageClose($event));
-    })("onAnimationEnd", function Toast_p_toastItem_0_Template_p_toastItem_onAnimationEnd_0_listener() {
+    })("@toastAnimation.start", function Toast_p_toastItem_0_Template_p_toastItem_animation_toastAnimation_start_0_listener($event) {
       ɵɵrestoreView(_r1);
       const ctx_r1 = ɵɵnextContext();
-      return ɵɵresetView(ctx_r1.onAnimationEnd());
-    })("onAnimationStart", function Toast_p_toastItem_0_Template_p_toastItem_onAnimationStart_0_listener() {
+      return ɵɵresetView(ctx_r1.onAnimationStart($event));
+    })("@toastAnimation.done", function Toast_p_toastItem_0_Template_p_toastItem_animation_toastAnimation_done_0_listener($event) {
       ɵɵrestoreView(_r1);
       const ctx_r1 = ɵɵnextContext();
-      return ɵɵresetView(ctx_r1.onAnimationStart());
+      return ɵɵresetView(ctx_r1.onAnimationEnd($event));
     });
     ɵɵelementEnd();
   }
@@ -336,7 +348,7 @@ function Toast_p_toastItem_0_Template(rf, ctx) {
     const msg_r3 = ctx.$implicit;
     const i_r4 = ctx.index;
     const ctx_r1 = ɵɵnextContext();
-    ɵɵproperty("message", msg_r3)("index", i_r4)("life", ctx_r1.life)("clearAll", ctx_r1.clearAllTrigger())("template", ctx_r1.template || ctx_r1._template)("headlessTemplate", ctx_r1.headlessTemplate || ctx_r1._headlessTemplate)("pt", ctx_r1.pt)("unstyled", ctx_r1.unstyled())("motionOptions", ctx_r1.computedMotionOptions());
+    ɵɵproperty("message", msg_r3)("index", i_r4)("life", ctx_r1.life)("template", ctx_r1.template || ctx_r1._template)("headlessTemplate", ctx_r1.headlessTemplate || ctx_r1._headlessTemplate)("@toastAnimation", void 0)("showTransformOptions", ctx_r1.showTransformOptions)("hideTransformOptions", ctx_r1.hideTransformOptions)("showTransitionOptions", ctx_r1.showTransitionOptions)("hideTransitionOptions", ctx_r1.hideTransitionOptions)("pt", ctx_r1.pt);
   }
 }
 var inlineStyles = {
@@ -390,7 +402,7 @@ var classes = {
 };
 var ToastStyle = class _ToastStyle extends BaseStyle {
   name = "toast";
-  style = style;
+  style = style2;
   classes = classes;
   inlineStyles = inlineStyles;
   static ɵfac = /* @__PURE__ */ (() => {
@@ -433,65 +445,25 @@ var ToastItem = class _ToastItem extends BaseComponent {
   hideTransformOptions;
   showTransitionOptions;
   hideTransitionOptions;
-  motionOptions = input(...ngDevMode ? [void 0, {
-    debugName: "motionOptions"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
-  clearAll = input(null, ...ngDevMode ? [{
-    debugName: "clearAll"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
-  onAnimationStart = output();
-  onAnimationEnd = output();
-  onBeforeEnter(event) {
-    this.onAnimationStart.emit(event.element);
-  }
-  onAfterLeave(event) {
-    if (!this.visible() && !this.isDestroyed) {
-      this.onClose.emit({
-        index: this.index,
-        message: this.message
-      });
-      if (!this.isDestroyed) {
-        this.onAnimationEnd.emit(event.element);
-      }
-    }
-  }
   onClose = new EventEmitter();
   _componentStyle = inject(ToastStyle);
   timeout;
-  visible = signal(void 0, ...ngDevMode ? [{
-    debugName: "visible"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
-  isDestroyed = false;
-  isClosing = false;
   constructor(zone) {
     super();
     this.zone = zone;
-    effect(() => {
-      if (this.clearAll()) {
-        this.visible.set(false);
-      }
-    });
   }
   onAfterViewInit() {
-    this.message?.sticky && this.visible.set(true);
     this.initTimeout();
   }
   initTimeout() {
     if (!this.message?.sticky) {
       this.clearTimeout();
       this.zone.runOutsideAngular(() => {
-        this.visible.set(true);
         this.timeout = setTimeout(() => {
-          this.visible.set(false);
+          this.onClose.emit({
+            index: this.index,
+            message: this.message
+          });
         }, this.message?.life || this.life || 3e3);
       });
     }
@@ -506,28 +478,21 @@ var ToastItem = class _ToastItem extends BaseComponent {
     this.clearTimeout();
   }
   onMouseLeave() {
-    if (!this.isClosing) {
-      this.initTimeout();
-    }
+    this.initTimeout();
   }
   onCloseIconClick = (event) => {
-    this.isClosing = true;
     this.clearTimeout();
-    this.visible.set(false);
+    this.onClose.emit({
+      index: this.index,
+      message: this.message
+    });
     event.preventDefault();
   };
   get closeAriaLabel() {
     return this.config.translation.aria ? this.config.translation.aria.close : void 0;
   }
   onDestroy() {
-    this.isDestroyed = true;
     this.clearTimeout();
-    this.visible.set(false);
-  }
-  get dataP() {
-    return this.cn({
-      [this.message?.severity]: this.message?.severity
-    });
   }
   static ɵfac = function ToastItem_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ToastItem)(ɵɵdirectiveInject(NgZone));
@@ -544,30 +509,20 @@ var ToastItem = class _ToastItem extends BaseComponent {
       showTransformOptions: "showTransformOptions",
       hideTransformOptions: "hideTransformOptions",
       showTransitionOptions: "showTransitionOptions",
-      hideTransitionOptions: "hideTransitionOptions",
-      motionOptions: [1, "motionOptions"],
-      clearAll: [1, "clearAll"]
+      hideTransitionOptions: "hideTransitionOptions"
     },
     outputs: {
-      onAnimationStart: "onAnimationStart",
-      onAnimationEnd: "onAnimationEnd",
       onClose: "onClose"
     },
     features: [ɵɵProvidersFeature([ToastStyle]), ɵɵInheritDefinitionFeature],
     decls: 4,
-    vars: 10,
-    consts: [["container", ""], ["role", "alert", "aria-live", "assertive", "aria-atomic", "true", 3, "pMotionOnBeforeEnter", "pMotionOnAfterLeave", "mouseenter", "mouseleave", "pMotion", "pMotionAppear", "pMotionName", "pMotionOptions", "pBind"], [3, "pBind", "class"], [4, "ngTemplateOutlet", "ngTemplateOutletContext"], [3, "pBind"], [4, "ngIf"], [3, "pBind", "ngClass"], ["data-p-icon", "check", 3, "pBind", "class"], ["data-p-icon", "info-circle", 3, "pBind", "class"], ["data-p-icon", "times-circle", 3, "pBind", "class"], ["data-p-icon", "exclamation-triangle", 3, "pBind", "class"], ["data-p-icon", "check", 3, "pBind"], ["data-p-icon", "info-circle", 3, "pBind"], ["data-p-icon", "times-circle", 3, "pBind"], ["data-p-icon", "exclamation-triangle", 3, "pBind"], ["type", "button", "autofocus", "", 3, "click", "keydown.enter", "pBind"], ["data-p-icon", "times", 3, "pBind", "class"], [3, "pBind", "class", 4, "ngIf"], ["data-p-icon", "times", 3, "pBind"]],
+    vars: 13,
+    consts: [["container", ""], ["role", "alert", "aria-live", "assertive", "aria-atomic", "true", 3, "mouseenter", "mouseleave", "pBind"], [3, "pBind", "class"], [4, "ngTemplateOutlet", "ngTemplateOutletContext"], [3, "pBind"], [4, "ngIf"], [3, "pBind", "ngClass"], ["data-p-icon", "check", 3, "pBind", "class"], ["data-p-icon", "info-circle", 3, "pBind", "class"], ["data-p-icon", "times-circle", 3, "pBind", "class"], ["data-p-icon", "exclamation-triangle", 3, "pBind", "class"], ["data-p-icon", "check", 3, "pBind"], ["data-p-icon", "info-circle", 3, "pBind"], ["data-p-icon", "times-circle", 3, "pBind"], ["data-p-icon", "exclamation-triangle", 3, "pBind"], ["type", "button", "autofocus", "", 3, "click", "keydown.enter", "pBind"], ["data-p-icon", "times", 3, "pBind", "class"], [3, "pBind", "class", 4, "ngIf"], ["data-p-icon", "times", 3, "pBind"]],
     template: function ToastItem_Template(rf, ctx) {
       if (rf & 1) {
         const _r1 = ɵɵgetCurrentView();
         ɵɵelementStart(0, "div", 1, 0);
-        ɵɵlistener("pMotionOnBeforeEnter", function ToastItem_Template_div_pMotionOnBeforeEnter_0_listener($event) {
-          ɵɵrestoreView(_r1);
-          return ɵɵresetView(ctx.onBeforeEnter($event));
-        })("pMotionOnAfterLeave", function ToastItem_Template_div_pMotionOnAfterLeave_0_listener($event) {
-          ɵɵrestoreView(_r1);
-          return ɵɵresetView(ctx.onAfterLeave($event));
-        })("mouseenter", function ToastItem_Template_div_mouseenter_0_listener() {
+        ɵɵlistener("mouseenter", function ToastItem_Template_div_mouseenter_0_listener() {
           ɵɵrestoreView(_r1);
           return ɵɵresetView(ctx.onMouseEnter());
         })("mouseleave", function ToastItem_Template_div_mouseleave_0_listener() {
@@ -579,14 +534,27 @@ var ToastItem = class _ToastItem extends BaseComponent {
       }
       if (rf & 2) {
         ɵɵclassMap(ctx.cn(ctx.cx("message"), ctx.message == null ? null : ctx.message.styleClass));
-        ɵɵproperty("pMotion", ctx.visible())("pMotionAppear", true)("pMotionName", "p-toast-message")("pMotionOptions", ctx.motionOptions())("pBind", ctx.ptm("message"));
-        ɵɵattribute("id", ctx.message == null ? null : ctx.message.id)("data-p", ctx.dataP);
+        ɵɵproperty("pBind", ctx.ptm("message"))("@messageState", ɵɵpureFunction1(11, _c1, ɵɵpureFunction4(6, _c0, ctx.showTransformOptions, ctx.hideTransformOptions, ctx.showTransitionOptions, ctx.hideTransitionOptions)));
+        ɵɵattribute("id", ctx.message == null ? null : ctx.message.id);
         ɵɵadvance(2);
         ɵɵconditional(ctx.headlessTemplate ? 2 : 3);
       }
     },
-    dependencies: [CommonModule, NgClass, NgIf, NgTemplateOutlet, CheckIcon, ExclamationTriangleIcon, InfoCircleIcon, TimesIcon, TimesCircleIcon, SharedModule, Bind, MotionModule, MotionDirective],
+    dependencies: [CommonModule, NgClass, NgIf, NgTemplateOutlet, CheckIcon, ExclamationTriangleIcon, InfoCircleIcon, TimesIcon, TimesCircleIcon, SharedModule, Bind],
     encapsulation: 2,
+    data: {
+      animation: [trigger("messageState", [state("visible", style({
+        transform: "translateY(0)",
+        opacity: 1
+      })), transition("void => *", [style({
+        transform: "{{showTransformParams}}",
+        opacity: 0
+      }), animate("{{showTransitionParams}}")]), transition("* => void", [animate("{{hideTransitionParams}}", style({
+        height: 0,
+        opacity: 0,
+        transform: "{{hideTransformParams}}"
+      }))])])]
+    },
     changeDetection: 0
   });
 };
@@ -596,25 +564,27 @@ var ToastItem = class _ToastItem extends BaseComponent {
     args: [{
       selector: "p-toastItem",
       standalone: true,
-      imports: [CommonModule, CheckIcon, ExclamationTriangleIcon, InfoCircleIcon, TimesIcon, TimesCircleIcon, SharedModule, Bind, MotionModule],
+      imports: [CommonModule, CheckIcon, ExclamationTriangleIcon, InfoCircleIcon, TimesIcon, TimesCircleIcon, SharedModule, Bind],
       template: `
         <div
             #container
-            [pMotion]="visible()"
-            [pMotionAppear]="true"
-            [pMotionName]="'p-toast-message'"
-            [pMotionOptions]="motionOptions()"
-            (pMotionOnBeforeEnter)="onBeforeEnter($event)"
-            (pMotionOnAfterLeave)="onAfterLeave($event)"
             [attr.id]="message?.id"
             [pBind]="ptm('message')"
             [class]="cn(cx('message'), message?.styleClass)"
+            [@messageState]="{
+                value: 'visible',
+                params: {
+                    showTransformParams: showTransformOptions,
+                    hideTransformParams: hideTransformOptions,
+                    showTransitionParams: showTransitionOptions,
+                    hideTransitionParams: hideTransitionOptions
+                }
+            }"
             (mouseenter)="onMouseEnter()"
             (mouseleave)="onMouseLeave()"
             role="alert"
             aria-live="assertive"
             aria-atomic="true"
-            [attr.data-p]="dataP"
         >
             @if (headlessTemplate) {
                 <ng-container *ngTemplateOutlet="headlessTemplate; context: { $implicit: message, closeFn: onCloseIconClick }"></ng-container>
@@ -642,26 +612,17 @@ var ToastItem = class _ToastItem extends BaseComponent {
                                 }
                             }
                         }
-                        <div [pBind]="ptm('messageText')" [ngClass]="cx('messageText')" [attr.data-p]="dataP">
-                            <div [pBind]="ptm('summary')" [ngClass]="cx('summary')" [attr.data-p]="dataP">
+                        <div [pBind]="ptm('messageText')" [ngClass]="cx('messageText')">
+                            <div [pBind]="ptm('summary')" [ngClass]="cx('summary')">
                                 {{ message.summary }}
                             </div>
-                            <div [pBind]="ptm('detail')" [ngClass]="cx('detail')" [attr.data-p]="dataP">{{ message.detail }}</div>
+                            <div [pBind]="ptm('detail')" [ngClass]="cx('detail')">{{ message.detail }}</div>
                         </div>
                     </ng-container>
                     <ng-container *ngTemplateOutlet="template; context: { $implicit: message }"></ng-container>
                     @if (message?.closable !== false) {
                         <div>
-                            <button
-                                [pBind]="ptm('closeButton')"
-                                type="button"
-                                [attr.class]="cx('closeButton')"
-                                (click)="onCloseIconClick($event)"
-                                (keydown.enter)="onCloseIconClick($event)"
-                                [attr.aria-label]="closeAriaLabel"
-                                autofocus
-                                [attr.data-p]="dataP"
-                            >
+                            <button [pBind]="ptm('closeButton')" type="button" [attr.class]="cx('closeButton')" (click)="onCloseIconClick($event)" (keydown.enter)="onCloseIconClick($event)" [attr.aria-label]="closeAriaLabel" autofocus>
                                 @if (message.closeIcon) {
                                     <span [pBind]="ptm('closeIcon')" *ngIf="message.closeIcon" [class]="cn(cx('closeIcon'), message?.closeIcon)"></span>
                                 } @else {
@@ -674,6 +635,17 @@ var ToastItem = class _ToastItem extends BaseComponent {
             }
         </div>
     `,
+      animations: [trigger("messageState", [state("visible", style({
+        transform: "translateY(0)",
+        opacity: 1
+      })), transition("void => *", [style({
+        transform: "{{showTransformParams}}",
+        opacity: 0
+      }), animate("{{showTransitionParams}}")]), transition("* => void", [animate("{{hideTransitionParams}}", style({
+        height: 0,
+        opacity: 0,
+        transform: "{{hideTransformParams}}"
+      }))])])],
       encapsulation: ViewEncapsulation.None,
       changeDetection: ChangeDetectionStrategy.OnPush,
       providers: [ToastStyle]
@@ -714,37 +686,12 @@ var ToastItem = class _ToastItem extends BaseComponent {
     hideTransitionOptions: [{
       type: Input
     }],
-    motionOptions: [{
-      type: Input,
-      args: [{
-        isSignal: true,
-        alias: "motionOptions",
-        required: false
-      }]
-    }],
-    clearAll: [{
-      type: Input,
-      args: [{
-        isSignal: true,
-        alias: "clearAll",
-        required: false
-      }]
-    }],
-    onAnimationStart: [{
-      type: Output,
-      args: ["onAnimationStart"]
-    }],
-    onAnimationEnd: [{
-      type: Output,
-      args: ["onAnimationEnd"]
-    }],
     onClose: [{
       type: Output
     }]
   });
 })();
 var Toast = class _Toast extends BaseComponent {
-  componentName = "Toast";
   $pcToast = inject(TOAST_INSTANCE, {
     optional: true,
     skipSelf: true
@@ -805,45 +752,23 @@ var Toast = class _Toast extends BaseComponent {
   /**
    * Transform options of the show animation.
    * @group Props
-   * @deprecated since v21.0.0. Use `motionOptions` instead.
    */
   showTransformOptions = "translateY(100%)";
   /**
    * Transform options of the hide animation.
    * @group Props
-   * @deprecated since v21.0.0. Use `motionOptions` instead.
    */
   hideTransformOptions = "translateY(-100%)";
   /**
    * Transition options of the show animation.
    * @group Props
-   * @deprecated since v21.0.0. Use `motionOptions` instead.
    */
   showTransitionOptions = "300ms ease-out";
   /**
    * Transition options of the hide animation.
    * @group Props
-   * @deprecated since v21.0.0. Use `motionOptions` instead.
    */
   hideTransitionOptions = "250ms ease-in";
-  /**
-   * The motion options.
-   * @group Props
-   */
-  motionOptions = input(void 0, ...ngDevMode ? [{
-    debugName: "motionOptions"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
-  computedMotionOptions = computed(() => {
-    return __spreadValues(__spreadValues({}, this.ptm("motion")), this.motionOptions());
-  }, ...ngDevMode ? [{
-    debugName: "computedMotionOptions"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
   /**
    * Object literal to define styles per screen size.
    * @group Props
@@ -856,16 +781,12 @@ var Toast = class _Toast extends BaseComponent {
    */
   onClose = new EventEmitter();
   /**
-   * Custom message template.
-   * @param {ToastMessageTemplateContext} context - message context.
-   * @see {@link ToastMessageTemplateContext}
+   * Custom template of message.
    * @group Templates
    */
   template;
   /**
    * Custom headless template.
-   * @param {ToastHeadlessTemplateContext} context - headless context.
-   * @see {@link ToastHeadlessTemplateContext}
    * @group Templates
    */
   headlessTemplate;
@@ -879,12 +800,6 @@ var Toast = class _Toast extends BaseComponent {
   styleElement;
   id = s("pn_id_");
   templates;
-  clearAllTrigger = signal(null, ...ngDevMode ? [{
-    debugName: "clearAllTrigger"
-  }] : (
-    /* istanbul ignore next */
-    []
-  ));
   constructor() {
     super();
   }
@@ -902,16 +817,13 @@ var Toast = class _Toast extends BaseComponent {
     this.clearSubscription = this.messageService.clearObserver.subscribe((key) => {
       if (key) {
         if (this.key === key) {
-          this.clearAll();
+          this.messages = null;
         }
       } else {
-        this.clearAll();
+        this.messages = null;
       }
       this.cd.markForCheck();
     });
-  }
-  clearAll() {
-    this.clearAllTrigger.set({});
   }
   _template;
   _headlessTemplate;
@@ -965,18 +877,21 @@ var Toast = class _Toast extends BaseComponent {
     this.onClose.emit({
       message: event.message
     });
-    this.onAnimationEnd();
     this.cd.detectChanges();
   }
-  onAnimationStart() {
-    this.renderer.setAttribute(this.el?.nativeElement, this.id, "");
-    if (this.autoZIndex && this.el?.nativeElement.style.zIndex === "") {
-      zindexutils.set("modal", this.el?.nativeElement, this.baseZIndex || this.config.zIndex.modal);
+  onAnimationStart(event) {
+    if (event.fromState === "void") {
+      this.renderer.setAttribute(this.el?.nativeElement, this.id, "");
+      if (this.autoZIndex && this.el?.nativeElement.style.zIndex === "") {
+        zindexutils.set("modal", this.el?.nativeElement, this.baseZIndex || this.config.zIndex.modal);
+      }
     }
   }
-  onAnimationEnd() {
-    if (this.autoZIndex && l(this.messages)) {
-      zindexutils.clear(this.el?.nativeElement);
+  onAnimationEnd(event) {
+    if (event.toState === "void") {
+      if (this.autoZIndex && l(this.messages)) {
+        zindexutils.clear(this.el?.nativeElement);
+      }
     }
   }
   createStyle() {
@@ -1021,11 +936,6 @@ var Toast = class _Toast extends BaseComponent {
     }
     this.destroyStyle();
   }
-  get dataP() {
-    return this.cn({
-      [this.position]: this.position
-    });
-  }
   static ɵfac = function Toast_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _Toast)();
   };
@@ -1034,8 +944,8 @@ var Toast = class _Toast extends BaseComponent {
     selectors: [["p-toast"]],
     contentQueries: function Toast_ContentQueries(rf, ctx, dirIndex) {
       if (rf & 1) {
-        ɵɵcontentQuery(dirIndex, _c2, 5);
-        ɵɵcontentQuery(dirIndex, _c3, 5);
+        ɵɵcontentQuery(dirIndex, _c4, 5);
+        ɵɵcontentQuery(dirIndex, _c5, 5);
         ɵɵcontentQuery(dirIndex, PrimeTemplate, 4);
       }
       if (rf & 2) {
@@ -1045,10 +955,9 @@ var Toast = class _Toast extends BaseComponent {
         ɵɵqueryRefresh(_t2 = ɵɵloadQuery()) && (ctx.templates = _t2);
       }
     },
-    hostVars: 5,
+    hostVars: 4,
     hostBindings: function Toast_HostBindings(rf, ctx) {
       if (rf & 2) {
-        ɵɵattribute("data-p", ctx.dataP);
         ɵɵstyleMap(ctx.sx("root"));
         ɵɵclassMap(ctx.cn(ctx.cx("root"), ctx.styleClass));
       }
@@ -1066,7 +975,6 @@ var Toast = class _Toast extends BaseComponent {
       hideTransformOptions: "hideTransformOptions",
       showTransitionOptions: "showTransitionOptions",
       hideTransitionOptions: "hideTransitionOptions",
-      motionOptions: [1, "motionOptions"],
       breakpoints: "breakpoints"
     },
     outputs: {
@@ -1081,10 +989,10 @@ var Toast = class _Toast extends BaseComponent {
     }]), ɵɵHostDirectivesFeature([Bind]), ɵɵInheritDefinitionFeature],
     decls: 1,
     vars: 1,
-    consts: [[3, "message", "index", "life", "clearAll", "template", "headlessTemplate", "pt", "unstyled", "motionOptions", "onClose", "onAnimationEnd", "onAnimationStart", 4, "ngFor", "ngForOf"], [3, "onClose", "onAnimationEnd", "onAnimationStart", "message", "index", "life", "clearAll", "template", "headlessTemplate", "pt", "unstyled", "motionOptions"]],
+    consts: [[3, "message", "index", "life", "template", "headlessTemplate", "showTransformOptions", "hideTransformOptions", "showTransitionOptions", "hideTransitionOptions", "pt", "onClose", 4, "ngFor", "ngForOf"], [3, "onClose", "message", "index", "life", "template", "headlessTemplate", "showTransformOptions", "hideTransformOptions", "showTransitionOptions", "hideTransitionOptions", "pt"]],
     template: function Toast_Template(rf, ctx) {
       if (rf & 1) {
-        ɵɵtemplate(0, Toast_p_toastItem_0_Template, 1, 9, "p-toastItem", 0);
+        ɵɵtemplate(0, Toast_p_toastItem_0_Template, 1, 11, "p-toastItem", 0);
       }
       if (rf & 2) {
         ɵɵproperty("ngForOf", ctx.messages);
@@ -1092,6 +1000,9 @@ var Toast = class _Toast extends BaseComponent {
     },
     dependencies: [CommonModule, NgForOf, ToastItem, SharedModule],
     encapsulation: 2,
+    data: {
+      animation: [trigger("toastAnimation", [transition(":enter, :leave", [query("@*", animateChild())])])]
+    },
     changeDetection: 0
   });
 };
@@ -1108,17 +1019,20 @@ var Toast = class _Toast extends BaseComponent {
             [message]="msg"
             [index]="i"
             [life]="life"
-            [clearAll]="clearAllTrigger()"
             (onClose)="onMessageClose($event)"
-            (onAnimationEnd)="onAnimationEnd()"
-            (onAnimationStart)="onAnimationStart()"
             [template]="template || _template"
             [headlessTemplate]="headlessTemplate || _headlessTemplate"
+            @toastAnimation
+            (@toastAnimation.start)="onAnimationStart($event)"
+            (@toastAnimation.done)="onAnimationEnd($event)"
+            [showTransformOptions]="showTransformOptions"
+            [hideTransformOptions]="hideTransformOptions"
+            [showTransitionOptions]="showTransitionOptions"
+            [hideTransitionOptions]="hideTransitionOptions"
             [pt]="pt"
-            [unstyled]="unstyled()"
-            [motionOptions]="computedMotionOptions()"
         ></p-toastItem>
     `,
+      animations: [trigger("toastAnimation", [transition(":enter, :leave", [query("@*", animateChild())])])],
       changeDetection: ChangeDetectionStrategy.OnPush,
       encapsulation: ViewEncapsulation.None,
       providers: [ToastStyle, {
@@ -1130,8 +1044,7 @@ var Toast = class _Toast extends BaseComponent {
       }],
       host: {
         "[class]": "cn(cx('root'), styleClass)",
-        "[style]": "sx('root')",
-        "[attr.data-p]": "dataP"
+        "[style]": "sx('root')"
       },
       hostDirectives: [Bind]
     }]
@@ -1186,14 +1099,6 @@ var Toast = class _Toast extends BaseComponent {
     }],
     hideTransitionOptions: [{
       type: Input
-    }],
-    motionOptions: [{
-      type: Input,
-      args: [{
-        isSignal: true,
-        alias: "motionOptions",
-        required: false
-      }]
     }],
     breakpoints: [{
       type: Input

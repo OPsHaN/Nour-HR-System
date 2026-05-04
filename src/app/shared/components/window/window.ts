@@ -1,10 +1,5 @@
 import { CommonModule, NgComponentOutlet } from "@angular/common";
 import { Component, Input, Output, EventEmitter, Type } from "@angular/core";
-
-import { CalendarComponent } from "../../../components/calendar/calendar.component";
-import { BrowserComponent } from "../../../components/browser/browser.component";
-import { CreateUser } from "../../../components/create-user/create-user";
-import { DownloadComponent } from "../../../components/download/download.component";
 import { DesktopWindow } from "../../desktop-window.model";
 import { WindowAction, getShortcutTheme } from "../../shortcut.config";
 import { HostListener } from "@angular/core";
@@ -15,10 +10,6 @@ import { HostListener } from "@angular/core";
   imports: [
     CommonModule,
     NgComponentOutlet,
-    CalendarComponent,
-    BrowserComponent,
-    CreateUser,
-    DownloadComponent,
   ],
   templateUrl: "./window.html",
   styleUrl: "./window.css",

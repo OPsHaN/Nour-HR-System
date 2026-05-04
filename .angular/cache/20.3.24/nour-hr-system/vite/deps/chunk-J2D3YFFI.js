@@ -91,6 +91,24 @@ function h() {
 function E(t2) {
   return t2 ? Math.abs(t2.scrollLeft) : 0;
 }
+function k() {
+  let t2 = document.documentElement;
+  return (window.pageXOffset || E(t2)) - (t2.clientLeft || 0);
+}
+function $() {
+  let t2 = document.documentElement;
+  return (window.pageYOffset || t2.scrollTop) - (t2.clientTop || 0);
+}
+function V(t2) {
+  return t2 ? getComputedStyle(t2).direction === "rtl" : false;
+}
+function D(t2, e, o = true) {
+  var n, r, i3, l3;
+  if (t2) {
+    let d2 = t2.offsetParent ? { width: t2.offsetWidth, height: t2.offsetHeight } : w(t2), s4 = d2.height, a2 = d2.width, u2 = e.offsetHeight, p3 = e.offsetWidth, f2 = e.getBoundingClientRect(), g3 = $(), it = k(), lt = h(), L, N, ot = "top";
+    f2.top + u2 + s4 > lt.height ? (L = f2.top + g3 - s4, ot = "bottom", L < 0 && (L = g3)) : L = u2 + f2.top + g3, f2.left + a2 > lt.width ? N = Math.max(0, f2.left + it + p3 - a2) : N = f2.left + it, V(t2) ? t2.style.insetInlineEnd = N + "px" : t2.style.insetInlineStart = N + "px", t2.style.top = L + "px", t2.style.transformOrigin = ot, o && (t2.style.marginTop = ot === "bottom" ? `calc(${(r = (n = x(/-anchor-gutter$/)) == null ? void 0 : n.value) != null ? r : "2px"} * -1)` : (l3 = (i3 = x(/-anchor-gutter$/)) == null ? void 0 : i3.value) != null ? l3 : "");
+  }
+}
 function S(t2, e) {
   t2 && (typeof e == "string" ? t2.style.cssText = e : Object.entries(e || {}).forEach(([o, n]) => t2.style[o] = n));
 }
@@ -104,6 +122,16 @@ function v(t2, e) {
     return o;
   }
   return 0;
+}
+function I(t2, e, o = true, n = void 0) {
+  var r;
+  if (t2) {
+    let i3 = t2.offsetParent ? { width: t2.offsetWidth, height: t2.offsetHeight } : w(t2), l3 = e.offsetHeight, d2 = e.getBoundingClientRect(), s4 = h(), a2, u2, p3 = n != null ? n : "top";
+    if (!n && d2.top + l3 + i3.height > s4.height ? (a2 = -1 * i3.height, p3 = "bottom", d2.top + a2 < 0 && (a2 = -1 * d2.top)) : a2 = l3, i3.width > s4.width ? u2 = d2.left * -1 : d2.left + i3.width > s4.width ? u2 = (d2.left + i3.width - s4.width) * -1 : u2 = 0, t2.style.top = a2 + "px", t2.style.insetInlineStart = u2 + "px", t2.style.transformOrigin = p3, o) {
+      let f2 = (r = x(/-anchor-gutter$/)) == null ? void 0 : r.value;
+      t2.style.marginTop = p3 === "bottom" ? `calc(${f2 != null ? f2 : "2px"} * -1)` : f2 != null ? f2 : "";
+    }
+  }
 }
 function y(t2) {
   if (t2) {
@@ -191,6 +219,15 @@ function U(t2, e = {}, ...o) {
     return A(n, e), n.append(...o), n;
   }
 }
+function ht(t2, e) {
+  if (t2) {
+    t2.style.opacity = "0";
+    let o = +/* @__PURE__ */ new Date(), n = "0", r = function() {
+      n = `${+t2.style.opacity + ((/* @__PURE__ */ new Date()).getTime() - o) / e}`, t2.style.opacity = n, o = +/* @__PURE__ */ new Date(), +n < 1 && ("requestAnimationFrame" in window ? requestAnimationFrame(r) : setTimeout(r, 16));
+    };
+    r();
+  }
+}
 function Y(t2, e) {
   return c(t2) ? Array.from(t2.querySelectorAll(e)) : [];
 }
@@ -222,6 +259,17 @@ function Tt(t2) {
   }
   return 0;
 }
+function Ht(t2) {
+  var e;
+  if (t2) {
+    let o = (e = y(t2)) == null ? void 0 : e.childNodes, n = 0;
+    if (o) for (let r = 0; r < o.length; r++) {
+      if (o[r] === t2) return n;
+      o[r].nodeType === 1 && n++;
+    }
+  }
+  return -1;
+}
 function Lt(t2, e) {
   let o = b(t2, e);
   return o.length > 0 ? o[o.length - 1] : null;
@@ -244,6 +292,10 @@ function C(t2, e) {
   }
   return 0;
 }
+function Mt() {
+  if (window.getSelection) return window.getSelection().toString();
+  if (document.getSelection) return document.getSelection().toString();
+}
 function Rt(t2) {
   if (t2) {
     let e = t2.offsetWidth, o = getComputedStyle(t2);
@@ -251,26 +303,27 @@ function Rt(t2) {
   }
   return 0;
 }
-function qt() {
-  return typeof window == "undefined" || !window.matchMedia ? false : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function et(t2) {
+  return !!(t2 && t2.offsetParent != null);
 }
-function Qt() {
-  return new Promise((t2) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(t2);
-    });
-  });
+function Yt() {
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 }
 function Zt(t2) {
   var e;
   t2 && ("remove" in Element.prototype ? t2.remove() : (e = t2.parentNode) == null || e.removeChild(t2));
 }
+function Gt(t2, e) {
+  let o = H(t2);
+  if (o) o.removeChild(e);
+  else throw new Error("Cannot remove " + e + " from " + t2);
+}
+function Kt(t2, e) {
+  let o = getComputedStyle(t2).getPropertyValue("borderTopWidth"), n = o ? parseFloat(o) : 0, r = getComputedStyle(t2).getPropertyValue("paddingTop"), i3 = r ? parseFloat(r) : 0, l3 = t2.getBoundingClientRect(), s4 = e.getBoundingClientRect().top + document.body.scrollTop - (l3.top + document.body.scrollTop) - n - i3, a2 = t2.scrollTop, u2 = t2.clientHeight, p3 = C(e);
+  s4 < 0 ? t2.scrollTop = a2 + s4 : s4 + p3 > u2 && (t2.scrollTop = a2 + s4 - u2 + p3);
+}
 function _t(t2, e = "", o) {
   c(t2) && o !== null && o !== void 0 && t2.setAttribute(e, o);
-}
-function te(t2, e, o = null, n) {
-  var r;
-  e && ((r = t2 == null ? void 0 : t2.style) == null || r.setProperty(e, o, n));
 }
 
 // node_modules/@primeuix/utils/dist/eventbus/index.mjs
@@ -360,9 +413,9 @@ function b2(e, t2, n = /* @__PURE__ */ new WeakSet()) {
   let S2 = e instanceof Date, A2 = t2 instanceof Date;
   if (S2 != A2) return false;
   if (S2 && A2) return e.getTime() == t2.getTime();
-  let I = e instanceof RegExp, L = t2 instanceof RegExp;
-  if (I != L) return false;
-  if (I && L) return e.toString() == t2.toString();
+  let I2 = e instanceof RegExp, L = t2 instanceof RegExp;
+  if (I2 != L) return false;
+  if (I2 && L) return e.toString() == t2.toString();
   let R2 = Object.keys(e);
   if (f2 = R2.length, f2 !== Object.keys(t2).length) return false;
   for (u2 = f2; u2-- !== 0; ) if (!Object.prototype.hasOwnProperty.call(t2, R2[u2])) return false;
@@ -399,11 +452,26 @@ function p2(e, t2) {
   }
   return null;
 }
-function k(e, t2, n) {
+function k2(e, t2, n) {
   return n ? p2(e, n) === p2(t2, n) : y3(e, t2);
+}
+function q(e, t2) {
+  if (e != null && t2 && t2.length) {
+    for (let n of t2) if (k2(e, n)) return true;
+  }
+  return false;
 }
 function i2(e, t2 = true) {
   return e instanceof Object && e.constructor === Object && (t2 || Object.keys(e).length !== 0);
+}
+function M(e, t2) {
+  let n = -1;
+  if (s2(e)) try {
+    n = e.findLastIndex(t2);
+  } catch (o) {
+    n = e.lastIndexOf([...e].reverse().find(t2));
+  }
+  return n;
 }
 function m2(e, ...t2) {
   return c3(e) ? e(...t2) : e;
@@ -428,8 +496,14 @@ function F2(e, t2 = "", n = {}) {
 function C2(e, t2 = true) {
   return Array.isArray(e) && (t2 || e.length !== 0);
 }
+function O(e) {
+  return e instanceof Date;
+}
 function z2(e) {
   return s2(e) && !isNaN(e);
+}
+function J(e = "") {
+  return s2(e) && e.length === 1 && !!e.match(/\S| /);
 }
 function G(e, t2) {
   if (t2) {
@@ -450,9 +524,6 @@ function X(e) {
 }
 function re(e) {
   return a(e) ? e.replace(/(_)/g, "-").replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase() : e;
-}
-function oe(e) {
-  return e === "auto" ? 0 : typeof e == "number" ? e : Number(e.replace(/[^\d.]/g, "").replace(",", ".")) * 1e3;
 }
 
 // node_modules/@primeuix/utils/dist/uuid/index.mjs
@@ -666,7 +737,7 @@ var FilterService = class _FilterService {
         return true;
       }
       for (let i3 = 0; i3 < filter.length; i3++) {
-        if (k(value, filter[i3])) {
+        if (k2(value, filter[i3])) {
           return true;
         }
       }
@@ -840,16 +911,11 @@ var MessageService = class _MessageService {
 })();
 var OverlayService = class _OverlayService {
   clickSource = new Subject();
-  parentDragSource = new Subject();
   clickObservable = this.clickSource.asObservable();
-  parentDragObservable = this.parentDragSource.asObservable();
   add(event) {
     if (event) {
       this.clickSource.next(event);
     }
-  }
-  emitParentDrag(container) {
-    this.parentDragSource.next(container);
   }
   static ɵfac = function OverlayService_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _OverlayService)();
@@ -1389,43 +1455,58 @@ export {
   P,
   dt,
   x,
-  w,
   h,
+  k,
+  $,
+  D,
   S,
   v,
+  I,
+  j,
   ut,
   A,
   U,
+  ht,
+  Y,
   z,
   bt,
+  b,
   vt,
   Tt,
+  Ht,
   Lt,
   K,
   C,
+  Mt,
   Rt,
-  qt,
-  Qt,
+  et,
+  Yt,
   Zt,
+  Gt,
+  Kt,
   _t,
-  te,
   s,
-  w2,
+  w2 as w,
   l2 as l,
+  y3 as y,
   c3 as c,
   s2,
-  k,
+  p2 as p,
+  k2,
+  q,
   i2 as i,
+  M,
   m2 as m,
   a,
   g,
   F2 as F,
   C2,
+  O,
   z2,
+  J,
   G,
-  Y2 as Y,
+  Y2,
   re,
-  oe,
   s3,
   ConfirmEventType,
   ConfirmationService,
@@ -1443,4 +1524,4 @@ export {
   TranslationKeys,
   TreeDragDropService
 };
-//# sourceMappingURL=chunk-XVHYPLNJ.js.map
+//# sourceMappingURL=chunk-J2D3YFFI.js.map
