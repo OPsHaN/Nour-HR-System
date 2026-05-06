@@ -141,3 +141,21 @@
     grid-column: span 1;
   }
 }
+
+.password-rules {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  padding: 0;
+  margin: 5px 5px;
+  font-size: 15px;
+}
+
+.password-rules li {
+  color: #999;
+  transition: 0.2s;
+}
+
+.password-rules li.valid {
+  color: #52c41a; /* أخضر */
+}

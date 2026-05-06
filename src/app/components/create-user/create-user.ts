@@ -21,6 +21,7 @@ export class CreateUser {
   successMsg = "";
   errorMsg = "";
   showPassword = false;
+  PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
 
   constructor(
     private fb: FormBuilder,
@@ -28,7 +29,14 @@ export class CreateUser {
   ) {
     this.form = this.fb.group({
       Username: ["", Validators.required],
-      Password: ["", [Validators.required, Validators.minLength(6)]],
+      Password: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(this.PASSWORD_PATTERN),
+        ],
+      ],
       Role: ["", Validators.required],
       Name: ["", Validators.required],
     });
@@ -41,6 +49,26 @@ export class CreateUser {
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
+
+  get passwordValue(): string {
+  return this.form.get('Password')?.value || '';
+}
+
+hasUpperCase(): boolean {
+  return /[A-Z]/.test(this.passwordValue);
+}
+
+hasLowerCase(): boolean {
+  return /[a-z]/.test(this.passwordValue);
+}
+
+hasNumber(): boolean {
+  return /\d/.test(this.passwordValue);
+}
+
+hasSymbol(): boolean {
+  return /[\W_]/.test(this.passwordValue);
+}
 
   isRequired(controlName: string): boolean {
     const control = this.form.get(controlName);

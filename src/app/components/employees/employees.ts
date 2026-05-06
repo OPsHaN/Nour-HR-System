@@ -1,71 +1,46 @@
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { Apiservice } from "src/app/services/api.service";
+import { FormsModule } from "@angular/forms";
+import { ConfirmationService } from "primeng/api";
 import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
-import { ConfirmDialog } from "primeng/confirmdialog";
-import { ConfirmationService } from 'primeng/api';
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-
-interface Employee {
-  id: string;
-  name: string;
-  username: string;
-  role: string;
-  isActive: boolean;
-}
+import { Apiservice } from "src/app/services/api.service";
 
 @Component({
   selector: "app-employees",
-  imports: [TableModule, TagModule, ConfirmDialog , FormsModule , CommonModule],
+  imports: [TableModule, TagModule, FormsModule, CommonModule],
   templateUrl: "./employees.html",
   styleUrl: "./employees.css",
 })
 export class Employees {
-  employees: Employee[] = [];
+  employees: any[] = [];
+  totalRecords = 0;
+  page = 1;
+  pageSize = 10;
+  loading = false;
 
-  constructor(private api: Apiservice , private confirmationService: ConfirmationService) {}
+  constructor(
+    private api: Apiservice,
+    private confirmationService: ConfirmationService,
+  ) {}
 
-  ngOnInit(): void {
-    this.getEmployees();
-  }
+  ngOnInit() {
+  this.loadEmployees();
+}
 
-  getEmployees() {
-    this.api.getAllUsers(1, 10).subscribe({
+  loadEmployees() {
+    this.loading = true;
+
+      this.api.getAllEmployees(this.page , this.pageSize).subscribe({
       next: (res: any) => {
-        this.employees = res.data || [];
+        this.employees = res.data;
+        this.totalRecords = res.totalCount;
+        this.loading = false;
+        console.log(res);
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
+        this.loading = false;
       },
     });
-  }
-
-
-  onRowEditSave(emp: any) {
-  console.log('Updated:', emp);
-
-  // API CALL
-  // this.api.updateUser(emp.id, emp).subscribe(...)
-}
-
-  confirmDelete(emp: any) {
-  this.confirmationService.confirm({
-    message: 'هل أنت متأكد من حذف المستخدم؟',
-    header: 'تأكيد الحذف',
-    icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'نعم',
-    rejectLabel: 'إلغاء',
-
-    accept: () => {
-      this.deleteEmployee(emp.id);
-    }
-  });
-}
-
-  deleteEmployee(id: string) {
-    console.log('Deleted ID:', id); 
-    // API CALL
-    // this.api.deleteUser(id).subscribe(...)
   }
 }

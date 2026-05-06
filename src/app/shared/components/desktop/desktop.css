@@ -102,6 +102,7 @@
 ::ng-deep.p-paginator-page.p-paginator-page-selected {
   background-color: var(--accent) !important;
   color: #fff !important;
+  border-radius: 20px;
 }
 
 ::ng-deep .p-select-option.p-select-option-selected.p-focus {
@@ -133,14 +134,6 @@
 ::ng-deep .p-select-dropdown,
 .p-select-label {
 
-  width:auto !important;
-  
-}
+  width: auto !important;
 
-::ng-deep .p-celleditor input:focus,
-::ng-deep .p-celleditor .p-inputtext:focus,
-::ng-deep .p-celleditor select:focus {
-  outline: none;
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 2px rgba(49, 120, 246, 0.2);
 }

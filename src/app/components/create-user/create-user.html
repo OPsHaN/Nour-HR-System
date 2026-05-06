@@ -4,20 +4,29 @@
     <div class="field">
       <label
         >إسم المستخدم
-  <span class="required text-danger" *ngIf="isRequired('Username')">*</span>
-</label
-      >
+        <span class="required text-danger" *ngIf="isRequired('Username')"
+          >*</span
+        >
+      </label>
       <input type="text" formControlName="Username" />
+    </div>
+
+    <!-- Name -->
+    <div class="field">
+      <label
+        >الاسم الكامل
+        <span class="required text-danger" *ngIf="isRequired('Name')">
+          *
+        </span></label
+      >
+      <input type="text" formControlName="Name" />
     </div>
 
     <!-- Password -->
     <div class="field password-field">
       <label
         >الرقم السرى
-        <span
-          class="required text-danger"
-          *ngIf="isRequired('Password')"
-        >
+        <span class="required text-danger" *ngIf="isRequired('Password')">
           *
         </span></label
       >
@@ -35,42 +44,38 @@
           (click)="togglePassword()"
         ></i>
       </div>
-    </div>
 
-    <!-- Name -->
-    <div class="field">
-      <label
-        >الاسم الكامل
-        <span
-          class="required text-danger"
-          *ngIf="isRequired('Name')"
-        >
-          *
-        </span></label
-      >
-      <input type="text" formControlName="Name" />
+      <ul class="password-rules">
+        <li class="text-danger">يجب أن تحتوى كلمة السر على :</li>
+        <li [class.valid]="hasUpperCase()">حرف كبير</li>
+        <li [class.valid]="hasLowerCase()">حرف صغير</li>
+        <li [class.valid]="hasNumber()">رقم</li>
+        <li [class.valid]="hasSymbol()">رمز</li>
+      </ul>
     </div>
 
     <!-- Role -->
     <div class="field">
       <label
         >منصب الموظف
-        <span
-          class="required text-danger"
-          *ngIf="isRequired('Role')"
-        >
+        <span class="required text-danger" *ngIf="isRequired('Role')">
           *
         </span></label
       >
       <select formControlName="Role">
         <option value="">اختر المنصب</option>
-        <option value="HR">HR</option>
-        <option value="Admin">Admin</option>
-        <option value="User">User</option>
+        <option value="Admin">مدير</option>
+        <option value="Accountant">محاسب</option>
+        <option value="HR">موارد بشرية</option>
+        <option value="Employee">موظف</option>
       </select>
     </div>
 
-    <button type="submit" [disabled]="loading || form.invalid" class="submit-btn full">
+    <button
+      type="submit"
+      [disabled]="loading || form.invalid"
+      class="submit-btn full"
+    >
       {{ loading ? 'جارى التسجيل...' : 'تسجيل' }}
     </button>
   </form>

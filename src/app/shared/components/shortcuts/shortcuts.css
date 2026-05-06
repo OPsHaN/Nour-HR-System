@@ -9,7 +9,7 @@
   display: grid;
   gap: 10px;
   justify-items: center;
-  width: 130px;
+  width: 140px;
   padding: 12px 8px;
   color: inherit;
   background: var(--shortcut-bg);

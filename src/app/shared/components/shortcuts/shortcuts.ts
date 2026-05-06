@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Output, EventEmitter } from '@angular/core';
 import { 
   getShortcutTheme,
-  getShortcuts,
+  getShortcutsByRole,
   Shortcut,
-  WindowAction
+  WindowAction,
+  UserRole
 } from '../../shortcut.config';
 
 @Component({
@@ -17,7 +18,12 @@ import {
 export class ShortcutsComponent {
   @Output() shortcutClick = new EventEmitter<Shortcut>();
 
-  protected readonly shortcuts = getShortcuts();
+  protected shortcuts: Shortcut[] = [];
+
+  ngOnInit() {
+    const role = this.getUserRole();
+    this.shortcuts = getShortcutsByRole(role);
+  }
 
   protected onShortcutClick(shortcut: Shortcut): void {
     this.shortcutClick.emit(shortcut);
@@ -25,6 +31,17 @@ export class ShortcutsComponent {
 
   protected getTheme(action: WindowAction) {
     return getShortcutTheme(action);
+  }
+
+  // 👇 جايب role من localStorage
+  private getUserRole(): UserRole {
+    const role = localStorage.getItem('role');
+
+    const allowed: UserRole[] = ["Admin", "HR", "Accountant", "Employee"];
+
+    return allowed.includes(role as UserRole)
+      ? (role as UserRole)
+      : "Employee";
   }
 }
 

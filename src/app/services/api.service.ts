@@ -6,23 +6,55 @@ import { MessageService } from "primeng/api";
   providedIn: "root",
 })
 export class Apiservice {
-  private baseUrl = "https://hrnourtest.runasp.net/api/auth/";
+  private baseUrl = "https://hrnourtest.runasp.net/api/";
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
   ) {}
 
+  //users//
+
   createUser(userData: any) {
-    return this.http.post(`${this.baseUrl}CreateUser`, userData);
+    return this.http.post(`${this.baseUrl}auth/CreateUser`, userData);
   }
 
   getAllUsers(page: number, pagesize: number) {
     return this.http.get(
-      `${this.baseUrl}users?page=${page}&pageSize=${pagesize}`,
+      `${this.baseUrl}auth/users?page=${page}&pageSize=${pagesize}`,
     );
   }
 
+   changePassword(id: number) {
+    return this.http.put(`${this.baseUrl}users/${id}/password`, {});
+  }
+
+
+  //employees//
+
+  addNewEmployee(employeeData: any) {
+    return this.http.post(`${this.baseUrl}employees`, employeeData);
+  }
+
+  editEmployee(id: string, employeeData: any) {
+    return this.http.put(`${this.baseUrl}employees/${id}`, employeeData);
+  }
+
+  getEmployeeById(id: string) {
+    return this.http.get(`${this.baseUrl}employees/${id}`);
+  }
+
+  updateEmployee(id: string, employeeData: any) {
+    return this.http.put(`${this.baseUrl}employees/${id}/end-of-service`, employeeData);
+  }
+
+  getAllEmployees(page: number, pagesize: number) {
+    return this.http.get(
+      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}`,
+    );
+  }
+
+ 
   showError(msg: string) {
     this.messageService.add({
       severity: "error",

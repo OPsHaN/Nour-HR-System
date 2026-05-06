@@ -38,3 +38,68 @@ input {
 .p-toast .p-toast-detail {
   text-align: right;
 }
+
+.p-datatable-tbody > tr > td {
+  padding: 0.4rem !important;
+}
+
+.p-paginator {
+  padding: 1px !important;
+}
+
+.p-select-label {
+  padding: 0.3rem 0.5rem !important;
+}
+
+/* 🎯 Table Wrapper */
+.p-datatable {
+  background: var(--surface);
+  border:0px solid var(--surface-border);
+  /* border-radius: 16px; */
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--surface-strong);
+  color: var(--text);
+  border-bottom: 2px solid var(--surface-border);
+  text-align: center;
+  font-weight: 600;
+  padding: 15px;
+   background-color: var(--accent) !important;
+  color: #fff !important;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background: transparent;
+  transition: 0.2s ease;
+    color: var(--text);
+
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: rgba(49, 120, 246, 0.08);
+}
+
+.p-cell-editor .p-inputtext {
+  background: var(--surface-strong);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+}
+
+.custom-input {
+  padding: 10px 10px;
+  border: 1px solid var(--surface-border);
+  border-radius: 18px;
+  color: var(--text);
+  outline: none;
+  font-size: 20px;
+  transition: 0.2s ease;
+}
+
+.custom-input option {
+  color: var(--text);
+  background: var(--surface-strong);
+}
