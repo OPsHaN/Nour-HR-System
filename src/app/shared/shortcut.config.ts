@@ -21,7 +21,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "event",
     bg: "#ff4d4f",
     roles: ["Admin", "HR" , "Accountant" , "Employee"] as UserRole[],
-    size: { width: 360, height: 550 },
+    size: { width: 500, height: 650 },
   },
   users: {
     title: "المستخدمين",
@@ -30,19 +30,19 @@ export const SHORTCUTS_CONFIG = {
     roles: ["Admin", "HR"] as UserRole[],
     size: { width: 860, height: 600 },
   },
-  createUser: {
-    title: "إضافة مستخدم",
-    icon: "person_add",
-    bg: "#fa8c16",
-    roles: ["Admin", "HR"] as UserRole[],
-    size: { width: 620, height: 480 },
-  },
   employees: {
     title: "الموظفين",
     icon: "people",
     bg: "#13c2c2",
     roles: ["Admin", "HR"] as UserRole[],
     size: { width: 860, height: 600 },
+  },
+    branches: {
+    title: "الفروع",
+    icon: "apartment",
+    bg: "#fa8c16",
+    roles: ["Admin", "HR"] as UserRole[],
+    size: { width: 620, height: 480 },
   },
   download: {
     title: "التقارير",

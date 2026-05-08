@@ -1,4 +1,26 @@
+<div class="sticky-header">
+  <button
+    pButton
+    type="button"
+    class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+    [class.btn-success]="!showCreateEmployee"
+    [class.btn-secondary]="showCreateEmployee"
+    icon="pi pi-plus"
+    (click)="showCreateEmployee = !showCreateEmployee"
+  >
+  <i
+    class="pi"
+    [ngClass]="showCreateEmployee ? 'pi-arrow-right' : 'pi-user-plus'"
+  ></i>
+
+  {{ showCreateEmployee ? 'الرجوع للخلف' : 'موظف جديد' }}  </button>
+</div>
+
+<app-create-employee *ngIf="showCreateEmployee">
+</app-create-employee>
+
 <p-table
+  *ngIf="!showCreateEmployee"
   [value]="employees"
   [paginator]="true"
   [rows]="pageSize"
@@ -19,6 +41,7 @@
       <th>رقم الحساب</th>
       <th>ساعات العمل</th>
       <th>الفرع</th>
+      <th>الإجراءات</th>
     </tr>
   </ng-template>
 
@@ -32,6 +55,26 @@
       <td>{{ emp.bankAccount }}</td>
       <td>{{ emp.shiftHours }}</td>
       <td>{{ emp.branchName }}</td>
+      <td>
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-success mx-1 my-1"
+          icon="pi pi-pencil"
+          (click)="editEmployee(emp)"
+        >
+          <i class="pi pi-pencil"></i>
+        </button>
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-danger mx-1 my-1"
+          icon="pi pi-trash"
+          (click)="confirmDelete(emp)"
+        >
+          <i class="pi pi-trash"></i>
+        </button>
+      </td>
     </tr>
   </ng-template>
 </p-table>

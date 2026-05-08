@@ -70,9 +70,9 @@
 }
 
 .submit-btn {
-  width: 50%;
-  margin:auto;
-  
+  width: 10%;
+  margin: auto;
+
 }
 
 .field {
@@ -95,7 +95,8 @@
 
 .password-field input {
   width: 100%;
-  padding-inline-end: 40px; /* مساحة للأيقونة */
+  padding-inline-end: 40px;
+  /* مساحة للأيقونة */
 }
 
 /* أيقونة العين */
@@ -157,5 +158,6 @@
 }
 
 .password-rules li.valid {
-  color: #52c41a; /* أخضر */
+  color: #52c41a;
+  /* أخضر */
 }

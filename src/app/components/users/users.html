@@ -1,4 +1,26 @@
+<div class="sticky-header">
+  <button
+    pButton
+    type="button"
+    class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+    [class.btn-success]="!showCreateUser"
+    [class.btn-secondary]="showCreateUser"
+    icon="pi pi-plus"
+    (click)="showCreateUser = !showCreateUser"
+  >
+  <i
+    class="pi"
+    [ngClass]="showCreateUser ? 'pi-arrow-right' : 'pi-user-plus'"
+  ></i>
+
+  {{ showCreateUser ? 'الرجوع للخلف' : 'مستخدم جديد' }}  </button>
+</div>
+
+<app-create-user *ngIf="showCreateUser">
+</app-create-user>
+
 <p-table
+  *ngIf="!showCreateUser"
   [value]="users"
   dataKey="id"
   editMode="row"
@@ -135,4 +157,3 @@
     </tr>
   </ng-template>
 </p-table>
-

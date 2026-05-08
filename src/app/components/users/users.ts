@@ -5,6 +5,7 @@ import { TagModule } from "primeng/tag";
 import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { CreateUser } from "../create-user/create-user";
 
 interface User {
   id: string;
@@ -16,7 +17,7 @@ interface User {
 
 @Component({
   selector: "app-users",
-  imports: [TableModule, TagModule , FormsModule , CommonModule],
+  imports: [TableModule, TagModule, FormsModule, CommonModule, CreateUser],
   templateUrl: "./users.html",
   styleUrl: "./users.css",
 })
@@ -25,6 +26,7 @@ export class Users {
   totalRecords = 0;
   page = 1;
   pageSize = 10;
+  showCreateUser: boolean = false;
 
   constructor(private api: Apiservice , private confirmationService: ConfirmationService) {}
 

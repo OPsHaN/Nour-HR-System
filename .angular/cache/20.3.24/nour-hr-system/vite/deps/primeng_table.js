@@ -1,4 +1,16 @@
 import {
+  Scroller,
+  ScrollerModule
+} from "./chunk-X2KOGDMA.js";
+import {
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+  NgControlStatus,
+  NgModel,
+  RequiredValidator
+} from "./chunk-FVPFOTMX.js";
+import {
   AutoFocus,
   Badge,
   BadgeModule,
@@ -10,11 +22,7 @@ import {
   Ripple,
   blockBodyScroll,
   unblockBodyScroll
-} from "./chunk-FTFMYLBQ.js";
-import {
-  Scroller,
-  ScrollerModule
-} from "./chunk-MYD2JMBQ.js";
+} from "./chunk-XVTH54CT.js";
 import {
   ObjectUtils,
   UniqueComponentId,
@@ -48,7 +56,7 @@ import {
   SpinnerIcon,
   TimesIcon,
   TrashIcon
-} from "./chunk-XTLXXFBV.js";
+} from "./chunk-2PSCK73C.js";
 import {
   BaseComponent,
   Bind,
@@ -104,14 +112,6 @@ import {
   y,
   z
 } from "./chunk-J2D3YFFI.js";
-import {
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  NgControlStatus,
-  NgModel,
-  RequiredValidator
-} from "./chunk-FVPFOTMX.js";
 import {
   animate,
   animation,

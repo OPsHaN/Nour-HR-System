@@ -5,10 +5,11 @@ import { ConfirmationService } from "primeng/api";
 import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
 import { Apiservice } from "src/app/services/api.service";
+import { CreateEmployee } from "../create-employee/create-employee";
 
 @Component({
   selector: "app-employees",
-  imports: [TableModule, TagModule, FormsModule, CommonModule],
+  imports: [TableModule, TagModule, FormsModule, CommonModule, CreateEmployee],
   templateUrl: "./employees.html",
   styleUrl: "./employees.css",
 })
@@ -18,6 +19,7 @@ export class Employees {
   page = 1;
   pageSize = 10;
   loading = false;
+  showCreateEmployee: boolean = false;
 
   constructor(
     private api: Apiservice,
@@ -42,5 +44,31 @@ export class Employees {
         this.loading = false;
       },
     });
+  }
+
+  editEmployee(emp: any) {
+    console.log('Updated:', emp); 
+
+}
+
+
+ confirmDelete(emp: any) {
+  this.confirmationService.confirm({
+    message: 'هل أنت متأكد من حذف الموظف',
+    header: 'تأكيد الحذف',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'نعم',
+    rejectLabel: 'إلغاء',
+
+    accept: () => {
+      this.deleteEmployee(emp.id);
+    }
+  });
+}
+
+  deleteEmployee(id: string) {
+    console.log('Deleted ID:', id); 
+    // API CALL
+    // this.api.deleteUser(id).subscribe(...)
   }
 }

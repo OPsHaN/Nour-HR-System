@@ -18,7 +18,7 @@ body {
 
 body {
   /* background: #dfe7f4; */
-    background: 
+  background:
     url("/photos/bg.png") no-repeat center center;
   background-size: cover;
   background-position: center;
@@ -39,12 +39,12 @@ input {
   text-align: right;
 }
 
-.p-datatable-tbody > tr > td {
+.p-datatable-tbody>tr>td {
   padding: 0.4rem !important;
 }
 
 .p-paginator {
-  padding: 1px !important;
+  padding: 3px !important;
 }
 
 .p-select-label {
@@ -54,33 +54,45 @@ input {
 /* 🎯 Table Wrapper */
 .p-datatable {
   background: var(--surface);
-  border:0px solid var(--surface-border);
+  border: 0px solid var(--surface-border);
   /* border-radius: 16px; */
   overflow: hidden;
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
 }
 
-.p-datatable .p-datatable-thead > tr > th {
+.p-datatable .p-datatable-thead>tr>th {
   background: var(--surface-strong);
-  color: var(--text);
   border-bottom: 2px solid var(--surface-border);
   text-align: center;
   font-weight: 600;
   padding: 15px;
-   background-color: var(--accent) !important;
+  background-color: var(--accent) !important;
   color: #fff !important;
 }
 
-.p-datatable .p-datatable-tbody > tr {
+.p-datatable .p-datatable-tbody>tr {
   background: transparent;
   transition: 0.2s ease;
-    color: var(--text);
+  color: var(--text);
+  text-align: center;
 
 }
 
-.p-datatable .p-datatable-tbody > tr:hover {
-  background: rgba(49, 120, 246, 0.08);
+.p-datatable .p-datatable-tbody>tr>td {
+  text-align: center;
+}
+
+/* ✨ hover احترافي */
+.p-datatable .p-datatable-tbody>tr:hover>td {
+  background: var(--hover);
+  color: var(--text);
+
+}
+
+/* ✨ left accent line */
+.p-datatable .p-datatable-tbody>tr:hover {
+  box-shadow: inset 3px 0 0 var(--hover);
 }
 
 .p-cell-editor .p-inputtext {
@@ -102,4 +114,50 @@ input {
 .custom-input option {
   color: var(--text);
   background: var(--surface-strong);
+}
+
+
+.p-paginator {
+  background: var(--surface) !important;
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(10px);
+}
+
+.p-paginator .p-paginator-page.p-highlight {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #fff !important;
+}
+
+.p-paginator .p-paginator-page:not(.p-highlight):hover {
+  background: rgba(49, 120, 246, 0.15);
+  color: var(--accent);
+}
+
+.p-paginator-page.p-paginator-page-selected {
+  background-color: var(--accent) !important;
+  color: #fff !important;
+  border-radius: 20px;
+}
+
+.p-select-option.p-select-option-selected.p-focus {
+  background: var(--accent);
+  color: var(--text);
+}
+
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-prev {
+  color: var(--text);
+}
+
+.p-paginator .p-paginator-next:hover,
+.p-paginator .p-paginator-prev:hover {
+  background: rgba(49, 120, 246, 0.15);
+}
+
+
+
+.p-select-dropdown,
+.p-select-label {
+  width: auto !important;
 }

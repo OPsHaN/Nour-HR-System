@@ -19,14 +19,13 @@
             [class.is-today]="day?.toDateString() === today().toDateString()"
             [disabled]="!day"
           >
-            {{ day?.getDate() ?? '' }}
-          </button>
+{{ day ? day.getDate().toLocaleString('ar-EG') : '' }}          </button>
         }
       </div>
     }
   </div>
   <div class="calendar-card__footer">
-    <button type="button" (click)="resetCalendar()">Today</button>
-    <button type="button" (click)="clearCalendarSelection()">Clear</button>
+    <button type="button" (click)="resetCalendar()">اليوم</button>
+    <button type="button" (click)="clearCalendarSelection()">مسح</button>
   </div>
 </div>

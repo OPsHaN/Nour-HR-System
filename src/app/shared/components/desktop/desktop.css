@@ -15,7 +15,8 @@
   /* --shadow: 0 22px 45px rgba(35, 56, 95, 0.18); */
   --taskbar: rgba(236, 242, 251, 0.75);
   --taskbar-border: rgba(255, 255, 255, 0.44);
-  --accent: #3178f6;
+  --accent: #92bbfd;
+  --hover: rgba(236, 236, 236, 0.474);
   --danger: #f45454;
   position: relative;
   min-height: 100vh;
@@ -51,7 +52,7 @@
   --shadow: 0 22px 45px rgba(0, 0, 0, 0.35);
   --taskbar: rgba(10, 16, 28, 0.8);
   --taskbar-border: rgba(255, 255, 255, 0.08);
-  --accent: #69a2ff;
+  --accent: #92bbfd;
   --shortcut-bg: rgba(30, 30, 30, 0.6);
 
 }
@@ -82,58 +83,3 @@
   }
 }
 
-::ng-deep .p-paginator {
-  background: var(--surface) !important;
-  border: 1px solid var(--surface-border);
-  backdrop-filter: blur(10px);
-}
-
-::ng-deep .p-paginator .p-paginator-page.p-highlight {
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
-  color: #fff !important;
-}
-
-::ng-deep .p-paginator .p-paginator-page:not(.p-highlight):hover {
-  background: rgba(49, 120, 246, 0.15);
-  color: var(--accent);
-}
-
-::ng-deep.p-paginator-page.p-paginator-page-selected {
-  background-color: var(--accent) !important;
-  color: #fff !important;
-  border-radius: 20px;
-}
-
-::ng-deep .p-select-option.p-select-option-selected.p-focus {
-  background: var(--accent);
-  color: var(--text);
-}
-
-::ng-deep .p-paginator .p-paginator-next,
-::ng-deep .p-paginator .p-paginator-prev {
-  color: var(--text);
-}
-
-::ng-deep .p-paginator .p-paginator-next:hover,
-::ng-deep .p-paginator .p-paginator-prev:hover {
-  background: rgba(49, 120, 246, 0.15);
-}
-
-
-::ng-deep .p-datatable-tbody>tr>td {
-  border-bottom: 1px solid var(--surface-border);
-  text-align: center !important;
-}
-
-::ng-deep .p-datatable-thead>tr>th {
-  border-bottom: 2px solid var(--surface-border);
-  text-align: center !important;
-}
-
-::ng-deep .p-select-dropdown,
-.p-select-label {
-
-  width: auto !important;
-
-}

@@ -1,0 +1,87 @@
+<div class="sticky-header">
+  <button
+    pButton
+    type="button"
+    class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+    [class.btn-success]="!showCreateBranch"
+    [class.btn-secondary]="showCreateBranch"
+    (click)="showCreateBranch = !showCreateBranch"
+  >
+    <i
+      class="pi"
+      [ngClass]="showCreateBranch ? 'pi-arrow-right' : 'pi-building'"
+    ></i>
+
+    {{ showCreateBranch ? 'الرجوع للخلف' : 'فرع جديد' }}
+  </button>
+</div>
+
+<!-- CREATE BRANCH -->
+<app-create-branch *ngIf="showCreateBranch">
+</app-create-branch>
+
+<!-- TABLE -->
+<p-table
+  *ngIf="!showCreateBranch"
+  [value]="Branches"
+  [paginator]="true"
+  [rows]="pageSize"
+  [rowsPerPageOptions]="[5,10,20]"
+  [loading]="loading"
+  [responsiveLayout]="'scroll'"
+  [paginatorDropdownAppendTo]="'body'"
+  dataKey="id"
+  dir="rtl"
+>
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>اسم الفرع</th>
+      <th>الإجراءات</th>
+    </tr>
+  </ng-template>
+
+  <!-- BODY -->
+  <ng-template pTemplate="body" let-branch let-ri="rowIndex">
+    <tr>
+
+      <!-- Row Number -->
+      <td>
+        {{ ri + 1 + (page - 1) * pageSize }}
+      </td>
+
+      <!-- Branch Name -->
+      <td>
+        {{ branch.name }}
+      </td>
+
+      <!-- Actions -->
+      <td>
+
+        <!-- Edit -->
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-success mx-1 my-1"
+          (click)="editBranch(branch)"
+        >
+          <i class="pi pi-pencil"></i>
+        </button>
+
+        <!-- Delete -->
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-danger mx-1 my-1"
+          (click)="confirmDelete(branch)"
+        >
+          <i class="pi pi-trash"></i>
+        </button>
+
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>

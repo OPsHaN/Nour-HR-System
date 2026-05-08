@@ -1,0 +1,179 @@
+<div class="panel">
+  <form [formGroup]="form" (ngSubmit)="Submit()" class="form grid-form">
+
+    <!-- Username -->
+    <div class="field">
+      <label>
+        اسم المستخدم
+        <span class="required text-danger" *ngIf="isRequired('username')">*</span>
+      </label>
+      <input type="text" formControlName="username" />
+    </div>
+
+    <!-- Password -->
+    <div class="field password-field">
+      <label>
+        كلمة المرور
+        <span class="required text-danger" *ngIf="isRequired('password')">*</span>
+      </label>
+
+      <div class="input-wrapper">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="كلمة المرور"
+        />
+
+        <i
+          class="pi"
+          [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
+          (click)="togglePassword()"
+        ></i>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="field">
+      <label>
+        الاسم الكامل
+        <span class="required text-danger" *ngIf="isRequired('name')">*</span>
+      </label>
+      <input type="text" formControlName="name" />
+    </div>
+
+    <!-- Role -->
+    <div class="field">
+      <label>
+        الدور الوظيفي
+        <span class="required text-danger" *ngIf="isRequired('role')">*</span>
+      </label>
+
+      <select formControlName="role">
+        <option value="">اختر الدور</option>
+        <option value="static">Static</option>
+        <option value="admin">Admin</option>
+        <option value="employee">Employee</option>
+      </select>
+    </div>
+
+    <!-- Job Name -->
+    <div class="field">
+      <label>
+        اسم الوظيفة
+        <span class="required text-danger" *ngIf="isRequired('theNameOfJob')">*</span>
+      </label>
+      <input type="text" formControlName="theNameOfJob" />
+    </div>
+
+    <!-- Bank Name -->
+    <div class="field">
+      <label>
+        اسم البنك
+        <span class="required text-danger" *ngIf="isRequired('bankName')">*</span>
+      </label>
+      <input type="text" formControlName="bankName" />
+    </div>
+
+    <!-- Bank Account -->
+    <div class="field">
+      <label>
+        رقم الحساب البنكي
+        <span class="required text-danger" *ngIf="isRequired('bankAccount')">*</span>
+      </label>
+      <input type="text" formControlName="bankAccount" />
+    </div>
+
+    <!-- Shift Hours -->
+    <div class="field">
+      <label>
+        عدد ساعات الشيفت
+        <span class="required text-danger" *ngIf="isRequired('shiftHours')">*</span>
+      </label>
+      <input type="number" formControlName="shiftHours" />
+    </div>
+
+    <!-- Branch Id -->
+    <div class="field">
+      <label>
+        الفرع
+        <span class="required text-danger" *ngIf="isRequired('branchId')">*</span>
+      </label>
+
+      <select formControlName="branchId">
+        <option value="">اختر الفرع</option>
+        <option [value]="1">الفرع الأول</option>
+        <option [value]="2">الفرع الثاني</option>
+      </select>
+    </div>
+
+    <!-- Hiring Date -->
+    <div class="field">
+      <label>
+        تاريخ التعيين
+        <span class="required text-danger" *ngIf="isRequired('hiringDate')">*</span>
+      </label>
+      <input type="date" formControlName="hiringDate" />
+    </div>
+
+    <!-- Qualification -->
+    <div class="field">
+      <label>
+        المؤهل الدراسي
+        <span class="required text-danger" *ngIf="isRequired('qualification')">*</span>
+      </label>
+      <input type="text" formControlName="qualification" />
+    </div>
+
+    <!-- Graduation Year -->
+    <div class="field">
+      <label>
+        سنة التخرج
+        <span class="required text-danger" *ngIf="isRequired('graduationYear')">*</span>
+      </label>
+      <input type="number" formControlName="graduationYear" />
+    </div>
+
+    <!-- National ID -->
+    <div class="field">
+      <label>
+        الرقم القومي
+        <span class="required text-danger" *ngIf="isRequired('nationalId')">*</span>
+      </label>
+      <input type="text" formControlName="nationalId" maxlength="14" />
+    </div>
+
+    <!-- Phone Number -->
+    <div class="field">
+      <label>
+        رقم الهاتف
+        <span class="required text-danger" *ngIf="isRequired('phoneNumber')">*</span>
+      </label>
+      <input type="text" formControlName="phoneNumber" />
+    </div>
+
+    <!-- Total Salary -->
+    <div class="field">
+      <label>
+        الراتب الإجمالي
+        <span class="required text-danger" *ngIf="isRequired('totalSalary')">*</span>
+      </label>
+      <input type="number" formControlName="totalSalary" />
+    </div>
+
+    <!-- Salary Per Hour -->
+    <div class="field">
+      <label>الراتب بالساعة</label>
+      <input type="number" formControlName="salaryPerHour" />
+    </div>
+
+    <!-- Submit -->
+    <button
+      type="submit"
+      [disabled]="loading || form.invalid"
+      class="submit-btn full mb-2"
+    >
+      {{ loading ? 'جارى التسجيل...' : 'تسجيل' }}
+    </button>
+
+  </form>
+</div>

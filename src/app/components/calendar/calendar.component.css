@@ -14,6 +14,25 @@
   gap: 12px;
 }
 
+/* أزرار الهيدر والفوتر فقط */
+.calendar-card__header button,
+.calendar-card__footer button {
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  color: inherit;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.calendar-card__header button:hover,
+.calendar-card__footer button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.28);
+}
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -31,39 +50,52 @@
   gap: 8px;
 }
 
+/* أيام الكالندر */
 .calendar-day {
   aspect-ratio: 1;
-  min-height: 40px;
-  border-radius: 14px;
+  min-height: 42px;
+
   border: none;
-  background: transparent;
-  color: inherit;
+  border-radius: 14px;
+
+  /* background: transparent; */
+  /* color: inherit; */
+
   cursor: pointer;
-  transition: background-color 160ms ease;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
+/* Hover */
+.calendar-day:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* اليوم الحالي */
 .calendar-day.is-today {
-  background: var(--accent);
-  color: white;
+  background: linear-gradient(135deg, #1677ff, #4096ff);
+  color: #fff;
+
+  font-weight: 600;
+
+  transform: scale(1.05);
+
+  box-shadow:
+    0 4px 14px rgba(22, 119, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
+/* منع hover يبوظ today */
+.calendar-day.is-today:hover {
+  background: linear-gradient(135deg, #1677ff, #4096ff);
+}
+
+/* الأيام الفاضية */
 .calendar-day:disabled {
   cursor: default;
-  opacity: 0.3;
-}
-
-.calendar-card button {
-  border: 0;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.16);
-  color: inherit;
-  cursor: pointer;
-  transition: transform 160ms ease, background-color 160ms ease;
-  min-height: 40px;
-  padding: 0 14px;
-}
-
-.calendar-card button:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.28);
+  opacity: 0.25;
 }

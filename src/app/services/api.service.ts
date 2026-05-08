@@ -54,6 +54,21 @@ export class Apiservice {
     );
   }
 
+
+  //branches//
+
+  addNewBranch(branchData: any) {
+    return this.http.post(`${this.baseUrl}branches`, branchData);
+  }
+
+  editBranch(id: string, branchData: any) {
+    return this.http.put(`${this.baseUrl}branches/${id}`, branchData);
+  }
+
+  getAllBranches(page: number, pagesize: number) {
+    return this.http.get(`${this.baseUrl}branches?page=${page}&pageSize=${pagesize}`);
+  }
+
  
   showError(msg: string) {
     this.messageService.add({

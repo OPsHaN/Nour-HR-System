@@ -9,13 +9,12 @@ import {
 import { Apiservice } from "src/app/services/api.service";
 
 @Component({
-  selector: "app-create-user",
-  standalone: true,
+  selector: "app-create-employee",
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: "./create-user.html",
-  styleUrl: "./create-user.css",
+  templateUrl: "./create-employee.html",
+  styleUrl: "./create-employee.css",
 })
-export class CreateUser {
+export class CreateEmployee {
   form: FormGroup;
   loading = false;
   successMsg = "";
@@ -28,17 +27,27 @@ export class CreateUser {
     private api: Apiservice,
   ) {
     this.form = this.fb.group({
-      Username: ["", Validators.required],
-      Password: [
+      username: ["", Validators.required],
+      password: [
         "",
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(this.PASSWORD_PATTERN),
-        ],
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(this.PASSWORD_PATTERN),
       ],
-      Role: ["", Validators.required],
-      Name: ["", Validators.required],
+      name: ["", Validators.required],
+      role: ["", Validators.required],
+      theNameOfJob: ["", Validators.required],
+      bankName: ["", Validators.required],
+      bankAccount: ["", Validators.required],
+      shiftHours: [8, Validators.required],
+      branchId: [null, Validators.required],
+      hiringDate: ["", Validators.required],
+      qualification: ["", Validators.required],
+      graduationYear: [null, Validators.required],
+      nationalId: ["", [Validators.required, Validators.minLength(14)]],
+      phoneNumber: ["", Validators.required],
+      totalSalary: [null, Validators.required],
+      salaryPerHour: [null],
     });
   }
 
@@ -49,26 +58,6 @@ export class CreateUser {
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
-
-  get passwordValue(): string {
-  return this.form.get('Password')?.value || '';
-}
-
-hasUpperCase(): boolean {
-  return /[A-Z]/.test(this.passwordValue);
-}
-
-hasLowerCase(): boolean {
-  return /[a-z]/.test(this.passwordValue);
-}
-
-hasNumber(): boolean {
-  return /\d/.test(this.passwordValue);
-}
-
-hasSymbol(): boolean {
-  return /[\W_]/.test(this.passwordValue);
-}
 
   isRequired(controlName: string): boolean {
     const control = this.form.get(controlName);
@@ -85,9 +74,9 @@ hasSymbol(): boolean {
     this.successMsg = "";
     this.errorMsg = "";
 
-    this.api.createUser(this.form.value).subscribe({
+    this.api.addNewEmployee(this.form.value).subscribe({
       next: () => {
-        this.api.showSuccess("تم تسجيل المستخدم بنجاح");
+        this.api.showSuccess("تم تسجيل الموظف بنجاح");
         this.form.reset();
         this.loading = false;
       },
