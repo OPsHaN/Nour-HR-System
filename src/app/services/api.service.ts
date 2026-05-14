@@ -49,7 +49,7 @@ export class Apiservice {
     return this.http.get(`${this.baseUrl}employees/${id}`);
   }
 
-  updateEmployee(id: string, employeeData: any) {
+  endOfServiceEmployee(id: string, employeeData: any) {
     return this.http.put(
       `${this.baseUrl}employees/${id}/end-of-service`,
       employeeData,
@@ -60,6 +60,10 @@ export class Apiservice {
     return this.http.get(
       `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}`,
     );
+  }
+
+  getHistoryByEmployeeId(id: string) {
+    return this.http.get(`${this.baseUrl}employees/${id}/history`);
   }
 
   //branches//

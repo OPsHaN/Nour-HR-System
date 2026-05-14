@@ -62,6 +62,7 @@ export class CreateEmployee {
   ngOnChanges(): void {
     if (this.employeeData) {
       this.form.patchValue(this.employeeData);
+      console.log(this.employeeData);
     }
   }
 
@@ -88,16 +89,30 @@ export class CreateEmployee {
     this.successMsg = "";
     this.errorMsg = "";
 
-    this.api.addNewEmployee(this.form.value).subscribe({
+    const request = this.employeeData
+      ? this.api.editEmployee(this.employeeData.id, this.form.value)
+      : this.api.addNewEmployee(this.form.value);
+
+    request.subscribe({
       next: () => {
-        this.api.showSuccess("تم تسجيل الموظف بنجاح");
+        this.api.showSuccess(
+          this.employeeData ? "تم تعديل الموظف بنجاح" : "تم تسجيل الموظف بنجاح",
+        );
+
         this.form.reset();
+
         this.loading = false;
+
         this.created.emit();
       },
+
       error: (err) => {
-        this.api.showError("يوجد مشكلة فى التسجيل");
+        this.api.showError(
+          this.employeeData ? "يوجد مشكلة فى التعديل" : "يوجد مشكلة فى التسجيل",
+        );
+
         console.error(err);
+
         this.loading = false;
       },
     });

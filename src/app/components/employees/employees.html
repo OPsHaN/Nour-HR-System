@@ -78,24 +78,140 @@
           pButton
           type="button"
           class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-          icon="pi pi-trash"
-          (click)="confirmDelete(emp)"
+          icon="pi pi-user-minus"
+          (click)="openEndService(emp)"
         >
           <i
-            class="pi pi-trash d-flex align-items-center justify-content-center"
+            class="pi pi-user-minus d-flex align-items-center justify-content-center"
           ></i>
         </button>
         <button
           pButton
           type="button"
-          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
           (click)="viewDetails(emp)"
         >
           <i
             class="pi pi-eye d-flex align-items-center justify-content-center"
           ></i>
         </button>
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          icon="pi pi-id-card"
+          (click)="openEmployeeDetails(emp)"
+        >
+          <i
+            class="pi pi-id-card d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
       </td>
     </tr>
   </ng-template>
 </p-table>
+
+<p-dialog
+  header="إنهاء خدمة الموظف"
+  [(visible)]="showEndServiceDialog"
+  [modal]="true"
+  class="end-service-dialog"
+  [style]="{ width: '20rem'}"
+>
+  <div class="mb-3">
+    <label class="mb-2 d-block">سبب إنهاء الخدمة</label>
+
+    <textarea
+      rows="4"
+      class="form-control"
+      [(ngModel)]="endServiceReason"
+      placeholder="اكتب السبب"
+    ></textarea>
+  </div>
+
+  <div class="d-flex justify-content-center gap-2">
+    <button
+      pButton
+      type="button"
+      label="تأكيد"
+      class="btn btn-sm btn-danger mx-1 my-1 rounded"
+      (click)="submitEndService(selectedEmployee)"
+    >
+      إرسال
+    </button>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="بيانات الموظف"
+  [(visible)]="showEmployeeDetailsDialog"
+  [modal]="true"
+  [style]="{ width: '35rem' }"
+  class="end-service-dialog"
+>
+
+  <div class="details-grid" *ngIf="employeeDetails">
+
+    <div class="detail-item">
+      <label>تاريخ التعيين</label>
+      <span>
+        {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <label>المؤهل الدراسي</label>
+      <span>
+        {{ employeeDetails.qualification }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <label>سنة التخرج</label>
+      <span>
+        {{ employeeDetails.graduationYear }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <label>الرقم القومي</label>
+      <span>
+        {{ employeeDetails.nationalId }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <label>رقم الهاتف</label>
+      <span>
+        {{ employeeDetails.phoneNumber }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <label>تاريخ إنهاء الخدمة</label>
+      <span>
+        {{
+          employeeDetails.endOfServiceDate
+            ? (employeeDetails.endOfServiceDate | date:'yyyy-MM-dd')
+            : '-'
+        }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <label>سبب إنهاء الخدمة</label>
+      <span>
+        {{ employeeDetails.endOfServiceReason || '-' }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <label>نوع إنهاء الخدمة</label>
+      <span>
+        {{ employeeDetails.endOfServiceType || '-' }}
+      </span>
+    </div>
+
+  </div>
+
+</p-dialog>

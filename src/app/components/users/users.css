@@ -9,3 +9,23 @@
     padding: 5px 0;
 }
 
+.input-wrapper {
+    position: relative;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.input-wrapper .custom-input {
+    width: 100%;
+    padding-left: 2.7rem;
+}
+
+.password-eye {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2;
+    font-size: 1rem;
+}

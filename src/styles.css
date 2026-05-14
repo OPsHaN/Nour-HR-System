@@ -166,6 +166,10 @@ input {
     flex-direction: row-reverse !important;
 }
 
+.p-dialog-content {
+    padding: 1rem !important;
+}
+
 .panel {
     display: grid;
     align-content: start;

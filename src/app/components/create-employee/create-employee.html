@@ -28,7 +28,7 @@
         />
 
         <i
-          class="pi"
+          class="pi my-auto"
           [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
           (click)="togglePassword()"
         ></i>
@@ -69,12 +69,12 @@
       </label>
       <select formControlName="theNameOfJob">
         <option value="">اختر المسمى الوظيفي</option>
-        <option value="Manager">مدير</option>
-        <option value="Employee">صيدلى</option>
-        <option value="Employee">مساعد صيدلى</option>
-        <option value="Employee">دليفرى</option>
-        <option value="Control">خدمات</option>
-        <option value="Admin">إدارة</option>
+        <option value="مدير">مدير</option>
+        <option value="صيدلى">صيدلى</option>
+        <option value="مساعد صيدلى">مساعد صيدلى</option>
+        <option value="دليفرى">دليفرى</option>
+        <option value="خدمات">خدمات</option>
+        <option value="إدارة">إدارة</option>
       </select>
     </div>
 
@@ -206,7 +206,8 @@
       [disabled]="loading || form.invalid"
       class="submit-btn full mb-2"
     >
-      {{ loading ? 'جارى التسجيل...' : 'تسجيل' }}
+      {{ loading ? (employeeData ? 'جارى التعديل...' : 'جارى التسجيل...') :
+      (employeeData ? 'تعديل' : 'تسجيل') }}
     </button>
   </form>
 </div>

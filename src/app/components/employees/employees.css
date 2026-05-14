@@ -8,3 +8,32 @@
 
     padding: 5px 0;
 }
+
+::ng-deep.end-service-dialog .p-dialog-header {
+  flex-direction: unset !important;
+  padding  : 0.5rem 1.5rem !important;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  padding: .8rem;
+  border-radius: 10px;
+  background: #f8f9fa;
+}
+
+.detail-item label {
+  font-weight: 600;
+  color: #666;
+}
+
+.detail-item span {
+  color: #222;
+}

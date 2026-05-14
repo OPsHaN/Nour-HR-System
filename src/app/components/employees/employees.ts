@@ -6,10 +6,18 @@ import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
 import { Apiservice } from "src/app/services/api.service";
 import { CreateEmployee } from "../create-employee/create-employee";
+import { Dialog } from "primeng/dialog";
 
 @Component({
   selector: "app-employees",
-  imports: [TableModule, TagModule, FormsModule, CommonModule, CreateEmployee],
+  imports: [
+    TableModule,
+    TagModule,
+    FormsModule,
+    CommonModule,
+    CreateEmployee,
+    Dialog,
+  ],
   templateUrl: "./employees.html",
   styleUrl: "./employees.css",
 })
@@ -21,6 +29,10 @@ export class Employees {
   loading = false;
   showCreateEmployee: boolean = false;
   selectedEmployee: any = null;
+  showEndServiceDialog = false;
+  endServiceReason = "";
+  employeeDetails: any = null;
+  showEmployeeDetailsDialog = false;
 
   constructor(
     private api: Apiservice,
@@ -46,29 +58,52 @@ export class Employees {
     });
   }
 
-editEmployee(emp: any) {
-  this.selectedEmployee = emp;
-  this.showCreateEmployee = true;
-}
+  editEmployee(emp: any) {
+    this.selectedEmployee = emp;
+    this.showCreateEmployee = true;
+  }
 
-  confirmDelete(emp: any) {
+  submitEndService(emp: any) {
+    if (!this.endServiceReason?.trim()) {
+      this.api.showError("يجب إدخال سبب إنهاء الخدمة");
+      return;
+    }
+
     this.confirmationService.confirm({
-      message: "هل أنت متأكد من حذف الموظف",
-      header: "تأكيد الحذف",
+      message: `هل أنت متأكد من إنهاء خدمة ${emp.name} نهائياً؟`,
+      header: "تأكيد إنهاء الخدمة",
       icon: "pi pi-exclamation-triangle",
       acceptLabel: "نعم",
       rejectLabel: "إلغاء",
+      acceptButtonStyleClass: "p-button-danger",
 
       accept: () => {
-        this.deleteEmployee(emp.id);
+        const payload = {
+          endOfServiceDate: new Date().toISOString(),
+          endOfServiceReason: this.endServiceReason,
+          endOfServiceType: "استقالة",
+        };
+
+        this.api.endOfServiceEmployee(emp.id, payload).subscribe({
+          next: () => {
+            this.api.showSuccess("تم إنهاء الخدمة بنجاح");
+            emp.isActive = false;
+            this.showEndServiceDialog = false;
+            this.endServiceReason = "";
+          },
+
+          error: (err) => {
+            this.api.showError("حدث خطأ أثناء إنهاء الخدمة");
+          },
+        });
       },
     });
   }
 
-  deleteEmployee(id: string) {
-    console.log("Deleted ID:", id);
-    // API CALL
-    // this.api.deleteUser(id).subscribe(...)
+  openEndService(emp: any) {
+    this.selectedEmployee = emp;
+    this.endServiceReason = "";
+    this.showEndServiceDialog = true;
   }
 
   viewDetails(emp: any) {
@@ -82,8 +117,20 @@ editEmployee(emp: any) {
     });
   }
 
-    onEmployeeCreated() {
+  onEmployeeCreated() {
     this.showCreateEmployee = false;
     this.loadEmployees();
+  }
+
+  openEmployeeDetails(emp: any) {
+    this.api.getHistoryByEmployeeId(emp.id).subscribe({
+      next: (res) => {
+        this.employeeDetails = res;
+        this.showEmployeeDetailsDialog = true;
+      },
+      error: (err) => {
+        this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+      },
+    });
   }
 }
