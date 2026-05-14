@@ -57,7 +57,6 @@ export class Login {
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
-          console.log(res.token);
 
           // حفظ البيانات في localStorage
           localStorage.setItem("name", res.name);

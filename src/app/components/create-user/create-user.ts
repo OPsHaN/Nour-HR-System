@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -22,6 +22,7 @@ export class CreateUser {
   errorMsg = "";
   showPassword = false;
   PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
+  @Output() created = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -90,6 +91,8 @@ hasSymbol(): boolean {
         this.api.showSuccess("تم تسجيل المستخدم بنجاح");
         this.form.reset();
         this.loading = false;
+                this.created.emit();
+
       },
       error: (err) => {
         this.api.showError("يوجد مشكلة فى التسجيل");

@@ -1,11 +1,12 @@
 <div class="panel">
   <form [formGroup]="form" (ngSubmit)="Submit()" class="form grid-form">
-
     <!-- Username -->
     <div class="field">
       <label>
         اسم المستخدم
-        <span class="required text-danger" *ngIf="isRequired('username')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('username')"
+          >*</span
+        >
       </label>
       <input type="text" formControlName="username" />
     </div>
@@ -14,7 +15,9 @@
     <div class="field password-field">
       <label>
         كلمة المرور
-        <span class="required text-danger" *ngIf="isRequired('password')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('password')"
+          >*</span
+        >
       </label>
 
       <div class="input-wrapper">
@@ -50,26 +53,38 @@
 
       <select formControlName="role">
         <option value="">اختر الدور</option>
-        <option value="static">Static</option>
-        <option value="admin">Admin</option>
-        <option value="employee">Employee</option>
+        <option value="static">ثابت</option>
+        <option value="changeable">متغير</option>
+        <option value="delivery">دليفرى</option>
       </select>
     </div>
 
     <!-- Job Name -->
     <div class="field">
       <label>
-        اسم الوظيفة
-        <span class="required text-danger" *ngIf="isRequired('theNameOfJob')">*</span>
+        المسمى الوظيفى
+        <span class="required text-danger" *ngIf="isRequired('theNameOfJob')"
+          >*</span
+        >
       </label>
-      <input type="text" formControlName="theNameOfJob" />
+      <select formControlName="theNameOfJob">
+        <option value="">اختر المسمى الوظيفي</option>
+        <option value="Manager">مدير</option>
+        <option value="Employee">صيدلى</option>
+        <option value="Employee">مساعد صيدلى</option>
+        <option value="Employee">دليفرى</option>
+        <option value="Control">خدمات</option>
+        <option value="Admin">إدارة</option>
+      </select>
     </div>
 
     <!-- Bank Name -->
     <div class="field">
       <label>
         اسم البنك
-        <span class="required text-danger" *ngIf="isRequired('bankName')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('bankName')"
+          >*</span
+        >
       </label>
       <input type="text" formControlName="bankName" />
     </div>
@@ -78,7 +93,9 @@
     <div class="field">
       <label>
         رقم الحساب البنكي
-        <span class="required text-danger" *ngIf="isRequired('bankAccount')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('bankAccount')"
+          >*</span
+        >
       </label>
       <input type="text" formControlName="bankAccount" />
     </div>
@@ -87,7 +104,9 @@
     <div class="field">
       <label>
         عدد ساعات الشيفت
-        <span class="required text-danger" *ngIf="isRequired('shiftHours')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('shiftHours')"
+          >*</span
+        >
       </label>
       <input type="number" formControlName="shiftHours" />
     </div>
@@ -96,13 +115,16 @@
     <div class="field">
       <label>
         الفرع
-        <span class="required text-danger" *ngIf="isRequired('branchId')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('branchId')"
+          >*</span
+        >
       </label>
 
       <select formControlName="branchId">
         <option value="">اختر الفرع</option>
-        <option [value]="1">الفرع الأول</option>
-        <option [value]="2">الفرع الثاني</option>
+        <option *ngFor="let branch of branches" [value]="branch.id">
+          {{ branch.name }}
+        </option>
       </select>
     </div>
 
@@ -110,7 +132,9 @@
     <div class="field">
       <label>
         تاريخ التعيين
-        <span class="required text-danger" *ngIf="isRequired('hiringDate')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('hiringDate')"
+          >*</span
+        >
       </label>
       <input type="date" formControlName="hiringDate" />
     </div>
@@ -119,7 +143,9 @@
     <div class="field">
       <label>
         المؤهل الدراسي
-        <span class="required text-danger" *ngIf="isRequired('qualification')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('qualification')"
+          >*</span
+        >
       </label>
       <input type="text" formControlName="qualification" />
     </div>
@@ -128,7 +154,9 @@
     <div class="field">
       <label>
         سنة التخرج
-        <span class="required text-danger" *ngIf="isRequired('graduationYear')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('graduationYear')"
+          >*</span
+        >
       </label>
       <input type="number" formControlName="graduationYear" />
     </div>
@@ -137,7 +165,9 @@
     <div class="field">
       <label>
         الرقم القومي
-        <span class="required text-danger" *ngIf="isRequired('nationalId')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('nationalId')"
+          >*</span
+        >
       </label>
       <input type="text" formControlName="nationalId" maxlength="14" />
     </div>
@@ -146,7 +176,9 @@
     <div class="field">
       <label>
         رقم الهاتف
-        <span class="required text-danger" *ngIf="isRequired('phoneNumber')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('phoneNumber')"
+          >*</span
+        >
       </label>
       <input type="text" formControlName="phoneNumber" />
     </div>
@@ -155,7 +187,9 @@
     <div class="field">
       <label>
         الراتب الإجمالي
-        <span class="required text-danger" *ngIf="isRequired('totalSalary')">*</span>
+        <span class="required text-danger" *ngIf="isRequired('totalSalary')"
+          >*</span
+        >
       </label>
       <input type="number" formControlName="totalSalary" />
     </div>
@@ -174,6 +208,5 @@
     >
       {{ loading ? 'جارى التسجيل...' : 'تسجيل' }}
     </button>
-
   </form>
 </div>

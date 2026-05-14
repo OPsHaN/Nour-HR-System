@@ -1,14 +1,11 @@
-.custom-input {
-  padding: 10px 10px;
-  border: 1px solid var(--surface-border);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  color: inherit;
-  outline: none;
-  font-size: 20px;
-  transition: 0.2s ease;
+.sticky-header {
+    position: static;
+    top: 0;
+    z-index: 1000;
+
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+
+    padding: 5px 0;
 }
 
-p.table .p-datatable-tbody > tr > td {
-  padding: 0.5rem 0.5rem;
-}

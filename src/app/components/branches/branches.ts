@@ -43,28 +43,35 @@ export class Branches {
     });
   }
 
-  editBranch(branch: any) {
-    console.log("Updated:", branch);
-  }
-
   confirmDelete(branch: any) {
     this.confirmationService.confirm({
-      message: "هل أنت متأكد من حذف الفرع",
+      message: "هل أنت متأكد من حذف الفرع ؟",
       header: "تأكيد الحذف",
       icon: "pi pi-exclamation-triangle",
       acceptLabel: "نعم",
       rejectLabel: "لا",
+
+      accept: () => {
+        this.deleteBranch(branch.id);
+      },
     });
   }
 
   deleteBranch(id: string) {
-    this.api.editBranch(id, { isActive: false }).subscribe({
+    this.api.deleteBranch(id, { isActive: false }).subscribe({
       next: () => {
+        this.api.showSuccess("تم حذف الفرع بنجاح");
         this.loadBranches();
       },
       error: (err) => {
+        this.api.showError("حدث خطأ أثناء الحذف");
         console.error(err);
       },
     });
+  }
+
+  onBranchCreated() {
+    this.showCreateBranch = false;
+    this.loadBranches();
   }
 }

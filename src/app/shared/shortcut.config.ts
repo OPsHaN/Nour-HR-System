@@ -1,4 +1,11 @@
-export type UserRole = "Admin" | "HR" | "Accountant" | "Control" | "Manager" |"Employee" | "Area Manager";
+export type UserRole =
+  | "Admin"
+  | "HR"
+  | "Accountant"
+  | "Control"
+  | "Manager"
+  | "Employee"
+  | "Area Manager";
 
 export interface ShortcutTheme {
   icon: string;
@@ -20,7 +27,7 @@ export const SHORTCUTS_CONFIG = {
     title: "النتيجة",
     icon: "event",
     bg: "#ff4d4f",
-    roles: ["Admin", "HR" , "Accountant" , "Employee"] as UserRole[],
+    roles: ["Admin", "HR", "Accountant", "Employee"] as UserRole[],
     size: { width: 500, height: 650 },
   },
   users: {
@@ -37,15 +44,23 @@ export const SHORTCUTS_CONFIG = {
     roles: ["Admin", "HR"] as UserRole[],
     size: { width: 860, height: 600 },
   },
-    branches: {
+  branches: {
     title: "الفروع",
     icon: "apartment",
     bg: "#fa8c16",
     roles: ["Admin", "HR"] as UserRole[],
     size: { width: 620, height: 480 },
   },
+  criteria: {
+    title: "بنود التقييم",
+    icon: "check_circle",
+    bg: "#722ed1",
+    roles: ["Admin", "HR"] as UserRole[],
+    size: { width: 620, height: 480 },
+  },
+
   download: {
-    title: "التقارير",
+    title: "التقارير ",
     icon: "bar_chart",
     bg: "#52c41a",
     roles: ["Admin", "HR"] as UserRole[],
@@ -79,17 +94,17 @@ export function getShortcuts(): Shortcut[] {
 
 /* 🔥 ROLE FILTER */
 export function getShortcutsByRole(role: UserRole): Shortcut[] {
-  return CONFIG_KEYS
-    .filter((action) => SHORTCUTS_CONFIG[action].roles.includes(role))
-    .map((action) => {
-      const config = SHORTCUTS_CONFIG[action];
+  return CONFIG_KEYS.filter((action) =>
+    SHORTCUTS_CONFIG[action].roles.includes(role),
+  ).map((action) => {
+    const config = SHORTCUTS_CONFIG[action];
 
-      return {
-        action,
-        title: config.title,
-        icon: config.icon,
-      };
-    });
+    return {
+      action,
+      title: config.title,
+      icon: config.icon,
+    };
+  });
 }
 
 /* 🔥 THEME */
@@ -105,7 +120,7 @@ export function getShortcutTheme(action: WindowAction): ShortcutTheme {
 
 //get role from localstorge with fallback
 export function getUserRole(): UserRole {
-  const role = localStorage.getItem('role');
+  const role = localStorage.getItem("role");
 
   const allowedRoles: UserRole[] = ["Admin", "HR", "Accountant", "Employee"];
 

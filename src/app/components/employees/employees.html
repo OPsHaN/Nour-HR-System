@@ -4,19 +4,26 @@
     type="button"
     class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
     [class.btn-success]="!showCreateEmployee"
-    [class.btn-secondary]="showCreateEmployee"
+    [class.btn-danger]="showCreateEmployee"
     icon="pi pi-plus"
-    (click)="showCreateEmployee = !showCreateEmployee"
+    (click)="
+  selectedEmployee = null;
+  showCreateEmployee = !showCreateEmployee"
   >
-  <i
-    class="pi"
-    [ngClass]="showCreateEmployee ? 'pi-arrow-right' : 'pi-user-plus'"
-  ></i>
+    <i
+      class="pi"
+      [ngClass]="showCreateEmployee ? 'pi pi-times' : 'pi-user-plus'"
+    ></i>
 
-  {{ showCreateEmployee ? 'الرجوع للخلف' : 'موظف جديد' }}  </button>
+    {{ showCreateEmployee ? '' : 'موظف جديد' }}
+  </button>
 </div>
 
-<app-create-employee *ngIf="showCreateEmployee">
+<app-create-employee
+  *ngIf="showCreateEmployee"
+  [employeeData]="selectedEmployee"
+  (created)="onEmployeeCreated()"
+>
 </app-create-employee>
 
 <p-table
@@ -59,20 +66,34 @@
         <button
           pButton
           type="button"
-          class="btn btn-sm btn-success mx-1 my-1"
+          class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
           icon="pi pi-pencil"
           (click)="editEmployee(emp)"
         >
-          <i class="pi pi-pencil"></i>
+          <i
+            class="pi pi-pencil d-flex align-items-center justify-content-center"
+          ></i>
         </button>
         <button
           pButton
           type="button"
-          class="btn btn-sm btn-danger mx-1 my-1"
+          class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
           icon="pi pi-trash"
           (click)="confirmDelete(emp)"
         >
-          <i class="pi pi-trash"></i>
+          <i
+            class="pi pi-trash d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          (click)="viewDetails(emp)"
+        >
+          <i
+            class="pi pi-eye d-flex align-items-center justify-content-center"
+          ></i>
         </button>
       </td>
     </tr>

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -20,7 +20,10 @@ export class CreateEmployee {
   successMsg = "";
   errorMsg = "";
   showPassword = false;
+  branches: any[] = [];
   PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
+  @Input() employeeData: any;
+  @Output() created = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -30,9 +33,11 @@ export class CreateEmployee {
       username: ["", Validators.required],
       password: [
         "",
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(this.PASSWORD_PATTERN),
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(this.PASSWORD_PATTERN),
+        ],
       ],
       name: ["", Validators.required],
       role: ["", Validators.required],
@@ -45,14 +50,23 @@ export class CreateEmployee {
       qualification: ["", Validators.required],
       graduationYear: [null, Validators.required],
       nationalId: ["", [Validators.required, Validators.minLength(14)]],
-      phoneNumber: ["", Validators.required],
+      phoneNumber: [
+        "",
+        [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/)],
+      ],
       totalSalary: [null, Validators.required],
       salaryPerHour: [null],
     });
   }
 
+  ngOnChanges(): void {
+    if (this.employeeData) {
+      this.form.patchValue(this.employeeData);
+    }
+  }
+
   ngOnInit(): void {
-    // Component initialization logic if needed
+    this.getBranches();
   }
 
   togglePassword() {
@@ -79,11 +93,25 @@ export class CreateEmployee {
         this.api.showSuccess("تم تسجيل الموظف بنجاح");
         this.form.reset();
         this.loading = false;
+        this.created.emit();
       },
       error: (err) => {
         this.api.showError("يوجد مشكلة فى التسجيل");
         console.error(err);
         this.loading = false;
+      },
+    });
+  }
+
+  getBranches() {
+    this.api.getAllBranches(1, 100).subscribe({
+      next: (res: any) => {
+        // Handle the list of branches as needed
+        this.branches = res.data;
+        console.log(this.branches);
+      },
+      error: (err) => {
+        console.error("Error fetching branches:", err);
       },
     });
   }

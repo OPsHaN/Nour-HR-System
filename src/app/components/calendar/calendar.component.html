@@ -19,7 +19,8 @@
             [class.is-today]="day?.toDateString() === today().toDateString()"
             [disabled]="!day"
           >
-{{ day ? day.getDate().toLocaleString('ar-EG') : '' }}          </button>
+            {{ day ? day.getDate().toLocaleString("ar-EG") : "" }}
+          </button>
         }
       </div>
     }

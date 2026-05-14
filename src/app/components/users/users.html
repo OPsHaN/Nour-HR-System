@@ -4,19 +4,20 @@
     type="button"
     class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
     [class.btn-success]="!showCreateUser"
-    [class.btn-secondary]="showCreateUser"
+    [class.btn-danger]="showCreateUser"
     icon="pi pi-plus"
     (click)="showCreateUser = !showCreateUser"
   >
-  <i
-    class="pi"
-    [ngClass]="showCreateUser ? 'pi-arrow-right' : 'pi-user-plus'"
-  ></i>
+    <i
+      class="pi"
+      [ngClass]="showCreateUser ? 'pi pi-times ' : 'pi-user-plus'"
+    ></i>
 
-  {{ showCreateUser ? 'الرجوع للخلف' : 'مستخدم جديد' }}  </button>
+    {{ showCreateUser ? '' : 'مستخدم جديد' }}
+  </button>
 </div>
 
-<app-create-user *ngIf="showCreateUser">
+<app-create-user *ngIf="showCreateUser" (created)="onEmployeeCreated()">
 </app-create-user>
 
 <p-table
@@ -30,6 +31,8 @@
   [tableStyle]="{ 'min-width': '60rem' }"
   [responsiveLayout]="'scroll'"
   [paginatorDropdownAppendTo]="'body'"
+    [editingRowKeys]="editingRowKeys"
+
   dir="rtl"
 >
   <!-- HEADER -->
@@ -38,6 +41,7 @@
       <th>#</th>
       <th>إسم الموظف</th>
       <th>إسم المستخدم</th>
+      <th>كلمة المرور</th>
       <th>المنصب</th>
       <th>الحالة</th>
       <th>الإجراءات</th>
@@ -53,7 +57,12 @@
       <td>
         <p-cellEditor>
           <ng-template pTemplate="input">
-            <input pInputText class="custom-input" [(ngModel)]="emp.name" />
+            <input
+              pInputText
+              class="custom-input"
+              readonly
+              [(ngModel)]="emp.name"
+            />
           </ng-template>
           <ng-template pTemplate="output"> {{ emp.name }} </ng-template>
         </p-cellEditor>
@@ -63,9 +72,40 @@
       <td>
         <p-cellEditor>
           <ng-template pTemplate="input">
-            <input pInputText class="custom-input" [(ngModel)]="emp.username" />
+            <input
+              pInputText
+              class="custom-input"
+              readonly
+              [(ngModel)]="emp.username"
+            />
           </ng-template>
           <ng-template pTemplate="output"> {{ emp.username }} </ng-template>
+        </p-cellEditor>
+      </td>
+
+      <!-- PASSWORD -->
+      <td>
+        <p-cellEditor>
+          <ng-template pTemplate="input">
+            <div class="input-wrapper">
+              <input
+                pInputText
+                class="custom-input"
+                [type]="emp.showPassword ? 'text' : 'password'"
+                [(ngModel)]="emp.password"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="الرقم السرى"
+              />
+
+              <i
+                class="pi password-eye"
+                [ngClass]="emp.showPassword ? 'pi-eye-slash' : 'pi-eye'"
+                (click)="emp.showPassword = !emp.showPassword"
+              ></i>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="output"> ******** </ng-template>
         </p-cellEditor>
       </td>
 
@@ -73,7 +113,7 @@
       <td>
         <p-cellEditor>
           <ng-template pTemplate="input">
-            <select [(ngModel)]="emp.role" class="custom-input">
+            <select [(ngModel)]="emp.role" disabled class="custom-input">
               <option value="">اختر المنصب</option>
               <option value="Admin">مسؤل</option>
               <option value="Accountant">محاسب</option>
@@ -92,9 +132,13 @@
       <td>
         <p-cellEditor>
           <ng-template pTemplate="input">
-            <select [(ngModel)]="emp.isActive" class="custom-input">
-              <option [value]="true">نشيط</option>
-              <option [value]="false">غير نشيط</option>
+            <select
+              [(ngModel)]="emp.isActive"
+              (ngModelChange)="onStatusChange(emp)"
+              class="custom-input"
+            >
+              <option [ngValue]="true">نشيط</option>
+              <option [ngValue]="false">غير نشيط</option>
             </select>
           </ng-template>
 
@@ -115,10 +159,14 @@
           *ngIf="!editing"
           pButton
           icon="pi pi-pencil"
-          class="btn btn-sm btn-success mx-1"
+          class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+            (click)="editingRowKeys[emp.id] = true"
+
           pInitEditableRow
         >
-          <i class="pi pi-pencil"></i>
+          <i
+            class="pi pi-pencil d-flex align-items-center justify-content-center"
+          ></i>
         </button>
 
         <!-- Save -->
@@ -126,10 +174,12 @@
           *ngIf="editing"
           pButton
           icon="pi pi-check"
-          class="btn btn-sm btn-success mx-1"
+          class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
           (click)="onRowEditSave(emp)"
         >
-          <i class="pi pi-check"></i>
+          <i
+            class="pi pi-check d-flex align-items-center justify-content-center"
+          ></i>
         </button>
 
         <!-- Cancel -->
@@ -137,22 +187,26 @@
           *ngIf="editing"
           pButton
           icon="pi pi-times"
-          class="btn btn-sm btn-danger mx-1"
+          class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
           pCancelEditableRow
         >
-          <i class="pi pi-times"></i>
+          <i
+            class="pi pi-times d-flex align-items-center justify-content-center"
+          ></i>
         </button>
 
         <!-- Delete -->
-        <button
+        <!-- <button
           *ngIf="!editing"
           pButton
           icon="pi pi-trash"
-          class="btn btn-sm btn-danger mx-1"
+          class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
           (click)="confirmDelete(emp)"
         >
-          <i class="pi pi-trash"></i>
-        </button>
+          <i
+            class="pi pi-trash d-flex align-items-center justify-content-center"
+          ></i>
+        </button> -->
       </td>
     </tr>
   </ng-template>

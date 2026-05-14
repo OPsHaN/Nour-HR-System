@@ -3,28 +3,28 @@
   pButton
   type="button"
   class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
-  [class.btn-success]="!showCreateBranch"
-  [class.btn-danger]="showCreateBranch"
-  (click)="showCreateBranch = !showCreateBranch"
+  [class.btn-success]="!showCreateCriteria"
+  [class.btn-danger]="showCreateCriteria"
+  (click)="showCreateCriteria = !showCreateCriteria"
 >
   <i
     class="pi"
-    [ngClass]="showCreateBranch ? 'pi-times' : 'pi-building'"
+    [ngClass]="showCreateCriteria ? 'pi-times' : 'pi-building'"
   ></i>
 
-  {{ showCreateBranch ? '' : 'فرع جديد' }}
+  {{ showCreateCriteria ? '' : 'بند جديد' }}
 </button>
 </div>
 
-<!-- CREATE BRANCH -->
-<app-create-branch *ngIf="showCreateBranch" (created)="onBranchCreated()"
+<!-- CREATE CRITERIA -->
+<app-create-criteria *ngIf="showCreateCriteria" (created)="onCriteriaCreated()"
 >
-</app-create-branch>
+</app-create-criteria>
 
 <!-- TABLE -->
 <p-table
-  *ngIf="!showCreateBranch"
-  [value]="Branches"
+  *ngIf="!showCreateCriteria"
+  [value]="Criteria"
   [paginator]="true"
   [rows]="pageSize"
   [rowsPerPageOptions]="[5,10,20]"
@@ -39,13 +39,13 @@
   <ng-template pTemplate="header">
     <tr>
       <th>#</th>
-      <th>اسم الفرع</th>
+      <th>اسم البند</th>
       <th>الإجراءات</th>
     </tr>
   </ng-template>
 
   <!-- BODY -->
-  <ng-template pTemplate="body" let-branch let-ri="rowIndex">
+  <ng-template pTemplate="body" let-criterion let-ri="rowIndex">
     <tr>
 
       <!-- Row Number -->
@@ -53,9 +53,9 @@
         {{ ri + 1 + (page - 1) * pageSize }}
       </td>
 
-      <!-- Branch Name -->
+      <!-- Criterion Name -->
       <td>
-        {{ branch.name }}
+        {{ criterion.name }}
       </td>
 
       <!-- Actions -->
@@ -68,7 +68,7 @@
           pButton
           type="button"
           class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-          (click)="confirmDelete(branch)"
+          (click)="confirmDelete(criterion)"
         >
           <i class="pi pi-trash d-flex align-items-center justify-content-center"></i>
         </button>

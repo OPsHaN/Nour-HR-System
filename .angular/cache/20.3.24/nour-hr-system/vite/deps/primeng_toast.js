@@ -7,7 +7,7 @@ import {
   InfoCircleIcon,
   TimesCircleIcon,
   TimesIcon
-} from "./chunk-2PSCK73C.js";
+} from "./chunk-XTLXXFBV.js";
 import {
   BaseComponent,
   Bind,
@@ -17,14 +17,6 @@ import {
   BaseStyle
 } from "./chunk-6YQJDJ7W.js";
 import {
-  MessageService,
-  PrimeTemplate,
-  SharedModule,
-  _t,
-  l,
-  s3 as s
-} from "./chunk-J2D3YFFI.js";
-import {
   animate,
   animateChild,
   query,
@@ -33,6 +25,14 @@ import {
   transition,
   trigger
 } from "./chunk-42VGZS34.js";
+import {
+  MessageService,
+  PrimeTemplate,
+  SharedModule,
+  _t,
+  l,
+  s3 as s
+} from "./chunk-J2D3YFFI.js";
 import {
   CommonModule,
   NgClass,

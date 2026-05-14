@@ -4,6 +4,7 @@ import { DownloadComponent } from "../components/download/download.component";
 import { Users } from "../components/users/users";
 import { Employees } from "../components/employees/employees";
 import { Branches } from "../components/branches/branches";
+import { Criteria } from "../components/criteria/criteria";
 
 export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   calendar: CalendarComponent,
@@ -11,4 +12,5 @@ export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   branches: Branches,
   employees:Employees,
   download: DownloadComponent,
+  criteria:Criteria
 };

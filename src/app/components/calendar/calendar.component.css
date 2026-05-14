@@ -55,11 +55,11 @@
   aspect-ratio: 1;
   min-height: 42px;
 
-  border: none;
+  border: 1px solid var(--surface-border);
   border-radius: 14px;
 
-  /* background: transparent; */
-  /* color: inherit; */
+  background: var(--surface-strong); 
+  color: var(--text-soft);
 
   cursor: pointer;
 
@@ -77,7 +77,7 @@
 
 /* اليوم الحالي */
 .calendar-day.is-today {
-  background: linear-gradient(135deg, #1677ff, #4096ff);
+  background: linear-gradient(135deg, #4096ff, #4096ff);
   color: #fff;
 
   font-weight: 600;

@@ -25,10 +25,15 @@ export class Apiservice {
     );
   }
 
-   changePassword(id: number) {
-    return this.http.put(`${this.baseUrl}users/${id}/password`, {});
+  changePassword(id: number, password: string) {
+    return this.http.put(`${this.baseUrl}auth/users/${id}/password`, {
+      NewPassword: password,
+    });
   }
 
+  changeStatus(id: number, status: boolean) {
+    return this.http.put(`${this.baseUrl}auth/users/${id}/toggle`, { status });
+  }
 
   //employees//
 
@@ -45,7 +50,10 @@ export class Apiservice {
   }
 
   updateEmployee(id: string, employeeData: any) {
-    return this.http.put(`${this.baseUrl}employees/${id}/end-of-service`, employeeData);
+    return this.http.put(
+      `${this.baseUrl}employees/${id}/end-of-service`,
+      employeeData,
+    );
   }
 
   getAllEmployees(page: number, pagesize: number) {
@@ -54,22 +62,43 @@ export class Apiservice {
     );
   }
 
-
   //branches//
 
   addNewBranch(branchData: any) {
     return this.http.post(`${this.baseUrl}branches`, branchData);
   }
 
-  editBranch(id: string, branchData: any) {
-    return this.http.put(`${this.baseUrl}branches/${id}`, branchData);
+  deleteBranch(id: string, branchData: any) {
+    return this.http.delete(`${this.baseUrl}branches/${id}`, {
+      body: branchData,
+    });
   }
 
   getAllBranches(page: number, pagesize: number) {
-    return this.http.get(`${this.baseUrl}branches?page=${page}&pageSize=${pagesize}`);
+    return this.http.get(
+      `${this.baseUrl}branches?page=${page}&pageSize=${pagesize}`,
+    );
   }
 
- 
+  //criteria
+
+  getAllCriteria(page: number, pagesize: number) {
+    return this.http.get(
+      `${this.baseUrl}evaluation-criteria?page=${page}&pageSize=${pagesize}`
+    );
+  }
+
+  addNewCriteria(criteriaData: any) {
+    return this.http.post(`${this.baseUrl}evaluation-criteria`, criteriaData);
+  }
+
+  deleteCriteria(id: string, criteriaData: any) {
+    return this.http.delete(`${this.baseUrl}evaluation-criteria/${id}`, {
+      body: criteriaData,
+    });
+  }
+  
+
   showError(msg: string) {
     this.messageService.add({
       severity: "error",

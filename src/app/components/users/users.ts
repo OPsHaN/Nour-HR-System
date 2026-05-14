@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Apiservice } from "src/app/services/api.service";
 import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService } from "primeng/api";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { CreateUser } from "../create-user/create-user";
@@ -27,11 +27,20 @@ export class Users {
   page = 1;
   pageSize = 10;
   showCreateUser: boolean = false;
+  showPassword = false;
+  editingRowKeys: { [key: string]: boolean } = {};
 
-  constructor(private api: Apiservice , private confirmationService: ConfirmationService) {}
+  constructor(
+    private api: Apiservice,
+    private confirmationService: ConfirmationService,
+  ) {}
 
   ngOnInit(): void {
     this.getEmployees();
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   getEmployees() {
@@ -45,31 +54,60 @@ export class Users {
     });
   }
 
-
   onRowEditSave(emp: any) {
-  console.log('Updated:', emp);
-
-  // API CALL
-  // this.api.updateUser(emp.id, emp).subscribe(...)
-}
+    // update user data
+    this.api.changePassword(emp.id, emp.password).subscribe({
+      next: () => {
+        this.api.showSuccess("تم تغيير كلمة المرور");
+        emp.password = "";
+        delete this.editingRowKeys[emp.id];
+      },
+      error: (err) => {
+        this.api.showError("فشل تغيير كلمة المرور");
+        console.error(err);
+      },
+    });
+  }
 
   confirmDelete(emp: any) {
-  this.confirmationService.confirm({
-    message: 'هل أنت متأكد من حذف المستخدم؟',
-    header: 'تأكيد الحذف',
-    icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'نعم',
-    rejectLabel: 'إلغاء',
+    this.confirmationService.confirm({
+      message: "هل أنت متأكد من حذف المستخدم؟",
+      header: "تأكيد الحذف",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "نعم",
+      rejectLabel: "إلغاء",
 
-    accept: () => {
-      this.deleteEmployee(emp.id);
-    }
-  });
-}
+      accept: () => {
+        this.deleteEmployee(emp.id);
+      },
+    });
+  }
 
   deleteEmployee(id: string) {
-    console.log('Deleted ID:', id); 
+    console.log("Deleted ID:", id);
     // API CALL
     // this.api.deleteUser(id).subscribe(...)
+  }
+
+  onEmployeeCreated() {
+    this.showCreateUser = false;
+    this.getEmployees();
+  }
+
+  onStatusChange(emp: any) {
+    this.api.changeStatus(emp.id, emp.isActive).subscribe({
+      next: () => {
+        this.api.showSuccess("تم تغيير الحالة بنجاح");
+        delete this.editingRowKeys[emp.id];
+      },
+      error: (err) => {
+        this.api.showError("حدث خطأ أثناء تغيير الحالة");
+
+        // rollback لو حصل error
+        emp.isActive = !emp.isActive;
+
+        console.error(err);
+      },
+    });
   }
 }
