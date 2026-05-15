@@ -54,7 +54,7 @@
       <select formControlName="role">
         <option value="">اختر الدور</option>
         <option value="static">ثابت</option>
-        <option value="changeable">متغير</option>
+        <option value="changable">متغير</option>
         <option value="delivery">دليفرى</option>
       </select>
     </div>
@@ -121,8 +121,8 @@
       </label>
 
       <select formControlName="branchId">
-        <option value="">اختر الفرع</option>
-        <option *ngFor="let branch of branches" [value]="branch.id">
+        <option [ngValue]="null">اختر الفرع</option>
+        <option *ngFor="let branch of branches" [ngValue]="branch.id">
           {{ branch.name }}
         </option>
       </select>
@@ -132,11 +132,20 @@
     <div class="field">
       <label>
         تاريخ التعيين
-        <span class="required text-danger" *ngIf="isRequired('hiringDate')"
-          >*</span
-        >
+        <span class="required text-danger" *ngIf="isRequired('hiringDate')">
+          *
+        </span>
       </label>
-      <input type="date" formControlName="hiringDate" />
+
+      <p-datepicker
+        formControlName="hiringDate"
+        dateFormat="yy-mm-dd"
+        [showIcon]="false"
+        inputId="hiringDate"
+        appendTo="body"
+        placeholder="اختر التاريخ"
+        styleClass="w-100"
+      ></p-datepicker>
     </div>
 
     <!-- Qualification -->
@@ -180,22 +189,23 @@
           >*</span
         >
       </label>
-      <input type="text" formControlName="phoneNumber" />
+      <input type="text" formControlName="phoneNumber" maxlength="11" />
     </div>
 
     <!-- Total Salary -->
-    <div class="field">
-      <label>
-        الراتب الإجمالي
-        <span class="required text-danger" *ngIf="isRequired('totalSalary')"
-          >*</span
-        >
-      </label>
+    <div class="field" *ngIf="form.get('role')?.value === 'static'">
+      <label> الراتب الإجمالي </label>
       <input type="number" formControlName="totalSalary" />
     </div>
 
     <!-- Salary Per Hour -->
-    <div class="field">
+    <div
+      class="field"
+      *ngIf="
+    form.get('role')?.value === 'changable' ||
+    form.get('role')?.value === 'delivery'
+  "
+    >
       <label>الراتب بالساعة</label>
       <input type="number" formControlName="salaryPerHour" />
     </div>

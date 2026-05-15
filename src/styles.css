@@ -162,145 +162,158 @@ input {
   width: auto !important;
 }
 
+.p-dialog {
+  border: 0.1rem solid var(--surface-border) !important;
+  /* background: var(--surface) !important; */
+  color: var(--text) !important;
+}
+
 .p-dialog-header {
-    flex-direction: row-reverse !important;
+  flex-direction: row-reverse !important;
+  background: var(--surface-strong) !important;
+  color: var(--text) !important;
+  border-bottom: 0.1rem solid var(--surface-border) !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
 }
 
 .p-dialog-content {
-    padding: 1rem !important;
+  padding: 1rem !important;
+  background: var(--surface-strong) !important;
+  color: var(--text);
+  border-radius: 0 0 0.5rem 0.5rem !important;
 }
 
 .panel {
-    display: grid;
-    align-content: start;
-    gap: 18px;
-    height: 100%;
-    padding: 10px;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  height: 100%;
+  padding: 10px;
 }
 
 .panel h3,
 .panel p {
-    margin: 0;
+  margin: 0;
 }
 
 .panel p {
-    color: var(--text-soft);
-    max-width: 52ch;
+  color: var(--text-soft);
+  max-width: 52ch;
 }
 
 /* 🔥 form container بنفس list */
 .form {
-    display: grid;
-    gap: 10px;
+  display: grid;
+  gap: 10px;
 }
 
 /* 🔥 نفس شكل list__item */
 .form input,
 .form select {
-    padding: 10px 10px;
-    border: 1px solid var(--surface-border);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.08);
-    color: inherit;
-    outline: none;
-    font-size: 20px;
-    transition: 0.2s ease;
+  padding: 10px 10px;
+  border: 1px solid var(--surface-border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  outline: none;
+  font-size: 20px;
+  transition: 0.2s ease;
 }
 
 /* focus زي modern glass UI */
 .form input:focus,
 .form select:focus {
-    border-color: #1677ff;
-    background: rgba(255, 255, 255, 0.12);
+  border-color: #1677ff;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* 🔥 button بنفس النظام */
 .form button {
-    /* padding: 10px; */
-    height: 50px;
-    border: 1px solid var(--surface-border);
-    border-radius: 18px;
-    background: rgba(22, 119, 255, 0.2);
-    color: var(--text);
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.2s ease;
+  /* padding: 10px; */
+  height: 50px;
+  border: 1px solid var(--surface-border);
+  border-radius: 18px;
+  background: rgba(22, 119, 255, 0.2);
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .form button:hover {
-    background: rgba(22, 119, 255, 0.35);
+  background: rgba(22, 119, 255, 0.35);
 }
 
 .form select option {
-    background: var(--surface);
+  background: var(--surface);
 }
 
 .form button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .submit-btn {
-    width: 10%;
-    margin: auto;
+  width: 10%;
+  margin: auto;
 
 }
 
 .field {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .field label {
-    color: var(--text-soft);
-    padding-inline-start: 6px;
+  color: var(--text-soft);
+  padding-inline-start: 6px;
 }
 
 
 .password-field .input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .password-field input {
-    width: 100%;
-    padding-inline-end: 40px;
-    /* مساحة للأيقونة */
+  width: 100%;
+  padding-inline-end: 40px;
+  /* مساحة للأيقونة */
 }
 
 /* أيقونة العين */
 .password-field i {
-    position: absolute;
-    left: 12px;
-    cursor: pointer;
-    font-size: 18px;
-    color: var(--text-soft);
-    transition: 0.2s;
+  position: absolute;
+  left: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-soft);
+  transition: 0.2s;
 }
 
 .password-field i:hover {
-    color: #1677ff;
+  color: #1677ff;
 }
 
 /* grid layout */
 .grid-form {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
 /* يخلي العنصر ياخد الصف كله */
 .full {
-    grid-column: span 3;
+  grid-column: span 3;
 }
 
 /* field */
 .field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 @media (max-width: 900px) {
@@ -324,20 +337,84 @@ input {
 }
 
 .password-rules {
-    display: flex;
-    list-style: none;
-    gap: 20px;
-    padding: 0;
-    margin: 5px 5px;
-    font-size: 15px;
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  padding: 0;
+  margin: 5px 5px;
+  font-size: 15px;
 }
 
 .password-rules li {
-    color: #999;
-    transition: 0.2s;
+  color: #999;
+  transition: 0.2s;
 }
 
 .password-rules li.valid {
-    color: #52c41a;
-    /* أخضر */
+  color: #52c41a;
+  /* أخضر */
+}
+
+.p-datepicker-input {
+  width: 100%;
+}
+
+
+.p-confirmdialog {
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(14px);
+  background: var(--surface) !important;
+}
+
+/* header */
+.p-confirmdialog .p-dialog-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  color: var(--text) !important;
+  padding: 0.5rem 0.5rem !important;
+}
+
+/* content */
+.p-confirmdialog .p-dialog-content {
+  background: transparent !important;
+  color: var(--text) !important;
+  padding: 0.5rem 0.5rem !important;
+}
+
+/* message */
+.p-confirmdialog-message {
+  color: var(--text) !important;
+  line-height: 1.8;
+}
+
+/* footer */
+.p-confirmdialog .p-dialog-footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  padding: 0.5rem 0.5rem !important;
+}
+
+/* buttons */
+.p-confirmdialog .p-button {
+  border-radius: 16px !important;
+}
+
+/* cancel button */
+.p-confirmdialog-reject-button {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,1) !important;
+}
+
+/* accept button */
+.p-confirmdialog-accept-button {
+  background: rgba(220,53,69,0.22) !important;
+  border: 1px solid rgba(220,53,69,1) !important;
+
+}
+
+/* icon */
+.p-confirmdialog-icon {
+  color: #f59e0b !important;
+  font-size: 2rem !important;
 }

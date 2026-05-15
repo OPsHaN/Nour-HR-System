@@ -116,29 +116,48 @@
   [(visible)]="showEndServiceDialog"
   [modal]="true"
   class="end-service-dialog"
-  [style]="{ width: '20rem'}"
+  [style]="{ width: '24rem' }"
 >
-  <div class="mb-3">
-    <label class="mb-2 d-block">سبب إنهاء الخدمة</label>
+  <div class="end-service-content">
+    <div class="field">
+      <label>نوع إنهاء الخدمة</label>
 
-    <textarea
-      rows="4"
-      class="form-control"
-      [(ngModel)]="endServiceReason"
-      placeholder="اكتب السبب"
-    ></textarea>
-  </div>
+      <select class="form-select" [(ngModel)]="endOfServiceType">
+        <option value="">اختر نوع إنهاء الخدمة</option>
 
-  <div class="d-flex justify-content-center gap-2">
-    <button
-      pButton
-      type="button"
-      label="تأكيد"
-      class="btn btn-sm btn-danger mx-1 my-1 rounded"
-      (click)="submitEndService(selectedEmployee)"
-    >
-      إرسال
-    </button>
+        <option value="استقالة">استقالة</option>
+
+        <option value="إنهاء الخدمة بمعرفة المجموعة">
+          إنهاء الخدمة بمعرفة المجموعة
+        </option>
+
+        <option value="إنهاء الخدمة بعدم معرفة المجموعة">
+          إنهاء الخدمة بعدم معرفة المجموعة
+        </option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>سبب إنهاء الخدمة</label>
+
+      <textarea
+        rows="4"
+        [(ngModel)]="endServiceReason"
+        placeholder="اكتب السبب"
+      ></textarea>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2">
+      <button
+        pButton
+        type="button"
+        label="تأكيد"
+        class="btn btn-sm btn-danger mx-1 my-1 rounded"
+        (click)="submitEndService(selectedEmployee)"
+      >
+        إرسال
+      </button>
+    </div>
   </div>
 </p-dialog>
 
@@ -146,72 +165,105 @@
   header="بيانات الموظف"
   [(visible)]="showEmployeeDetailsDialog"
   [modal]="true"
-  [style]="{ width: '35rem' }"
+  [style]="{ width: '40rem' }"
   class="end-service-dialog"
 >
-
   <div class="details-grid" *ngIf="employeeDetails">
+    <!-- اسم الموظف -->
+    <div class="detail-item">
+      <label>اسم الموظف</label>
+      <span>{{ employeeDetails.name || '-' }}</span>
+    </div>
 
+    <!-- المسمى الوظيفي -->
+    <div class="detail-item">
+      <label>المسمى الوظيفى</label>
+      <span>{{ employeeDetails.theNameOfJob || '-' }}</span>
+    </div>
+
+    <!-- نوع الوظيفة -->
+    <div class="detail-item">
+      <label>الدور الوظيفي</label>
+      <span>
+        {{ employeeDetails.role === 'static' ? 'ثابت' : employeeDetails.role ===
+        'changable' ? 'متغير' : employeeDetails.role === 'delivery' ? 'دليفرى' :
+        '-' }}
+      </span>
+    </div>
+
+    <!-- الفرع -->
+    <div class="detail-item">
+      <label>الفرع</label>
+      <span>{{ employeeDetails.branchName || '-' }}</span>
+    </div>
+
+    <!-- ساعات الشيفت -->
+    <div class="detail-item">
+      <label>عدد ساعات الشيفت</label>
+      <span>{{ employeeDetails.shiftHours || '-' }}</span>
+    </div>
+
+    <!-- البنك -->
+    <div class="detail-item">
+      <label>اسم البنك</label>
+      <span>{{ employeeDetails.bankName || '-' }}</span>
+    </div>
+
+    <!-- الحساب البنكي -->
+    <div class="detail-item">
+      <label>رقم الحساب البنكى</label>
+      <span>{{ employeeDetails.bankAccount || '-' }}</span>
+    </div>
+
+    <!-- تاريخ التعيين -->
     <div class="detail-item">
       <label>تاريخ التعيين</label>
-      <span>
-        {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}
-      </span>
+      <span> {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }} </span>
     </div>
 
+    <!-- المؤهل -->
     <div class="detail-item">
       <label>المؤهل الدراسي</label>
-      <span>
-        {{ employeeDetails.qualification }}
-      </span>
+      <span>{{ employeeDetails.qualification || '-' }}</span>
     </div>
 
+    <!-- سنة التخرج -->
     <div class="detail-item">
       <label>سنة التخرج</label>
-      <span>
-        {{ employeeDetails.graduationYear }}
-      </span>
+      <span>{{ employeeDetails.graduationYear || '-' }}</span>
     </div>
 
+    <!-- الرقم القومي -->
     <div class="detail-item">
       <label>الرقم القومي</label>
-      <span>
-        {{ employeeDetails.nationalId }}
-      </span>
+      <span>{{ employeeDetails.nationalId || '-' }}</span>
     </div>
 
+    <!-- رقم الهاتف -->
     <div class="detail-item">
       <label>رقم الهاتف</label>
-      <span>
-        {{ employeeDetails.phoneNumber }}
-      </span>
+      <span>{{ employeeDetails.phoneNumber || '-' }}</span>
     </div>
 
+    <!-- تاريخ إنهاء الخدمة -->
     <div class="detail-item">
       <label>تاريخ إنهاء الخدمة</label>
       <span>
-        {{
-          employeeDetails.endOfServiceDate
-            ? (employeeDetails.endOfServiceDate | date:'yyyy-MM-dd')
-            : '-'
-        }}
+        {{ employeeDetails.endOfServiceDate ? (employeeDetails.endOfServiceDate
+        | date:'yyyy-MM-dd') : '-' }}
       </span>
     </div>
 
-    <div class="detail-item">
-      <label>سبب إنهاء الخدمة</label>
-      <span>
-        {{ employeeDetails.endOfServiceReason || '-' }}
-      </span>
-    </div>
-
+    <!-- نوع إنهاء الخدمة -->
     <div class="detail-item">
       <label>نوع إنهاء الخدمة</label>
-      <span>
-        {{ employeeDetails.endOfServiceType || '-' }}
-      </span>
+      <span>{{ employeeDetails.endOfServiceType || '-' }}</span>
     </div>
 
+    <!-- سبب إنهاء الخدمة -->
+    <div class="detail-item full-width">
+      <label>سبب إنهاء الخدمة</label>
+      <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
+    </div>
   </div>
-
 </p-dialog>

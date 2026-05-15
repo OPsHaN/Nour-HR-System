@@ -1,6 +1,6 @@
 import {
   SpinnerIcon
-} from "./chunk-2PSCK73C.js";
+} from "./chunk-JD4PFQ2X.js";
 import {
   BaseComponent,
   Bind,
@@ -823,6 +823,96 @@ var ConnectedOverlayScrollHandler = class {
   }
 };
 
+// node_modules/primeng/fesm2022/primeng-autofocus.mjs
+var AutoFocus = class _AutoFocus extends BaseComponent {
+  /**
+   * When present, it specifies that the component should automatically get focus on load.
+   * @group Props
+   */
+  autofocus = false;
+  focused = false;
+  platformId = inject(PLATFORM_ID);
+  document = inject(DOCUMENT);
+  host = inject(ElementRef);
+  onAfterContentChecked() {
+    if (this.autofocus === false) {
+      this.host.nativeElement.removeAttribute("autofocus");
+    } else {
+      this.host.nativeElement.setAttribute("autofocus", true);
+    }
+    if (!this.focused) {
+      this.autoFocus();
+    }
+  }
+  onAfterViewChecked() {
+    if (!this.focused) {
+      this.autoFocus();
+    }
+  }
+  autoFocus() {
+    if (isPlatformBrowser(this.platformId) && this.autofocus) {
+      setTimeout(() => {
+        const focusableElements = DomHandler.getFocusableElements(this.host?.nativeElement);
+        if (focusableElements.length === 0) {
+          this.host.nativeElement.focus();
+        }
+        if (focusableElements.length > 0) {
+          focusableElements[0].focus();
+        }
+        this.focused = true;
+      });
+    }
+  }
+  static ɵfac = /* @__PURE__ */ (() => {
+    let ɵAutoFocus_BaseFactory;
+    return function AutoFocus_Factory(__ngFactoryType__) {
+      return (ɵAutoFocus_BaseFactory || (ɵAutoFocus_BaseFactory = ɵɵgetInheritedFactory(_AutoFocus)))(__ngFactoryType__ || _AutoFocus);
+    };
+  })();
+  static ɵdir = ɵɵdefineDirective({
+    type: _AutoFocus,
+    selectors: [["", "pAutoFocus", ""]],
+    inputs: {
+      autofocus: [0, "pAutoFocus", "autofocus"]
+    },
+    features: [ɵɵInheritDefinitionFeature]
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(AutoFocus, [{
+    type: Directive,
+    args: [{
+      selector: "[pAutoFocus]",
+      standalone: true
+    }]
+  }], null, {
+    autofocus: [{
+      type: Input,
+      args: ["pAutoFocus"]
+    }]
+  });
+})();
+var AutoFocusModule = class _AutoFocusModule {
+  static ɵfac = function AutoFocusModule_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _AutoFocusModule)();
+  };
+  static ɵmod = ɵɵdefineNgModule({
+    type: _AutoFocusModule,
+    imports: [AutoFocus],
+    exports: [AutoFocus]
+  });
+  static ɵinj = ɵɵdefineInjector({});
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(AutoFocusModule, [{
+    type: NgModule,
+    args: [{
+      imports: [AutoFocus],
+      exports: [AutoFocus]
+    }]
+  }], null, null);
+})();
+
 // node_modules/@primeuix/styles/dist/badge/index.mjs
 var style = "\n    .p-badge {\n        display: inline-flex;\n        border-radius: dt('badge.border.radius');\n        align-items: center;\n        justify-content: center;\n        padding: dt('badge.padding');\n        background: dt('badge.primary.background');\n        color: dt('badge.primary.color');\n        font-size: dt('badge.font.size');\n        font-weight: dt('badge.font.weight');\n        min-width: dt('badge.min.width');\n        height: dt('badge.height');\n    }\n\n    .p-badge-dot {\n        width: dt('badge.dot.size');\n        min-width: dt('badge.dot.size');\n        height: dt('badge.dot.size');\n        border-radius: 50%;\n        padding: 0;\n    }\n\n    .p-badge-circle {\n        padding: 0;\n        border-radius: 50%;\n    }\n\n    .p-badge-secondary {\n        background: dt('badge.secondary.background');\n        color: dt('badge.secondary.color');\n    }\n\n    .p-badge-success {\n        background: dt('badge.success.background');\n        color: dt('badge.success.color');\n    }\n\n    .p-badge-info {\n        background: dt('badge.info.background');\n        color: dt('badge.info.color');\n    }\n\n    .p-badge-warn {\n        background: dt('badge.warn.background');\n        color: dt('badge.warn.color');\n    }\n\n    .p-badge-danger {\n        background: dt('badge.danger.background');\n        color: dt('badge.danger.color');\n    }\n\n    .p-badge-contrast {\n        background: dt('badge.contrast.background');\n        color: dt('badge.contrast.color');\n    }\n\n    .p-badge-sm {\n        font-size: dt('badge.sm.font.size');\n        min-width: dt('badge.sm.min.width');\n        height: dt('badge.sm.height');\n    }\n\n    .p-badge-lg {\n        font-size: dt('badge.lg.font.size');\n        min-width: dt('badge.lg.min.width');\n        height: dt('badge.lg.height');\n    }\n\n    .p-badge-xl {\n        font-size: dt('badge.xl.font.size');\n        min-width: dt('badge.xl.min.width');\n        height: dt('badge.xl.height');\n    }\n";
 
@@ -1372,220 +1462,6 @@ var BadgeModule = class _BadgeModule {
   }], null, null);
 })();
 
-// node_modules/primeng/fesm2022/primeng-autofocus.mjs
-var AutoFocus = class _AutoFocus extends BaseComponent {
-  /**
-   * When present, it specifies that the component should automatically get focus on load.
-   * @group Props
-   */
-  autofocus = false;
-  focused = false;
-  platformId = inject(PLATFORM_ID);
-  document = inject(DOCUMENT);
-  host = inject(ElementRef);
-  onAfterContentChecked() {
-    if (this.autofocus === false) {
-      this.host.nativeElement.removeAttribute("autofocus");
-    } else {
-      this.host.nativeElement.setAttribute("autofocus", true);
-    }
-    if (!this.focused) {
-      this.autoFocus();
-    }
-  }
-  onAfterViewChecked() {
-    if (!this.focused) {
-      this.autoFocus();
-    }
-  }
-  autoFocus() {
-    if (isPlatformBrowser(this.platformId) && this.autofocus) {
-      setTimeout(() => {
-        const focusableElements = DomHandler.getFocusableElements(this.host?.nativeElement);
-        if (focusableElements.length === 0) {
-          this.host.nativeElement.focus();
-        }
-        if (focusableElements.length > 0) {
-          focusableElements[0].focus();
-        }
-        this.focused = true;
-      });
-    }
-  }
-  static ɵfac = /* @__PURE__ */ (() => {
-    let ɵAutoFocus_BaseFactory;
-    return function AutoFocus_Factory(__ngFactoryType__) {
-      return (ɵAutoFocus_BaseFactory || (ɵAutoFocus_BaseFactory = ɵɵgetInheritedFactory(_AutoFocus)))(__ngFactoryType__ || _AutoFocus);
-    };
-  })();
-  static ɵdir = ɵɵdefineDirective({
-    type: _AutoFocus,
-    selectors: [["", "pAutoFocus", ""]],
-    inputs: {
-      autofocus: [0, "pAutoFocus", "autofocus"]
-    },
-    features: [ɵɵInheritDefinitionFeature]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(AutoFocus, [{
-    type: Directive,
-    args: [{
-      selector: "[pAutoFocus]",
-      standalone: true
-    }]
-  }], null, {
-    autofocus: [{
-      type: Input,
-      args: ["pAutoFocus"]
-    }]
-  });
-})();
-var AutoFocusModule = class _AutoFocusModule {
-  static ɵfac = function AutoFocusModule_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _AutoFocusModule)();
-  };
-  static ɵmod = ɵɵdefineNgModule({
-    type: _AutoFocusModule,
-    imports: [AutoFocus],
-    exports: [AutoFocus]
-  });
-  static ɵinj = ɵɵdefineInjector({});
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(AutoFocusModule, [{
-    type: NgModule,
-    args: [{
-      imports: [AutoFocus],
-      exports: [AutoFocus]
-    }]
-  }], null, null);
-})();
-
-// node_modules/primeng/fesm2022/primeng-fluid.mjs
-var _c0 = ["*"];
-var classes2 = {
-  root: "p-fluid"
-};
-var FluidStyle = class _FluidStyle extends BaseStyle {
-  name = "fluid";
-  classes = classes2;
-  static ɵfac = /* @__PURE__ */ (() => {
-    let ɵFluidStyle_BaseFactory;
-    return function FluidStyle_Factory(__ngFactoryType__) {
-      return (ɵFluidStyle_BaseFactory || (ɵFluidStyle_BaseFactory = ɵɵgetInheritedFactory(_FluidStyle)))(__ngFactoryType__ || _FluidStyle);
-    };
-  })();
-  static ɵprov = ɵɵdefineInjectable({
-    token: _FluidStyle,
-    factory: _FluidStyle.ɵfac
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(FluidStyle, [{
-    type: Injectable
-  }], null, null);
-})();
-var FluidClasses;
-(function(FluidClasses2) {
-  FluidClasses2["root"] = "p-fluid";
-})(FluidClasses || (FluidClasses = {}));
-var FLUID_INSTANCE = new InjectionToken("FLUID_INSTANCE");
-var Fluid = class _Fluid extends BaseComponent {
-  $pcFluid = inject(FLUID_INSTANCE, {
-    optional: true,
-    skipSelf: true
-  }) ?? void 0;
-  bindDirectiveInstance = inject(Bind, {
-    self: true
-  });
-  onAfterViewChecked() {
-    this.bindDirectiveInstance.setAttrs(this.ptms(["host", "root"]));
-  }
-  _componentStyle = inject(FluidStyle);
-  static ɵfac = /* @__PURE__ */ (() => {
-    let ɵFluid_BaseFactory;
-    return function Fluid_Factory(__ngFactoryType__) {
-      return (ɵFluid_BaseFactory || (ɵFluid_BaseFactory = ɵɵgetInheritedFactory(_Fluid)))(__ngFactoryType__ || _Fluid);
-    };
-  })();
-  static ɵcmp = ɵɵdefineComponent({
-    type: _Fluid,
-    selectors: [["p-fluid"]],
-    hostVars: 2,
-    hostBindings: function Fluid_HostBindings(rf, ctx) {
-      if (rf & 2) {
-        ɵɵclassMap(ctx.cx("root"));
-      }
-    },
-    features: [ɵɵProvidersFeature([FluidStyle, {
-      provide: FLUID_INSTANCE,
-      useExisting: _Fluid
-    }, {
-      provide: PARENT_INSTANCE,
-      useExisting: _Fluid
-    }]), ɵɵHostDirectivesFeature([Bind]), ɵɵInheritDefinitionFeature],
-    ngContentSelectors: _c0,
-    decls: 1,
-    vars: 0,
-    template: function Fluid_Template(rf, ctx) {
-      if (rf & 1) {
-        ɵɵprojectionDef();
-        ɵɵprojection(0);
-      }
-    },
-    dependencies: [CommonModule],
-    encapsulation: 2,
-    changeDetection: 0
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Fluid, [{
-    type: Component,
-    args: [{
-      selector: "p-fluid",
-      template: ` <ng-content></ng-content> `,
-      standalone: true,
-      imports: [CommonModule],
-      changeDetection: ChangeDetectionStrategy.OnPush,
-      encapsulation: ViewEncapsulation.None,
-      providers: [FluidStyle, {
-        provide: FLUID_INSTANCE,
-        useExisting: Fluid
-      }, {
-        provide: PARENT_INSTANCE,
-        useExisting: Fluid
-      }],
-      host: {
-        "[class]": "cx('root')"
-      },
-      hostDirectives: [Bind]
-    }]
-  }], null, null);
-})();
-var FluidModule = class _FluidModule {
-  static ɵfac = function FluidModule_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _FluidModule)();
-  };
-  static ɵmod = ɵɵdefineNgModule({
-    type: _FluidModule,
-    imports: [Fluid],
-    exports: [Fluid]
-  });
-  static ɵinj = ɵɵdefineInjector({
-    imports: [Fluid]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(FluidModule, [{
-    type: NgModule,
-    args: [{
-      imports: [Fluid],
-      exports: [Fluid]
-    }]
-  }], null, null);
-})();
-
 // node_modules/@primeuix/styles/dist/ripple/index.mjs
 var style3 = "\n    .p-ink {\n        display: block;\n        position: absolute;\n        background: dt('ripple.background');\n        border-radius: 100%;\n        transform: scale(0);\n        pointer-events: none;\n    }\n\n    .p-ink-active {\n        animation: ripple 0.4s linear;\n    }\n\n    @keyframes ripple {\n        100% {\n            opacity: 0;\n            transform: scale(2.5);\n        }\n    }\n";
 
@@ -1613,13 +1489,13 @@ var style4 = (
     }
 `
 );
-var classes3 = {
+var classes2 = {
   root: "p-ink"
 };
 var RippleStyle = class _RippleStyle extends BaseStyle {
   name = "ripple";
   style = style4;
-  classes = classes3;
+  classes = classes2;
   static ɵfac = /* @__PURE__ */ (() => {
     let ɵRippleStyle_BaseFactory;
     return function RippleStyle_Factory(__ngFactoryType__) {
@@ -1773,6 +1649,130 @@ var RippleModule = class _RippleModule {
     args: [{
       imports: [Ripple],
       exports: [Ripple]
+    }]
+  }], null, null);
+})();
+
+// node_modules/primeng/fesm2022/primeng-fluid.mjs
+var _c0 = ["*"];
+var classes3 = {
+  root: "p-fluid"
+};
+var FluidStyle = class _FluidStyle extends BaseStyle {
+  name = "fluid";
+  classes = classes3;
+  static ɵfac = /* @__PURE__ */ (() => {
+    let ɵFluidStyle_BaseFactory;
+    return function FluidStyle_Factory(__ngFactoryType__) {
+      return (ɵFluidStyle_BaseFactory || (ɵFluidStyle_BaseFactory = ɵɵgetInheritedFactory(_FluidStyle)))(__ngFactoryType__ || _FluidStyle);
+    };
+  })();
+  static ɵprov = ɵɵdefineInjectable({
+    token: _FluidStyle,
+    factory: _FluidStyle.ɵfac
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(FluidStyle, [{
+    type: Injectable
+  }], null, null);
+})();
+var FluidClasses;
+(function(FluidClasses2) {
+  FluidClasses2["root"] = "p-fluid";
+})(FluidClasses || (FluidClasses = {}));
+var FLUID_INSTANCE = new InjectionToken("FLUID_INSTANCE");
+var Fluid = class _Fluid extends BaseComponent {
+  $pcFluid = inject(FLUID_INSTANCE, {
+    optional: true,
+    skipSelf: true
+  }) ?? void 0;
+  bindDirectiveInstance = inject(Bind, {
+    self: true
+  });
+  onAfterViewChecked() {
+    this.bindDirectiveInstance.setAttrs(this.ptms(["host", "root"]));
+  }
+  _componentStyle = inject(FluidStyle);
+  static ɵfac = /* @__PURE__ */ (() => {
+    let ɵFluid_BaseFactory;
+    return function Fluid_Factory(__ngFactoryType__) {
+      return (ɵFluid_BaseFactory || (ɵFluid_BaseFactory = ɵɵgetInheritedFactory(_Fluid)))(__ngFactoryType__ || _Fluid);
+    };
+  })();
+  static ɵcmp = ɵɵdefineComponent({
+    type: _Fluid,
+    selectors: [["p-fluid"]],
+    hostVars: 2,
+    hostBindings: function Fluid_HostBindings(rf, ctx) {
+      if (rf & 2) {
+        ɵɵclassMap(ctx.cx("root"));
+      }
+    },
+    features: [ɵɵProvidersFeature([FluidStyle, {
+      provide: FLUID_INSTANCE,
+      useExisting: _Fluid
+    }, {
+      provide: PARENT_INSTANCE,
+      useExisting: _Fluid
+    }]), ɵɵHostDirectivesFeature([Bind]), ɵɵInheritDefinitionFeature],
+    ngContentSelectors: _c0,
+    decls: 1,
+    vars: 0,
+    template: function Fluid_Template(rf, ctx) {
+      if (rf & 1) {
+        ɵɵprojectionDef();
+        ɵɵprojection(0);
+      }
+    },
+    dependencies: [CommonModule],
+    encapsulation: 2,
+    changeDetection: 0
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Fluid, [{
+    type: Component,
+    args: [{
+      selector: "p-fluid",
+      template: ` <ng-content></ng-content> `,
+      standalone: true,
+      imports: [CommonModule],
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      encapsulation: ViewEncapsulation.None,
+      providers: [FluidStyle, {
+        provide: FLUID_INSTANCE,
+        useExisting: Fluid
+      }, {
+        provide: PARENT_INSTANCE,
+        useExisting: Fluid
+      }],
+      host: {
+        "[class]": "cx('root')"
+      },
+      hostDirectives: [Bind]
+    }]
+  }], null, null);
+})();
+var FluidModule = class _FluidModule {
+  static ɵfac = function FluidModule_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _FluidModule)();
+  };
+  static ɵmod = ɵɵdefineNgModule({
+    type: _FluidModule,
+    imports: [Fluid],
+    exports: [Fluid]
+  });
+  static ɵinj = ɵɵdefineInjector({
+    imports: [Fluid]
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(FluidModule, [{
+    type: NgModule,
+    args: [{
+      imports: [Fluid],
+      exports: [Fluid]
     }]
   }], null, null);
 })();
@@ -3812,11 +3812,11 @@ export {
   unblockBodyScroll,
   ConnectedOverlayScrollHandler,
   AutoFocus,
+  Fluid,
   Badge,
   BadgeModule,
-  Fluid,
   Ripple,
   Button,
   ButtonModule
 };
-//# sourceMappingURL=chunk-XVTH54CT.js.map
+//# sourceMappingURL=chunk-GYVKYQ6A.js.map

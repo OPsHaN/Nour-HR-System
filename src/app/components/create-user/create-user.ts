@@ -34,7 +34,7 @@ export class CreateUser {
         "",
         [
           Validators.required,
-          Validators.minLength(8),
+          Validators.minLength(6),
           Validators.pattern(this.PASSWORD_PATTERN),
         ],
       ],
@@ -52,24 +52,24 @@ export class CreateUser {
   }
 
   get passwordValue(): string {
-  return this.form.get('Password')?.value || '';
-}
+    return this.form.get("Password")?.value || "";
+  }
 
-hasUpperCase(): boolean {
-  return /[A-Z]/.test(this.passwordValue);
-}
+  hasUpperCase(): boolean {
+    return /[A-Z]/.test(this.passwordValue);
+  }
 
-hasLowerCase(): boolean {
-  return /[a-z]/.test(this.passwordValue);
-}
+  hasLowerCase(): boolean {
+    return /[a-z]/.test(this.passwordValue);
+  }
 
-hasNumber(): boolean {
-  return /\d/.test(this.passwordValue);
-}
+  hasNumber(): boolean {
+    return /\d/.test(this.passwordValue);
+  }
 
-hasSymbol(): boolean {
-  return /[\W_]/.test(this.passwordValue);
-}
+  hasSymbol(): boolean {
+    return /[\W_]/.test(this.passwordValue);
+  }
 
   isRequired(controlName: string): boolean {
     const control = this.form.get(controlName);
@@ -91,8 +91,7 @@ hasSymbol(): boolean {
         this.api.showSuccess("تم تسجيل المستخدم بنجاح");
         this.form.reset();
         this.loading = false;
-                this.created.emit();
-
+        this.created.emit();
       },
       error: (err) => {
         this.api.showError("يوجد مشكلة فى التسجيل");

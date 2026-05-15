@@ -6,11 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { DatePickerModule } from "primeng/datepicker";
 import { Apiservice } from "src/app/services/api.service";
 
 @Component({
   selector: "app-create-employee",
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule , DatePickerModule],
   templateUrl: "./create-employee.html",
   styleUrl: "./create-employee.css",
 })
@@ -35,7 +36,7 @@ export class CreateEmployee {
         "",
         [
           Validators.required,
-          Validators.minLength(8),
+          Validators.minLength(6),
           Validators.pattern(this.PASSWORD_PATTERN),
         ],
       ],
@@ -45,17 +46,17 @@ export class CreateEmployee {
       bankName: ["", Validators.required],
       bankAccount: ["", Validators.required],
       shiftHours: [8, Validators.required],
-      branchId: [null, Validators.required],
+      branchId: [0, Validators.required],
       hiringDate: ["", Validators.required],
       qualification: ["", Validators.required],
-      graduationYear: [null, Validators.required],
+      graduationYear: [0, Validators.required],
       nationalId: ["", [Validators.required, Validators.minLength(14)]],
       phoneNumber: [
         "",
-        [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/)],
+        [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/), Validators.minLength(11)],
       ],
-      totalSalary: [null, Validators.required],
-      salaryPerHour: [null],
+      totalSalary: [0],
+      salaryPerHour: [0],
     });
   }
 

@@ -31,6 +31,7 @@ export class Employees {
   selectedEmployee: any = null;
   showEndServiceDialog = false;
   endServiceReason = "";
+  endOfServiceType = "";
   employeeDetails: any = null;
   showEmployeeDetailsDialog = false;
 
@@ -81,7 +82,7 @@ export class Employees {
         const payload = {
           endOfServiceDate: new Date().toISOString(),
           endOfServiceReason: this.endServiceReason,
-          endOfServiceType: "استقالة",
+          endOfServiceType: this.endOfServiceType,
         };
 
         this.api.endOfServiceEmployee(emp.id, payload).subscribe({
@@ -106,16 +107,7 @@ export class Employees {
     this.showEndServiceDialog = true;
   }
 
-  viewDetails(emp: any) {
-    this.api.getEmployeeById(emp.id).subscribe({
-      next: (res) => {
-        console.log("Employee Details:", res);
-      },
-      error: (err) => {
-        console.error("Error fetching employee details:", err);
-      },
-    });
-  }
+  viewDetails(emp: any) {}
 
   onEmployeeCreated() {
     this.showCreateEmployee = false;
@@ -124,11 +116,24 @@ export class Employees {
 
   openEmployeeDetails(emp: any) {
     this.api.getHistoryByEmployeeId(emp.id).subscribe({
-      next: (res) => {
-        this.employeeDetails = res;
-        this.showEmployeeDetailsDialog = true;
+      next: (historyRes) => {
+        this.api.getEmployeeById(emp.id).subscribe({
+          next: (employeeRes) => {
+            this.employeeDetails = {
+              ...historyRes,
+              ...employeeRes,
+            };
+
+            this.showEmployeeDetailsDialog = true;
+          },
+
+          error: () => {
+            this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+          },
+        });
       },
-      error: (err) => {
+
+      error: () => {
         this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
       },
     });
