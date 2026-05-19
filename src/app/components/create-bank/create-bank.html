@@ -1,0 +1,28 @@
+<div class="panel">
+  <form [formGroup]="form" (ngSubmit)="Submit()" class="form">
+
+    <!-- Bank Name -->
+    <div class="field">
+      <label>
+        اسم البنك
+        <span class="required text-danger">*</span>
+      </label>
+
+      <input
+        type="text"
+        formControlName="Name"
+        placeholder="أدخل اسم البنك"
+      />
+    </div>
+
+    <!-- Submit -->
+    <button
+      type="submit"
+      [disabled]="loading || form.invalid"
+      class="submit-btn full"
+    >
+      {{ loading ? 'جارى الحفظ...' : 'حفظ' }}
+    </button>
+
+  </form>
+</div>

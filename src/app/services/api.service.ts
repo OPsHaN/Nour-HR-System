@@ -66,6 +66,26 @@ export class Apiservice {
     return this.http.get(`${this.baseUrl}employees/${id}/history`);
   }
 
+
+  getScheduleByEmployeeId(id: string) {
+    return this.http.get(`${this.baseUrl}employees/${id}/schedule`);
+  }
+
+  addScheduleByEmployeeId(id: string, scheduleData: any) {
+    return this.http.post(`${this.baseUrl}employees/${id}/schedule`, scheduleData);
+  }
+
+
+
+  updateScheduleByEmployeeId(id: string, id2: string , scheduleData: any) {
+    return this.http.put(`${this.baseUrl}employees/${id}/schedule/${id2}`, scheduleData);
+  }
+
+  deleteScheduleByEmployeeIdAndId(id: string, id2: string) {
+    return this.http.delete(`${this.baseUrl}employees/${id}/schedule/${id2}`, {});
+    };
+  
+
   //branches//
 
   addNewBranch(branchData: any) {
@@ -100,6 +120,22 @@ export class Apiservice {
     return this.http.delete(`${this.baseUrl}evaluation-criteria/${id}`, {
       body: criteriaData,
     });
+  }
+
+  //banks//
+
+  addNewBank(bankData: any) {
+    return this.http.post(`${this.baseUrl}banks`, bankData);
+  }
+
+  deleteBank(id: string) {
+    return this.http.delete(`${this.baseUrl}banks/${id}`, {});
+  }
+
+  getAllBanks() {
+    return this.http.get(
+      `${this.baseUrl}banks`,
+    );
   }
   
 

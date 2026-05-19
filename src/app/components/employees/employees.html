@@ -1,4 +1,6 @@
-<div class="sticky-header">
+<div
+  class="sticky-header d-flex justify-content-between align-items-center gap-2"
+>
   <button
     pButton
     type="button"
@@ -17,6 +19,15 @@
 
     {{ showCreateEmployee ? '' : 'موظف جديد' }}
   </button>
+  <input
+    type="text"
+    pInputText
+    placeholder="بحث..."
+    class="custom-input search-input mx-1"
+    icon="pi pi-search"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearchTermChange()"
+  />
 </div>
 
 <app-create-employee
@@ -89,10 +100,10 @@
           pButton
           type="button"
           class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
-          (click)="viewDetails(emp)"
+          (click)="openSchedule(emp)"
         >
           <i
-            class="pi pi-eye d-flex align-items-center justify-content-center"
+            class="pi pi-calendar-clock d-flex align-items-center justify-content-center"
           ></i>
         </button>
         <button
@@ -107,6 +118,11 @@
           ></i>
         </button>
       </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="8" class="text-center py-4">لاتوجد أى بيانات</td>
     </tr>
   </ng-template>
 </p-table>
@@ -162,7 +178,7 @@
 </p-dialog>
 
 <p-dialog
-  header="بيانات الموظف"
+  [header]="isEditMode ? 'تعديل بيانات الموظف' : 'بيانات الموظف'"
   [(visible)]="showEmployeeDetailsDialog"
   [modal]="true"
   [style]="{ width: '40rem' }"
@@ -178,7 +194,23 @@
     <!-- المسمى الوظيفي -->
     <div class="detail-item">
       <label>المسمى الوظيفى</label>
-      <span>{{ employeeDetails.theNameOfJob || '-' }}</span>
+
+      <select
+        *ngIf="isEditMode"
+        class="custom-input"
+        [(ngModel)]="employeeDetails.theNameOfJob"
+      >
+        <option value="">اختر المسمى الوظيفي</option>
+        <option value="مدير">مدير</option>
+        <option value="صيدلي">صيدلي</option>
+        <option value="مساعد صيدلي">مساعد صيدلي</option>
+        <option value="دليفري">دليفري</option>
+        <option value="خدمات">خدمات</option>
+        <option value="إدارة">إدارة</option>
+      </select>
+      <span *ngIf="!isEditMode">
+        {{ employeeDetails.theNameOfJob || '-' }}
+      </span>
     </div>
 
     <!-- نوع الوظيفة -->
@@ -194,31 +226,84 @@
     <!-- الفرع -->
     <div class="detail-item">
       <label>الفرع</label>
-      <span>{{ employeeDetails.branchName || '-' }}</span>
+
+      <select
+        class="custom-input"
+        *ngIf="isEditMode"
+        [(ngModel)]="employeeDetails.branchId"
+      >
+        <option *ngFor="let branch of branches" [ngValue]="branch.id">
+          {{ branch.name }}
+        </option>
+      </select>
+
+      <span *ngIf="!isEditMode"> {{ employeeDetails.branchName || '-' }} </span>
     </div>
 
     <!-- ساعات الشيفت -->
     <div class="detail-item">
       <label>عدد ساعات الشيفت</label>
-      <span>{{ employeeDetails.shiftHours || '-' }}</span>
+
+      <input
+        *ngIf="isEditMode"
+        type="number"
+        class="custom-input"
+        [(ngModel)]="employeeDetails.shiftHours"
+      />
+
+      <span *ngIf="!isEditMode"> {{ employeeDetails.shiftHours || '-' }} </span>
     </div>
 
     <!-- البنك -->
     <div class="detail-item">
       <label>اسم البنك</label>
-      <span>{{ employeeDetails.bankName || '-' }}</span>
+
+      <select
+        class="custom-input"
+        *ngIf="isEditMode"
+        [(ngModel)]="employeeDetails.bankId"
+      >
+        <option *ngFor="let bank of banks" [ngValue]="bank.id">
+          {{ bank.name }}
+        </option>
+      </select>
+
+      <span *ngIf="!isEditMode"> {{ employeeDetails.bankName || '-' }} </span>
     </div>
 
     <!-- الحساب البنكي -->
     <div class="detail-item">
       <label>رقم الحساب البنكى</label>
-      <span>{{ employeeDetails.bankAccount || '-' }}</span>
+
+      <input
+        *ngIf="isEditMode"
+        type="text"
+        class="custom-input"
+        [(ngModel)]="employeeDetails.bankAccount"
+      />
+
+      <span *ngIf="!isEditMode">
+        {{ employeeDetails.bankAccount || '-' }}
+      </span>
     </div>
 
     <!-- تاريخ التعيين -->
     <div class="detail-item">
       <label>تاريخ التعيين</label>
-      <span> {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }} </span>
+
+      <p-datepicker
+        *ngIf="isEditMode"
+        class="custom"
+        [(ngModel)]="employeeDetails.hiringDate"
+        dateFormat="yy-mm-dd"
+        appendTo="body"
+        styleClass="w-100"
+        placeholder="اختر التاريخ"
+      ></p-datepicker>
+
+      <span *ngIf="!isEditMode">
+        {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}
+      </span>
     </div>
 
     <!-- المؤهل -->
@@ -266,4 +351,175 @@
       <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
     </div>
   </div>
+  <div
+    class="dialog-actions d-flex justify-content-center my-1"
+    *ngIf="isEditMode"
+  >
+    <button
+      pButton
+      type="button"
+      class="btn btn-success p-1 border-rounded"
+      (click)="saveEmployeeEdits()"
+    >
+      حفظ التعديلات
+    </button>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="مواعيد الحضور والانصراف للموظف {{ this.employeeName }}"
+  [(visible)]="showAttendanceDialog"
+  [modal]="true"
+  [style]="{ width: '40rem' }"
+  class="schedule-dialog"
+>
+  <button
+    pButton
+    type="button"
+    class="btn btn-sm btn-success my-1 d-flex align-items-center justify-content-center gap-2"
+    (click)="addAttendance()"
+  >
+    <i class="pi pi-plus d-flex align-items-center justify-content-center"></i>
+    إضافة يوم
+  </button>
+  <p-table
+    [value]="employeeAttendance"
+    responsiveLayout="scroll"
+    styleClass="p-datatable-sm"
+  >
+    <!-- Header -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th>اليوم</th>
+        <th>الحضور</th>
+        <th>الانصراف</th>
+        <th>الإجراءات</th>
+      </tr>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template pTemplate="body" let-item let-ri="rowIndex">
+      <tr>
+        <!-- اليوم -->
+        <td>
+          <!-- Edit -->
+          <select
+            *ngIf="item.isEditing"
+            class="custom-input"
+            [(ngModel)]="item.dayOfWeek"
+          >
+            <option [ngValue]="0">الأحد</option>
+            <option [ngValue]="1">الإثنين</option>
+            <option [ngValue]="2">الثلاثاء</option>
+            <option [ngValue]="3">الأربعاء</option>
+            <option [ngValue]="4">الخميس</option>
+            <option [ngValue]="5">الجمعة</option>
+            <option [ngValue]="6">السبت</option>
+          </select>
+
+          <!-- View -->
+          <span *ngIf="!item.isEditing">
+            {{ item.dayOfWeek === 0 ? 'الأحد' : item.dayOfWeek === 1 ? 'الإثنين'
+            : item.dayOfWeek === 2 ? 'الثلاثاء' : item.dayOfWeek === 3 ?
+            'الأربعاء' : item.dayOfWeek === 4 ? 'الخميس' : item.dayOfWeek === 5
+            ? 'الجمعة' : item.dayOfWeek === 6 ? 'السبت' : '-' }}
+          </span>
+        </td>
+
+        <!-- الحضور -->
+        <td>
+          <input
+            *ngIf="item.isEditing"
+            type="time"
+            class="custom-input"
+            [(ngModel)]="item.checkInTime"
+          />
+
+          <span *ngIf="!item.isEditing">
+            {{ formatTime(item.checkInTime) }}
+          </span>
+        </td>
+        <!-- الانصراف -->
+        <td>
+          <input
+            *ngIf="item.isEditing"
+            type="time"
+            class="custom-input"
+            [(ngModel)]="item.checkOutTime"
+          />
+
+          <span *ngIf="!item.isEditing">
+            {{ formatTime(item.checkOutTime) }}
+          </span>
+        </td>
+        <!-- Actions -->
+        <td class="d-flex justify-content-center">
+          <!-- Edit Mode -->
+          <div *ngIf="item.isEditing" class="d-flex align-items-center gap-2">
+            <!-- Save / Create -->
+            <button
+              pButton
+              type="button"
+              [class]="
+      item.isNew
+        ? 'btn btn-sm btn-primary rounded-circle mx-1 my-1'
+        : 'btn btn-sm btn-success rounded-circle mx-1 my-1'
+    "
+              (click)="item.isNew ? createAttendance(item) : saveAttendance(item)"
+            >
+              <i
+                class="pi pi-check d-flex align-items-center justify-content-center"
+              ></i>
+            </button>
+
+            <!-- Cancel -->
+            <button
+              pButton
+              type="button"
+              class="btn btn-sm btn-secondary rounded-circle mx-1 my-1"
+              (click)="cancelEditAttendance(item)"
+            >
+              <i
+                class="pi pi-times d-flex align-items-center justify-content-center"
+              ></i>
+            </button>
+          </div>
+
+          <!-- View Mode -->
+          <div *ngIf="!item.isEditing" class="d-flex align-items-center gap-2">
+            <!-- Edit -->
+            <button
+              pButton
+              type="button"
+              class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+              (click)="editAttendance(item)"
+            >
+              <i
+                class="pi pi-pencil d-flex align-items-center justify-content-center"
+              ></i>
+            </button>
+
+            <!-- Delete -->
+            <button
+              pButton
+              type="button"
+              class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+              (click)="deleteAttendance(item)"
+            >
+              <i
+                class="pi pi-trash d-flex align-items-center justify-content-center"
+              ></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Empty -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </p-dialog>

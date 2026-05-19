@@ -85,4 +85,16 @@
   color: var(--text);
 }
 
+::ng-deep.schedule-dialog .p-dialog-header {
+    flex-direction: unset !important;
+  padding: 0.3rem 0.3rem !important;
+}
 
+::ng-deep.schedule-dialog .p-dialog-content{
+  padding: 0.3rem !important;
+}
+
+
+::ng-deep .custom .p-inputtext{
+  padding: 5px 5px !important;
+}

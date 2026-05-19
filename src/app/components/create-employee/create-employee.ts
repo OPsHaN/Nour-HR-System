@@ -22,6 +22,7 @@ export class CreateEmployee {
   errorMsg = "";
   showPassword = false;
   branches: any[] = [];
+  banks:any[] = [];
   PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
   @Input() employeeData: any;
   @Output() created = new EventEmitter<void>();
@@ -69,6 +70,7 @@ export class CreateEmployee {
 
   ngOnInit(): void {
     this.getBranches();
+    this.getBanks();
   }
 
   togglePassword() {
@@ -128,6 +130,18 @@ export class CreateEmployee {
       },
       error: (err) => {
         console.error("Error fetching branches:", err);
+      },
+    });
+  }
+
+
+getBanks() {
+    this.api.getAllBanks().subscribe({
+      next: (res: any) => { 
+        this.banks = res;
+      }
+      ,error: (err) => {
+        console.error("Error fetching banks:", err);
       },
     });
   }

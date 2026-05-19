@@ -58,7 +58,13 @@ export const SHORTCUTS_CONFIG = {
     roles: ["Admin", "HR"] as UserRole[],
     size: { width: 620, height: 480 },
   },
-
+  banks:{
+    title: "البنوك",
+    icon: "account_balance",
+    bg: "#eb2f96",
+    roles: ["Admin", "HR"] as UserRole[],
+    size: { width: 620, height: 480 },
+  },
   download: {
     title: "التقارير ",
     icon: "bar_chart",

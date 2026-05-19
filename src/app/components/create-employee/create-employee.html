@@ -86,7 +86,12 @@
           >*</span
         >
       </label>
-      <input type="text" formControlName="bankName" />
+      <select formControlName="bankName">
+        <option [ngValue]="null">اختر البنك</option>
+        <option *ngFor="let bank of banks" [ngValue]="bank.id">
+          {{ bank.name }}
+        </option>
+      </select>
     </div>
 
     <!-- Bank Account -->

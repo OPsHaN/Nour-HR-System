@@ -98,20 +98,28 @@ input {
 .p-cell-editor .p-inputtext {
   background: var(--surface-strong);
   border: 1px solid var(--surface-border);
-  border-radius: 12px;
+  /* border-radius: 12px; */
 }
 
 .custom-input {
-  padding: 10px 10px;
+  padding: 5px 5px;
   border: 1px solid var(--surface-border);
   border-radius: 18px;
   color: var(--text);
   outline: none;
-  font-size: 20px;
   transition: 0.2s ease;
+    /* font-size: 20px; */
+
+  background: var(--surface-strong);
 }
 
 .custom-input option {
+  color: var(--text);
+  padding: 10px;
+  background: var(--surface-strong);
+}
+
+.custom-input select {  
   color: var(--text);
   background: var(--surface-strong);
 }
@@ -361,23 +369,24 @@ input {
 
 
 .p-confirmdialog {
-  border-radius: 24px !important;
+  border-radius: 25px !important;
   overflow: hidden !important;
   backdrop-filter: blur(14px);
-  background: var(--surface) !important;
+  background: var(--bg-start) !important;
+  border: 0.1rem solid  !important;
 }
 
 /* header */
 .p-confirmdialog .p-dialog-header {
-  background: transparent !important;
-  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  background: var(--bg-start) !important;
+  border-bottom: 1px solid  !important;
   color: var(--text) !important;
   padding: 0.5rem 0.5rem !important;
 }
 
 /* content */
 .p-confirmdialog .p-dialog-content {
-  background: transparent !important;
+  background: var(--bg-start) !important;
   color: var(--text) !important;
   padding: 0.5rem 0.5rem !important;
 }
@@ -391,7 +400,7 @@ input {
 /* footer */
 .p-confirmdialog .p-dialog-footer {
   background: transparent !important;
-  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  border-top: 1px solid  !important;
   padding: 0.5rem 0.5rem !important;
 }
 
@@ -417,4 +426,11 @@ input {
 .p-confirmdialog-icon {
   color: #f59e0b !important;
   font-size: 2rem !important;
+}
+
+.p-inputtext {
+  /* padding: 5px 5px !important; */
+  border-radius: 18px !important;
+  background: var(--surface-strong) !important;
+  color: var(--text) !important;
 }
