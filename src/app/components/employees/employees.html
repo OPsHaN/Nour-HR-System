@@ -1,33 +1,48 @@
 <div
   class="sticky-header d-flex justify-content-between align-items-center gap-2"
 >
-  <button
-    pButton
-    type="button"
-    class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
-    [class.btn-success]="!showCreateEmployee"
-    [class.btn-danger]="showCreateEmployee"
-    icon="pi pi-plus"
-    (click)="
-  selectedEmployee = null;
-  showCreateEmployee = !showCreateEmployee"
-  >
-    <i
-      class="pi"
-      [ngClass]="showCreateEmployee ? 'pi pi-times' : 'pi-user-plus'"
-    ></i>
+  <div class="d-flex justify-content-start align-items-center">
+    <button
+      pButton
+      type="button"
+      class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+      [class.btn-success]="!showCreateEmployee"
+      [class.btn-danger]="showCreateEmployee"
+      icon="pi pi-plus"
+      (click)="selectedEmployee = null; showCreateEmployee = !showCreateEmployee"
+    >
+      <i
+        class="pi"
+        [ngClass]="showCreateEmployee ? 'pi pi-times' : 'pi-user-plus'"
+      ></i>
 
-    {{ showCreateEmployee ? '' : 'موظف جديد' }}
-  </button>
-  <input
-    type="text"
-    pInputText
-    placeholder="بحث..."
-    class="custom-input search-input mx-1"
-    icon="pi pi-search"
-    [(ngModel)]="searchTerm"
-    (ngModelChange)="onSearchTermChange()"
-  />
+      {{ showCreateEmployee ? '' : 'موظف جديد' }}
+    </button>
+    <input
+      *ngIf="!showCreateEmployee"
+      type="text"
+      pInputText
+      placeholder="بحث..."
+      class="custom-input search-input mx-1 h-50"
+      icon="pi pi-search"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchTermChange()"
+    />
+  </div>
+  <div class="d-flex justify-content-end gap-2 align-items-center">
+    <button
+      *ngIf="!showCreateEmployee"
+      pButton
+      type="button"
+      class="btn btn-sm btn-info mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+      (click)="exportToExcel()"
+    >
+      <i
+        class="pi pi-file-excel d-flex align-items-center justify-content-center"
+      ></i>
+      تصدير Excel
+    </button>
+  </div>
 </div>
 
 <app-create-employee
@@ -65,7 +80,8 @@
 
   <!-- BODY -->
   <ng-template pTemplate="body" let-emp let-ri="rowIndex">
-    <tr>
+    <tr [class.active-row]="activeEmployeeId === emp.id"
+>
       <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
       <td>{{ emp.name }}</td>
       <td>{{ emp.theNameOfJob }}</td>
@@ -79,12 +95,20 @@
           type="button"
           class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
           icon="pi pi-pencil"
-          (click)="editEmployee(emp)"
+          (click)="openMenu($event, emp)"
         >
           <i
-            class="pi pi-pencil d-flex align-items-center justify-content-center"
+            class="pi pi-plus d-flex align-items-center justify-content-center"
           ></i>
         </button>
+        <!-- Menu -->
+        <p-menu
+          #menu
+          [popup]="true"
+          appendTo="body"
+          [model]="employeeActions"
+          class="empolyee-actions"
+        ></p-menu>
         <button
           pButton
           type="button"
@@ -186,6 +210,7 @@
 >
   <div class="details-grid" *ngIf="employeeDetails">
     <!-- اسم الموظف -->
+
     <div class="detail-item">
       <label>اسم الموظف</label>
       <span>{{ employeeDetails.name || '-' }}</span>
@@ -351,6 +376,23 @@
       <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
     </div>
   </div>
+
+  <!-- Edit -->
+
+  <div
+    class="dialog-actions d-flex justify-content-center my-1"
+    *ngIf="!isEditMode"
+  >
+    <button
+      pButton
+      type="button"
+      class="btn btn-warning p-1 border-rounded"
+      (click)="editEmployee(employeeDetails)"
+    >
+      تعديل البيانات
+    </button>
+  </div>
+
   <div
     class="dialog-actions d-flex justify-content-center my-1"
     *ngIf="isEditMode"

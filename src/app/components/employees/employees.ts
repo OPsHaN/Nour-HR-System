@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectorRef, Component } from "@angular/core";
+import { ChangeDetectorRef, Component, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ConfirmationService } from "primeng/api";
 import { TableModule } from "primeng/table";
@@ -8,6 +8,7 @@ import { Apiservice } from "src/app/services/api.service";
 import { CreateEmployee } from "../create-employee/create-employee";
 import { Dialog } from "primeng/dialog";
 import { DatePickerModule } from "primeng/datepicker";
+import { Menu } from 'primeng/menu';
 
 @Component({
   selector: "app-employees",
@@ -19,6 +20,7 @@ import { DatePickerModule } from "primeng/datepicker";
     CreateEmployee,
     Dialog,
     DatePickerModule,
+    Menu
   ],
   templateUrl: "./employees.html",
   styleUrl: "./employees.css",
@@ -38,12 +40,14 @@ export class Employees {
   showEmployeeDetailsDialog = false;
   isEditMode = false;
   branches: any[] = [];
-  banks:any[] = [];
+  banks: any[] = [];
   showAttendanceDialog = false;
   employeeAttendance: any[] = [];
   employeeName: string = "";
   selectedEmployeeId: string = "";
   searchTerm: string = "";
+  activeEmployeeId: number | null = null;
+  @ViewChild('menu') menu!: Menu;
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
@@ -55,6 +59,72 @@ export class Employees {
     this.loadBranches();
     this.loadBanks();
   }
+
+  openMenu(event: Event, emp: any) {
+  this.selectedEmployee = emp;
+  this.activeEmployeeId = emp.id;
+  this.menu.toggle(event);
+
+}
+
+employeeActions = [
+
+  {
+    label: 'إضافة زيادة',
+    icon: 'pi pi-plus-circle',
+
+    command: () => {
+
+      this.openAddBonus(this.selectedEmployee);
+
+    }
+  },
+
+  {
+    label: 'إضافة سلفة',
+    icon: 'pi pi-wallet',
+
+    command: () => {
+
+      this.openAddAdvance(this.selectedEmployee);
+
+    }
+  },
+
+  {
+    label: 'إضافة خصم',
+    icon: 'pi pi-minus-circle',
+
+    command: () => {
+
+      this.openAddDeduction(this.selectedEmployee);
+
+    }
+  },
+
+  {
+    label: 'إضافة خصم تعاقدات',
+    icon: 'pi pi-file-edit',
+
+    command: () => {
+
+      this.openContractDeduction(this.selectedEmployee);
+
+    }
+  },
+
+  {
+    label: 'إضافة سلفة نقدية',
+    icon: 'pi pi-money-bill',
+
+    command: () => {
+
+      this.openCashAdvance(this.selectedEmployee);
+
+    }
+  }
+
+];
 
   loadEmployees() {
     this.loading = true;
@@ -82,7 +152,7 @@ export class Employees {
     });
   }
 
-    loadBanks() {
+  loadBanks() {
     this.loading = true;
     this.api.getAllBanks().subscribe({
       next: (res: any) => {
@@ -121,7 +191,7 @@ export class Employees {
   saveEmployeeEdits() {
     const payload = {
       theNameOfJob: this.employeeDetails.theNameOfJob,
-      bankId : this.employeeDetails.bankId,
+      bankId: this.employeeDetails.bankId,
       bankName: this.employeeDetails.bankName,
       bankAccount: this.employeeDetails.bankAccount,
       shiftHours: this.employeeDetails.shiftHours,
@@ -352,6 +422,17 @@ export class Employees {
       this.loadEmployees();
       return;
     }
+  }
 
-}
+  exportToExcel() {}
+
+  openAddDeduction(emp: any) {}
+
+  openAddBonus(emp: any) {}
+
+  openAddAdvance(emp: any) {}
+
+  openContractDeduction(emp: any) {}
+
+  openCashAdvance(emp: any) {}
 }

@@ -98,3 +98,15 @@
 ::ng-deep .custom .p-inputtext{
   padding: 5px 5px !important;
 }
+
+
+.active-row td {
+
+  background: rgba(175, 175, 175, 0.5) !important;
+
+  transition: 0.2s ease;
+
+}
+
+
+
