@@ -103,7 +103,7 @@ input {
 
 .custom-input {
   padding: 5px 5px;
-  border: 1px solid var(--surface-border);
+  border: 2px solid var(--surface-border);
   border-radius: 18px;
   color: var(--text);
   outline: none;
@@ -434,13 +434,17 @@ input {
   background: var(--surface-strong) !important;
   color: var(--text) !important;
 }
+.p-menu{
+  border-radius: 20px !important;
+}
 
 .p-menu-list {
   direction: rtl;
   background: rgba(222, 221, 221, 0.75);
+  border-radius: 15px;
   color: inherit;
   font-size: large;
-  padding: 0 !important;
+  padding: 3px !important;
 }
 
 .p-menu-item-icon {
@@ -450,4 +454,8 @@ input {
 
 .p-menu-item-link {
   padding: 10px 16px !important;
+}
+
+.p-menu-item-content{
+  border-radius: 15px !important;
 }

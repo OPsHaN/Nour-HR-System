@@ -8,7 +8,8 @@ import { Apiservice } from "src/app/services/api.service";
 import { CreateEmployee } from "../create-employee/create-employee";
 import { Dialog } from "primeng/dialog";
 import { DatePickerModule } from "primeng/datepicker";
-import { Menu } from 'primeng/menu';
+import { Menu } from "primeng/menu";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-employees",
@@ -20,7 +21,7 @@ import { Menu } from 'primeng/menu';
     CreateEmployee,
     Dialog,
     DatePickerModule,
-    Menu
+    Menu,
   ],
   templateUrl: "./employees.html",
   styleUrl: "./employees.css",
@@ -47,7 +48,16 @@ export class Employees {
   selectedEmployeeId: string = "";
   searchTerm: string = "";
   activeEmployeeId: number | null = null;
-  @ViewChild('menu') menu!: Menu;
+  @ViewChild("menu") menu!: Menu;
+  showPayrollFilterDialog = false;
+  selectedMonth = new Date().getMonth() + 1;
+  selectedYear = new Date().getFullYear();
+  selectedEmployeeForPayroll: any = null;
+  isCurrentMonth = true;
+  payrollViewType = "current";
+  showPayrollDetails = false;
+  payrollRequestSub: Subscription | null = null;
+  payrollLoading = false;
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
@@ -61,70 +71,57 @@ export class Employees {
   }
 
   openMenu(event: Event, emp: any) {
-  this.selectedEmployee = emp;
-  this.activeEmployeeId = emp.id;
-  this.menu.toggle(event);
-
-}
-
-employeeActions = [
-
-  {
-    label: 'إضافة زيادة',
-    icon: 'pi pi-plus-circle',
-
-    command: () => {
-
-      this.openAddBonus(this.selectedEmployee);
-
-    }
-  },
-
-  {
-    label: 'إضافة سلفة',
-    icon: 'pi pi-wallet',
-
-    command: () => {
-
-      this.openAddAdvance(this.selectedEmployee);
-
-    }
-  },
-
-  {
-    label: 'إضافة خصم',
-    icon: 'pi pi-minus-circle',
-
-    command: () => {
-
-      this.openAddDeduction(this.selectedEmployee);
-
-    }
-  },
-
-  {
-    label: 'إضافة خصم تعاقدات',
-    icon: 'pi pi-file-edit',
-
-    command: () => {
-
-      this.openContractDeduction(this.selectedEmployee);
-
-    }
-  },
-
-  {
-    label: 'إضافة سلفة نقدية',
-    icon: 'pi pi-money-bill',
-
-    command: () => {
-
-      this.openCashAdvance(this.selectedEmployee);
-
-    }
+    this.selectedEmployee = emp;
+    this.activeEmployeeId = emp.id;
+    this.menu.toggle(event);
   }
 
-];
+  employeeActions = [
+    {
+      label: "إضافة زيادة",
+      icon: "pi pi-plus-circle",
+
+      command: () => {
+        this.openAddBonus(this.selectedEmployee);
+      },
+    },
+
+    {
+      label: "إضافة سلفة",
+      icon: "pi pi-wallet",
+
+      command: () => {
+        this.openAddAdvance(this.selectedEmployee);
+      },
+    },
+
+    {
+      label: "إضافة خصم",
+      icon: "pi pi-minus-circle",
+
+      command: () => {
+        this.openAddDeduction(this.selectedEmployee);
+      },
+    },
+
+    {
+      label: "إضافة خصم تعاقدات",
+      icon: "pi pi-file-edit",
+
+      command: () => {
+        this.openContractDeduction(this.selectedEmployee);
+      },
+    },
+
+    {
+      label: "إضافة سلفة نقدية",
+      icon: "pi pi-money-bill",
+
+      command: () => {
+        this.openCashAdvance(this.selectedEmployee);
+      },
+    },
+  ];
 
   loadEmployees() {
     this.loading = true;
@@ -166,7 +163,7 @@ employeeActions = [
 
   editEmployee(emp: any) {
     this.isEditMode = true;
-
+    this.showPayrollDetails = false;
     this.api.getHistoryByEmployeeId(emp.id).subscribe({
       next: (historyRes) => {
         console.log(historyRes);
@@ -221,6 +218,7 @@ employeeActions = [
       this.api.showError("يجب إدخال سبب إنهاء الخدمة");
       return;
     }
+    this.activeEmployeeId = emp.id;
 
     this.confirmationService.confirm({
       message: `هل أنت متأكد من إنهاء خدمة ${emp.name} نهائياً؟`,
@@ -257,11 +255,12 @@ employeeActions = [
     this.selectedEmployee = emp;
     this.endServiceReason = "";
     this.showEndServiceDialog = true;
+    this.activeEmployeeId = emp.id;
   }
 
   openSchedule(emp: any) {
     this.selectedEmployeeId = emp.id;
-    console.log(emp);
+    this.activeEmployeeId = emp.id;
     this.employeeName = emp.name;
     this.api.getScheduleByEmployeeId(emp.id).subscribe({
       next: (scheduleRes: any) => {
@@ -295,26 +294,159 @@ employeeActions = [
     this.loadEmployees();
   }
 
+  // openEmployeeDetails(emp: any) {
+  //   this.isEditMode = false;
+  //   this.api.getHistoryByEmployeeId(emp.id).subscribe({
+  //     next: (historyRes) => {
+  //       this.api.getEmployeeById(emp.id).subscribe({
+  //         next: (employeeRes) => {
+  //           this.api.getMonthyDataForuser(emp.id).subscribe({
+  //             next: (payrollRes) => {
+  //               console.log(payrollRes);
+  //               this.employeeDetails = {
+  //                 ...historyRes,
+  //                 ...employeeRes,
+  //                 ...payrollRes,
+  //               };
+  //             },
+  //           });
+
+  //           this.showEmployeeDetailsDialog = true;
+  //           this.cdr.detectChanges();
+  //         },
+
+  //         error: () => {
+  //           this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+  //         },
+  //       });
+  //     },
+
+  //     error: () => {
+  //       this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+  //     },
+  //   });
+  // }
+
+  onPayrollFilterChange() {
+    this.isCurrentMonth = this.payrollViewType === "current";
+
+    if (this.isCurrentMonth) {
+      this.selectedMonth = new Date().getMonth() + 1;
+      this.selectedYear = new Date().getFullYear();
+    }
+  }
+
+  reloadPayrollData() {
+    if (!this.selectedEmployeeForPayroll) {
+      return;
+    }
+
+    this.isCurrentMonth = this.payrollViewType === "current";
+    this.showPayrollDetails = false;
+    // keep dialog open while reloading
+    this.showEmployeeDetailsDialog = true;
+    if (this.payrollRequestSub) {
+      this.payrollRequestSub.unsubscribe();
+      this.payrollRequestSub = null;
+    }
+    this.loadEmployeeDetailsWithPayroll();
+  }
+
   openEmployeeDetails(emp: any) {
+    this.selectedEmployeeForPayroll = emp;
+    // when explicitly opening details, default to current month
+    this.payrollViewType = "current";
+    this.isCurrentMonth = true;
+    // keep existing details until new data arrives
+    // show dialog immediately so it doesn't 'disappear' on errors
+    this.showEmployeeDetailsDialog = true;
+    this.selectedMonth = new Date().getMonth() + 1;
+    this.selectedYear = new Date().getFullYear();
+
+    if (this.payrollRequestSub) {
+      this.payrollRequestSub.unsubscribe();
+      this.payrollRequestSub = null;
+    }
+
+    this.loadEmployeeDetailsWithPayroll();
+  }
+
+  loadEmployeeDetailsWithPayroll() {
+    const emp = this.selectedEmployeeForPayroll;
+    if (!emp) {
+      return;
+    }
+
     this.isEditMode = false;
+    this.showPayrollFilterDialog = false;
     this.api.getHistoryByEmployeeId(emp.id).subscribe({
       next: (historyRes) => {
         this.api.getEmployeeById(emp.id).subscribe({
           next: (employeeRes) => {
-            this.employeeDetails = {
-              ...historyRes,
-              ...employeeRes,
-            };
-            this.showEmployeeDetailsDialog = true;
-            this.cdr.detectChanges();
+            // Current Month
+            if (this.isCurrentMonth) {
+              if (this.payrollRequestSub) {
+                this.payrollRequestSub.unsubscribe();
+                this.payrollRequestSub = null;
+              }
+              this.payrollRequestSub = this.api
+                .getMonthyDataForuser(emp.id)
+                .subscribe({
+                  next: (payrollRes) => {
+                    this.employeeDetails = {
+                      ...historyRes,
+                      ...employeeRes,
+                      ...payrollRes,
+                    };
+                    this.showPayrollDetails = true;
+                    this.showEmployeeDetailsDialog = true;
+                    this.cdr.detectChanges();
+                    this.payrollRequestSub = null;
+                    // this.api.showSuccess("تم تحميل بيانات الموظف بنجاح");
+                  },
+                  error: () => {
+                    this.api.showError("لا يوجد بيانات لهذا الشهر");
+                    this.payrollRequestSub = null;
+                  },
+                });
+            }
+            // Selected Month / Year
+            else {
+              if (this.payrollRequestSub) {
+                this.payrollRequestSub.unsubscribe();
+                this.payrollRequestSub = null;
+              }
+              this.payrollRequestSub = this.api
+                .getmonthlyDataForuserByMonth(
+                  emp.id,
+                  this.selectedMonth,
+                  this.selectedYear,
+                )
+                .subscribe({
+                  next: (payrollRes) => {
+                    this.employeeDetails = {
+                      ...historyRes,
+                      ...employeeRes,
+                      ...payrollRes,
+                    };
+                    this.showPayrollDetails = true;
+                    this.showEmployeeDetailsDialog = true;
+                    this.cdr.detectChanges();
+                    this.payrollRequestSub = null;
+                    this.api.showSuccess("تم تحميل بيانات المرتب بنجاح");
+                  },
+                  error: () => {
+                    this.api.showError("لا يوجد بيانات لهذا الشهر");
+                    this.payrollRequestSub = null;
+                  },
+                });
+            }
           },
-
           error: () => {
             this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
           },
         });
       },
-
       error: () => {
         this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
       },

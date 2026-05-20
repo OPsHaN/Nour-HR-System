@@ -66,25 +66,38 @@ export class Apiservice {
     return this.http.get(`${this.baseUrl}employees/${id}/history`);
   }
 
-
   getScheduleByEmployeeId(id: string) {
     return this.http.get(`${this.baseUrl}employees/${id}/schedule`);
   }
 
   addScheduleByEmployeeId(id: string, scheduleData: any) {
-    return this.http.post(`${this.baseUrl}employees/${id}/schedule`, scheduleData);
+    return this.http.post(
+      `${this.baseUrl}employees/${id}/schedule`,
+      scheduleData,
+    );
   }
 
-
-
-  updateScheduleByEmployeeId(id: string, id2: string , scheduleData: any) {
-    return this.http.put(`${this.baseUrl}employees/${id}/schedule/${id2}`, scheduleData);
+  updateScheduleByEmployeeId(id: string, id2: string, scheduleData: any) {
+    return this.http.put(
+      `${this.baseUrl}employees/${id}/schedule/${id2}`,
+      scheduleData,
+    );
   }
 
   deleteScheduleByEmployeeIdAndId(id: string, id2: string) {
-    return this.http.delete(`${this.baseUrl}employees/${id}/schedule/${id2}`, {});
-    };
-  
+    return this.http.delete(
+      `${this.baseUrl}employees/${id}/schedule/${id2}`,
+      {},
+    );
+  }
+
+  getMonthyDataForuser(id:string){
+    return this.http.get(`${this.baseUrl}payroll/${id}/current`);
+  }
+
+  getmonthlyDataForuserByMonth(id:string,month:number , year:number){
+    return this.http.get(`${this.baseUrl}payroll/${id}/${month}/${year}`);
+  }
 
   //branches//
 
@@ -108,7 +121,7 @@ export class Apiservice {
 
   getAllCriteria(page: number, pagesize: number) {
     return this.http.get(
-      `${this.baseUrl}evaluation-criteria?page=${page}&pageSize=${pagesize}`
+      `${this.baseUrl}evaluation-criteria?page=${page}&pageSize=${pagesize}`,
     );
   }
 
@@ -133,11 +146,8 @@ export class Apiservice {
   }
 
   getAllBanks() {
-    return this.http.get(
-      `${this.baseUrl}banks`,
-    );
+    return this.http.get(`${this.baseUrl}banks`);
   }
-  
 
   showError(msg: string) {
     this.messageService.add({

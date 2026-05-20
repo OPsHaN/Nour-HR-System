@@ -80,8 +80,7 @@
 
   <!-- BODY -->
   <ng-template pTemplate="body" let-emp let-ri="rowIndex">
-    <tr [class.active-row]="activeEmployeeId === emp.id"
->
+    <tr [class.active-row]="activeEmployeeId === emp.id">
       <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
       <td>{{ emp.name }}</td>
       <td>{{ emp.theNameOfJob }}</td>
@@ -208,172 +207,467 @@
   [style]="{ width: '40rem' }"
   class="end-service-dialog"
 >
-  <div class="details-grid" *ngIf="employeeDetails">
-    <!-- اسم الموظف -->
+  <div *ngIf="employeeDetails">
+    <!-- بيانات الموظف -->
+    <div class="section-block">
+      <div class="details-grid">
+        <!-- اسم الموظف -->
 
-    <div class="detail-item">
-      <label>اسم الموظف</label>
-      <span>{{ employeeDetails.name || '-' }}</span>
+        <div class="detail-item">
+          <label>اسم الموظف</label>
+          <span>{{ employeeDetails.name || '-' }}</span>
+        </div>
+
+        <!-- المسمى الوظيفي -->
+        <div class="detail-item">
+          <label>المسمى الوظيفى</label>
+
+          <select
+            *ngIf="isEditMode"
+            class="custom-input"
+            [(ngModel)]="employeeDetails.theNameOfJob"
+          >
+            <option value="">اختر المسمى الوظيفي</option>
+            <option value="مدير">مدير</option>
+            <option value="صيدلي">صيدلي</option>
+            <option value="مساعد صيدلي">مساعد صيدلي</option>
+            <option value="دليفري">دليفري</option>
+            <option value="خدمات">خدمات</option>
+            <option value="إدارة">إدارة</option>
+          </select>
+          <span *ngIf="!isEditMode">
+            {{ employeeDetails.theNameOfJob || '-' }}
+          </span>
+        </div>
+
+        <!-- نوع الوظيفة -->
+        <div class="detail-item">
+          <label>الدور الوظيفي</label>
+          <span>
+            {{ employeeDetails.role === 'static' ? 'ثابت' : employeeDetails.role
+            === 'changable' ? 'متغير' : employeeDetails.role === 'delivery' ?
+            'دليفرى' : '-' }}
+          </span>
+        </div>
+
+        <!-- الفرع -->
+        <div class="detail-item">
+          <label>الفرع</label>
+
+          <select
+            class="custom-input"
+            *ngIf="isEditMode"
+            [(ngModel)]="employeeDetails.branchId"
+          >
+            <option *ngFor="let branch of branches" [ngValue]="branch.id">
+              {{ branch.name }}
+            </option>
+          </select>
+
+          <span *ngIf="!isEditMode">
+            {{ employeeDetails.branchName || '-' }}
+          </span>
+        </div>
+
+        <!-- ساعات الشيفت -->
+        <div class="detail-item">
+          <label>عدد ساعات الشيفت</label>
+
+          <input
+            *ngIf="isEditMode"
+            type="number"
+            class="custom-input"
+            [(ngModel)]="employeeDetails.shiftHours"
+          />
+
+          <span *ngIf="!isEditMode">
+            {{ employeeDetails.shiftHours || '-' }}
+          </span>
+        </div>
+
+        <!-- البنك -->
+        <div class="detail-item">
+          <label>اسم البنك</label>
+
+          <select
+            class="custom-input"
+            *ngIf="isEditMode"
+            [(ngModel)]="employeeDetails.bankId"
+          >
+            <option *ngFor="let bank of banks" [ngValue]="bank.id">
+              {{ bank.name }}
+            </option>
+          </select>
+
+          <span *ngIf="!isEditMode">
+            {{ employeeDetails.bankName || '-' }}
+          </span>
+        </div>
+
+        <!-- الحساب البنكي -->
+        <div class="detail-item">
+          <label>رقم الحساب البنكى</label>
+
+          <input
+            *ngIf="isEditMode"
+            type="text"
+            class="custom-input"
+            [(ngModel)]="employeeDetails.bankAccount"
+          />
+
+          <span *ngIf="!isEditMode">
+            {{ employeeDetails.bankAccount || '-' }}
+          </span>
+        </div>
+
+        <!-- تاريخ التعيين -->
+        <div class="detail-item">
+          <label>تاريخ التعيين</label>
+
+          <p-datepicker
+            *ngIf="isEditMode"
+            class="custom"
+            [(ngModel)]="employeeDetails.hiringDate"
+            dateFormat="yy-mm-dd"
+            appendTo="body"
+            styleClass="w-100"
+            placeholder="اختر التاريخ"
+          ></p-datepicker>
+
+          <span *ngIf="!isEditMode">
+            {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}
+          </span>
+        </div>
+
+        <!-- المؤهل -->
+        <div class="detail-item">
+          <label>المؤهل الدراسي</label>
+          <span>{{ employeeDetails.qualification || '-' }}</span>
+        </div>
+
+        <!-- سنة التخرج -->
+        <div class="detail-item">
+          <label>سنة التخرج</label>
+          <span>{{ employeeDetails.graduationYear || '-' }}</span>
+        </div>
+
+        <!-- الرقم القومي -->
+        <div class="detail-item">
+          <label>الرقم القومي</label>
+          <span>{{ employeeDetails.nationalId || '-' }}</span>
+        </div>
+
+        <!-- رقم الهاتف -->
+        <div class="detail-item">
+          <label>رقم الهاتف</label>
+          <span>{{ employeeDetails.phoneNumber || '-' }}</span>
+        </div>
+
+        <!-- تاريخ إنهاء الخدمة -->
+        <div class="detail-item">
+          <label>تاريخ إنهاء الخدمة</label>
+          <span>
+            {{ employeeDetails.endOfServiceDate ?
+            (employeeDetails.endOfServiceDate | date:'yyyy-MM-dd') : '-' }}
+          </span>
+        </div>
+
+        <!-- نوع إنهاء الخدمة -->
+        <div class="detail-item">
+          <label>نوع إنهاء الخدمة</label>
+          <span>{{ employeeDetails.endOfServiceType || '-' }}</span>
+        </div>
+
+        <!-- سبب إنهاء الخدمة -->
+        <div class="detail-item">
+          <label>سبب إنهاء الخدمة</label>
+          <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
+        </div>
+      </div>
     </div>
 
-    <!-- المسمى الوظيفي -->
-    <div class="detail-item">
-      <label>المسمى الوظيفى</label>
+    <!-- المرتبات -->
+    <div class="section-block mt-2">
+      <h5 class="section-header">
+        <i class="pi pi-wallet"></i>
+        بيانات المرتب
+      </h5>
 
-      <select
-        *ngIf="isEditMode"
-        class="custom-input"
-        [(ngModel)]="employeeDetails.theNameOfJob"
-      >
-        <option value="">اختر المسمى الوظيفي</option>
-        <option value="مدير">مدير</option>
-        <option value="صيدلي">صيدلي</option>
-        <option value="مساعد صيدلي">مساعد صيدلي</option>
-        <option value="دليفري">دليفري</option>
-        <option value="خدمات">خدمات</option>
-        <option value="إدارة">إدارة</option>
-      </select>
-      <span *ngIf="!isEditMode">
-        {{ employeeDetails.theNameOfJob || '-' }}
-      </span>
-    </div>
+      <!-- Payroll Filter -->
+      <div class="payroll-toolbar">
+        <!-- نوع العرض -->
+        <div class="toolbar-group">
+          <label class="toolbar-label"> عرض بيانات </label>
 
-    <!-- نوع الوظيفة -->
-    <div class="detail-item">
-      <label>الدور الوظيفي</label>
-      <span>
-        {{ employeeDetails.role === 'static' ? 'ثابت' : employeeDetails.role ===
-        'changable' ? 'متغير' : employeeDetails.role === 'delivery' ? 'دليفرى' :
-        '-' }}
-      </span>
-    </div>
+          <select
+            class="custom-input toolbar-select"
+            [(ngModel)]="payrollViewType"
+            (change)="onPayrollFilterChange()"
+          >
+            <option value="current">الشهر الحالى</option>
 
-    <!-- الفرع -->
-    <div class="detail-item">
-      <label>الفرع</label>
+            <option value="custom">شهر وسنة أخرى</option>
+          </select>
+        </div>
 
-      <select
-        class="custom-input"
-        *ngIf="isEditMode"
-        [(ngModel)]="employeeDetails.branchId"
-      >
-        <option *ngFor="let branch of branches" [ngValue]="branch.id">
-          {{ branch.name }}
-        </option>
-      </select>
+        <!-- الشهر -->
+        <div class="toolbar-group" *ngIf="payrollViewType === 'custom'">
+          <label class="toolbar-label"> الشهر </label>
 
-      <span *ngIf="!isEditMode"> {{ employeeDetails.branchName || '-' }} </span>
-    </div>
+          <select
+            class="custom-input toolbar-select"
+            [(ngModel)]="selectedMonth"
+          >
+            <option [ngValue]="1">يناير</option>
+            <option [ngValue]="2">فبراير</option>
+            <option [ngValue]="3">مارس</option>
+            <option [ngValue]="4">أبريل</option>
+            <option [ngValue]="5">مايو</option>
+            <option [ngValue]="6">يونيو</option>
+            <option [ngValue]="7">يوليو</option>
+            <option [ngValue]="8">أغسطس</option>
+            <option [ngValue]="9">سبتمبر</option>
+            <option [ngValue]="10">أكتوبر</option>
+            <option [ngValue]="11">نوفمبر</option>
+            <option [ngValue]="12">ديسمبر</option>
+          </select>
+        </div>
 
-    <!-- ساعات الشيفت -->
-    <div class="detail-item">
-      <label>عدد ساعات الشيفت</label>
+        <!-- السنة -->
+        <div class="toolbar-group" *ngIf="payrollViewType === 'custom'">
+          <label class="toolbar-label"> السنة </label>
 
-      <input
-        *ngIf="isEditMode"
-        type="number"
-        class="custom-input"
-        [(ngModel)]="employeeDetails.shiftHours"
-      />
+          <input
+            type="number"
+            class="custom-input toolbar-year"
+            [(ngModel)]="selectedYear"
+          />
+        </div>
 
-      <span *ngIf="!isEditMode"> {{ employeeDetails.shiftHours || '-' }} </span>
-    </div>
+        <!-- تحديث -->
+        <button
+          pButton
+          type="button"
+          class="btn btn-primary payroll-refresh-btn"
+          (click)="reloadPayrollData()"
+        >
+          <i class="pi pi-refresh"></i>
 
-    <!-- البنك -->
-    <div class="detail-item">
-      <label>اسم البنك</label>
+          عرض
+        </button>
+      </div>
 
-      <select
-        class="custom-input"
-        *ngIf="isEditMode"
-        [(ngModel)]="employeeDetails.bankId"
-      >
-        <option *ngFor="let bank of banks" [ngValue]="bank.id">
-          {{ bank.name }}
-        </option>
-      </select>
+      <div class="details-grid" *ngIf="showPayrollDetails">
+        <!----تفاصيل المرتب-->
 
-      <span *ngIf="!isEditMode"> {{ employeeDetails.bankName || '-' }} </span>
-    </div>
+        <!-- Cash Borrows -->
+        <div
+          class="detail-item full-width"
+          *ngIf="employeeDetails?.cashBorrows?.length"
+        >
+          <h6 class="section-title text-info">السلف النقدية</h6>
 
-    <!-- الحساب البنكي -->
-    <div class="detail-item">
-      <label>رقم الحساب البنكى</label>
+          <p-table
+            [value]="employeeDetails.cashBorrows"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>القيمة</th>
+                <th>السبب</th>
+                  <th>ملاحظات</th>
+                <th>التاريخ</th>
+              </tr>
+            </ng-template>
 
-      <input
-        *ngIf="isEditMode"
-        type="text"
-        class="custom-input"
-        [(ngModel)]="employeeDetails.bankAccount"
-      />
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.amount }} ج</td>
 
-      <span *ngIf="!isEditMode">
-        {{ employeeDetails.bankAccount || '-' }}
-      </span>
-    </div>
+                <td>{{ item.reason || '-' }}</td>
 
-    <!-- تاريخ التعيين -->
-    <div class="detail-item">
-      <label>تاريخ التعيين</label>
+                <td>{{ item.notes || '-' }}</td>
 
-      <p-datepicker
-        *ngIf="isEditMode"
-        class="custom"
-        [(ngModel)]="employeeDetails.hiringDate"
-        dateFormat="yy-mm-dd"
-        appendTo="body"
-        styleClass="w-100"
-        placeholder="اختر التاريخ"
-      ></p-datepicker>
+                <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
 
-      <span *ngIf="!isEditMode">
-        {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}
-      </span>
-    </div>
+        <!-- Bonuses -->
+        <div
+          class="detail-item full-width"
+          *ngIf="employeeDetails?.bonuses?.length"
+        >
+          <h6 class="section-title text-success">الزيادات</h6>
 
-    <!-- المؤهل -->
-    <div class="detail-item">
-      <label>المؤهل الدراسي</label>
-      <span>{{ employeeDetails.qualification || '-' }}</span>
-    </div>
+          <p-table
+            [value]="employeeDetails.bonuses"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>القيمة</th>
+                <th>السبب</th>
+                  <th>ملاحظات</th>
+                <th>التاريخ</th>
+              </tr>
+            </ng-template>
 
-    <!-- سنة التخرج -->
-    <div class="detail-item">
-      <label>سنة التخرج</label>
-      <span>{{ employeeDetails.graduationYear || '-' }}</span>
-    </div>
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.amount }} ج</td>
 
-    <!-- الرقم القومي -->
-    <div class="detail-item">
-      <label>الرقم القومي</label>
-      <span>{{ employeeDetails.nationalId || '-' }}</span>
-    </div>
+                <td>{{ item.reason || '-' }}</td>
 
-    <!-- رقم الهاتف -->
-    <div class="detail-item">
-      <label>رقم الهاتف</label>
-      <span>{{ employeeDetails.phoneNumber || '-' }}</span>
-    </div>
+                <td>{{ item.notes || '-' }}</td>
 
-    <!-- تاريخ إنهاء الخدمة -->
-    <div class="detail-item">
-      <label>تاريخ إنهاء الخدمة</label>
-      <span>
-        {{ employeeDetails.endOfServiceDate ? (employeeDetails.endOfServiceDate
-        | date:'yyyy-MM-dd') : '-' }}
-      </span>
-    </div>
+                <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
 
-    <!-- نوع إنهاء الخدمة -->
-    <div class="detail-item">
-      <label>نوع إنهاء الخدمة</label>
-      <span>{{ employeeDetails.endOfServiceType || '-' }}</span>
-    </div>
+        <!-- Contract Discounts -->
+        <div
+          class="detail-item full-width"
+          *ngIf="employeeDetails?.contractDiscounts?.length"
+        >
+          <h6 class="section-title text-warning">خصومات التعاقدات</h6>
 
-    <!-- سبب إنهاء الخدمة -->
-    <div class="detail-item full-width">
-      <label>سبب إنهاء الخدمة</label>
-      <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
+          <p-table
+            [value]="employeeDetails.contractDiscounts"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>القيمة</th>
+                <th>السبب</th>
+                <th>ملاحظات</th>
+                <th>التاريخ</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.amount }} ج</td>
+
+                <td>{{ item.reason || '-' }}</td>
+                <td>{{ item.notes || '-' }}</td>
+                <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <!-- Discounts -->
+        <div
+          class="detail-item full-width"
+          *ngIf="employeeDetails?.discounts?.length"
+        >
+          <h6 class="section-title text-danger">الخصومات</h6>
+
+          <p-table
+            [value]="employeeDetails.discounts"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>القيمة</th>
+                <th>السبب</th>
+                <th>ملاحظات</th>
+                <th>التاريخ</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.amount }} ج</td>
+
+                <td>{{ item.reasonOfDiscount }}</td>
+
+                <td>{{ item.notes || '-' }}</td>
+
+                <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <!-- Payroll -->
+
+        <div class="detail-item">
+          <label>عدد الساعات</label>
+          <span> {{ employeeDetails.hours | number:'1.0-2' }} </span>
+        </div>
+
+        <div class="detail-item">
+          <label>الساعات الإضافية</label>
+          <span> {{ employeeDetails.hoursOverTime }} </span>
+        </div>
+
+        <div class="detail-item">
+          <label>سعر الساعة</label>
+          <span> {{ employeeDetails.salaryPerHour }} ج </span>
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى المرتب</label>
+          <span> {{ employeeDetails.totalSalary | number:'1.0-2' }} ج </span>
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى الخصومات</label>
+          <span class="text-danger">
+            {{ employeeDetails.totalDiscounts }} ج
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى السلف</label>
+          <span> {{ employeeDetails.totalBorrows }} ج </span>
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى الزيادات</label>
+          <span class="text-success"> {{ employeeDetails.totalBouns }} ج </span>
+        </div>
+
+        <div class="detail-item">
+          <label>صافى المرتب</label>
+
+          <span
+            [class.text-danger]="employeeDetails.netSalary < 0"
+            [class.text-success]="employeeDetails.netSalary >= 0"
+          >
+            {{ employeeDetails.netSalary | number:'1.0-2' }} ج
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 
