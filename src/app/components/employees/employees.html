@@ -204,12 +204,20 @@
   [header]="isEditMode ? 'تعديل بيانات الموظف' : 'بيانات الموظف'"
   [(visible)]="showEmployeeDetailsDialog"
   [modal]="true"
-  [style]="{ width: '40rem' }"
+  [style]="{ width: '70rem', 'max-height': '100%'}"
   class="end-service-dialog"
 >
   <div *ngIf="employeeDetails">
     <!-- بيانات الموظف -->
     <div class="section-block">
+      <div class="payroll-toolbar">
+        <div class="toolbar-group">
+          <label class="toolbar-label">
+            <i class="pi pi-user"></i> بيانات الموظف
+          </label>
+        </div>
+      </div>
+
       <div class="details-grid">
         <!-- اسم الموظف -->
 
@@ -388,16 +396,12 @@
 
     <!-- المرتبات -->
     <div class="section-block mt-2">
-      <h5 class="section-header">
-        <i class="pi pi-wallet"></i>
-        بيانات المرتب
-      </h5>
-
-      <!-- Payroll Filter -->
       <div class="payroll-toolbar">
         <!-- نوع العرض -->
         <div class="toolbar-group">
-          <label class="toolbar-label"> عرض بيانات </label>
+          <label class="toolbar-label">
+            <i class="pi pi-wallet"></i> بيانات المرتب
+          </label>
 
           <select
             class="custom-input toolbar-select"
@@ -476,7 +480,7 @@
               <tr>
                 <th>القيمة</th>
                 <th>السبب</th>
-                  <th>ملاحظات</th>
+                <th>ملاحظات</th>
                 <th>التاريخ</th>
               </tr>
             </ng-template>
@@ -516,7 +520,7 @@
               <tr>
                 <th>القيمة</th>
                 <th>السبب</th>
-                  <th>ملاحظات</th>
+                <th>ملاحظات</th>
                 <th>التاريخ</th>
               </tr>
             </ng-template>
@@ -622,39 +626,58 @@
 
         <div class="detail-item">
           <label>عدد الساعات</label>
-          <span> {{ employeeDetails.hours | number:'1.0-2' }} </span>
+          <span> {{ employeeDetails.hours | number:'1.0-2' }} ساعة</span>
         </div>
 
         <div class="detail-item">
           <label>الساعات الإضافية</label>
-          <span> {{ employeeDetails.hoursOverTime }} </span>
+          <span> {{ employeeDetails.hoursOverTime }} ساعة</span>
         </div>
 
         <div class="detail-item">
           <label>سعر الساعة</label>
-          <span> {{ employeeDetails.salaryPerHour }} ج </span>
+          <span> {{ employeeDetails.salaryPerHour }} جنية </span>
         </div>
 
         <div class="detail-item">
           <label>إجمالى المرتب</label>
-          <span> {{ employeeDetails.totalSalary | number:'1.0-2' }} ج </span>
+          <span> {{ employeeDetails.totalSalary | number:'1.0-2' }} جنية </span>
         </div>
 
         <div class="detail-item">
           <label>إجمالى الخصومات</label>
           <span class="text-danger">
-            {{ employeeDetails.totalDiscounts }} ج
+            {{ employeeDetails.totalDiscounts }} جنية
           </span>
         </div>
 
         <div class="detail-item">
           <label>إجمالى السلف</label>
-          <span> {{ employeeDetails.totalBorrows }} ج </span>
+          <span class="text-danger">
+            {{ employeeDetails.totalBorrows }} جنية</span
+          >
         </div>
 
         <div class="detail-item">
           <label>إجمالى الزيادات</label>
-          <span class="text-success"> {{ employeeDetails.totalBouns }} ج </span>
+          <span class="text-success">
+            {{ employeeDetails.totalBouns }} جنية</span
+          >
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى الاجازات</label>
+          <span> {{ employeeDetails.holidaies }} يوم</span>
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى الساعات المنسية</label>
+          <span> {{ employeeDetails.forgetedHours }} ساعة</span>
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى التأمينات</label>
+          <span> {{ employeeDetails.insurence }} جنية</span>
         </div>
 
         <div class="detail-item">
@@ -664,8 +687,69 @@
             [class.text-danger]="employeeDetails.netSalary < 0"
             [class.text-success]="employeeDetails.netSalary >= 0"
           >
-            {{ employeeDetails.netSalary | number:'1.0-2' }} ج
+            {{ employeeDetails.netSalary | number:'1.0-2' }} جنية
           </span>
+        </div>
+      </div>
+
+      <!-- تعديل بيانات المرتب -->
+      <div class="section-block" *ngIf="isEditMode">
+        <div class="details-grid">
+          <!-- إجمالى المرتب -->
+          <div class="detail-item">
+            <label>إجمالى المرتب</label>
+
+            <input
+              type="number"
+              step="0.01"
+              class="custom-input"
+              [(ngModel)]="employeeDetails.totalSalary"
+            />
+          </div>
+
+          <!-- سعر الساعة -->
+          <div class="detail-item">
+            <label>سعر الساعة</label>
+
+            <input
+              type="number"
+              class="custom-input"
+              [(ngModel)]="employeeDetails.salaryPerHour"
+            />
+          </div>
+
+          <!-- التأمين -->
+          <div class="detail-item">
+            <label>التأمين</label>
+
+            <input
+              type="number"
+              class="custom-input"
+              [(ngModel)]="employeeDetails.insurence"
+            />
+          </div>
+
+          <!-- الساعات الإضافية -->
+          <div class="detail-item">
+            <label>الساعات الإضافية</label>
+
+            <input
+              type="number"
+              class="custom-input"
+              [(ngModel)]="employeeDetails.hoursOverTime"
+            />
+          </div>
+
+          <!-- الساعات المنسية -->
+          <div class="detail-item">
+            <label>الساعات المنسية</label>
+
+            <input
+              type="number"
+              class="custom-input"
+              [(ngModel)]="employeeDetails.forgetedHours"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -858,4 +942,64 @@
       </tr>
     </ng-template>
   </p-table>
+</p-dialog>
+
+<p-dialog
+  [header]="currentActionTitle "
+  [(visible)]="actionDialogVisible"
+  [modal]="true"
+  class="end-service-dialog"
+  [style]="{ width: '20rem' }"
+>
+  <!-- الفورم -->
+
+  <div class="end-service-content">
+    <div class="field">
+      <label>القيمة</label>
+
+      <input
+        type="number"
+        class="custom-input"
+        [(ngModel)]="actionForm.amount"
+      />
+    </div>
+
+    <div class="field">
+      <label>السبب</label>
+
+      <input
+        type="text"
+        class="custom-input"
+        [(ngModel)]="actionForm.reasonOfDiscount"
+      />
+    </div>
+
+    <div class="field">
+      <label>ملاحظات</label>
+
+      <textarea
+        rows="2"
+        class="custom-input"
+        [(ngModel)]="actionForm.notes"
+      ></textarea>
+    </div>
+  </div>
+
+  <div class="form">
+    <button
+      type="button"
+      [disabled]="
+    actionLoading ||
+    !actionForm.amount ||
+    !actionForm.reasonOfDiscount ||
+    !actionForm.notes"
+      class="submit-btn full my-2"
+      (click)="saveAction()"
+    >
+      {{ actionLoading ? 'جارى الحفظ...' : ( currentActionType === 'bonus' ?
+      'إضافة زيادة' : currentActionType === 'borrow' ? 'إضافة سلفة' :
+      currentActionType === 'discount' ? 'إضافة خصم' : currentActionType ===
+      'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة نقدية' ) }}
+    </button>
+  </div>
 </p-dialog>

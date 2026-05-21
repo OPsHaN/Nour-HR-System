@@ -14,7 +14,7 @@
 
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
 }
 
@@ -38,10 +38,11 @@
 }
 
 
-.end-service-content {
+::ng-deep.end-service-content .p-dialog-content {
   display: grid;
-  gap: 16px;
+  gap: 5px;
   padding-top: 10px;
+  padding:5px;
 }
 
 /* fields */
@@ -91,7 +92,7 @@
 }
 
 ::ng-deep.schedule-dialog .p-dialog-content {
-  padding: 0.3rem !important;
+  padding: 0.5rem !important;
 }
 
 
@@ -101,11 +102,8 @@
 
 
 .active-row td {
-
   background: rgba(175, 175, 175, 0.5) !important;
-
   transition: 0.2s ease;
-
 }
 
 
@@ -126,9 +124,9 @@
   flex-wrap: wrap;
   margin: 18px 0 24px;
   padding: 18px;
-  border-radius: 24px;
+  border-radius: 10px;
   background: var(--surface);
-  border: 1px solid var(--surface-border);
+  border: 2px solid var(--surface-border);
   backdrop-filter: blur(14px);
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.08),
@@ -148,8 +146,9 @@
 
 /* labels */
 .toolbar-label {
-  color: var(--text-soft);
+  color: var(--text);
   padding-inline-start: 6px;
+  font-weight: 600;
 
 }
 

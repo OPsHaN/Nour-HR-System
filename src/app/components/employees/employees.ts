@@ -58,6 +58,17 @@ export class Employees {
   showPayrollDetails = false;
   payrollRequestSub: Subscription | null = null;
   payrollLoading = false;
+  actionDialogVisible = false;
+  currentActionType = "";
+  currentActionTitle = "";
+  actionItems: any[] = [];
+  actionForm = {
+    employeeId: 0,
+    amount: null,
+    reasonOfDiscount: "",
+    notes: "",
+  };
+  actionLoading = false;
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
@@ -80,45 +91,48 @@ export class Employees {
     {
       label: "إضافة زيادة",
       icon: "pi pi-plus-circle",
-
       command: () => {
-        this.openAddBonus(this.selectedEmployee);
+        this.openActionDialog("bonus", "إضافة زيادة", this.selectedEmployee);
       },
     },
 
     {
       label: "إضافة سلفة",
       icon: "pi pi-wallet",
-
       command: () => {
-        this.openAddAdvance(this.selectedEmployee);
+        this.openActionDialog("borrow", "إضافة سلفة", this.selectedEmployee);
       },
     },
 
     {
       label: "إضافة خصم",
       icon: "pi pi-minus-circle",
-
       command: () => {
-        this.openAddDeduction(this.selectedEmployee);
+        this.openActionDialog("discount", "إضافة خصم", this.selectedEmployee);
       },
     },
 
     {
       label: "إضافة خصم تعاقدات",
       icon: "pi pi-file-edit",
-
       command: () => {
-        this.openContractDeduction(this.selectedEmployee);
+        this.openActionDialog(
+          "contract",
+          "إضافة خصم تعاقدات",
+          this.selectedEmployee,
+        );
       },
     },
 
     {
       label: "إضافة سلفة نقدية",
       icon: "pi pi-money-bill",
-
       command: () => {
-        this.openCashAdvance(this.selectedEmployee);
+        this.openActionDialog(
+          "cashBorrow",
+          "إضافة سلفة نقدية",
+          this.selectedEmployee,
+        );
       },
     },
   ];
@@ -166,13 +180,17 @@ export class Employees {
     this.showPayrollDetails = false;
     this.api.getHistoryByEmployeeId(emp.id).subscribe({
       next: (historyRes) => {
-        console.log(historyRes);
         this.api.getEmployeeById(emp.id).subscribe({
           next: (employeeRes) => {
-            this.employeeDetails = {
-              ...historyRes,
-              ...employeeRes,
-            };
+            this.api.getMonthyDataForuser(emp.id).subscribe({
+              next: (payrollRes) => {
+                this.employeeDetails = {
+                  ...historyRes,
+                  ...employeeRes,
+                  ...payrollRes,
+                };
+              },
+            });
 
             this.employeeDetails.hiringDate = this.employeeDetails.hiringDate
               ? new Date(this.employeeDetails.hiringDate)
@@ -202,15 +220,45 @@ export class Employees {
 
     this.api.editEmployee(this.employeeDetails.id, payload).subscribe({
       next: () => {
-        this.api.showSuccess("تم حفظ التعديلات بنجاح");
-        this.showEmployeeDetailsDialog = false;
-        this.loadEmployees();
+        const payrollPayload = {
+          totalSalary: (this.employeeDetails.totalSalary = Number(
+            this.employeeDetails.totalSalary?.toFixed(2),
+          )),
+          salaryPerHour: (this.employeeDetails.salaryPerHour = Number(
+            this.employeeDetails.salaryPerHour?.toFixed(2),
+          )),
+          insurence: this.employeeDetails.insurence,
+          hoursOverTime: this.employeeDetails.hoursOverTime,
+          forgetedHours: this.employeeDetails.forgetedHours,
+        };
+
+        this.api
+          .updateMonthlyDtataForUser(this.employeeDetails.id, payrollPayload)
+          .subscribe({
+            next: () => {
+              this.api.showSuccess("تم حفظ جميع التعديلات بنجاح");
+
+              this.showEmployeeDetailsDialog = false;
+
+              this.loadEmployees();
+            },
+
+            error: (err) => {
+              console.log(err);
+
+              this.api.showError(
+                "تم حفظ بيانات الموظف ولكن فشل تحديث بيانات المرتب",
+              );
+            },
+          });
       },
-      error: () => {
-        this.api.showError("حدث خطأ أثناء حفظ التعديلات");
+
+      error: (err) => {
+        console.log(err);
+
+        this.api.showError("حدث خطأ أثناء حفظ بيانات الموظف");
       },
     });
-    // api call here
   }
 
   submitEndService(emp: any) {
@@ -271,8 +319,6 @@ export class Employees {
         }));
         this.showAttendanceDialog = true;
         this.cdr.detectChanges();
-
-        this.api.showSuccess("تم تحميل جدول الموظف بنجاح");
       },
       error: () => {
         this.api.showError("حدث خطأ أثناء تحميل جدول الموظف");
@@ -558,13 +604,154 @@ export class Employees {
 
   exportToExcel() {}
 
-  openAddDeduction(emp: any) {}
+  openActionDialog(type: string, title: string, employee: any) {
+    this.currentActionType = type;
 
-  openAddBonus(emp: any) {}
+    this.currentActionTitle = title + " - " + employee.name;
 
-  openAddAdvance(emp: any) {}
+    this.actionForm = {
+      employeeId: employee.id,
+      amount: null,
+      reasonOfDiscount: "",
+      notes: "",
+    };
 
-  openContractDeduction(emp: any) {}
+    switch (type) {
+      case "bonus":
+        this.actionItems = this.employeeDetails?.bonuses || [];
+        break;
 
-  openCashAdvance(emp: any) {}
+      case "borrow":
+        this.actionItems = this.employeeDetails?.borrows || [];
+        break;
+
+      case "discount":
+        this.actionItems = this.employeeDetails?.discounts || [];
+        break;
+
+      case "contract":
+        this.actionItems = this.employeeDetails?.contractDiscounts || [];
+        break;
+
+      case "cashBorrow":
+        this.actionItems = this.employeeDetails?.cashBorrows || [];
+        break;
+    }
+
+    this.actionDialogVisible = true;
+  }
+
+  saveAction() {
+
+  if (
+    !this.actionForm.amount ||
+    !this.actionForm.reasonOfDiscount?.trim() ||
+    !this.actionForm.notes?.trim()
+  ) {
+
+    this.api.showError(
+      'يجب إدخال القيمة والسبب والملاحظات'
+    );
+
+    return;
+  }
+
+  this.actionLoading = true;
+
+  const request =
+    this.currentActionType === 'bonus'
+      ? this.api.addBonus(this.actionForm)
+      : this.currentActionType === 'borrow'
+      ? this.api.addCashBorrow(this.actionForm)
+      : this.currentActionType === 'discount'
+      ? this.api.addDiscount(this.actionForm)
+      : this.currentActionType === 'contract'
+      ? this.api.addContractDiscount(this.actionForm)
+      : this.api.addCashBorrow(this.actionForm);
+
+  request.subscribe({
+
+    next: (res: any) => {
+
+      this.actionItems.unshift(res);
+
+      this.actionForm = {
+        employeeId: this.actionForm.employeeId,
+        amount: null,
+        reasonOfDiscount: '',
+        notes: '',
+      };
+
+      this.actionLoading = false;
+
+      this.api.showSuccess('تمت الإضافة بنجاح');
+    },
+
+    error: () => {
+
+      this.actionLoading = false;
+
+      this.api.showError('حدث خطأ أثناء الحفظ');
+    },
+  });
+}
+
+  deleteAction(id: number) {
+    switch (this.currentActionType) {
+      case "bonus":
+        this.api.deleteBonus(id).subscribe({
+          next: () => {
+            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+
+            this.api.showSuccess("تم حذف الزيادة");
+          },
+        });
+
+        break;
+
+      case "borrow":
+        this.api.deleteCashBorrow(id).subscribe({
+          next: () => {
+            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+
+            this.api.showSuccess("تم حذف السلفة");
+          },
+        });
+
+        break;
+
+      case "discount":
+        this.api.deleteDiscount(id).subscribe({
+          next: () => {
+            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+
+            this.api.showSuccess("تم حذف الخصم");
+          },
+        });
+
+        break;
+
+      case "contract":
+        this.api.deleteContractDiscount(id).subscribe({
+          next: () => {
+            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+
+            this.api.showSuccess("تم حذف خصم التعاقد");
+          },
+        });
+
+        break;
+
+      case "cashBorrow":
+        this.api.deleteCashBorrow(id).subscribe({
+          next: () => {
+            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+
+            this.api.showSuccess("تم حذف السلفة النقدية");
+          },
+        });
+
+        break;
+    }
+  }
 }

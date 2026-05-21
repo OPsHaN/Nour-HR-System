@@ -171,7 +171,7 @@ input {
 }
 
 .p-dialog {
-  border: 0.1rem solid var(--surface-border) !important;
+  border: 0rem solid var(--surface-border) !important;
   /* background: var(--surface) !important; */
   color: var(--text) !important;
 }
@@ -184,12 +184,17 @@ input {
   border-radius: 0.5rem 0.5rem 0 0 !important;
 }
 
+.p-icon{
+  color: var(--text-soft) !important;
+}
+
 .p-dialog-content {
   padding: 1rem !important;
   background: var(--surface-strong) !important;
   color: var(--text);
   border-radius: 0 0 0.5rem 0.5rem !important;
 }
+
 
 .panel {
   display: grid;
@@ -262,7 +267,7 @@ input {
 }
 
 .submit-btn {
-  width: 10%;
+  width: auto;
   margin: auto;
 
 }
@@ -308,7 +313,7 @@ input {
 /* grid layout */
 .grid-form {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
 }
 
@@ -436,6 +441,7 @@ input {
 }
 .p-menu{
   border-radius: 20px !important;
+  box-shadow: #999 0px 8px 24px !important;
 }
 
 .p-menu-list {
