@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-download',
+  selector: 'app-reports',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './download.component.html',
-  styleUrl: './download.component.css',
+  templateUrl: './reports.html',
+  styleUrl: './reports.css',
 })
-export class DownloadComponent {}
+export class Reports {}

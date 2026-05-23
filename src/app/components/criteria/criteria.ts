@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { CreateCriteria } from '../create-criteria/create-criteria';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -24,6 +25,7 @@ export class Criteria {
     constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -36,6 +38,7 @@ export class Criteria {
       next: (res: any) => {
         this.Criteria = res.data;
         this.loading = false;
+        this.cdr.detectChanges();
         console.log(res);
       },
       error: () => {

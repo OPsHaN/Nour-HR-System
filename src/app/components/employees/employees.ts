@@ -176,6 +176,8 @@ export class Employees {
         this.employees = res.data;
         this.totalRecords = res.totalCount;
         this.loading = false;
+         this.cdr.detectChanges();
+
       },
       error: () => {
         this.loading = false;
@@ -196,6 +198,7 @@ export class Employees {
     this.api.getAllBranches(1, 100).subscribe({
       next: (res: any) => {
         this.branches = res.data;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.api.showError("حدث خطأ أثناء تحميل الفروع");
@@ -208,6 +211,8 @@ export class Employees {
     this.api.getAllBanks().subscribe({
       next: (res: any) => {
         this.banks = res;
+        this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.loading = false;
@@ -329,6 +334,7 @@ export class Employees {
             emp.isActive = false;
             this.showEndServiceDialog = false;
             this.endServiceReason = "";
+            this.cdr.detectChanges();
           },
 
           error: (err) => {
@@ -570,8 +576,29 @@ export class Employees {
     });
   }
 
+    createAttendance(item: any) {
+    this.api
+      .addScheduleByEmployeeId(this.selectedEmployeeId, {
+        dayOfWeek: item.dayOfWeek,
+        checkInTime: item.checkInTime,
+        checkOutTime: item.checkOutTime,
+      })
+      .subscribe({
+        next: (res: any) => {
+          item.id = res.id;
+          item.isNew = false;
+          item.isEditing = false;
+          this.cdr.detectChanges();
+          this.api.showSuccess("تم إضافة اليوم بنجاح");
+        },
+
+        error: () => {
+          this.api.showError("حدث خطأ أثناء إضافة اليوم");
+        },
+      });
+  }
+
   deleteAttendance(emp: any) {
-    console.log(emp);
     this.confirmationService.confirm({
       message: `هل أنت متأكد من حذف هذا المعياد`,
       header: "تأكيد الحذف",
@@ -587,6 +614,7 @@ export class Employees {
               this.employeeAttendance = this.employeeAttendance.filter(
                 (x) => x !== emp,
               );
+              this.cdr.detectChanges();
               this.api.showSuccess("تم حذف الميعاد بنجاح");
             },
             error: () => {
@@ -597,26 +625,7 @@ export class Employees {
     });
   }
 
-  createAttendance(item: any) {
-    this.api
-      .addScheduleByEmployeeId(this.selectedEmployeeId, {
-        dayOfWeek: item.dayOfWeek,
-        checkInTime: item.checkInTime,
-        checkOutTime: item.checkOutTime,
-      })
-      .subscribe({
-        next: (res: any) => {
-          item.id = res.id;
-          item.isNew = false;
-          item.isEditing = false;
-          this.api.showSuccess("تم إضافة اليوم بنجاح");
-        },
 
-        error: () => {
-          this.api.showError("حدث خطأ أثناء إضافة اليوم");
-        },
-      });
-  }
 
   editAttendance(item: any) {
     item.originalData = { ...item };
@@ -635,6 +644,7 @@ export class Employees {
         next: () => {
           this.api.showSuccess("تم تعديل الميعاد بنجاح");
           this.loadEmployees();
+        this.cdr.detectChanges();
         },
         error: () => {
           this.api.showError("حدث خطأ أثناء تعديل الميعاد");
@@ -666,6 +676,7 @@ export class Employees {
         next: (res: any) => {
           this.employees = res.data ?? res;
           this.totalRecords = res.totalCount ?? this.employees.length;
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error(err);
@@ -682,9 +693,7 @@ export class Employees {
 
   openActionDialog(type: string, title: string, employee: any) {
     this.currentActionType = type;
-
     this.currentActionTitle = title + "  " + employee.name;
-
     this.actionForm = {
       employeeId: employee.id,
       amount: null,
@@ -774,19 +783,16 @@ export class Employees {
       this.api.addEvaluations(this.actionForm).subscribe({
         next: (res: any) => {
           this.actionItems.unshift(res);
-
           this.actionLoading = false;
-
           this.actionDialogVisible = false;
-
           this.api.showSuccess("تم إضافة التقييم بنجاح");
-
           this.loadEmployeeDetailsWithPayroll();
+          this.cdr.detectChanges();
+
         },
 
         error: () => {
           this.actionLoading = false;
-
           this.api.showError("حدث خطأ أثناء حفظ التقييم");
         },
       });
@@ -848,7 +854,7 @@ export class Employees {
         };
 
         this.actionLoading = false;
-
+        this.cdr.detectChanges();
         this.api.showSuccess("تمت الإضافة بنجاح");
       },
 
@@ -886,6 +892,7 @@ export class Employees {
         request.subscribe({
           next: () => {
             this.actionItems = this.actionItems.filter((x: any) => x.id !== id);
+            this.cdr.detectChanges();
             this.api.showSuccess("تم الحذف بنجاح");
             this.loadEmployeeDetailsWithPayroll();
           },
@@ -916,6 +923,8 @@ export class Employees {
           next: (res: any) => {
             this.employees = res.data ?? res;
             this.totalRecords = res.totalCount ?? this.employees.length;
+            this.cdr.detectChanges();
+
           },
         });
       return;
@@ -933,6 +942,8 @@ export class Employees {
           next: (res: any) => {
             this.employees = res.data ?? res;
             this.totalRecords = res.totalCount ?? this.employees.length;
+            this.cdr.detectChanges();
+
           },
         });
       return;
@@ -950,6 +961,8 @@ export class Employees {
           next: (res: any) => {
             this.employees = res.data ?? res;
             this.totalRecords = res.totalCount ?? this.employees.length;
+            this.cdr.detectChanges();
+
           },
         });
       return;
@@ -967,6 +980,7 @@ export class Employees {
           next: (res: any) => {
             this.employees = res.data ?? res;
             this.totalRecords = res.totalCount ?? this.employees.length;
+            this.cdr.detectChanges();
           },
         });
       return;
@@ -1030,6 +1044,8 @@ export class Employees {
         this.showGroupDialog = false;
         this.showGroupMode = false;
         this.selectedEmployeeIds = [];
+        this.cdr.detectChanges();
+
         // success toast
       },
       error: (err) => console.error(err),

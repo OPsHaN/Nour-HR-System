@@ -11,7 +11,6 @@
     class="pi"
     [ngClass]="showCreateBranch ? 'pi-times' : 'pi-sitemap'"
   ></i>
-
   {{ showCreateBranch ? '' : 'فرع جديد' }}
 </button>
 </div>
@@ -34,7 +33,6 @@
   dataKey="id"
   dir="rtl"
 >
-
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
@@ -47,22 +45,16 @@
   <!-- BODY -->
   <ng-template pTemplate="body" let-branch let-ri="rowIndex">
     <tr>
-
       <!-- Row Number -->
       <td>
         {{ ri + 1 + (page - 1) * pageSize }}
       </td>
-
       <!-- Branch Name -->
       <td>
         {{ branch.name }}
       </td>
-
       <!-- Actions -->
       <td>
-
-
-
         <!-- Delete -->
         <button
           pButton
@@ -72,7 +64,6 @@
         >
           <i class="pi pi-trash d-flex align-items-center justify-content-center"></i>
         </button>
-
       </td>
     </tr>
   </ng-template>

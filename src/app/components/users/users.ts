@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
 import { Apiservice } from "src/app/services/api.service";
 import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
@@ -33,6 +34,7 @@ export class Users {
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +49,7 @@ export class Users {
     this.api.getAllUsers(1, 10).subscribe({
       next: (res: any) => {
         this.users = res.data || [];
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
@@ -61,6 +64,7 @@ export class Users {
         this.api.showSuccess("تم تغيير كلمة المرور");
         emp.password = "";
         delete this.editingRowKeys[emp.id];
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.api.showError("فشل تغيير كلمة المرور");
@@ -98,6 +102,7 @@ export class Users {
     this.api.changeStatus(emp.id, emp.isActive).subscribe({
       next: () => {
         this.api.showSuccess("تم تغيير الحالة بنجاح");
+        this.cdr.detectChanges();
         delete this.editingRowKeys[emp.id];
       },
       error: (err) => {

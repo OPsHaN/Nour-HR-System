@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
 import { CreateBank } from "../create-bank/create-bank";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -23,6 +24,7 @@ export class Banks {
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -35,6 +37,7 @@ export class Banks {
       next: (res: any) => {
         this.Banks = res;
         this.loading = false;
+        this.cdr.detectChanges();
         console.log(res);
       },
       error: () => {

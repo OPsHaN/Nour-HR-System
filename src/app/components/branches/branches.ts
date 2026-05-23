@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
@@ -23,6 +23,7 @@ export class Branches {
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -35,6 +36,7 @@ export class Branches {
       next: (res: any) => {
         this.Branches = res.data;
         this.loading = false;
+        this.cdr.detectChanges();
         console.log(res);
       },
       error: () => {
