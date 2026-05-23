@@ -122,7 +122,7 @@
   align-items: flex-end;
   gap: 16px;
   flex-wrap: wrap;
-  margin: 18px 0 24px;
+  margin: 8px 0 8px;
   padding: 18px;
   border-radius: 10px;
   background: var(--surface);
@@ -260,7 +260,6 @@
   font-size: 20px;
   font-weight: 600;
   transition: 0.2s ease;
-
   border: 1px solid transparent;
 }
 
@@ -271,12 +270,7 @@
   border-color: #86efac;
 }
 
-/* جيد جدا */
-.rate-very-good {
-  background: #dbeafe;
-  color: #1d4ed8;
-  border-color: #93c5fd;
-}
+
 
 /* جيد */
 .rate-good {
@@ -285,12 +279,7 @@
   border-color: #7dd3fc;
 }
 
-/* مقبول */
-.rate-acceptable {
-  background: #fef3c7;
-  color: #92400e;
-  border-color: #fcd34d;
-}
+
 
 /* ضعيف */
 .rate-weak {

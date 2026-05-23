@@ -237,6 +237,12 @@ function z(t2, e) {
 function bt(t2, e) {
   t2 && document.activeElement !== t2 && t2.focus(e);
 }
+function Q(t2, e) {
+  if (c(t2)) {
+    let o = t2.getAttribute(e);
+    return isNaN(o) ? o === "true" || o === "false" ? o === "true" : o : +o;
+  }
+}
 function b(t2, e = "") {
   let o = Y(t2, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e},
             [href]:not([tabindex = "-1"]):not([style*="display:none"]):not([hidden])${e},
@@ -1458,6 +1464,7 @@ export {
   h,
   k,
   $,
+  V,
   D,
   S,
   v,
@@ -1470,6 +1477,7 @@ export {
   Y,
   z,
   bt,
+  Q,
   b,
   vt,
   Tt,
@@ -1524,4 +1532,4 @@ export {
   TranslationKeys,
   TreeDragDropService
 };
-//# sourceMappingURL=chunk-J2D3YFFI.js.map
+//# sourceMappingURL=chunk-PNDCOZ5Q.js.map

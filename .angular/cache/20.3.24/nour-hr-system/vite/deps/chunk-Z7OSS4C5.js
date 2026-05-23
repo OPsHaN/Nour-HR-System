@@ -1,20 +1,22 @@
 import {
-  SpinnerIcon
-} from "./chunk-JD4PFQ2X.js";
-import {
   Badge,
   BadgeModule,
-  DomHandler,
+  DomHandler
+} from "./chunk-D3THK2KF.js";
+import {
   Ripple
-} from "./chunk-IVYCYDNX.js";
+} from "./chunk-QNJMC3YA.js";
+import {
+  SpinnerIcon
+} from "./chunk-5KNWC75X.js";
 import {
   BaseComponent,
   Bind,
   PARENT_INSTANCE
-} from "./chunk-OM3BQQTE.js";
+} from "./chunk-J4CZ74AU.js";
 import {
   BaseStyle
-} from "./chunk-6YQJDJ7W.js";
+} from "./chunk-QLJWVH4S.js";
 import {
   PrimeTemplate,
   SharedModule,
@@ -22,7 +24,7 @@ import {
   W,
   l,
   z
-} from "./chunk-J2D3YFFI.js";
+} from "./chunk-PNDCOZ5Q.js";
 import {
   CommonModule,
   NgIf,
@@ -2340,4 +2342,4 @@ export {
   Button,
   ButtonModule
 };
-//# sourceMappingURL=chunk-7TXXSRSO.js.map
+//# sourceMappingURL=chunk-Z7OSS4C5.js.map

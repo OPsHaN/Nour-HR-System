@@ -9,6 +9,7 @@ import { CreateEmployee } from "../create-employee/create-employee";
 import { Dialog } from "primeng/dialog";
 import { DatePickerModule } from "primeng/datepicker";
 import { Menu } from "primeng/menu";
+import { Tabs, TabPanels, TabPanel, TabList, Tab } from "primeng/tabs";
 import { Subscription } from "rxjs";
 import { forkJoin } from "rxjs";
 
@@ -22,6 +23,11 @@ import { forkJoin } from "rxjs";
     CreateEmployee,
     Dialog,
     DatePickerModule,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanels,
+    TabPanel,
     Menu,
   ],
   templateUrl: "./employees.html",
@@ -63,10 +69,10 @@ export class Employees {
   currentActionType = "";
   currentActionTitle = "";
   quarters: any[] = [
-    { value: 'Q1', label: 'الربع الأول' },
-    { value: 'Q2', label: 'الربع الثاني' },
-    { value: 'Q3', label: 'الربع الثالث' },
-    { value: 'Q4', label: 'الربع الرابع' },
+    { value: "Q1", label: "الربع الأول" },
+    { value: "Q2", label: "الربع الثاني" },
+    { value: "Q3", label: "الربع الثالث" },
+    { value: "Q4", label: "الربع الرابع" },
   ];
   actionItems: any[] = [];
   actionForm: any = {};
@@ -383,6 +389,8 @@ export class Employees {
     // when explicitly opening details, default to current month
     this.payrollViewType = "current";
     this.isCurrentMonth = true;
+    this.employeeName = emp.name;
+
     // keep existing details until new data arrives
     // show dialog immediately so it doesn't 'disappear' on errors
     this.showEmployeeDetailsDialog = true;
@@ -523,7 +531,7 @@ export class Employees {
       },
 
       error: () => {
-        this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+        this.api.showError("لا يوجد بيانات لهذا الشهر");
       },
     });
   }
@@ -636,7 +644,7 @@ export class Employees {
   openActionDialog(type: string, title: string, employee: any) {
     this.currentActionType = type;
 
-    this.currentActionTitle = title + " - " + employee.name;
+    this.currentActionTitle = title + "  " + employee.name;
 
     this.actionForm = {
       employeeId: employee.id,
@@ -686,23 +694,25 @@ export class Employees {
   }
 
   addEvaluationRow() {
-  this.actionForm.results.push({
-    evaluationCriteriaId: null,
-    rating: '',
-  });
-}
+    this.actionForm.results.push({
+      evaluationCriteriaId: null,
+      rating: "",
+    });
+  }
 
-removeEvaluationRow(index: number) {
-  this.actionForm.results.splice(index, 1);
-}
+  removeEvaluationRow(index: number) {
+    this.actionForm.results.splice(index, 1);
+  }
 
   saveAction() {
     // Evaluation
 
     if (this.currentActionType === "evaluation") {
       if (
-        this.actionForm.quarter == null || this.actionForm.quarter === '' ||
-        this.actionForm.year == null || this.actionForm.year === '' ||
+        this.actionForm.quarter == null ||
+        this.actionForm.quarter === "" ||
+        this.actionForm.year == null ||
+        this.actionForm.year === "" ||
         !this.actionForm.results?.length
       ) {
         this.api.showError("يجب إدخال بيانات التقييم");
