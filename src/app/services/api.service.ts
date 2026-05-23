@@ -91,48 +91,51 @@ export class Apiservice {
     );
   }
 
-  getMonthyDataForuser(id:string){
+  getMonthyDataForuser(id: string) {
     return this.http.get(`${this.baseUrl}payroll/${id}/current`);
   }
 
-  getmonthlyDataForuserByMonth(id:string,month:number , year:number){
+  getmonthlyDataForuserByMonth(id: string, month: number, year: number) {
     return this.http.get(`${this.baseUrl}payroll/${id}/${month}/${year}`);
   }
 
-  updateMonthlyDtataForUser(id:string, data:any){
-    return this.http.put(`${this.baseUrl}payroll/${id}/monthly-data`,data);
+  updateMonthlyDtataForUser(id: string, data: any) {
+    return this.http.put(`${this.baseUrl}payroll/${id}/monthly-data`, data);
   }
 
-  addDiscount(data:any){
-    return this.http.post(`${this.baseUrl}payroll/discounts`,data);
+  addDiscount(data: any) {
+    return this.http.post(`${this.baseUrl}payroll/discount`, data);
   }
 
-  addContractDiscount(data:any){
-    return this.http.post(`${this.baseUrl}payroll/contract-discounts`,data);
+  addContractDiscount(data: any) {
+    return this.http.post(`${this.baseUrl}payroll/contract-discount`, data);
   }
 
-  addBonus(data:any){
-    return this.http.post(`${this.baseUrl}payroll/bonus`,data);
+  addBonus(data: any) {
+    return this.http.post(`${this.baseUrl}payroll/bonus`, data);
   }
 
-  addCashBorrow(data:any){
-    return this.http.post(`${this.baseUrl}payroll/cash-borrow`,data);
+  addCashBorrow(data: any) {
+    return this.http.post(`${this.baseUrl}payroll/cash-borrow`, data);
   }
 
-  deleteDiscount(id:number){
-    return this.http.delete(`${this.baseUrl}payroll/discounts/${id}`,{});
+  deleteDiscount(id: number) {
+    return this.http.delete(`${this.baseUrl}payroll/discount/${id}`, {});
   }
 
-  deleteContractDiscount(id:number){
-    return this.http.delete(`${this.baseUrl}payroll/contract-discounts/${id}`,{});
+  deleteContractDiscount(id: number) {
+    return this.http.delete(
+      `${this.baseUrl}payroll/contract-discount/${id}`,
+      {},
+    );
   }
 
-  deleteBonus(id:number){
-    return this.http.delete(`${this.baseUrl}payroll/bonus/${id}`,{});
+  deleteBonus(id: number) {
+    return this.http.delete(`${this.baseUrl}payroll/bonus/${id}`, {});
   }
 
-  deleteCashBorrow(id:number){
-    return this.http.delete(`${this.baseUrl}payroll/cash-borrow/${id}`,{});
+  deleteCashBorrow(id: number) {
+    return this.http.delete(`${this.baseUrl}payroll/cash-borrow/${id}`, {});
   }
 
   getAllMonthlyData(month: number, year: number) {
@@ -141,12 +144,23 @@ export class Apiservice {
     );
   }
 
-  getAllMonthlyDatabyBranch(month: number, year: number, branchId:string) {
+  getAllMonthlyDatabyBranch(month: number, year: number, branchId: string) {
     return this.http.get(
       `${this.baseUrl}payroll/monthly-data?month=${month}&year=${year}&branchId=${branchId}`,
     );
   }
 
+  addEvaluations(data: any) {
+    return this.http.post(`${this.baseUrl}evaluations`, data);
+  }
+
+  getEvaluations(empolyeeId:number) {
+    return this.http.get(`${this.baseUrl}evaluations/${empolyeeId}`);
+  }
+
+  getEmployeeHistory(id: number) {
+    return this.http.get(`${this.baseUrl}employees/${id}/branches`);
+  }
 
   //branches//
 

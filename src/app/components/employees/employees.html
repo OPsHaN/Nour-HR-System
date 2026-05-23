@@ -394,6 +394,139 @@
       </div>
     </div>
 
+    <!-- التقييمات -->
+    <div
+      class="detail-item full-width mt-2 mt-2"
+      *ngIf="employeeDetails?.evaluations?.length"
+    >
+      <div class="payroll-toolbar">
+        <div class="toolbar-group">
+          <label class="toolbar-label">
+            <i class="pi pi-chart-line"></i>
+            تقييمات الموظف
+          </label>
+        </div>
+      </div>
+
+      <div
+        class="evaluation-card mb-3"
+        *ngFor="let evaluation of employeeDetails.evaluations"
+      >
+        <!-- Header -->
+        <div class="details-grid mb-3">
+          <div class="detail-item">
+            <label>الربع</label>
+            <span>{{ evaluation.quarter }}</span>
+          </div>
+
+          <div class="detail-item">
+            <label>السنة</label>
+            <span>{{ evaluation.year }}</span>
+          </div>
+
+          <div class="detail-item">
+            <label>تم التقييم بواسطة</label>
+            <span>{{ evaluation.evaluatedBy || '-' }}</span>
+          </div>
+        </div>
+
+        <!-- Results Table -->
+        <p-table
+          [value]="evaluation.results"
+          responsiveLayout="scroll"
+          styleClass="p-datatable-sm"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>المعيار</th>
+              <th>التقييم</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-item>
+            <tr>
+              <td>
+                {{ item.criteriaName || '-' }}
+              </td>
+
+              <td>
+                <span
+                  class="evaluation-rate"
+                  [ngClass]="{
+      'rate-excellent': item.rating === 'ممتاز',
+      'rate-very-good': item.rating === 'جيد جدا',
+      'rate-good': item.rating === 'جيد',
+      'rate-acceptable': item.rating === 'مقبول',
+      'rate-weak': item.rating === 'ضعيف'
+    }"
+                >
+                  <i
+                    class="pi"
+                    [ngClass]="{
+        'pi-star-fill': item.rating === 'ممتاز',
+        'pi-thumbs-up-fill': item.rating === 'جيد جدا',
+        'pi-check-circle': item.rating === 'جيد',
+        'pi-info-circle': item.rating === 'مقبول',
+        'pi-times-circle': item.rating === 'ضعيف'
+      }"
+                  ></i>
+
+                  {{ item.rating }}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="2" class="text-center py-4">لا توجد نتائج تقييم</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <!-- سجل الفروع -->
+    <div
+      class="detail-item full-width mt-2"
+      *ngIf="employeeDetails?.employeeHistory?.length"
+    >
+      <div class="payroll-toolbar">
+        <div class="toolbar-group">
+          <label class="toolbar-label">
+            <i class="pi pi-history"></i>
+            سجل تنقلات الموظف بين الفروع
+          </label>
+        </div>
+      </div>
+
+      <p-table
+        [value]="employeeDetails.employeeHistory"
+        responsiveLayout="scroll"
+        styleClass="p-datatable-sm"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>تاريخ البدء</th>
+            <th>الفرع</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>{{ item.startDate | date:'yyyy-MM-dd' }}</td>
+            <td>{{ item.branchName }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="2" class="text-center py-4">لا يوجد سجل تنقلات</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
     <!-- المرتبات -->
     <div class="section-block mt-2">
       <div class="payroll-toolbar">
@@ -482,6 +615,7 @@
                 <th>السبب</th>
                 <th>ملاحظات</th>
                 <th>التاريخ</th>
+                <th>الإجراءات</th>
               </tr>
             </ng-template>
 
@@ -493,12 +627,24 @@
 
                 <td>{{ item.notes || '-' }}</td>
 
-                <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                <td>{{ item.dateOfBorrow | date:'yyyy-MM-dd' }}</td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                    (click)="deleteAction(item.id, 'cashBorrow')"
+                  >
+                    <i
+                      class="pi pi-trash d-flex align-items-center justify-content-center"
+                    ></i>
+                  </button>
+                </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+                <td colspan="5" class="text-center py-4">لاتوجد أى بيانات</td>
               </tr>
             </ng-template>
           </p-table>
@@ -522,6 +668,7 @@
                 <th>السبب</th>
                 <th>ملاحظات</th>
                 <th>التاريخ</th>
+                <th>الإجراءات</th>
               </tr>
             </ng-template>
 
@@ -533,12 +680,24 @@
 
                 <td>{{ item.notes || '-' }}</td>
 
-                <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                <td>{{ item.dateOfBonus | date:'yyyy-MM-dd' }}</td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                    (click)="deleteAction(item.id, 'bonus')"
+                  >
+                    <i
+                      class="pi pi-trash d-flex align-items-center justify-content-center"
+                    ></i>
+                  </button>
+                </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+                <td colspan="5" class="text-center py-4">لاتوجد أى بيانات</td>
               </tr>
             </ng-template>
           </p-table>
@@ -562,6 +721,7 @@
                 <th>السبب</th>
                 <th>ملاحظات</th>
                 <th>التاريخ</th>
+                <th>الإجراءات</th>
               </tr>
             </ng-template>
 
@@ -569,9 +729,21 @@
               <tr>
                 <td>{{ item.amount }} ج</td>
 
-                <td>{{ item.reason || '-' }}</td>
+                <td>{{ item.reasonOfDiscount || '-' }}</td>
                 <td>{{ item.notes || '-' }}</td>
                 <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                    (click)="deleteAction(item.id, 'contract')"
+                  >
+                    <i
+                      class="pi pi-trash d-flex align-items-center justify-content-center"
+                    ></i>
+                  </button>
+                </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
@@ -600,6 +772,7 @@
                 <th>السبب</th>
                 <th>ملاحظات</th>
                 <th>التاريخ</th>
+                <th>الإجراءات</th>
               </tr>
             </ng-template>
 
@@ -612,11 +785,23 @@
                 <td>{{ item.notes || '-' }}</td>
 
                 <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                    (click)="deleteAction(item.id, 'discount')"
+                  >
+                    <i
+                      class="pi pi-trash d-flex align-items-center justify-content-center"
+                    ></i>
+                  </button>
+                </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+                <td colspan="5" class="text-center py-4">لاتوجد أى بيانات</td>
               </tr>
             </ng-template>
           </p-table>
@@ -678,6 +863,13 @@
         <div class="detail-item">
           <label>إجمالى التأمينات</label>
           <span> {{ employeeDetails.insurence }} جنية</span>
+        </div>
+
+        <div class="detail-item">
+          <label>إجمالى السلف النقدية</label>
+          <span class="text-danger">
+            {{ employeeDetails.totalCashBorrows }} جنية</span
+          >
         </div>
 
         <div class="detail-item">
@@ -945,61 +1137,157 @@
 </p-dialog>
 
 <p-dialog
-  [header]="currentActionTitle "
+  [header]="currentActionTitle"
   [(visible)]="actionDialogVisible"
   [modal]="true"
   class="end-service-dialog"
-  [style]="{ width: '20rem' }"
+  [style]="{
+    width: currentActionType === 'evaluation'
+      ? '45rem'
+      : '20rem'
+  }"
 >
-  <!-- الفورم -->
 
-  <div class="end-service-content">
-    <div class="field">
-      <label>القيمة</label>
+  <!-- إضافة تقييم -->
 
-      <input
-        type="number"
-        class="custom-input"
-        [(ngModel)]="actionForm.amount"
-      />
+  <div *ngIf="currentActionType === 'evaluation'">
+
+    <!-- Header -->
+
+    <div class="evaluation-header mb-4">
+
+      <div class="field">
+        <label>الربع</label>
+
+        <select
+          class="custom-input"
+          [(ngModel)]="actionForm.quarter"
+        >
+          <option
+            *ngFor="let quarter of quarters"
+            [value]="quarter.value"
+          >
+            {{ quarter.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>السنة</label>
+
+        <input
+          type="number"
+          class="custom-input"
+          [(ngModel)]="actionForm.year"
+        />
+      </div>
+
     </div>
 
-    <div class="field">
-      <label>السبب</label>
 
-      <input
-        type="text"
-        class="custom-input"
-        [(ngModel)]="actionForm.reasonOfDiscount"
-      />
+
+    <!-- Add -->
+
+    <div class="d-flex justify-content-end mb-3">
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        label="إضافة معيار"
+        class="p-button-primary p-button-sm"
+        (click)="addEvaluationRow()"
+      ></button>
+
     </div>
 
-    <div class="field">
-      <label>ملاحظات</label>
+    <!-- Save -->
 
-      <textarea
-        rows="2"
-        class="custom-input"
-        [(ngModel)]="actionForm.notes"
-      ></textarea>
-    </div>
-  </div>
-
-  <div class="form">
     <button
       type="button"
-      [disabled]="
-    actionLoading ||
-    !actionForm.amount ||
-    !actionForm.reasonOfDiscount ||
-    !actionForm.notes"
-      class="submit-btn full my-2"
+      class="submit-btn full"
+      [disabled]="actionLoading"
       (click)="saveAction()"
     >
-      {{ actionLoading ? 'جارى الحفظ...' : ( currentActionType === 'bonus' ?
-      'إضافة زيادة' : currentActionType === 'borrow' ? 'إضافة سلفة' :
-      currentActionType === 'discount' ? 'إضافة خصم' : currentActionType ===
-      'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة نقدية' ) }}
+      {{
+        actionLoading
+          ? 'جارى الحفظ...'
+          : 'إضافة التقييم'
+      }}
     </button>
+
   </div>
+
+  <!-- باقى الأنواع -->
+
+  <div *ngIf="currentActionType !== 'evaluation'">
+
+    <div class="end-service-content">
+
+      <div class="field">
+        <label>القيمة</label>
+
+        <input
+          type="number"
+          class="custom-input"
+          [(ngModel)]="actionForm.amount"
+        />
+      </div>
+
+      <div class="field">
+        <label>السبب</label>
+
+        <input
+          type="text"
+          class="custom-input"
+          [(ngModel)]="actionForm.reasonOfDiscount"
+        />
+      </div>
+
+      <div class="field">
+        <label>ملاحظات</label>
+
+        <textarea
+          rows="2"
+          class="custom-input"
+          [(ngModel)]="actionForm.notes"
+        ></textarea>
+      </div>
+
+    </div>
+
+    <div class="form">
+
+      <button
+        type="button"
+        [disabled]="
+          actionLoading ||
+          !actionForm.amount ||
+          !actionForm.reasonOfDiscount ||
+          !actionForm.notes
+        "
+        class="submit-btn full my-2"
+        (click)="saveAction()"
+      >
+        {{
+          actionLoading
+            ? 'جارى الحفظ...'
+            : (
+              currentActionType === 'bonus'
+                ? 'إضافة زيادة'
+                : currentActionType === 'borrow'
+                ? 'إضافة سلفة'
+                : currentActionType === 'discount'
+                ? 'إضافة خصم'
+                : currentActionType === 'contract'
+                ? 'إضافة خصم تعاقد'
+                : 'إضافة سلفة نقدية'
+            )
+        }}
+      </button>
+
+    </div>
+
+  </div>
+
 </p-dialog>

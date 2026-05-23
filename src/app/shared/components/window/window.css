@@ -4,7 +4,7 @@
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--surface-border);
-  border-radius: 22px;
+  border-radius: 16px;
   background: var(--surface-strong);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);

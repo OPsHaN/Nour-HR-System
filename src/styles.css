@@ -171,8 +171,8 @@ input {
 }
 
 .p-dialog {
-  border: 0rem solid var(--surface-border) !important;
-  /* background: var(--surface) !important; */
+  border: 0.1rem solid var(--surface-border) !important;
+  background: var(--surface) !important;
   color: var(--text) !important;
 }
 

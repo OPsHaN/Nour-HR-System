@@ -10,6 +10,7 @@ import { Dialog } from "primeng/dialog";
 import { DatePickerModule } from "primeng/datepicker";
 import { Menu } from "primeng/menu";
 import { Subscription } from "rxjs";
+import { forkJoin } from "rxjs";
 
 @Component({
   selector: "app-employees",
@@ -61,13 +62,14 @@ export class Employees {
   actionDialogVisible = false;
   currentActionType = "";
   currentActionTitle = "";
+  quarters: any[] = [
+    { value: 'Q1', label: 'الربع الأول' },
+    { value: 'Q2', label: 'الربع الثاني' },
+    { value: 'Q3', label: 'الربع الثالث' },
+    { value: 'Q4', label: 'الربع الرابع' },
+  ];
   actionItems: any[] = [];
-  actionForm = {
-    employeeId: 0,
-    amount: null,
-    reasonOfDiscount: "",
-    notes: "",
-  };
+  actionForm: any = {};
   actionLoading = false;
   constructor(
     private api: Apiservice,
@@ -131,6 +133,17 @@ export class Employees {
         this.openActionDialog(
           "cashBorrow",
           "إضافة سلفة نقدية",
+          this.selectedEmployee,
+        );
+      },
+    },
+    {
+      label: "إضافة تقييم",
+      icon: "pi pi-star",
+      command: () => {
+        this.openActionDialog(
+          "evaluation",
+          "إضافة تقييم",
           this.selectedEmployee,
         );
       },
@@ -340,39 +353,6 @@ export class Employees {
     this.loadEmployees();
   }
 
-  // openEmployeeDetails(emp: any) {
-  //   this.isEditMode = false;
-  //   this.api.getHistoryByEmployeeId(emp.id).subscribe({
-  //     next: (historyRes) => {
-  //       this.api.getEmployeeById(emp.id).subscribe({
-  //         next: (employeeRes) => {
-  //           this.api.getMonthyDataForuser(emp.id).subscribe({
-  //             next: (payrollRes) => {
-  //               console.log(payrollRes);
-  //               this.employeeDetails = {
-  //                 ...historyRes,
-  //                 ...employeeRes,
-  //                 ...payrollRes,
-  //               };
-  //             },
-  //           });
-
-  //           this.showEmployeeDetailsDialog = true;
-  //           this.cdr.detectChanges();
-  //         },
-
-  //         error: () => {
-  //           this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
-  //         },
-  //       });
-  //     },
-
-  //     error: () => {
-  //       this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
-  //     },
-  //   });
-  // }
-
   onPayrollFilterChange() {
     this.isCurrentMonth = this.payrollViewType === "current";
 
@@ -417,82 +397,131 @@ export class Employees {
     this.loadEmployeeDetailsWithPayroll();
   }
 
+  // loadEmployeeDetailsWithPayroll() {
+  //   const emp = this.selectedEmployeeForPayroll;
+  //   if (!emp) {
+  //     return;
+  //   }
+
+  //   this.isEditMode = false;
+  //   this.showPayrollFilterDialog = false;
+  //   this.api.getHistoryByEmployeeId(emp.id).subscribe({
+  //     next: (historyRes) => {
+  //       this.api.getEmployeeById(emp.id).subscribe({
+  //         next: (employeeRes) => {
+  //           // Current Month
+  //           if (this.isCurrentMonth) {
+  //             if (this.payrollRequestSub) {
+  //               this.payrollRequestSub.unsubscribe();
+  //               this.payrollRequestSub = null;
+  //             }
+  //             this.payrollRequestSub = this.api
+  //               .getMonthyDataForuser(emp.id)
+  //               .subscribe({
+  //                 next: (payrollRes) => {
+  //                   this.employeeDetails = {
+  //                     ...historyRes,
+  //                     ...employeeRes,
+  //                     ...payrollRes,
+  //                   };
+  //                   this.showPayrollDetails = true;
+  //                   this.showEmployeeDetailsDialog = true;
+  //                   this.cdr.detectChanges();
+  //                   this.payrollRequestSub = null;
+  //                   // this.api.showSuccess("تم تحميل بيانات الموظف بنجاح");
+  //                 },
+  //                 error: () => {
+  //                   this.api.showError("لا يوجد بيانات لهذا الشهر");
+  //                   this.payrollRequestSub = null;
+  //                 },
+  //               });
+  //           }
+  //           // Selected Month / Year
+  //           else {
+  //             if (this.payrollRequestSub) {
+  //               this.payrollRequestSub.unsubscribe();
+  //               this.payrollRequestSub = null;
+  //             }
+  //             this.payrollRequestSub = this.api
+  //               .getmonthlyDataForuserByMonth(
+  //                 emp.id,
+  //                 this.selectedMonth,
+  //                 this.selectedYear,
+  //               )
+  //               .subscribe({
+  //                 next: (payrollRes) => {
+  //                   this.employeeDetails = {
+  //                     ...historyRes,
+  //                     ...employeeRes,
+  //                     ...payrollRes,
+  //                   };
+  //                   this.showPayrollDetails = true;
+  //                   this.showEmployeeDetailsDialog = true;
+  //                   this.cdr.detectChanges();
+  //                   this.payrollRequestSub = null;
+  //                   this.api.showSuccess("تم تحميل بيانات المرتب بنجاح");
+  //                 },
+  //                 error: () => {
+  //                   this.api.showError("لا يوجد بيانات لهذا الشهر");
+  //                   this.payrollRequestSub = null;
+  //                 },
+  //               });
+  //           }
+  //         },
+  //         error: () => {
+  //           this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+  //         },
+  //       });
+  //     },
+  //     error: () => {
+  //       this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+  //     },
+  //   });
+  // }
+
   loadEmployeeDetailsWithPayroll() {
     const emp = this.selectedEmployeeForPayroll;
+
     if (!emp) {
       return;
     }
 
     this.isEditMode = false;
     this.showPayrollFilterDialog = false;
-    this.api.getHistoryByEmployeeId(emp.id).subscribe({
-      next: (historyRes) => {
-        this.api.getEmployeeById(emp.id).subscribe({
-          next: (employeeRes) => {
-            // Current Month
-            if (this.isCurrentMonth) {
-              if (this.payrollRequestSub) {
-                this.payrollRequestSub.unsubscribe();
-                this.payrollRequestSub = null;
-              }
-              this.payrollRequestSub = this.api
-                .getMonthyDataForuser(emp.id)
-                .subscribe({
-                  next: (payrollRes) => {
-                    this.employeeDetails = {
-                      ...historyRes,
-                      ...employeeRes,
-                      ...payrollRes,
-                    };
-                    this.showPayrollDetails = true;
-                    this.showEmployeeDetailsDialog = true;
-                    this.cdr.detectChanges();
-                    this.payrollRequestSub = null;
-                    // this.api.showSuccess("تم تحميل بيانات الموظف بنجاح");
-                  },
-                  error: () => {
-                    this.api.showError("لا يوجد بيانات لهذا الشهر");
-                    this.payrollRequestSub = null;
-                  },
-                });
-            }
-            // Selected Month / Year
-            else {
-              if (this.payrollRequestSub) {
-                this.payrollRequestSub.unsubscribe();
-                this.payrollRequestSub = null;
-              }
-              this.payrollRequestSub = this.api
-                .getmonthlyDataForuserByMonth(
-                  emp.id,
-                  this.selectedMonth,
-                  this.selectedYear,
-                )
-                .subscribe({
-                  next: (payrollRes) => {
-                    this.employeeDetails = {
-                      ...historyRes,
-                      ...employeeRes,
-                      ...payrollRes,
-                    };
-                    this.showPayrollDetails = true;
-                    this.showEmployeeDetailsDialog = true;
-                    this.cdr.detectChanges();
-                    this.payrollRequestSub = null;
-                    this.api.showSuccess("تم تحميل بيانات المرتب بنجاح");
-                  },
-                  error: () => {
-                    this.api.showError("لا يوجد بيانات لهذا الشهر");
-                    this.payrollRequestSub = null;
-                  },
-                });
-            }
-          },
-          error: () => {
-            this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
-          },
-        });
+
+    const payrollRequest = this.isCurrentMonth
+      ? this.api.getMonthyDataForuser(emp.id)
+      : this.api.getmonthlyDataForuserByMonth(
+          emp.id,
+          this.selectedMonth,
+          this.selectedYear,
+        );
+
+    forkJoin({
+      employee: this.api.getEmployeeById(emp.id),
+      history: this.api.getEmployeeHistory(emp.id),
+      evaluations: this.api.getEvaluations(emp.id),
+      payroll: payrollRequest,
+    }).subscribe({
+      next: (res: any) => {
+        this.employeeDetails = {
+          ...res.employee,
+          ...res.payroll,
+
+          employeeHistory: res.history,
+          evaluations: res.evaluations,
+        };
+
+        this.showPayrollDetails = true;
+        this.showEmployeeDetailsDialog = true;
+
+        this.cdr.detectChanges();
+
+        if (!this.isCurrentMonth) {
+          this.api.showSuccess("تم تحميل بيانات المرتب بنجاح");
+        }
       },
+
       error: () => {
         this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
       },
@@ -616,6 +645,21 @@ export class Employees {
       notes: "",
     };
 
+    if (type === "evaluation") {
+      this.actionForm = {
+        employeeId: employee.id,
+        quarter: "Q1",
+        year: new Date().getFullYear(),
+        results: [
+          {
+            evaluationCriteriaId: null,
+            rating: "",
+          },
+        ],
+      };
+      this.actionItems = this.employeeDetails?.evaluations || [];
+    }
+
     switch (type) {
       case "bonus":
         this.actionItems = this.employeeDetails?.bonuses || [];
@@ -641,117 +685,167 @@ export class Employees {
     this.actionDialogVisible = true;
   }
 
-  saveAction() {
-
-  if (
-    !this.actionForm.amount ||
-    !this.actionForm.reasonOfDiscount?.trim() ||
-    !this.actionForm.notes?.trim()
-  ) {
-
-    this.api.showError(
-      'يجب إدخال القيمة والسبب والملاحظات'
-    );
-
-    return;
-  }
-
-  this.actionLoading = true;
-
-  const request =
-    this.currentActionType === 'bonus'
-      ? this.api.addBonus(this.actionForm)
-      : this.currentActionType === 'borrow'
-      ? this.api.addCashBorrow(this.actionForm)
-      : this.currentActionType === 'discount'
-      ? this.api.addDiscount(this.actionForm)
-      : this.currentActionType === 'contract'
-      ? this.api.addContractDiscount(this.actionForm)
-      : this.api.addCashBorrow(this.actionForm);
-
-  request.subscribe({
-
-    next: (res: any) => {
-
-      this.actionItems.unshift(res);
-
-      this.actionForm = {
-        employeeId: this.actionForm.employeeId,
-        amount: null,
-        reasonOfDiscount: '',
-        notes: '',
-      };
-
-      this.actionLoading = false;
-
-      this.api.showSuccess('تمت الإضافة بنجاح');
-    },
-
-    error: () => {
-
-      this.actionLoading = false;
-
-      this.api.showError('حدث خطأ أثناء الحفظ');
-    },
+  addEvaluationRow() {
+  this.actionForm.results.push({
+    evaluationCriteriaId: null,
+    rating: '',
   });
 }
 
-  deleteAction(id: number) {
-    switch (this.currentActionType) {
-      case "bonus":
-        this.api.deleteBonus(id).subscribe({
-          next: () => {
-            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+removeEvaluationRow(index: number) {
+  this.actionForm.results.splice(index, 1);
+}
 
-            this.api.showSuccess("تم حذف الزيادة");
-          },
-        });
+  saveAction() {
+    // Evaluation
 
-        break;
+    if (this.currentActionType === "evaluation") {
+      if (
+        this.actionForm.quarter == null || this.actionForm.quarter === '' ||
+        this.actionForm.year == null || this.actionForm.year === '' ||
+        !this.actionForm.results?.length
+      ) {
+        this.api.showError("يجب إدخال بيانات التقييم");
 
-      case "borrow":
-        this.api.deleteCashBorrow(id).subscribe({
-          next: () => {
-            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+        return;
+      }
 
-            this.api.showSuccess("تم حذف السلفة");
-          },
-        });
+      const invalidResult = this.actionForm.results.some(
+        (x: any) => !x.evaluationCriteriaId || !x.rating,
+      );
 
-        break;
+      if (invalidResult) {
+        this.api.showError("يجب استكمال جميع معايير التقييم");
 
-      case "discount":
-        this.api.deleteDiscount(id).subscribe({
-          next: () => {
-            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+        return;
+      }
 
-            this.api.showSuccess("تم حذف الخصم");
-          },
-        });
+      this.actionLoading = true;
 
-        break;
+      this.api.addEvaluations(this.actionForm).subscribe({
+        next: (res: any) => {
+          this.actionItems.unshift(res);
 
-      case "contract":
-        this.api.deleteContractDiscount(id).subscribe({
-          next: () => {
-            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+          this.actionLoading = false;
 
-            this.api.showSuccess("تم حذف خصم التعاقد");
-          },
-        });
+          this.actionDialogVisible = false;
 
-        break;
+          this.api.showSuccess("تم إضافة التقييم بنجاح");
 
-      case "cashBorrow":
-        this.api.deleteCashBorrow(id).subscribe({
-          next: () => {
-            this.actionItems = this.actionItems.filter((x) => x.id !== id);
+          this.loadEmployeeDetailsWithPayroll();
+        },
 
-            this.api.showSuccess("تم حذف السلفة النقدية");
-          },
-        });
+        error: () => {
+          this.actionLoading = false;
 
-        break;
+          this.api.showError("حدث خطأ أثناء حفظ التقييم");
+        },
+      });
+
+      return;
     }
+
+    // Validation لباقى الأنواع
+
+    if (
+      !this.actionForm.amount ||
+      !this.actionForm.reasonOfDiscount?.trim() ||
+      !this.actionForm.notes?.trim()
+    ) {
+      this.api.showError("يجب إدخال القيمة والسبب والملاحظات");
+
+      return;
+    }
+
+    this.actionLoading = true;
+
+    // Dynamic Payload
+
+    const payload =
+      this.currentActionType === "bonus" || this.currentActionType === "borrow"
+        ? {
+            employeeId: this.actionForm.employeeId,
+            amount: this.actionForm.amount,
+            reason: this.actionForm.reasonOfDiscount,
+            notes: this.actionForm.notes,
+          }
+        : {
+            employeeId: this.actionForm.employeeId,
+            amount: this.actionForm.amount,
+            reasonOfDiscount: this.actionForm.reasonOfDiscount,
+            notes: this.actionForm.notes,
+          };
+
+    // Dynamic Request
+
+    const request =
+      this.currentActionType === "bonus"
+        ? this.api.addBonus(payload)
+        : this.currentActionType === "borrow"
+          ? this.api.addCashBorrow(payload)
+          : this.currentActionType === "discount"
+            ? this.api.addDiscount(payload)
+            : this.api.addContractDiscount(payload);
+
+    request.subscribe({
+      next: (res: any) => {
+        this.actionItems.unshift(res);
+
+        this.actionForm = {
+          employeeId: this.actionForm.employeeId,
+          amount: null,
+          reasonOfDiscount: "",
+          notes: "",
+        };
+
+        this.actionLoading = false;
+
+        this.api.showSuccess("تمت الإضافة بنجاح");
+      },
+
+      error: () => {
+        this.actionLoading = false;
+
+        this.api.showError("حدث خطأ أثناء الحفظ");
+      },
+    });
+  }
+
+  deleteAction(id: number, type?: string) {
+    const actionType = type || this.currentActionType;
+
+    this.confirmationService.confirm({
+      header: "تأكيد الحذف",
+      message: "هل أنت متأكد من حذف هذا البند؟",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "حذف",
+      rejectLabel: "إلغاء",
+      acceptButtonStyleClass: "p-button-danger",
+
+      accept: () => {
+        const request =
+          actionType === "bonus"
+            ? this.api.deleteBonus(id)
+            : actionType === "borrow" || actionType === "cashBorrow"
+              ? this.api.deleteCashBorrow(id)
+              : actionType === "discount"
+                ? this.api.deleteDiscount(id)
+                : actionType === "contract"
+                  ? this.api.deleteContractDiscount(id)
+                  : this.api.deleteCashBorrow(id);
+
+        request.subscribe({
+          next: () => {
+            this.actionItems = this.actionItems.filter((x: any) => x.id !== id);
+            this.api.showSuccess("تم الحذف بنجاح");
+            this.loadEmployeeDetailsWithPayroll();
+          },
+
+          error: () => {
+            this.api.showError("حدث خطأ أثناء الحذف");
+          },
+        });
+      },
+    });
   }
 }
