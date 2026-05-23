@@ -184,7 +184,7 @@ input {
   border-radius: 0.5rem 0.5rem 0 0 !important;
 }
 
-.p-icon{
+.p-icon {
   color: var(--text-soft) !important;
 }
 
@@ -195,6 +195,33 @@ input {
   border-radius: 0 0 0.5rem 0.5rem !important;
 }
 
+.p-tab {
+  background: var(--surface-strong) !important;
+  color: var(--text) !important;
+  border: 0.1rem solid var(--surface-border) !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.p-tab-active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border: 0.1rem solid var(--surface-border) !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.p-tablist {
+  background: var(--surface-strong) !important;
+  color: var(--text) !important;
+}
+
+.p-tabpanels {
+  background: var(--surface) !important;
+  border: 0.1rem solid var(--surface-border) !important;
+  border-radius: 0 0 0.5rem 0.5rem !important;
+  padding: 0.5rem !important;
+  color: var(--text) !important;
+}
 
 .panel {
   display: grid;
@@ -439,7 +466,8 @@ input {
   background: var(--surface-strong) !important;
   color: var(--text) !important;
 }
-.p-menu{
+
+.p-menu {
   border-radius: 20px !important;
   box-shadow: #999 0px 8px 24px !important;
 }
@@ -462,6 +490,6 @@ input {
   padding: 10px 16px !important;
 }
 
-.p-menu-item-content{
+.p-menu-item-content {
   border-radius: 15px !important;
 }

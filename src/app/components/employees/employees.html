@@ -205,777 +205,666 @@
   [(visible)]="showEmployeeDetailsDialog"
   [modal]="true"
   [style]="{ width: '70rem', 'max-height': '100%'}"
-  class="end-service-dialog"
+  class="data-employee-dialog"
 >
   <div *ngIf="employeeDetails">
-    <!-- بيانات الموظف -->
-    <div class="detail-item full-width mt-2 mt-2">
-      <div class="payroll-toolbar">
-        <div class="toolbar-group">
-          <label class="toolbar-label">
-            <i class="pi pi-user"></i> بيانات الموظف
-          </label>
-        </div>
-      </div>
-
-      <div class="evaluation-card mb-3">
-        <!-- Header -->
-        <div class="details-grid">
-          <!-- اسم الموظف -->
-
-          <div class="detail-item">
-            <label>اسم الموظف</label>
-            <span>{{ employeeDetails.name || '-' }}</span>
-          </div>
-
-          <!-- المسمى الوظيفي -->
-          <div class="detail-item">
-            <label>المسمى الوظيفى</label>
-
-            <select
-              *ngIf="isEditMode"
-              class="custom-input"
-              [(ngModel)]="employeeDetails.theNameOfJob"
-            >
-              <option value="">اختر المسمى الوظيفي</option>
-              <option value="مدير">مدير</option>
-              <option value="صيدلي">صيدلي</option>
-              <option value="مساعد صيدلي">مساعد صيدلي</option>
-              <option value="دليفري">دليفري</option>
-              <option value="خدمات">خدمات</option>
-              <option value="إدارة">إدارة</option>
-            </select>
-            <span *ngIf="!isEditMode">
-              {{ employeeDetails.theNameOfJob || '-' }}
-            </span>
-          </div>
-
-          <!-- نوع الوظيفة -->
-          <div class="detail-item">
-            <label>الدور الوظيفي</label>
-            <span>
-              {{ employeeDetails.role === 'static' ? 'ثابت' :
-              employeeDetails.role === 'changable' ? 'متغير' :
-              employeeDetails.role === 'delivery' ? 'دليفرى' : '-' }}
-            </span>
-          </div>
-
-          <!-- الفرع -->
-          <div class="detail-item">
-            <label>الفرع</label>
-
-            <select
-              class="custom-input"
-              *ngIf="isEditMode"
-              [(ngModel)]="employeeDetails.branchId"
-            >
-              <option *ngFor="let branch of branches" [ngValue]="branch.id">
-                {{ branch.name }}
-              </option>
-            </select>
-
-            <span *ngIf="!isEditMode">
-              {{ employeeDetails.branchName || '-' }}
-            </span>
-          </div>
-
-          <!-- ساعات الشيفت -->
-          <div class="detail-item">
-            <label>عدد ساعات الشيفت</label>
-
-            <input
-              *ngIf="isEditMode"
-              type="number"
-              class="custom-input"
-              [(ngModel)]="employeeDetails.shiftHours"
-            />
-
-            <span *ngIf="!isEditMode">
-              {{ employeeDetails.shiftHours || '-' }}
-            </span>
-          </div>
-
-          <!-- البنك -->
-          <div class="detail-item">
-            <label>اسم البنك</label>
-
-            <select
-              class="custom-input"
-              *ngIf="isEditMode"
-              [(ngModel)]="employeeDetails.bankId"
-            >
-              <option *ngFor="let bank of banks" [ngValue]="bank.id">
-                {{ bank.name }}
-              </option>
-            </select>
-
-            <span *ngIf="!isEditMode">
-              {{ employeeDetails.bankName || '-' }}
-            </span>
-          </div>
-
-          <!-- الحساب البنكي -->
-          <div class="detail-item">
-            <label>رقم الحساب البنكى</label>
-
-            <input
-              *ngIf="isEditMode"
-              type="text"
-              class="custom-input"
-              [(ngModel)]="employeeDetails.bankAccount"
-            />
-
-            <span *ngIf="!isEditMode">
-              {{ employeeDetails.bankAccount || '-' }}
-            </span>
-          </div>
-
-          <!-- تاريخ التعيين -->
-          <div class="detail-item">
-            <label>تاريخ التعيين</label>
-
-            <p-datepicker
-              *ngIf="isEditMode"
-              class="custom"
-              [(ngModel)]="employeeDetails.hiringDate"
-              dateFormat="yy-mm-dd"
-              appendTo="body"
-              styleClass="w-100"
-              placeholder="اختر التاريخ"
-            ></p-datepicker>
-
-            <span *ngIf="!isEditMode">
-              {{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}
-            </span>
-          </div>
-
-          <!-- المؤهل -->
-          <div class="detail-item">
-            <label>المؤهل الدراسي</label>
-            <span>{{ employeeDetails.qualification || '-' }}</span>
-          </div>
-
-          <!-- سنة التخرج -->
-          <div class="detail-item">
-            <label>سنة التخرج</label>
-            <span>{{ employeeDetails.graduationYear || '-' }}</span>
-          </div>
-
-          <!-- الرقم القومي -->
-          <div class="detail-item">
-            <label>الرقم القومي</label>
-            <span>{{ employeeDetails.nationalId || '-' }}</span>
-          </div>
-
-          <!-- رقم الهاتف -->
-          <div class="detail-item">
-            <label>رقم الهاتف</label>
-            <span>{{ employeeDetails.phoneNumber || '-' }}</span>
-          </div>
-
-          <!-- تاريخ إنهاء الخدمة -->
-          <div class="detail-item">
-            <label>تاريخ إنهاء الخدمة</label>
-            <span>
-              {{ employeeDetails.endOfServiceDate ?
-              (employeeDetails.endOfServiceDate | date:'yyyy-MM-dd') : '-' }}
-            </span>
-          </div>
-
-          <!-- نوع إنهاء الخدمة -->
-          <div class="detail-item">
-            <label>نوع إنهاء الخدمة</label>
-            <span>{{ employeeDetails.endOfServiceType || '-' }}</span>
-          </div>
-
-          <!-- سبب إنهاء الخدمة -->
-          <div class="detail-item">
-            <label>سبب إنهاء الخدمة</label>
-            <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- التقييمات -->
-    <div class="detail-item full-width mt-2 mt-2"
-      *ngIf="employeeDetails?.evaluations?.length"
-    >
-      <div class="payroll-toolbar">
-        <div class="toolbar-group">
-          <label class="toolbar-label">
-            <i class="pi pi-chart-line"></i>
-            تقييمات الموظف
-          </label>
-        </div>
-      </div>
-
-      <div
-        class="evaluation-card mb-2"
-        *ngFor="let evaluation of employeeDetails.evaluations"
-      >
-        <!-- Header -->
-        <div class="details-grid mb-2">
-          <div class="detail-item">
-            <label>الربع</label>
-            <span>{{ evaluation.quarter }}</span>
-          </div>
-
-          <div class="detail-item">
-            <label>السنة</label>
-            <span>{{ evaluation.year }}</span>
-          </div>
-
-          <div class="detail-item">
-            <label>تم التقييم بواسطة</label>
-            <span>{{ evaluation.evaluatedBy || '-' }}</span>
-          </div>
-        </div>
-
-        <!-- Results Table -->
-        <p-table
-          [value]="evaluation.results"
-          responsiveLayout="scroll"
-          styleClass="p-datatable-sm"
+    <p-tabs [(value)]="activeTabIndex">
+      <p-tablist>
+        <p-tab value="0"><i class="pi pi-user me-2"></i> بيانات الموظف</p-tab>
+        <p-tab value="1"><i class="pi pi-wallet me-2"></i> بيانات المرتب</p-tab>
+        <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length"
+          ><i class="pi pi-chart-line me-2"></i> التقييمات</p-tab
         >
-          <ng-template pTemplate="header">
-            <tr>
-              <th>البند</th>
-              <th>التقييم</th>
-            </tr>
-          </ng-template>
+        <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length"
+          ><i class="pi pi-history me-2"></i> سجل التنقلات</p-tab
+        >
+      </p-tablist>
 
-          <ng-template pTemplate="body" let-item>
-            <tr>
-              <td>{{ item.criteriaName || '-' }}</td>
+      <p-tabpanels>
+        <!-- ===== Tab 1: بيانات الموظف ===== -->
+        <p-tabpanel value="0">
+          <div class="evaluation-card mb-3">
+            <div class="details-grid">
+              <div class="detail-item">
+                <label>اسم الموظف</label>
+                <span>{{ employeeDetails.name || '-' }}</span>
+              </div>
 
-              <td>
-                <span
-                  class="evaluation-rate"
-                  [ngClass]="{
-      'rate-excellent': item.rating === 'ممتاز',
-      'rate-good': item.rating === 'جيد',
-      'rate-weak': item.rating === 'ضعيف'
-    }"
+              <div class="detail-item">
+                <label>المسمى الوظيفى</label>
+                <select
+                  *ngIf="isEditMode"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.theNameOfJob"
                 >
-                  <i
-                    class="pi"
-                    [ngClass]="{
-        'pi-star-fill': item.rating === 'ممتاز',
-        'pi-check-circle': item.rating === 'جيد',
-        'pi-times-circle': item.rating === 'ضعيف'
-      }"
-                  ></i>
+                  <option value="">اختر المسمى الوظيفي</option>
+                  <option value="مدير">مدير</option>
+                  <option value="صيدلي">صيدلي</option>
+                  <option value="مساعد صيدلي">مساعد صيدلي</option>
+                  <option value="دليفري">دليفري</option>
+                  <option value="خدمات">خدمات</option>
+                  <option value="إدارة">إدارة</option>
+                </select>
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.theNameOfJob || '-' }}</span
+                >
+              </div>
 
-                  {{ item.rating }}
+              <div class="detail-item">
+                <label>الدور الوظيفي</label>
+                <span>
+                  {{ employeeDetails.role === 'static' ? 'ثابت' :
+                  employeeDetails.role === 'changable' ? 'متغير' :
+                  employeeDetails.role === 'delivery' ? 'دليفرى' : '-' }}
                 </span>
-              </td>
-            </tr>
-          </ng-template>
+              </div>
 
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="2" class="text-center py-4">لا توجد نتائج تقييم</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
+              <div class="detail-item">
+                <label>الفرع</label>
+                <select
+                  class="custom-input"
+                  *ngIf="isEditMode"
+                  [(ngModel)]="employeeDetails.branchId"
+                >
+                  <option *ngFor="let branch of branches" [ngValue]="branch.id">
+                    {{ branch.name }}
+                  </option>
+                </select>
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.branchName || '-' }}</span
+                >
+              </div>
 
-    <!-- سجل الفروع -->
-    <div class="detail-item full-width mt-2"
-      *ngIf="employeeDetails?.employeeHistory?.length"
-    >
-      <div class="payroll-toolbar">
-        <div class="toolbar-group">
-          <label class="toolbar-label">
-            <i class="pi pi-history"></i>
-            سجل تنقلات الموظف بين الفروع
-          </label>
-        </div>
-      </div>
+              <div class="detail-item">
+                <label>عدد ساعات الشيفت</label>
+                <input
+                  *ngIf="isEditMode"
+                  type="number"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.shiftHours"
+                />
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.shiftHours || '-' }}</span
+                >
+              </div>
 
-      <p-table
-        [value]="employeeDetails.employeeHistory"
-        responsiveLayout="scroll"
-        styleClass="p-datatable-sm"
+              <div class="detail-item">
+                <label>اسم البنك</label>
+                <select
+                  class="custom-input"
+                  *ngIf="isEditMode"
+                  [(ngModel)]="employeeDetails.bankId"
+                >
+                  <option *ngFor="let bank of banks" [ngValue]="bank.id">
+                    {{ bank.name }}
+                  </option>
+                </select>
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.bankName || '-' }}</span
+                >
+              </div>
+
+              <div class="detail-item">
+                <label>رقم الحساب البنكى</label>
+                <input
+                  *ngIf="isEditMode"
+                  type="text"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.bankAccount"
+                />
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.bankAccount || '-' }}</span
+                >
+              </div>
+
+              <div class="detail-item">
+                <label>تاريخ التعيين</label>
+                <p-datepicker
+                  *ngIf="isEditMode"
+                  class="custom"
+                  [(ngModel)]="employeeDetails.hiringDate"
+                  dateFormat="yy-mm-dd"
+                  appendTo="body"
+                  styleClass="w-100"
+                  placeholder="اختر التاريخ"
+                ></p-datepicker>
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}</span
+                >
+              </div>
+
+              <div class="detail-item">
+                <label>المؤهل الدراسي</label>
+                <span>{{ employeeDetails.qualification || '-' }}</span>
+              </div>
+
+              <div class="detail-item">
+                <label>سنة التخرج</label>
+                <span>{{ employeeDetails.graduationYear || '-' }}</span>
+              </div>
+
+              <div class="detail-item">
+                <label>الرقم القومي</label>
+                <span>{{ employeeDetails.nationalId || '-' }}</span>
+              </div>
+
+              <div class="detail-item">
+                <label>رقم الهاتف</label>
+                <span>{{ employeeDetails.phoneNumber || '-' }}</span>
+              </div>
+
+              <div class="detail-item">
+                <label>تاريخ إنهاء الخدمة</label>
+                <span
+                  >{{ employeeDetails.endOfServiceDate ?
+                  (employeeDetails.endOfServiceDate | date:'yyyy-MM-dd') : '-'
+                  }}</span
+                >
+              </div>
+
+              <div class="detail-item">
+                <label>نوع إنهاء الخدمة</label>
+                <span>{{ employeeDetails.endOfServiceType || '-' }}</span>
+              </div>
+
+              <div class="detail-item">
+                <label>سبب إنهاء الخدمة</label>
+                <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
+              </div>
+            </div>
+          </div>
+        </p-tabpanel>
+
+        <!-- ===== Tab 2: بيانات المرتب ===== -->
+        <p-tabpanel value="1">
+          <!-- Toolbar -->
+          <div class="payroll-toolbar mb-3">
+            <div class="toolbar-group">
+              <label class="toolbar-label">نوع العرض</label>
+              <select
+                class="custom-input toolbar-select"
+                [(ngModel)]="payrollViewType"
+                (change)="onPayrollFilterChange()"
+              >
+                <option value="current">الشهر الحالى</option>
+                <option value="custom">شهر وسنة أخرى</option>
+              </select>
+            </div>
+
+            <div class="toolbar-group" *ngIf="payrollViewType === 'custom'">
+              <label class="toolbar-label">الشهر</label>
+              <select
+                class="custom-input toolbar-select"
+                [(ngModel)]="selectedMonth"
+              >
+                <option [ngValue]="1">يناير</option>
+                <option [ngValue]="2">فبراير</option>
+                <option [ngValue]="3">مارس</option>
+                <option [ngValue]="4">أبريل</option>
+                <option [ngValue]="5">مايو</option>
+                <option [ngValue]="6">يونيو</option>
+                <option [ngValue]="7">يوليو</option>
+                <option [ngValue]="8">أغسطس</option>
+                <option [ngValue]="9">سبتمبر</option>
+                <option [ngValue]="10">أكتوبر</option>
+                <option [ngValue]="11">نوفمبر</option>
+                <option [ngValue]="12">ديسمبر</option>
+              </select>
+            </div>
+
+            <div class="toolbar-group" *ngIf="payrollViewType === 'custom'">
+              <label class="toolbar-label">السنة</label>
+              <input
+                type="number"
+                class="custom-input toolbar-year"
+                [(ngModel)]="selectedYear"
+              />
+            </div>
+
+            <button
+              pButton
+              type="button"
+              class="btn btn-primary payroll-refresh-btn"
+              (click)="reloadPayrollData()"
+            >
+              <i class="pi pi-refresh"></i> عرض
+            </button>
+          </div>
+
+          <div class="evaluation-card mb-3" *ngIf="showPayrollDetails">
+            <!-- Cash Borrows -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.cashBorrows?.length"
+            >
+              <h6 class="section-title text-info">السلف النقدية</h6>
+              <p-table
+                [value]="employeeDetails.cashBorrows"
+                responsiveLayout="scroll"
+                styleClass="p-datatable-sm"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reason || '-' }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.dateOfBorrow | date:'yyyy-MM-dd' }}</td>
+                    <td>
+                      <button
+                        pButton
+                        type="button"
+                        class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                        (click)="deleteAction(item.id, 'cashBorrow')"
+                      >
+                        <i
+                          class="pi pi-trash d-flex align-items-center justify-content-center"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center py-4">
+                      لاتوجد أى بيانات
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- Bonuses -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.bonuses?.length"
+            >
+              <h6 class="section-title text-success">الزيادات</h6>
+              <p-table
+                [value]="employeeDetails.bonuses"
+                responsiveLayout="scroll"
+                styleClass="p-datatable-sm"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reason || '-' }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.dateOfBonus | date:'yyyy-MM-dd' }}</td>
+                    <td>
+                      <button
+                        pButton
+                        type="button"
+                        class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                        (click)="deleteAction(item.id, 'bonus')"
+                      >
+                        <i
+                          class="pi pi-trash d-flex align-items-center justify-content-center"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center py-4">
+                      لاتوجد أى بيانات
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- Contract Discounts -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.contractDiscounts?.length"
+            >
+              <h6 class="section-title text-warning">خصومات التعاقدات</h6>
+              <p-table
+                [value]="employeeDetails.contractDiscounts"
+                responsiveLayout="scroll"
+                styleClass="p-datatable-sm"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reasonOfDiscount || '-' }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                    <td>
+                      <button
+                        pButton
+                        type="button"
+                        class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                        (click)="deleteAction(item.id, 'contract')"
+                      >
+                        <i
+                          class="pi pi-trash d-flex align-items-center justify-content-center"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center py-4">
+                      لاتوجد أى بيانات
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- Discounts -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.discounts?.length"
+            >
+              <h6 class="section-title text-danger">الخصومات</h6>
+              <p-table
+                [value]="employeeDetails.discounts"
+                responsiveLayout="scroll"
+                styleClass="p-datatable-sm"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reasonOfDiscount }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                    <td>
+                      <button
+                        pButton
+                        type="button"
+                        class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                        (click)="deleteAction(item.id, 'discount')"
+                      >
+                        <i
+                          class="pi pi-trash d-flex align-items-center justify-content-center"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center py-4">
+                      لاتوجد أى بيانات
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- Payroll Summary -->
+            <div class="details-grid mt-3">
+              <div class="detail-item">
+                <label>عدد الساعات</label
+                ><span>{{ employeeDetails.hours | number:'1.0-2' }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>الساعات الإضافية</label
+                ><span>{{ employeeDetails.hoursOverTime }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>سعر الساعة</label
+                ><span>{{ employeeDetails.salaryPerHour }} جنية</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى المرتب</label
+                ><span
+                  >{{ employeeDetails.totalSalary | number:'1.0-2' }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالى الخصومات</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalDiscounts }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالى السلف</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalBorrows }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالى الزيادات</label
+                ><span class="text-success"
+                  >{{ employeeDetails.totalBouns }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالى الاجازات</label
+                ><span>{{ employeeDetails.holidaies }} يوم</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى الساعات المنسية</label
+                ><span>{{ employeeDetails.forgetedHours }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى التأمينات</label
+                ><span>{{ employeeDetails.insurence }} جنية</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى السلف النقدية</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalCashBorrows }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>صافى المرتب</label>
+                <span
+                  [class.text-danger]="employeeDetails.netSalary < 0"
+                  [class.text-success]="employeeDetails.netSalary >= 0"
+                >
+                  {{ employeeDetails.netSalary | number:'1.0-2' }} جنية
+                </span>
+              </div>
+            </div>
+          </div>
+                      <!-- Edit Payroll (isEditMode only) -->
+            <div class="section-block mt-3" *ngIf="isEditMode">
+              <div class="details-grid">
+                <div class="detail-item">
+                  <label>إجمالى المرتب</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="custom-input"
+                    [(ngModel)]="employeeDetails.totalSalary"
+                  />
+                </div>
+                <div class="detail-item">
+                  <label>سعر الساعة</label>
+                  <input
+                    type="number"
+                    class="custom-input"
+                    [(ngModel)]="employeeDetails.salaryPerHour"
+                  />
+                </div>
+                <div class="detail-item">
+                  <label>التأمين</label>
+                  <input
+                    type="number"
+                    class="custom-input"
+                    [(ngModel)]="employeeDetails.insurence"
+                  />
+                </div>
+                <div class="detail-item">
+                  <label>الساعات الإضافية</label>
+                  <input
+                    type="number"
+                    class="custom-input"
+                    [(ngModel)]="employeeDetails.hoursOverTime"
+                  />
+                </div>
+                <div class="detail-item">
+                  <label>الساعات المنسية</label>
+                  <input
+                    type="number"
+                    class="custom-input"
+                    [(ngModel)]="employeeDetails.forgetedHours"
+                  />
+                </div>
+              </div>
+            </div>
+        </p-tabpanel>
+
+        <!-- ===== Tab 3: التقييمات ===== -->
+        <p-tabpanel value="2" *ngIf="employeeDetails?.evaluations?.length">
+          <div
+            class="evaluation-card mb-2"
+            *ngFor="let evaluation of employeeDetails.evaluations"
+          >
+            <div class="details-grid mb-2">
+              <div class="detail-item">
+                <label>الربع</label><span>{{ evaluation.quarter }}</span>
+              </div>
+              <div class="detail-item">
+                <label>السنة</label><span>{{ evaluation.year }}</span>
+              </div>
+              <div class="detail-item">
+                <label>تم التقييم بواسطة</label
+                ><span>{{ evaluation.evaluatedBy || '-' }}</span>
+              </div>
+            </div>
+            <p-table
+              [value]="evaluation.results"
+              responsiveLayout="scroll"
+              styleClass="p-datatable-sm"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>البند</th>
+                  <th>التقييم</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.criteriaName || '-' }}</td>
+                  <td>
+                    <span
+                      class="evaluation-rate"
+                      [ngClass]="{
+                      'rate-excellent': item.rating === 'ممتاز',
+                      'rate-good': item.rating === 'جيد',
+                      'rate-weak': item.rating === 'ضعيف'
+                    }"
+                    >
+                      <i
+                        class="pi"
+                        [ngClass]="{
+                        'pi-star-fill': item.rating === 'ممتاز',
+                        'pi-check-circle': item.rating === 'جيد',
+                        'pi-times-circle': item.rating === 'ضعيف'
+                      }"
+                      ></i>
+                      {{ item.rating }}
+                    </span>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="2" class="text-center py-4">
+                    لا توجد نتائج تقييم
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </p-tabpanel>
+
+        <!-- ===== Tab 4: سجل التنقلات ===== -->
+        <p-tabpanel value="3" *ngIf="employeeDetails?.employeeHistory?.length">
+          <p-table
+            [value]="employeeDetails.employeeHistory"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>تاريخ البدء</th>
+                <th>الفرع</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.startDate | date:'yyyy-MM-dd' }}</td>
+                <td>{{ item.branchName }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="2" class="text-center py-4">لا يوجد سجل تنقلات</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+
+  <!-- Footer Actions -->
+  <ng-template pTemplate="footer">
+    <div class="dialog-actions d-flex justify-content-center my-1">
+      <button
+        *ngIf="!isEditMode"
+        pButton
+        type="button"
+        class="btn btn-warning p-1 border-rounded"
+        (click)="editEmployee(employeeDetails)"
       >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>تاريخ البدء</th>
-            <th>الفرع</th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-item>
-          <tr>
-            <td>{{ item.startDate | date:'yyyy-MM-dd' }}</td>
-            <td>{{ item.branchName }}</td>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="2" class="text-center py-4">لا يوجد سجل تنقلات</td>
-          </tr>
-        </ng-template>
-      </p-table>
+        تعديل البيانات
+      </button>
+      <button
+        *ngIf="isEditMode"
+        pButton
+        type="button"
+        class="btn btn-success p-1 border-rounded"
+        (click)="saveEmployeeEdits()"
+      >
+        حفظ التعديلات
+      </button>
     </div>
-
-    <!-- المرتبات -->
-    <div class="detail-item full-width mt-2 mt-2">
-      <div class="payroll-toolbar">
-        <!-- نوع العرض -->
-        <div class="toolbar-group">
-          <label class="toolbar-label">
-            <i class="pi pi-wallet"></i> بيانات المرتب
-          </label>
-
-          <select
-            class="custom-input toolbar-select"
-            [(ngModel)]="payrollViewType"
-            (change)="onPayrollFilterChange()"
-          >
-            <option value="current">الشهر الحالى</option>
-
-            <option value="custom">شهر وسنة أخرى</option>
-          </select>
-        </div>
-
-        <!-- الشهر -->
-        <div class="toolbar-group" *ngIf="payrollViewType === 'custom'">
-          <label class="toolbar-label"> الشهر </label>
-
-          <select
-            class="custom-input toolbar-select"
-            [(ngModel)]="selectedMonth"
-          >
-            <option [ngValue]="1">يناير</option>
-            <option [ngValue]="2">فبراير</option>
-            <option [ngValue]="3">مارس</option>
-            <option [ngValue]="4">أبريل</option>
-            <option [ngValue]="5">مايو</option>
-            <option [ngValue]="6">يونيو</option>
-            <option [ngValue]="7">يوليو</option>
-            <option [ngValue]="8">أغسطس</option>
-            <option [ngValue]="9">سبتمبر</option>
-            <option [ngValue]="10">أكتوبر</option>
-            <option [ngValue]="11">نوفمبر</option>
-            <option [ngValue]="12">ديسمبر</option>
-          </select>
-        </div>
-
-        <!-- السنة -->
-        <div class="toolbar-group" *ngIf="payrollViewType === 'custom'">
-          <label class="toolbar-label"> السنة </label>
-
-          <input
-            type="number"
-            class="custom-input toolbar-year"
-            [(ngModel)]="selectedYear"
-          />
-        </div>
-
-        <!-- تحديث -->
-        <button
-          pButton
-          type="button"
-          class="btn btn-primary payroll-refresh-btn"
-          (click)="reloadPayrollData()"
-        >
-          <i class="pi pi-refresh"></i>
-
-          عرض
-        </button>
-      </div>
-
-      <div class="evaluation-card mb-3">
-        <div class="details-grid" *ngIf="showPayrollDetails">
-          <!----تفاصيل المرتب-->
-
-          <!-- Cash Borrows -->
-          <div
-            class="detail-item full-width"
-            *ngIf="employeeDetails?.cashBorrows?.length"
-          >
-            <h6 class="section-title text-info">السلف النقدية</h6>
-
-            <p-table
-              [value]="employeeDetails.cashBorrows"
-              responsiveLayout="scroll"
-              styleClass="p-datatable-sm"
-            >
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>القيمة</th>
-                  <th>السبب</th>
-                  <th>ملاحظات</th>
-                  <th>التاريخ</th>
-                  <th>الإجراءات</th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-item>
-                <tr>
-                  <td>{{ item.amount }} ج</td>
-
-                  <td>{{ item.reason || '-' }}</td>
-
-                  <td>{{ item.notes || '-' }}</td>
-
-                  <td>{{ item.dateOfBorrow | date:'yyyy-MM-dd' }}</td>
-                  <td>
-                    <button
-                      pButton
-                      type="button"
-                      class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                      (click)="deleteAction(item.id, 'cashBorrow')"
-                    >
-                      <i
-                        class="pi pi-trash d-flex align-items-center justify-content-center"
-                      ></i>
-                    </button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="5" class="text-center py-4">لاتوجد أى بيانات</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-
-          <!-- Bonuses -->
-          <div
-            class="detail-item full-width"
-            *ngIf="employeeDetails?.bonuses?.length"
-          >
-            <h6 class="section-title text-success">الزيادات</h6>
-
-            <p-table
-              [value]="employeeDetails.bonuses"
-              responsiveLayout="scroll"
-              styleClass="p-datatable-sm"
-            >
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>القيمة</th>
-                  <th>السبب</th>
-                  <th>ملاحظات</th>
-                  <th>التاريخ</th>
-                  <th>الإجراءات</th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-item>
-                <tr>
-                  <td>{{ item.amount }} ج</td>
-
-                  <td>{{ item.reason || '-' }}</td>
-
-                  <td>{{ item.notes || '-' }}</td>
-
-                  <td>{{ item.dateOfBonus | date:'yyyy-MM-dd' }}</td>
-                  <td>
-                    <button
-                      pButton
-                      type="button"
-                      class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                      (click)="deleteAction(item.id, 'bonus')"
-                    >
-                      <i
-                        class="pi pi-trash d-flex align-items-center justify-content-center"
-                      ></i>
-                    </button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="5" class="text-center py-4">لاتوجد أى بيانات</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-
-          <!-- Contract Discounts -->
-          <div
-            class="detail-item full-width"
-            *ngIf="employeeDetails?.contractDiscounts?.length"
-          >
-            <h6 class="section-title text-warning">خصومات التعاقدات</h6>
-
-            <p-table
-              [value]="employeeDetails.contractDiscounts"
-              responsiveLayout="scroll"
-              styleClass="p-datatable-sm"
-            >
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>القيمة</th>
-                  <th>السبب</th>
-                  <th>ملاحظات</th>
-                  <th>التاريخ</th>
-                  <th>الإجراءات</th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-item>
-                <tr>
-                  <td>{{ item.amount }} ج</td>
-
-                  <td>{{ item.reasonOfDiscount || '-' }}</td>
-                  <td>{{ item.notes || '-' }}</td>
-                  <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
-                  <td>
-                    <button
-                      pButton
-                      type="button"
-                      class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                      (click)="deleteAction(item.id, 'contract')"
-                    >
-                      <i
-                        class="pi pi-trash d-flex align-items-center justify-content-center"
-                      ></i>
-                    </button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-
-          <!-- Discounts -->
-          <div
-            class="detail-item full-width"
-            *ngIf="employeeDetails?.discounts?.length"
-          >
-            <h6 class="section-title text-danger">الخصومات</h6>
-
-            <p-table
-              [value]="employeeDetails.discounts"
-              responsiveLayout="scroll"
-              styleClass="p-datatable-sm"
-            >
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>القيمة</th>
-                  <th>السبب</th>
-                  <th>ملاحظات</th>
-                  <th>التاريخ</th>
-                  <th>الإجراءات</th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-item>
-                <tr>
-                  <td>{{ item.amount }} ج</td>
-
-                  <td>{{ item.reasonOfDiscount }}</td>
-
-                  <td>{{ item.notes || '-' }}</td>
-
-                  <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
-                  <td>
-                    <button
-                      pButton
-                      type="button"
-                      class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                      (click)="deleteAction(item.id, 'discount')"
-                    >
-                      <i
-                        class="pi pi-trash d-flex align-items-center justify-content-center"
-                      ></i>
-                    </button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="5" class="text-center py-4">لاتوجد أى بيانات</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-
-          <!-- Payroll -->
-
-          <div class="detail-item">
-            <label>عدد الساعات</label>
-            <span> {{ employeeDetails.hours | number:'1.0-2' }} ساعة</span>
-          </div>
-
-          <div class="detail-item">
-            <label>الساعات الإضافية</label>
-            <span> {{ employeeDetails.hoursOverTime }} ساعة</span>
-          </div>
-
-          <div class="detail-item">
-            <label>سعر الساعة</label>
-            <span> {{ employeeDetails.salaryPerHour }} جنية </span>
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى المرتب</label>
-            <span>
-              {{ employeeDetails.totalSalary | number:'1.0-2' }} جنية
-            </span>
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى الخصومات</label>
-            <span class="text-danger">
-              {{ employeeDetails.totalDiscounts }} جنية
-            </span>
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى السلف</label>
-            <span class="text-danger">
-              {{ employeeDetails.totalBorrows }} جنية</span
-            >
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى الزيادات</label>
-            <span class="text-success">
-              {{ employeeDetails.totalBouns }} جنية</span
-            >
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى الاجازات</label>
-            <span> {{ employeeDetails.holidaies }} يوم</span>
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى الساعات المنسية</label>
-            <span> {{ employeeDetails.forgetedHours }} ساعة</span>
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى التأمينات</label>
-            <span> {{ employeeDetails.insurence }} جنية</span>
-          </div>
-
-          <div class="detail-item">
-            <label>إجمالى السلف النقدية</label>
-            <span class="text-danger">
-              {{ employeeDetails.totalCashBorrows }} جنية</span
-            >
-          </div>
-
-          <div class="detail-item">
-            <label>صافى المرتب</label>
-
-            <span
-              [class.text-danger]="employeeDetails.netSalary < 0"
-              [class.text-success]="employeeDetails.netSalary >= 0"
-            >
-              {{ employeeDetails.netSalary | number:'1.0-2' }} جنية
-            </span>
-          </div>
-        </div>
-
-        <!-- تعديل بيانات المرتب -->
-        <div class="section-block" *ngIf="isEditMode">
-          <div class="details-grid">
-            <!-- إجمالى المرتب -->
-            <div class="detail-item">
-              <label>إجمالى المرتب</label>
-
-              <input
-                type="number"
-                step="0.01"
-                class="custom-input"
-                [(ngModel)]="employeeDetails.totalSalary"
-              />
-            </div>
-
-            <!-- سعر الساعة -->
-            <div class="detail-item">
-              <label>سعر الساعة</label>
-
-              <input
-                type="number"
-                class="custom-input"
-                [(ngModel)]="employeeDetails.salaryPerHour"
-              />
-            </div>
-
-            <!-- التأمين -->
-            <div class="detail-item">
-              <label>التأمين</label>
-
-              <input
-                type="number"
-                class="custom-input"
-                [(ngModel)]="employeeDetails.insurence"
-              />
-            </div>
-
-            <!-- الساعات الإضافية -->
-            <div class="detail-item">
-              <label>الساعات الإضافية</label>
-
-              <input
-                type="number"
-                class="custom-input"
-                [(ngModel)]="employeeDetails.hoursOverTime"
-              />
-            </div>
-
-            <!-- الساعات المنسية -->
-            <div class="detail-item">
-              <label>الساعات المنسية</label>
-
-              <input
-                type="number"
-                class="custom-input"
-                [(ngModel)]="employeeDetails.forgetedHours"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Edit -->
-
-  <div
-    class="dialog-actions d-flex justify-content-center my-1"
-    *ngIf="!isEditMode"
-  >
-    <button
-      pButton
-      type="button"
-      class="btn btn-warning p-1 border-rounded"
-      (click)="editEmployee(employeeDetails)"
-    >
-      تعديل البيانات
-    </button>
-  </div>
-
-  <div
-    class="dialog-actions d-flex justify-content-center my-1"
-    *ngIf="isEditMode"
-  >
-    <button
-      pButton
-      type="button"
-      class="btn btn-success p-1 border-rounded"
-      (click)="saveEmployeeEdits()"
-    >
-      حفظ التعديلات
-    </button>
-  </div>
+  </ng-template>
 </p-dialog>
 
 <p-dialog

@@ -12,6 +12,25 @@
   padding: 0.2rem 1rem !important;
 }
 
+
+::ng-deep.data-employee-dialog .p-dialog-header {
+  flex-direction: unset !important;
+  padding: 0.2rem 1rem !important;
+}
+
+::ng-deep.data-employee-dialog .p-dialog-content {
+  padding: 0.5rem 1rem !important;
+  border-radius: 0 0 0.0rem 0.0rem !important;
+}
+
+::ng-deep.data-employee-dialog .p-dialog-footer {
+  flex-direction: unset !important;
+  padding: 0.2rem 0.2rem !important;
+  border-radius: 0 0 0.5rem 0.5rem !important;
+    background: var(--surface-strong) !important;
+        border-top: 0.1rem solid var(--surface-border) !important;
+}
+
 .details-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

@@ -77,6 +77,8 @@ export class Employees {
   actionItems: any[] = [];
   actionForm: any = {};
   actionLoading = false;
+  activeTabIndex: string = '0';
+
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
