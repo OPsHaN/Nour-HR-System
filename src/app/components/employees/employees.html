@@ -1,11 +1,11 @@
 <div
   class="sticky-header d-flex justify-content-between align-items-center gap-2"
 >
-  <div class="d-flex justify-content-start align-items-center">
+  <div class="d-flex justify-content-start align-items-center gap-2">
     <button
       pButton
       type="button"
-      class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+      class="btn btn-sm btn-success me-1 my-1 d-flex align-items-center justify-content-center gap-1"
       [class.btn-success]="!showCreateEmployee"
       [class.btn-danger]="showCreateEmployee"
       icon="pi pi-plus"
@@ -18,30 +18,129 @@
 
       {{ showCreateEmployee ? '' : 'موظف جديد' }}
     </button>
-    <input
+
+    <button
+      pButton
+      type="button"
+      class="btn btn-sm  my-1 d-flex align-items-center justify-content-center gap-1"
+      [class.btn-success]="!showGroupMode"
+      [class.btn-danger]="showGroupMode && !selectedEmployeeIds.length"
+      [class.btn-warning]="showGroupMode && selectedEmployeeIds.length"
+      (click)="showGroupMode && selectedEmployeeIds.length ? openGroupDialog() : toggleGroupMode()"
       *ngIf="!showCreateEmployee"
-      type="text"
-      pInputText
-      placeholder="بحث..."
-      class="custom-input search-input mx-1 h-50"
-      icon="pi pi-search"
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="onSearchTermChange()"
-    />
+    >
+      <i
+        class="pi"
+        [ngClass]="showGroupMode ? (selectedEmployeeIds.length ? 'pi-save' : 'pi-times') : 'pi-users'"
+      ></i>
+      {{ showGroupMode ? (selectedEmployeeIds.length ? 'حفظ المجموعة (' +
+      selectedEmployeeIds.length + ')' : 'إلغاء') : 'إضافة مجموعة' }}
+    </button>
+    <!-- فلتر الفرع -->
+
   </div>
   <div class="d-flex justify-content-end gap-2 align-items-center">
-    <button
+    <!-- <button
       *ngIf="!showCreateEmployee"
       pButton
       type="button"
-      class="btn btn-sm btn-info mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+      class="btn btn-sm btn-info  my-1 d-flex align-items-center justify-content-center"
       (click)="exportToExcel()"
     >
       <i
         class="pi pi-file-excel d-flex align-items-center justify-content-center"
       ></i>
       تصدير Excel
-    </button>
+    </button> -->
+        <div *ngIf="!showCreateEmployee" class="gap-2">
+      <select
+        class="custom-input toolbar-select"
+        [(ngModel)]="selectedBranchFilter"
+        (change)="onFilterChange()"
+      >
+        <option value="">كل الفروع</option>
+        <option *ngFor="let branch of branches" [value]="branch.id">
+          {{ branch.name }}
+        </option>
+      </select>
+
+      <!-- فلتر البنك -->
+      <select
+        class="custom-input toolbar-select mx-2"
+        [(ngModel)]="selectedBankFilter"
+        (change)="onFilterChange()"
+      >
+        <option value="">كل البنوك</option>
+        <option *ngFor="let bank of banks" [value]="bank.id">
+          {{ bank.name }}
+        </option>
+      </select>
+
+      <!-- فلتر الدور الوظيفي -->
+      <select
+        class="custom-input toolbar-select"
+        [(ngModel)]="selectedRoleFilter"
+        (change)="onFilterChange()"
+      >
+        <option value="">كل الأدوار</option>
+        <option value="static">ثابت</option>
+        <option value="changable">متغير</option>
+        <option value="delivery">دليفرى</option>
+      </select>
+
+      <!-- زرار reset الفلاتر -->
+      <button
+        *ngIf="selectedBranchFilter || selectedBankFilter || selectedRoleFilter"
+        pButton
+        type="button"
+        class="btn btn-sm btn-danger mx-2 my-1 rounded-circle"
+        (click)="resetFilters()"
+      >
+        <i
+          class="pi pi-filter-slash d-flex align-items-center justify-content-center"
+        ></i>
+      </button>
+    </div>
+    <span
+      class="p-input-icon-right position-relative ms-1"
+      *ngIf="!showCreateEmployee"
+    >
+      <i
+        class="pi pi-search position-absolute"
+        style="
+          left: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          z-index: 1;
+        "
+        (click)="onSearchTermChange()"
+      ></i>
+
+      <i
+        *ngIf="searchTerm"
+        class="pi pi-times position-absolute"
+        style="
+          right: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          z-index: 1;
+          color: red;
+        "
+        (click)="clearSearch()"
+      ></i>
+
+      <input
+        type="text"
+        pInputText
+        placeholder="بحث..."
+        class="custom-input search-input"
+        style="padding-left: 1rem; padding-right: 2rem; width: 250px"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearchTermChange()"
+      />
+    </span>
   </div>
 </div>
 
@@ -67,6 +166,10 @@
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
+      <th *ngIf="showGroupMode">
+        <input type="checkbox" (change)="toggleSelectAll($event)" />
+      </th>
+
       <th>#</th>
       <th>الاسم</th>
       <th>الوظيفة</th>
@@ -80,7 +183,18 @@
 
   <!-- BODY -->
   <ng-template pTemplate="body" let-emp let-ri="rowIndex">
-    <tr [class.active-row]="activeEmployeeId === emp.id">
+    <tr
+      [class.active-row]="activeEmployeeId === emp.id"
+      [class.table-primary]="isEmployeeSelected(emp.id)"
+    >
+      <td *ngIf="showGroupMode">
+        <input
+          type="checkbox"
+          [checked]="isEmployeeSelected(emp.id)"
+          (change)="toggleEmployeeSelection(emp.id)"
+        />
+      </td>
+
       <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
       <td>{{ emp.name }}</td>
       <td>{{ emp.theNameOfJob }}</td>
@@ -699,52 +813,52 @@
               </div>
             </div>
           </div>
-                      <!-- Edit Payroll (isEditMode only) -->
-            <div class="section-block mt-3" *ngIf="isEditMode">
-              <div class="details-grid">
-                <div class="detail-item">
-                  <label>إجمالى المرتب</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    class="custom-input"
-                    [(ngModel)]="employeeDetails.totalSalary"
-                  />
-                </div>
-                <div class="detail-item">
-                  <label>سعر الساعة</label>
-                  <input
-                    type="number"
-                    class="custom-input"
-                    [(ngModel)]="employeeDetails.salaryPerHour"
-                  />
-                </div>
-                <div class="detail-item">
-                  <label>التأمين</label>
-                  <input
-                    type="number"
-                    class="custom-input"
-                    [(ngModel)]="employeeDetails.insurence"
-                  />
-                </div>
-                <div class="detail-item">
-                  <label>الساعات الإضافية</label>
-                  <input
-                    type="number"
-                    class="custom-input"
-                    [(ngModel)]="employeeDetails.hoursOverTime"
-                  />
-                </div>
-                <div class="detail-item">
-                  <label>الساعات المنسية</label>
-                  <input
-                    type="number"
-                    class="custom-input"
-                    [(ngModel)]="employeeDetails.forgetedHours"
-                  />
-                </div>
+          <!-- Edit Payroll (isEditMode only) -->
+          <div class="section-block mt-3" *ngIf="isEditMode">
+            <div class="details-grid">
+              <div class="detail-item">
+                <label>إجمالى المرتب</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.totalSalary"
+                />
+              </div>
+              <div class="detail-item">
+                <label>سعر الساعة</label>
+                <input
+                  type="number"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.salaryPerHour"
+                />
+              </div>
+              <div class="detail-item">
+                <label>التأمين</label>
+                <input
+                  type="number"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.insurence"
+                />
+              </div>
+              <div class="detail-item">
+                <label>الساعات الإضافية</label>
+                <input
+                  type="number"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.hoursOverTime"
+                />
+              </div>
+              <div class="detail-item">
+                <label>الساعات المنسية</label>
+                <input
+                  type="number"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.forgetedHours"
+                />
               </div>
             </div>
+          </div>
         </p-tabpanel>
 
         <!-- ===== Tab 3: التقييمات ===== -->
@@ -1142,4 +1256,83 @@
       </button>
     </div>
   </div>
+</p-dialog>
+
+<p-dialog
+  header="إضافة مجموعة"
+  [(visible)]="showGroupDialog"
+  [modal]="true"
+  [style]="{ width: '35rem' }"
+  class="data-employee-dialog"
+>
+  <div class="details-grid">
+    <!-- نوع العملية -->
+    <div class="detail-item full-width">
+      <label>نوع العملية</label>
+      <select class="custom-input" [(ngModel)]="groupActionType">
+        <option value="bonus">زيادة</option>
+        <option value="discount">خصم</option>
+      </select>
+    </div>
+
+    <!-- القيمة -->
+    <div class="detail-item full-width">
+      <label>القيمة <span class="text-danger">*</span></label>
+      <input
+        type="number"
+        class="custom-input"
+        [(ngModel)]="groupAmount"
+        placeholder="أدخل القيمة"
+      />
+    </div>
+
+    <!-- السبب -->
+    <div class="detail-item full-width">
+      <label>السبب <span class="text-danger">*</span></label>
+      <input
+        type="text"
+        class="custom-input"
+        [(ngModel)]="groupReason"
+        placeholder="أدخل السبب"
+      />
+    </div>
+
+    <!-- ملاحظات -->
+    <div class="detail-item full-width">
+      <label>ملاحظات</label>
+      <textarea
+        class="custom-input"
+        [(ngModel)]="groupNotes"
+        placeholder="ملاحظات إضافية (اختياري)"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <!-- الموظفين المختارين -->
+    <div class="detail-item full-width">
+      <label>الموظفين المختارين ({{ selectedEmployeeIds.length }})</label>
+      <div class="d-flex flex-wrap gap-1 mt-1">
+        <span *ngFor="let id of selectedEmployeeIds" class="badge">
+          {{ getEmployeeName(id) }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-center gap-2">
+      <button
+        pButton
+        type="button"
+        class="btn"
+        [class.btn-success]="groupActionType === 'bonus'"
+        [class.btn-danger]="groupActionType === 'discount'"
+        [disabled]="!groupAmount || !groupReason"
+        (click)="saveGroup()"
+      >
+        <i class="pi pi-save me-1"></i>
+        {{ groupActionType === 'bonus' ? 'إضافة زيادة' : 'إضافة خصم' }}
+      </button>
+    </div>
+  </ng-template>
 </p-dialog>

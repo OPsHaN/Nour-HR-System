@@ -42,7 +42,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "people",
     bg: "#13c2c2",
     roles: ["Admin", "HR"] as UserRole[],
-    size: { width: 860, height: 600 },
+    size: { width: 1200, height: 600 },
   },
   branches: {
     title: "الفروع",

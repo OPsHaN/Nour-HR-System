@@ -198,7 +198,7 @@ input {
 .p-tab {
   background: var(--surface-strong) !important;
   color: var(--text) !important;
-  border: 0.1rem solid var(--surface-border) !important;
+  border: 0.1rem  solid var(--surface-border) !important;
   border-radius: 0.5rem 0.5rem 0 0 !important;
   padding: 0.5rem 1rem !important;
 }
@@ -218,7 +218,7 @@ input {
 .p-tabpanels {
   background: var(--surface) !important;
   border: 0.1rem solid var(--surface-border) !important;
-  border-radius: 0 0 0.5rem 0.5rem !important;
+  border-radius: 0.5rem 0 0.5rem 0.5rem !important;
   padding: 0.5rem !important;
   color: var(--text) !important;
 }
@@ -492,4 +492,9 @@ input {
 
 .p-menu-item-content {
   border-radius: 15px !important;
+}
+
+.badge{
+  color: var(--text) !important;
+  background: rgba(222, 221, 221, 0.75);
 }

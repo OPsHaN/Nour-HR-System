@@ -1,3 +1,4 @@
+import { Employees } from "./../components/employees/employees";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MessageService } from "primeng/api";
@@ -59,6 +60,42 @@ export class Apiservice {
   getAllEmployees(page: number, pagesize: number) {
     return this.http.get(
       `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}`,
+    );
+  }
+
+  getAllEmployeesByBranch(page: number, pagesize: number, branchId: string) {
+    return this.http.get(
+      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}&branchId=${branchId}`,
+    );
+  }
+
+  gettAllEmployessByBank(page: number, pagesize: number, bankId: string) {
+    return this.http.get(
+      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}&bankId=${bankId}`,
+    );
+  }
+
+  getAllEmployessByRole(page: number, pagesize: number, role: string) {
+    return this.http.get(
+      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}&role=${role}`,
+    );
+  }
+
+  getAllEmployessWithAllFilters(
+    page: number,
+    pagesize: number,
+    branchId: string,
+    bankId: string,
+    role: string,
+  ) {
+    return this.http.get(
+      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}&branchId=${branchId}&bankId=${bankId}&role=${role}`,
+    );
+  }
+
+  getAllEmployessByName(page: number, pagesize: number, name: string) {
+    return this.http.get(
+      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}&name=${name}`,
     );
   }
 
@@ -154,7 +191,7 @@ export class Apiservice {
     return this.http.post(`${this.baseUrl}evaluations`, data);
   }
 
-  getEvaluations(empolyeeId:number) {
+  getEvaluations(empolyeeId: number) {
     return this.http.get(`${this.baseUrl}evaluations/${empolyeeId}`);
   }
 
@@ -210,6 +247,28 @@ export class Apiservice {
 
   getAllBanks() {
     return this.http.get(`${this.baseUrl}banks`);
+  }
+
+  //bulk//
+
+  addBulkBonus(employees: any) {
+    return this.http.post(`${this.baseUrl}payroll/bonus/bulk`, employees);
+  }
+
+  addBulkDiscount(employees: any) {
+    return this.http.post(`${this.baseUrl}payroll/discount/bulk`, employees);
+  }
+
+  addBulkVariedDiscount(employees:any){
+    return this.http.post(`${this.baseUrl}payroll/discount/bulk-varied` , employees)
+  }
+
+  addBulkVariedContractDiscount(employees:any){
+    return this.http.post(`${this.baseUrl}payroll/contract-discount/bulk-varied` , employees)
+  }
+
+  addBulkVariedBonus(employess:any){
+    return this.http.post(`${this.baseUrl}payroll/bonus/bulk-varied`, employess)
   }
 
   showError(msg: string) {

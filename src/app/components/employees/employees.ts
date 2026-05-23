@@ -77,7 +77,17 @@ export class Employees {
   actionItems: any[] = [];
   actionForm: any = {};
   actionLoading = false;
-  activeTabIndex: string = '0';
+  activeTabIndex: string = "0";
+  selectedBranchFilter: string = "";
+  selectedBankFilter: string = "";
+  selectedRoleFilter: string = "";
+  showGroupMode: boolean = false;
+  selectedEmployeeIds: number[] = [];
+  showGroupDialog: boolean = false;
+  groupAmount: number = 0;
+  groupReason: string = "";
+  groupNotes: string = "";
+  groupActionType: "bonus" | "discount" = "bonus";
 
   constructor(
     private api: Apiservice,
@@ -171,6 +181,15 @@ export class Employees {
         this.loading = false;
       },
     });
+  }
+
+  getEmployeeName(id: number): string {
+    return this.employees.find((e: any) => e.id === id)?.name ?? "";
+  }
+
+  toggleSelectAll(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.selectedEmployeeIds = checked ? this.employees.map((e) => e.id) : [];
   }
 
   loadBranches() {
@@ -509,7 +528,8 @@ export class Employees {
 
     forkJoin({
       employee: this.api.getEmployeeById(emp.id),
-      history: this.api.getEmployeeHistory(emp.id),
+      branchHistory: this.api.getEmployeeHistory(emp.id),
+      employeHistory: this.api.getHistoryByEmployeeId(emp.id),
       evaluations: this.api.getEvaluations(emp.id),
       payroll: payrollRequest,
     }).subscribe({
@@ -517,8 +537,8 @@ export class Employees {
         this.employeeDetails = {
           ...res.employee,
           ...res.payroll,
-
-          employeeHistory: res.history,
+          ...res.employeHistory,
+          employeeHistory: res.branchHistory,
           evaluations: res.evaluations,
         };
 
@@ -639,6 +659,23 @@ export class Employees {
       this.loadEmployees();
       return;
     }
+
+    this.api
+      .getAllEmployessByName(this.page, this.pageSize, this.searchTerm)
+      .subscribe({
+        next: (res: any) => {
+          this.employees = res.data ?? res;
+          this.totalRecords = res.totalCount ?? this.employees.length;
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+  }
+
+  clearSearch() {
+    this.searchTerm = "";
+    this.loadEmployees();
   }
 
   exportToExcel() {}
@@ -858,6 +895,144 @@ export class Employees {
           },
         });
       },
+    });
+  }
+
+  onFilterChange() {
+    const hasBranch = !!this.selectedBranchFilter;
+    const hasBank = !!this.selectedBankFilter;
+    const hasRole = !!this.selectedRoleFilter;
+
+    if (hasBranch && hasBank && hasRole) {
+      this.api
+        .getAllEmployessWithAllFilters(
+          this.page,
+          this.pageSize,
+          this.selectedBranchFilter,
+          this.selectedBankFilter,
+          this.selectedRoleFilter,
+        )
+        .subscribe({
+          next: (res: any) => {
+            this.employees = res.data ?? res;
+            this.totalRecords = res.totalCount ?? this.employees.length;
+          },
+        });
+      return;
+    }
+
+    // لو فرع فقط
+    if (hasBranch && !hasBank && !hasRole) {
+      this.api
+        .getAllEmployeesByBranch(
+          this.page,
+          this.pageSize,
+          this.selectedBranchFilter,
+        )
+        .subscribe({
+          next: (res: any) => {
+            this.employees = res.data ?? res;
+            this.totalRecords = res.totalCount ?? this.employees.length;
+          },
+        });
+      return;
+    }
+
+    // لو بنك فقط
+    if (hasBank && !hasBranch && !hasRole) {
+      this.api
+        .gettAllEmployessByBank(
+          this.page,
+          this.pageSize,
+          this.selectedBankFilter,
+        )
+        .subscribe({
+          next: (res: any) => {
+            this.employees = res.data ?? res;
+            this.totalRecords = res.totalCount ?? this.employees.length;
+          },
+        });
+      return;
+    }
+
+    // لو دور فقط
+    if (hasRole && !hasBranch && !hasBank) {
+      this.api
+        .getAllEmployessByRole(
+          this.page,
+          this.pageSize,
+          this.selectedRoleFilter,
+        )
+        .subscribe({
+          next: (res: any) => {
+            this.employees = res.data ?? res;
+            this.totalRecords = res.totalCount ?? this.employees.length;
+          },
+        });
+      return;
+    }
+
+    this.loadEmployees();
+  }
+
+  resetFilters() {
+    this.selectedBranchFilter = "";
+    this.selectedBankFilter = "";
+    this.selectedRoleFilter = "";
+    this.loadEmployees();
+  }
+
+  toggleGroupMode() {
+    this.showGroupMode = !this.showGroupMode;
+    this.selectedEmployeeIds = [];
+    if (!this.showGroupMode) {
+      this.showGroupDialog = false;
+    }
+  }
+
+  toggleEmployeeSelection(empId: number) {
+    const index = this.selectedEmployeeIds.indexOf(empId);
+    if (index === -1) {
+      this.selectedEmployeeIds.push(empId);
+    } else {
+      this.selectedEmployeeIds.splice(index, 1);
+    }
+  }
+
+  isEmployeeSelected(empId: number): boolean {
+    return this.selectedEmployeeIds.includes(empId);
+  }
+
+  openGroupDialog() {
+    if (!this.selectedEmployeeIds.length) return;
+    this.groupAmount = 0;
+    this.groupReason = "";
+    this.groupNotes = "";
+    this.groupActionType = "bonus";
+    this.showGroupDialog = true;
+  }
+
+  saveGroup() {
+    const payload = {
+      employeeIds: this.selectedEmployeeIds,
+      amount: this.groupAmount,
+      reason: this.groupReason,
+      notes: this.groupNotes || null,
+    };
+
+    const call$ =
+      this.groupActionType === "bonus"
+        ? this.api.addBulkBonus(payload)
+        : this.api.addBulkDiscount(payload);
+
+    call$.subscribe({
+      next: () => {
+        this.showGroupDialog = false;
+        this.showGroupMode = false;
+        this.selectedEmployeeIds = [];
+        // success toast
+      },
+      error: (err) => console.error(err),
     });
   }
 }
