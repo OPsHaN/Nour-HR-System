@@ -1,19 +1,93 @@
-.payroll-refresh-btn {
-
-  height: 44px;
-  min-width: 100px;
-  border: none !important;
-  border-radius: 20px !important;
-  background: linear-gradient(135deg,
-      rgba(22, 119, 255, 0.95),
-      rgba(88, 150, 255, 0.9)) !important;
-
-  color: #fff !important;
-
-  font-size: 20px !important;
-  padding: 0 18px;
-  transition: all 0.25s ease;
-  box-shadow:
-    0 8px 20px rgba(22, 119, 255, 0.25);
-
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.reports-page {
+  padding: 1rem;
+  direction: rtl;
 }
+
+/* ── Filters ─────────────────────────────────────────────────────────────── */
+.filters-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 250px;
+}
+.filter-item .p-inputtext {
+  padding: 0.5rem;
+}
+
+.filter-item label {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  font-weight: 500;
+}
+
+/* ── Stats Cards ─────────────────────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stat-card {
+  background: var(--surface-100);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.stat-value.success { color: var(--green-600); }
+.stat-value.warning { color: var(--orange-500); }
+.stat-value.danger  { color: var(--red-600); }
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+/* ── Payroll Sections ────────────────────────────────────────────────────── */
+.payroll-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.6rem;
+  padding-right: 0.5rem;
+  border-right: 3px solid var(--primary-color);
+}
+
+/* ── Misc ────────────────────────────────────────────────────────────────── */
+.text-center { text-align: center; }
+
+.p-4 { padding: 1rem; }
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.w-full { width: 100%; }

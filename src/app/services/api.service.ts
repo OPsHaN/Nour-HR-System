@@ -259,31 +259,72 @@ export class Apiservice {
     return this.http.post(`${this.baseUrl}payroll/discount/bulk`, employees);
   }
 
-  addBulkVariedDiscount(employees:any){
-    return this.http.post(`${this.baseUrl}payroll/discount/bulk-varied` , employees)
+  addBulkVariedDiscount(employees: any) {
+    return this.http.post(
+      `${this.baseUrl}payroll/discount/bulk-varied`,
+      employees,
+    );
   }
 
-  addBulkVariedContractDiscount(employees:any){
-    return this.http.post(`${this.baseUrl}payroll/contract-discount/bulk-varied` , employees)
+  addBulkVariedContractDiscount(employees: any) {
+    return this.http.post(
+      `${this.baseUrl}payroll/contract-discount/bulk-varied`,
+      employees,
+    );
   }
 
-  addBulkVariedBonus(employess:any){
-    return this.http.post(`${this.baseUrl}payroll/bonus/bulk-varied`, employess)
+  addBulkVariedBonus(employess: any) {
+    return this.http.post(
+      `${this.baseUrl}payroll/bonus/bulk-varied`,
+      employess,
+    );
   }
-
 
   //reports//
 
-  getAllShifts(fromDate:string){
-    return this.http.get(`${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}`);
+  getAllShifts(fromDate: string) {
+    return this.http.get(
+      `${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}`,
+    );
   }
 
-  getAllReportsForEmpolyee(employeeId : number){
+  getAllOpenAndLateShifts(type: string) {
+    return this.http.get(`${this.baseUrl}attendance/reports?type=${type}`);
+  }
+
+  getAbsentEmployees(fromDate: string, toDate: string) {
+    return this.http.get(`${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}`);
+  }
+
+  startShift(){
+    return this.http.post(
+      `${this.baseUrl}attendance/start`, {}
+    );
+  }
+
+  endShift(){
+    return this.http.post(
+      `${this.baseUrl}attendance/end`, {}
+    );
+  }
+
+  getMyShifts(fromDate: string, toDate: string) {
+    return this.http.get(`${this.baseUrl}attendance/my-shifts?fromDate=${fromDate}&toDate=${toDate}`);
+
+  }
+
+  getAllReportsForEmpolyee(employeeId: number) {
     return this.http.get(`${this.baseUrl}payroll/${employeeId}/details`);
   }
 
-  getAllReportsForEmpolyeeInMonthAndYear(employeeId:number , month:number , year:number){
-    return this.http.get(`${this.baseUrl}payroll/${employeeId}/details?month=${month}&year=${year}`)
+  getAllReportsForEmpolyeeInMonthAndYear(
+    employeeId: number,
+    month: number,
+    year: number,
+  ) {
+    return this.http.get(
+      `${this.baseUrl}payroll/${employeeId}/details?month=${month}&year=${year}`,
+    );
   }
 
   showError(msg: string) {

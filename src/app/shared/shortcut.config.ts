@@ -70,7 +70,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "bar_chart",
     bg: "#52c41a",
     roles: ["Admin", "HR"] as UserRole[],
-    size: { width: 620, height: 420 },
+    size: { width: 1000, height: 500 },
   },
   orders: {
     title: "الطلبات",

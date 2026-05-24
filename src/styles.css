@@ -241,6 +241,16 @@ input {
   max-width: 52ch;
 }
 
+.p-datepicker-input {
+  padding: 0.2rem;
+  width: 100%;
+}
+
+.p-select-filter {
+  padding: 0.2rem;
+  width: 100%;
+}
+
 /* 🔥 form container بنفس list */
 .form {
   display: grid;

@@ -82,3 +82,37 @@
     padding: 5px;
   }
 }
+
+.shift-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* زرار بدء الشيفت لما يكون disabled */
+.shift-actions .p-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.shift-fieldset {
+  border: 3px solid var(--text);
+  border-radius: 30px;
+  padding: 0.4rem 0.75rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  legend {
+    font-size: 0.75rem;
+    color: var(--text);
+    padding: 0 0.4rem;
+    float: none;
+    width: auto;
+  }
+}
+
+.shift-buttons {
+  display: flex;
+  gap: 0.5rem;
+}

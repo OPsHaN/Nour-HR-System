@@ -1,80 +1,423 @@
-<!-- Toolbar -->
-<div class="d-flex align-items-center gap-2 my-3">
-  <div class="d-flex align-items-center gap-1">
-    <label class="toolbar-label"> </label>
-    <input type="date" class="custom-input" [(ngModel)]="fromDate" />
-  </div>
-
-  <button
-    pButton
-    type="button"
-    class="btn btn-primary payroll-refresh-btn"
-    (click)="loadAllShifts()"
+<div class="reports-page">
+  <p-tabs
+    [(value)]="activeTabIndex"
+    (valueChange)="onTabChange(+($event ?? 0))"
   >
-     عرض
-  </button>
+    <p-tablist>
+      <p-tab [value]="0">الشيفتات</p-tab>
+      <p-tab [value]="1">المتأخرون / المفتوحة</p-tab>
+      <p-tab [value]="2">الغيابات</p-tab>
+      <p-tab [value]="3">كشف الرواتب</p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      <!-- ===== Tab 1: الشيفتات ===== -->
+      <p-tabpanel [value]="0">
+        <div class="filters-bar">
+          <div class="filter-item">
+            <label>من تاريخ</label>
+            <p-datepicker
+              [(ngModel)]="shiftsFromDate"
+              dateFormat="yy-mm-dd"
+              placeholder="اختر تاريخ"
+              [appendTo]="'body'"
+              [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+            />
+          </div>
+          <p-button
+            label="تطبيق"
+            [pt]="{ root: { style: 'padding: 0.3rem 0.75rem' } }"
+            (onClick)="loadAllShifts()"
+          />
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value">{{ shiftsTotalCount }}</span>
+            <span class="stat-label">إجمالي الشيفتات</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value success"> {{ presentCount }} </span>
+            <span class="stat-label">حاضر</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value warning"> {{ openCount }} </span>
+            <span class="stat-label">مفتوحة</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value danger"> {{ lateCount }} </span>
+            <span class="stat-label">متأخرة</span>
+          </div>
+        </div>
+
+        <p-table
+          [value]="allShifts"
+          [loading]="loadingShifts"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '55rem' }"
+          [paginatorDropdownAppendTo]="'body'"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>الموظف</th>
+              <th>الفرع</th>
+              <th>اليوم</th>
+              <th>دخول مجدول</th>
+              <th>دخول فعلي</th>
+              <th>خروج مجدول</th>
+              <th>خروج فعلي</th>
+              <th>الحالة</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-shift>
+            <tr>
+              <td>{{ shift.employeeName }}</td>
+              <td>{{ shift.branchName }}</td>
+              <td>{{ formatDateDisplay(shift.day) }}</td>
+              <td>{{ formatTime(shift.scheduledCheckIn) }}</td>
+              <td>{{ formatTime(shift.actualCheckIn) }}</td>
+              <td>{{ formatTime(shift.scheduledCheckOut) }}</td>
+              <td>{{ formatTime(shift.actualCheckOut) }}</td>
+              <td>
+                <p-tag
+                  [value]="getStatusLabel(getShiftStatus(shift))"
+                  [severity]="getStatusSeverity(getShiftStatus(shift))"
+                />
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 2: المتأخرون / المفتوحة / الأوفرتايم ===== -->
+      <p-tabpanel [value]="1">
+        <div class="filters-bar">
+          <div class="filter-item">
+            <label>النوع</label>
+            <p-select
+              [(ngModel)]="selectedShiftType"
+              [options]="shiftTypeOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="اختر النوع"
+            />
+          </div>
+          <p-button
+            label="تطبيق"
+            [pt]="{ root: { style: 'padding: 0.3rem 0.75rem' } }"
+            (onClick)="loadOpenLateShifts()"
+          />
+        </div>
+
+        <p-table
+          [value]="openLateShifts"
+          [loading]="loadingOpenLate"
+          [paginator]="true"
+          [rows]="10"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '50rem' }"
+            [paginatorDropdownAppendTo]="'body'"
+
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>الموظف</th>
+              <th>الفرع</th>
+              <th>اليوم</th>
+              <th>دخول مجدول</th>
+              <th>دخول فعلي</th>
+              <th>خروج مجدول</th>
+              <th>خروج فعلي</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-shift>
+            <tr>
+              <td>{{ shift.employeeName }}</td>
+              <td>{{ shift.branchName }}</td>
+              <td>{{ formatDateDisplay(shift.day) }}</td>
+              <td>{{ formatTime(shift.scheduledCheckIn) }}</td>
+              <td>{{ formatTime(shift.actualCheckIn) }}</td>
+              <td>{{ formatTime(shift.scheduledCheckOut) }}</td>
+              <td>{{ formatTime(shift.actualCheckOut) }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 3: الغيابات ===== -->
+      <p-tabpanel [value]="2">
+        <div class="filters-bar">
+          <div class="filter-item">
+            <label>من تاريخ</label>
+            <p-datepicker
+              [(ngModel)]="absentFromDate"
+              dateFormat="yy-mm-dd"
+              placeholder="اختر تاريخ"
+              [appendTo]="'body'"
+              [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+            />
+          </div>
+          <div class="filter-item">
+            <label>إلى تاريخ</label>
+            <p-datepicker
+              [(ngModel)]="absentToDate"
+              dateFormat="yy-mm-dd"
+              placeholder="اختر تاريخ"
+              [appendTo]="'body'"
+              [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+            />
+          </div>
+          <p-button
+            label="تطبيق"
+            [pt]="{ root: { style: 'padding: 0.3rem 0.75rem' } }"
+            (onClick)="loadAbsentEmployees()"
+          />
+        </div>
+
+        <p-table
+          [value]="absentEmployees"
+          [loading]="loadingAbsent"
+          [paginator]="true"
+          [rows]="10"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '40rem' }"
+            [paginatorDropdownAppendTo]="'body'"
+
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>الموظف</th>
+              <th>الفرع</th>
+              <th>اليوم</th>
+              <th>دخول مجدول</th>
+              <th>خروج مجدول</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-emp>
+            <tr>
+              <td>{{ emp.employeeName }}</td>
+              <td>{{ emp.branchName }}</td>
+              <td>{{ formatDateDisplay(emp.day) }}</td>
+              <td>{{ formatTime(emp.scheduledCheckIn) }}</td>
+              <td>{{ formatTime(emp.scheduledCheckOut) }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 4: كشف الرواتب ===== -->
+      <p-tabpanel [value]="3">
+        <div class="filters-bar">
+          <div class="filter-item">
+            <label>الموظف</label>
+            <p-select
+              [(ngModel)]="selectedEmployeeId"
+              [options]="employees"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="اختر موظف"
+              [filter]="true"
+              filterPlaceholder="بحث..."
+            />
+          </div>
+          <div class="filter-item">
+            <label>الشهر</label>
+            <p-datepicker
+              [(ngModel)]="payrollMonth"
+              view="month"
+              dateFormat="mm/yy"
+              placeholder="اختر الشهر"
+              [appendTo]="'body'"
+              [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+            />
+          </div>
+          <p-button
+            label="تطبيق"
+            [pt]="{ root: { style: 'padding: 0.3rem 0.75rem' } }"
+            (onClick)="loadPayroll()"
+          />
+        </div>
+
+        <ng-container *ngIf="payrollDetails && !loadingPayroll">
+          <!-- Summary Row -->
+          <div class="stats-grid" style="margin-bottom: 1.5rem">
+            <div class="stat-card">
+              <span class="stat-value danger"
+                >{{ totalDiscounts | number }}</span
+              >
+              <span class="stat-label">إجمالي الخصومات (ج.م)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value success"
+                >{{ totalBonuses | number }}</span
+              >
+              <span class="stat-label">إجمالي البونص (ج.م)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value warning"
+                >{{ totalBorrows | number }}</span
+              >
+              <span class="stat-label">إجمالي السلف (ج.م)</span>
+            </div>
+          </div>
+
+          <!-- Discounts Table -->
+          <div class="payroll-section" *ngIf="payrollDetails.discounts?.length">
+            <h4 class="section-title">الخصومات</h4>
+            <p-table
+              [value]="payrollDetails.discounts"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>السبب</th>
+                  <th>ملاحظات</th>
+                  <th>التاريخ</th>
+                  <th style="text-align: center">المبلغ (ج.م)</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-d>
+                <tr>
+                  <td>{{ d.reasonOfDiscount }}</td>
+                  <td>{{ d.notes ?? '—' }}</td>
+                  <td>{{ formatDateDisplay(d.date) }}</td>
+                  <td style="color: var(--red-600); font-weight: 500">
+                    — {{ d.amount | number }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <!-- Contract Discounts Table -->
+          <div
+            class="payroll-section"
+            *ngIf="payrollDetails.contractDiscounts?.length"
+          >
+            <h4 class="section-title">خصومات العقد</h4>
+            <p-table
+              [value]="payrollDetails.contractDiscounts"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>السبب</th>
+                  <th>ملاحظات</th>
+                  <th>التاريخ</th>
+                  <th style="text-align: center">المبلغ (ج.م)</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-d>
+                <tr>
+                  <td>{{ d.reasonOfDiscount }}</td>
+                  <td>{{ d.notes ?? '—' }}</td>
+                  <td>{{ formatDateDisplay(d.date) }}</td>
+                  <td style="color: var(--red-600); font-weight: 500">
+                    — {{ d.amount | number }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <!-- Bonuses Table -->
+          <div class="payroll-section" *ngIf="payrollDetails.bonuses?.length">
+            <h4 class="section-title">البونص</h4>
+            <p-table
+              [value]="payrollDetails.bonuses"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>السبب</th>
+                   <th>ملاحظات</th>
+                  <th>التاريخ</th>
+                  <th style="text-align: center">المبلغ (ج.م)</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-b>
+                <tr>
+                  <td>{{ b.reason ?? '—' }}</td>
+                  <td>{{ b.notes ?? '—' }}</td>
+                  <td>{{ formatDateDisplay(b.dateOfBonus) }}</td>
+                  <td style="color: var(--green-600); font-weight: 500">
+                    + {{ b.amount | number }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <!-- Cash Borrows Table -->
+          <div
+            class="payroll-section"
+            *ngIf="payrollDetails.cashBorrows?.length"
+          >
+            <h4 class="section-title">السلف</h4>
+            <p-table
+              [value]="payrollDetails.cashBorrows"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                   <th>السبب</th>
+                  <th>التاريخ</th>
+                  <th>ملاحظات</th>
+                  <th style="text-align: center">المبلغ (ج.م)</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-b>
+                <tr>
+                  <td>{{ b.reason ?? '—' }}</td>
+                  <td>{{ formatDateDisplay(b.date) }}</td>
+                  <td>{{ b.notes ?? '—' }}</td>
+                  <td style="color: var(--orange-600); font-weight: 500">
+                    {{ b.amount | number }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <!-- Empty payroll state -->
+          <p-message
+            *ngIf="!payrollDetails.discounts?.length && !payrollDetails.bonuses?.length && !payrollDetails.cashBorrows?.length"
+            severity="info"
+            text="لا توجد حركات مالية لهذا الشهر"
+            styleClass="w-full"
+          />
+        </ng-container>
+
+        <p-message
+          *ngIf="!payrollDetails && !loadingPayroll"
+          severity="info"
+          text="اختر موظف وشهر ثم اضغط تطبيق"
+          styleClass="w-full"
+        />
+
+        <div class="spinner-wrap" *ngIf="loadingPayroll">
+          <p-progressSpinner styleClass="w-4rem h-4rem" />
+        </div>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
 </div>
-
-<!-- Table -->
-<p-table
-  [value]="Shifts"
-  [paginator]="true"
-  [rows]="pageSize"
-  [totalRecords]="totalRecords"
-  [loading]="loading"
-  [rowsPerPageOptions]="[5, 10, 20]"
-  [responsiveLayout]="'scroll'"
-  [paginatorDropdownAppendTo]="'body'"
-  dataKey="employeeId"
-  dir="rtl"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th>#</th>
-      <th>الموظف</th>
-      <th>الفرع</th>
-      <th>اليوم</th>
-      <th>وقت الدخول المجدول</th>
-      <th>وقت الدخول الفعلي</th>
-      <th>وقت الخروج المجدول</th>
-      <th>وقت الخروج الفعلي</th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-shift let-ri="rowIndex">
-    <tr>
-      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
-      <td>{{ shift.employeeName }}</td>
-      <td>{{ shift.branchName }}</td>
-      <td>{{ shift.day | date:'yyyy-MM-dd' }}</td>
-
-      <td>{{ formatTime(shift.scheduledCheckIn) }}</td>
-
-      <td>
-        <span
-          [class.text-success]="shift.actualCheckIn <= shift.scheduledCheckIn"
-          [class.text-danger]="shift.actualCheckIn > shift.scheduledCheckIn"
-        >
-          {{ formatTime(shift.actualCheckIn) }}
-        </span>
-      </td>
-
-      <td>{{ formatTime(shift.scheduledCheckOut) }}</td>
-
-      <td>
-        <span
-          [class.text-danger]="shift.actualCheckOut < shift.scheduledCheckOut"
-          [class.text-success]="shift.actualCheckOut >= shift.scheduledCheckOut"
-        >
-          {{ formatTime(shift.actualCheckOut) }}
-        </span>
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="8" class="text-center py-4">لاتوجد أى بيانات</td>
-    </tr>
-  </ng-template>
-</p-table>

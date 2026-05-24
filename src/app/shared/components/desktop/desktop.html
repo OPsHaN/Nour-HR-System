@@ -1,7 +1,39 @@
 <div class="desktop" [class.dark]="isDark">
   <div class="desktop__surface">
     <div class="d-flex align-items-center justify-content-between gap-2">
-      <h3 class="desktop__greeting m-0">أهلا و سهلاً بك يا {{ userName }}</h3>
+      <div class="d-flex flex-column align-items-start gap-1">
+        <!-- <h3 class="desktop__greeting m-0">أهلا و سهلاً بك يا {{ userName }}</h3> -->
+
+        <fieldset class="shift-fieldset d-flex align-items-center justify-content-center">
+          <legend>
+            <h3 class="desktop__greeting m-0">
+              أهلا و سهلاً بك يا {{ userName }}
+            </h3>
+          </legend>
+
+          <div class="shift-buttons" >
+            <p-button
+              [pt]="{ root: { style: 'padding: 0.3rem 0.75rem ; border-radius : 30px'} }"
+              label="بدء الشيفت"
+              icon="pi pi-play"
+              severity="success"
+              [disabled]="shiftStarted"
+              [loading]="loadingStart"
+              (onClick)="onStartShift()"
+            />
+            <p-button
+              [pt]="{ root: { style: 'padding: 0.3rem 0.75rem ; border-radius : 30px' } }"
+              label="إنهاء الشيفت"
+              icon="pi pi-stop"
+              severity="danger"
+              [disabled]="!shiftStarted"
+              [loading]="loadingEnd"
+              (onClick)="onEndShift()"
+            />
+          </div>
+        </fieldset>
+      </div>
+
       <div class="Logo">
         <img src="/photos/nour.png" alt="Logo" />
       </div>

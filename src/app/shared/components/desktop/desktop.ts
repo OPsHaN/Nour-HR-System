@@ -7,16 +7,15 @@ import {
   OnDestroy,
   inject,
 } from "@angular/core";
-import {
-  ShortcutsComponent,
- 
-} from "../shortcuts/shortcuts";
+import { ShortcutsComponent } from "../shortcuts/shortcuts";
 import { WindowComponent } from "../window/window";
 import { TaskbarComponent } from "../taskbar/taskbar";
 import { DesktopWindow } from "../../desktop-window.model";
 import { WINDOW_REGISTRY } from "../../window-registry";
 import { Shortcut, SHORTCUTS_CONFIG } from "../../shortcut.config";
-
+import { ButtonModule } from "primeng/button";
+import { Apiservice } from "src/app/services/api.service";
+import { ConfirmationService } from "primeng/api";
 
 @Component({
   selector: "app-desktop",
@@ -26,13 +25,23 @@ import { Shortcut, SHORTCUTS_CONFIG } from "../../shortcut.config";
     ShortcutsComponent,
     WindowComponent,
     TaskbarComponent,
+    ButtonModule,
   ],
   templateUrl: "./desktop.html",
   styleUrl: "./desktop.css",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Desktop implements OnDestroy {
-  userName: string = '';
+  userName: string = "";
+  // Shift state
+  shiftStarted = false;
+  loadingStart = false;
+  loadingEnd = false;
+
+  get isEmployee(): boolean {
+    const role = localStorage.getItem("role");
+    return role === "Employee";
+  }
 
   protected windows: DesktopWindow[] = [];
   protected isDark = false;
@@ -46,11 +55,15 @@ export class Desktop implements OnDestroy {
       }
     | undefined;
   private nextId = 1;
-  
+
+  constructor(
+    private api: Apiservice,
+    private confirmationService: ConfirmationService,
+  ) {}
 
   ngOnInit() {
-  this.userName = localStorage.getItem('name') || 'مستخدم';
-}
+    this.userName = localStorage.getItem("name") || "مستخدم";
+  }
 
   ngOnDestroy(): void {
     // Cleanup if needed
@@ -217,8 +230,29 @@ export class Desktop implements OnDestroy {
     return window.id;
   }
 
+  private defaultSize(action: keyof typeof SHORTCUTS_CONFIG) {
+    return SHORTCUTS_CONFIG[action]?.size ?? { width: 520, height: 360 };
+  }
 
-private defaultSize(action: keyof typeof SHORTCUTS_CONFIG) {
-  return SHORTCUTS_CONFIG[action]?.size ?? { width: 520, height: 360 };
-}
+  onStartShift(): void {
+    this.loadingStart = true;
+    this.api.startShift().subscribe({
+      next: () => {
+        this.shiftStarted = true;
+        this.loadingStart = false;
+      },
+      error: () => (this.loadingStart = false),
+    });
+  }
+
+  onEndShift(): void {
+    this.loadingEnd = true;
+    this.api.endShift().subscribe({
+      next: () => {
+        this.shiftStarted = false;
+        this.loadingEnd = false;
+      },
+      error: () => (this.loadingEnd = false),
+    });
+  }
 }
