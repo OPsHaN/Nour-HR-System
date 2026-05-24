@@ -434,7 +434,7 @@ export class Employees {
     this.payrollViewType = "current";
     this.isCurrentMonth = true;
     this.employeeName = emp.name;
-
+     this.activeTabIndex = "0";
     // keep existing details until new data arrives
     // show dialog immediately so it doesn't 'disappear' on errors
     this.showEmployeeDetailsDialog = true;

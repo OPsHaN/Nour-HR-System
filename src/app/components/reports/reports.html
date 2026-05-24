@@ -1,13 +1,80 @@
-<div class="panel">
-  <h3>Download</h3>
-  <p>Transfers stay visible here while files are queued, active, or completed.</p>
-  <div class="download-card">
-    <div>
-      <strong>metro-ui-demo.zip</strong>
-      <span>Completed</span>
-    </div>
-    <div class="download-bar">
-      <span></span>
-    </div>
+<!-- Toolbar -->
+<div class="d-flex align-items-center gap-2 my-3">
+  <div class="d-flex align-items-center gap-1">
+    <label class="toolbar-label"> </label>
+    <input type="date" class="custom-input" [(ngModel)]="fromDate" />
   </div>
+
+  <button
+    pButton
+    type="button"
+    class="btn btn-primary payroll-refresh-btn"
+    (click)="loadAllShifts()"
+  >
+     عرض
+  </button>
 </div>
+
+<!-- Table -->
+<p-table
+  [value]="Shifts"
+  [paginator]="true"
+  [rows]="pageSize"
+  [totalRecords]="totalRecords"
+  [loading]="loading"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [responsiveLayout]="'scroll'"
+  [paginatorDropdownAppendTo]="'body'"
+  dataKey="employeeId"
+  dir="rtl"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>الموظف</th>
+      <th>الفرع</th>
+      <th>اليوم</th>
+      <th>وقت الدخول المجدول</th>
+      <th>وقت الدخول الفعلي</th>
+      <th>وقت الخروج المجدول</th>
+      <th>وقت الخروج الفعلي</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-shift let-ri="rowIndex">
+    <tr>
+      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
+      <td>{{ shift.employeeName }}</td>
+      <td>{{ shift.branchName }}</td>
+      <td>{{ shift.day | date:'yyyy-MM-dd' }}</td>
+
+      <td>{{ formatTime(shift.scheduledCheckIn) }}</td>
+
+      <td>
+        <span
+          [class.text-success]="shift.actualCheckIn <= shift.scheduledCheckIn"
+          [class.text-danger]="shift.actualCheckIn > shift.scheduledCheckIn"
+        >
+          {{ formatTime(shift.actualCheckIn) }}
+        </span>
+      </td>
+
+      <td>{{ formatTime(shift.scheduledCheckOut) }}</td>
+
+      <td>
+        <span
+          [class.text-danger]="shift.actualCheckOut < shift.scheduledCheckOut"
+          [class.text-success]="shift.actualCheckOut >= shift.scheduledCheckOut"
+        >
+          {{ formatTime(shift.actualCheckOut) }}
+        </span>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="8" class="text-center py-4">لاتوجد أى بيانات</td>
+    </tr>
+  </ng-template>
+</p-table>
