@@ -49,6 +49,7 @@ export class Employees {
   isEditMode = false;
   branches: any[] = [];
   banks: any[] = [];
+  Criteria: any[] = [];
   showAttendanceDialog = false;
   employeeAttendance: any[] = [];
   employeeName: string = "";
@@ -88,6 +89,7 @@ export class Employees {
   groupReason: string = "";
   groupNotes: string = "";
   groupActionType: "bonus" | "discount" = "bonus";
+  evaluationResults: { evaluationCriteriaId: number; rating: string }[] = [];
 
   constructor(
     private api: Apiservice,
@@ -99,6 +101,7 @@ export class Employees {
     this.loadEmployees();
     this.loadBranches();
     this.loadBanks();
+    this.loadCriteria();
   }
 
   openMenu(event: Event, emp: any) {
@@ -176,8 +179,7 @@ export class Employees {
         this.employees = res.data;
         this.totalRecords = res.totalCount;
         this.loading = false;
-         this.cdr.detectChanges();
-
+        this.cdr.detectChanges();
       },
       error: () => {
         this.loading = false;
@@ -211,6 +213,21 @@ export class Employees {
     this.api.getAllBanks().subscribe({
       next: (res: any) => {
         this.banks = res;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loading = false;
+      },
+    });
+  }
+
+  loadCriteria() {
+    this.loading = true;
+    this.api.getAllCriteria(this.page, 20).subscribe({
+      next: (res: any) => {
+        this.Criteria = res.data;
+        console.log(this.Criteria);
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -432,88 +449,6 @@ export class Employees {
     this.loadEmployeeDetailsWithPayroll();
   }
 
-  // loadEmployeeDetailsWithPayroll() {
-  //   const emp = this.selectedEmployeeForPayroll;
-  //   if (!emp) {
-  //     return;
-  //   }
-
-  //   this.isEditMode = false;
-  //   this.showPayrollFilterDialog = false;
-  //   this.api.getHistoryByEmployeeId(emp.id).subscribe({
-  //     next: (historyRes) => {
-  //       this.api.getEmployeeById(emp.id).subscribe({
-  //         next: (employeeRes) => {
-  //           // Current Month
-  //           if (this.isCurrentMonth) {
-  //             if (this.payrollRequestSub) {
-  //               this.payrollRequestSub.unsubscribe();
-  //               this.payrollRequestSub = null;
-  //             }
-  //             this.payrollRequestSub = this.api
-  //               .getMonthyDataForuser(emp.id)
-  //               .subscribe({
-  //                 next: (payrollRes) => {
-  //                   this.employeeDetails = {
-  //                     ...historyRes,
-  //                     ...employeeRes,
-  //                     ...payrollRes,
-  //                   };
-  //                   this.showPayrollDetails = true;
-  //                   this.showEmployeeDetailsDialog = true;
-  //                   this.cdr.detectChanges();
-  //                   this.payrollRequestSub = null;
-  //                   // this.api.showSuccess("تم تحميل بيانات الموظف بنجاح");
-  //                 },
-  //                 error: () => {
-  //                   this.api.showError("لا يوجد بيانات لهذا الشهر");
-  //                   this.payrollRequestSub = null;
-  //                 },
-  //               });
-  //           }
-  //           // Selected Month / Year
-  //           else {
-  //             if (this.payrollRequestSub) {
-  //               this.payrollRequestSub.unsubscribe();
-  //               this.payrollRequestSub = null;
-  //             }
-  //             this.payrollRequestSub = this.api
-  //               .getmonthlyDataForuserByMonth(
-  //                 emp.id,
-  //                 this.selectedMonth,
-  //                 this.selectedYear,
-  //               )
-  //               .subscribe({
-  //                 next: (payrollRes) => {
-  //                   this.employeeDetails = {
-  //                     ...historyRes,
-  //                     ...employeeRes,
-  //                     ...payrollRes,
-  //                   };
-  //                   this.showPayrollDetails = true;
-  //                   this.showEmployeeDetailsDialog = true;
-  //                   this.cdr.detectChanges();
-  //                   this.payrollRequestSub = null;
-  //                   this.api.showSuccess("تم تحميل بيانات المرتب بنجاح");
-  //                 },
-  //                 error: () => {
-  //                   this.api.showError("لا يوجد بيانات لهذا الشهر");
-  //                   this.payrollRequestSub = null;
-  //                 },
-  //               });
-  //           }
-  //         },
-  //         error: () => {
-  //           this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
-  //         },
-  //       });
-  //     },
-  //     error: () => {
-  //       this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
-  //     },
-  //   });
-  // }
-
   loadEmployeeDetailsWithPayroll() {
     const emp = this.selectedEmployeeForPayroll;
 
@@ -576,7 +511,7 @@ export class Employees {
     });
   }
 
-    createAttendance(item: any) {
+  createAttendance(item: any) {
     this.api
       .addScheduleByEmployeeId(this.selectedEmployeeId, {
         dayOfWeek: item.dayOfWeek,
@@ -625,8 +560,6 @@ export class Employees {
     });
   }
 
-
-
   editAttendance(item: any) {
     item.originalData = { ...item };
     item.isEditing = true;
@@ -644,7 +577,7 @@ export class Employees {
         next: () => {
           this.api.showSuccess("تم تعديل الميعاد بنجاح");
           this.loadEmployees();
-        this.cdr.detectChanges();
+          this.cdr.detectChanges();
         },
         error: () => {
           this.api.showError("حدث خطأ أثناء تعديل الميعاد");
@@ -742,55 +675,57 @@ export class Employees {
   }
 
   addEvaluationRow() {
-    this.actionForm.results.push({
-      evaluationCriteriaId: null,
-      rating: "",
-    });
+    this.evaluationResults.push({ evaluationCriteriaId: 0, rating: "" });
   }
 
   removeEvaluationRow(index: number) {
-    this.actionForm.results.splice(index, 1);
+    this.evaluationResults.splice(index, 1);
   }
 
   saveAction() {
-    // Evaluation
-
+    // ===== Evaluation =====
     if (this.currentActionType === "evaluation") {
-      if (
-        this.actionForm.quarter == null ||
-        this.actionForm.quarter === "" ||
-        this.actionForm.year == null ||
-        this.actionForm.year === "" ||
-        !this.actionForm.results?.length
-      ) {
-        this.api.showError("يجب إدخال بيانات التقييم");
-
+      if (!this.actionForm.quarter || !this.actionForm.year) {
+        this.api.showError("يجب إدخال الربع والسنة");
         return;
       }
 
-      const invalidResult = this.actionForm.results.some(
-        (x: any) => !x.evaluationCriteriaId || !x.rating,
+      if (!this.evaluationResults.length) {
+        this.api.showError("يجب إضافة بند تقييم واحد على الأقل");
+        return;
+      }
+
+      const invalidResult = this.evaluationResults.some(
+        (x) => !x.evaluationCriteriaId || !x.rating,
       );
 
       if (invalidResult) {
         this.api.showError("يجب استكمال جميع معايير التقييم");
-
         return;
       }
 
       this.actionLoading = true;
 
-      this.api.addEvaluations(this.actionForm).subscribe({
+      const evaluationPayload = {
+        employeeId: this.actionForm.employeeId,
+        quarter: this.actionForm.quarter,
+        year: this.actionForm.year,
+        results: this.evaluationResults.map((r) => ({
+          evaluationCriteriaId: r.evaluationCriteriaId,
+          rating: r.rating,
+        })),
+      };
+
+      this.api.addEvaluations(evaluationPayload).subscribe({
         next: (res: any) => {
           this.actionItems.unshift(res);
           this.actionLoading = false;
           this.actionDialogVisible = false;
+          this.evaluationResults = [];
           this.api.showSuccess("تم إضافة التقييم بنجاح");
           this.loadEmployeeDetailsWithPayroll();
           this.cdr.detectChanges();
-
         },
-
         error: () => {
           this.actionLoading = false;
           this.api.showError("حدث خطأ أثناء حفظ التقييم");
@@ -800,21 +735,17 @@ export class Employees {
       return;
     }
 
-    // Validation لباقى الأنواع
-
+    // ===== باقى الأنواع =====
     if (
       !this.actionForm.amount ||
       !this.actionForm.reasonOfDiscount?.trim() ||
       !this.actionForm.notes?.trim()
     ) {
       this.api.showError("يجب إدخال القيمة والسبب والملاحظات");
-
       return;
     }
 
     this.actionLoading = true;
-
-    // Dynamic Payload
 
     const payload =
       this.currentActionType === "bonus" || this.currentActionType === "borrow"
@@ -831,8 +762,6 @@ export class Employees {
             notes: this.actionForm.notes,
           };
 
-    // Dynamic Request
-
     const request =
       this.currentActionType === "bonus"
         ? this.api.addBonus(payload)
@@ -845,22 +774,18 @@ export class Employees {
     request.subscribe({
       next: (res: any) => {
         this.actionItems.unshift(res);
-
         this.actionForm = {
           employeeId: this.actionForm.employeeId,
           amount: null,
           reasonOfDiscount: "",
           notes: "",
         };
-
         this.actionLoading = false;
         this.cdr.detectChanges();
         this.api.showSuccess("تمت الإضافة بنجاح");
       },
-
       error: () => {
         this.actionLoading = false;
-
         this.api.showError("حدث خطأ أثناء الحفظ");
       },
     });
@@ -924,7 +849,6 @@ export class Employees {
             this.employees = res.data ?? res;
             this.totalRecords = res.totalCount ?? this.employees.length;
             this.cdr.detectChanges();
-
           },
         });
       return;
@@ -943,7 +867,6 @@ export class Employees {
             this.employees = res.data ?? res;
             this.totalRecords = res.totalCount ?? this.employees.length;
             this.cdr.detectChanges();
-
           },
         });
       return;
@@ -962,7 +885,6 @@ export class Employees {
             this.employees = res.data ?? res;
             this.totalRecords = res.totalCount ?? this.employees.length;
             this.cdr.detectChanges();
-
           },
         });
       return;
@@ -1045,6 +967,7 @@ export class Employees {
         this.showGroupMode = false;
         this.selectedEmployeeIds = [];
         this.cdr.detectChanges();
+        this.api.showSuccess("تم الإضافة بنجاح");
 
         // success toast
       },

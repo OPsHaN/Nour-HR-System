@@ -29,3 +29,26 @@
     z-index: 2;
     font-size: 1rem;
 }
+
+:host ::ng-deep .p-datatable {
+    width: 100%;
+    overflow-x: auto;
+}
+
+:host ::ng-deep .p-datatable table {
+    width: 100%;
+}
+
+.input-wrapper {
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .input-wrapper {
+        width: 100%;
+    }
+
+    .custom-input {
+        width: 100%;
+    }
+}

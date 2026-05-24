@@ -39,7 +39,6 @@ export class Criteria {
         this.Criteria = res.data;
         this.loading = false;
         this.cdr.detectChanges();
-        console.log(res);
       },
       error: () => {
         this.loading = false;

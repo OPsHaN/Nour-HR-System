@@ -1,18 +1,25 @@
 <div class="desktop" [class.dark]="isDark">
   <div class="desktop__surface">
-      <h3 class="desktop__greeting">أهلا و سهلاً بك يا {{ userName }}</h3>
-    <app-shortcuts (shortcutClick)="openShortcut($event)"></app-shortcuts>
-    <div class="Logo"><img src="/photos/nour.png" alt="Logo"></div>
+    <div class="d-flex align-items-center justify-content-between gap-2">
+      <h3 class="desktop__greeting m-0">أهلا و سهلاً بك يا {{ userName }}</h3>
+      <div class="Logo">
+        <img src="/photos/nour.png" alt="Logo" />
+      </div>
+    </div>
+    <app-shortcuts
+      style="display: flex; justify-content: center"
+      (shortcutClick)="openShortcut($event)"
+    ></app-shortcuts>
 
     @for (window of windows; track trackByWindowId($index, window)) {
-      <app-window
-        [window]="window"
-        (activate)="activateWindow($event)"
-        (minimize)="minimizeWindow($event)"
-        (maximize)="toggleMaximize($event)"
-        (close)="closeWindow($event)"
-        (startDrag)="startDrag($event)"
-      ></app-window>
+    <app-window
+      [window]="window"
+      (activate)="activateWindow($event)"
+      (minimize)="minimizeWindow($event)"
+      (maximize)="toggleMaximize($event)"
+      (close)="closeWindow($event)"
+      (startDrag)="startDrag($event)"
+    ></app-window>
     }
   </div>
 
@@ -23,4 +30,3 @@
     (themeChange)="handleThemeChange($event)"
   ></app-taskbar>
 </div>
-

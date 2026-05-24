@@ -35,14 +35,14 @@ export const SHORTCUTS_CONFIG = {
     icon: "groups",
     bg: "#1677ff",
     roles: ["Admin", "HR"] as UserRole[],
-    size: { width: 860, height: 600 },
+    size: { width: 900, height: 600 },
   },
   employees: {
     title: "الموظفين",
     icon: "people",
     bg: "#13c2c2",
     roles: ["Admin", "HR"] as UserRole[],
-    size: { width: 1200, height: 600 },
+    size: { width: 1250, height: 600 },
   },
   branches: {
     title: "الفروع",
@@ -65,10 +65,24 @@ export const SHORTCUTS_CONFIG = {
     roles: ["Admin", "HR"] as UserRole[],
     size: { width: 620, height: 480 },
   },
-  download: {
+  reports: {
     title: "التقارير ",
     icon: "bar_chart",
     bg: "#52c41a",
+    roles: ["Admin", "HR"] as UserRole[],
+    size: { width: 620, height: 420 },
+  },
+  orders: {
+    title: "الطلبات",
+    icon: "assignment",
+    bg: "#fa8c16",
+    roles: ["Admin", "HR"] as UserRole[],
+    size: { width: 620, height: 420 },
+  },
+  complaints: {
+    title: "الشكاوى",
+    icon: "report_problem",
+    bg: "#f5222d",
     roles: ["Admin", "HR"] as UserRole[],
     size: { width: 620, height: 420 },
   },

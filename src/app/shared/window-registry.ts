@@ -1,18 +1,22 @@
 import { Type } from "@angular/core";
 import { CalendarComponent } from "../components/calendar/calendar.component";
-import { DownloadComponent } from "../components/download/download.component";
+import { Reports } from "../components/reports/reports";
 import { Users } from "../components/users/users";
 import { Employees } from "../components/employees/employees";
 import { Branches } from "../components/branches/branches";
 import { Criteria } from "../components/criteria/criteria";
 import { Banks } from "../components/banks/banks";
+import { Orders } from "../components/orders/orders";
+import { Complaint } from "../components/complaint/complaint";
 
 export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   calendar: CalendarComponent,
   users: Users,
   branches: Branches,
   employees:Employees,
-  download: DownloadComponent,
+  reports: Reports,
   criteria:Criteria,
-  banks:Banks
+  banks:Banks,
+  orders:Orders,
+  complaints:Complaint
 };
