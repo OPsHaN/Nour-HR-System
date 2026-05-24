@@ -271,6 +271,21 @@ export class Apiservice {
     return this.http.post(`${this.baseUrl}payroll/bonus/bulk-varied`, employess)
   }
 
+
+  //reports//
+
+  getAllShifts(fromDate:string){
+    return this.http.get(`${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}`);
+  }
+
+  getAllReportsForEmpolyee(employeeId : number){
+    return this.http.get(`${this.baseUrl}payroll/${employeeId}/details`);
+  }
+
+  getAllReportsForEmpolyeeInMonthAndYear(employeeId:number , month:number , year:number){
+    return this.http.get(`${this.baseUrl}payroll/${employeeId}/details?month=${month}&year=${year}`)
+  }
+
   showError(msg: string) {
     this.messageService.add({
       severity: "error",
