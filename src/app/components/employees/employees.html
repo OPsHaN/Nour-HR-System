@@ -274,7 +274,10 @@
     <div class="field">
       <label>نوع إنهاء الخدمة</label>
 
-      <select class="form-select" [(ngModel)]="endOfServiceType">
+      <select
+        class="custom-input toolbar-select h-100"
+        [(ngModel)]="endOfServiceType"
+      >
         <option value="">اختر نوع إنهاء الخدمة</option>
 
         <option value="استقالة">استقالة</option>
@@ -317,7 +320,7 @@
   [header]="isEditMode ? 'تعديل بيانات الموظف' : 'بيانات الموظف ' + employeeName"
   [(visible)]="showEmployeeDetailsDialog"
   [modal]="true"
-  [style]="{ width: '70rem', 'max-height': '100%'}"
+  [style]="{ width: '100rem', 'max-height': '100%'}"
   class="data-employee-dialog"
 >
   <div *ngIf="employeeDetails">

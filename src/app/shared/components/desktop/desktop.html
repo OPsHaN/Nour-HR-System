@@ -4,14 +4,16 @@
       <div class="d-flex flex-column align-items-start gap-1">
         <!-- <h3 class="desktop__greeting m-0">أهلا و سهلاً بك يا {{ userName }}</h3> -->
 
-        <fieldset class="shift-fieldset d-flex align-items-center justify-content-center">
+        <fieldset
+          class="shift-fieldset d-flex align-items-center justify-content-center"
+        >
           <legend>
             <h3 class="desktop__greeting m-0">
               أهلا و سهلاً بك يا {{ userName }}
             </h3>
           </legend>
 
-          <div class="shift-buttons" >
+          <div class="shift-buttons">
             <p-button
               [pt]="{ root: { style: 'padding: 0.3rem 0.75rem ; border-radius : 30px'} }"
               label="بدء الشيفت"
@@ -21,6 +23,10 @@
               [loading]="loadingStart"
               (onClick)="onStartShift()"
             />
+            <div *ngIf="shiftStarted" class="shift-counter">
+              <i class="pi pi-clock"></i>
+              {{ formattedTime }}
+            </div>
             <p-button
               [pt]="{ root: { style: 'padding: 0.3rem 0.75rem ; border-radius : 30px' } }"
               label="إنهاء الشيفت"

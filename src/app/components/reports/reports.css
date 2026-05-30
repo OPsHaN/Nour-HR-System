@@ -1,6 +1,6 @@
 /* ── Layout ──────────────────────────────────────────────────────────────── */
 .reports-page {
-  padding: 1rem;
+  padding: 0.5rem;
   direction: rtl;
 }
 
@@ -91,3 +91,4 @@
 }
 
 .w-full { width: 100%; }
+

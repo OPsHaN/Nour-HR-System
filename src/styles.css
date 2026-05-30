@@ -198,7 +198,7 @@ input {
 .p-tab {
   background: var(--surface-strong) !important;
   color: var(--text) !important;
-  border: 0.1rem  solid var(--surface-border) !important;
+  border: 0.1rem solid var(--surface-border) !important;
   border-radius: 0.5rem 0.5rem 0 0 !important;
   padding: 0.5rem 1rem !important;
 }
@@ -504,7 +504,100 @@ input {
   border-radius: 15px !important;
 }
 
-.badge{
+.badge {
   color: var(--text) !important;
   background: rgba(222, 221, 221, 0.75);
+}
+
+.apply-btn {
+  height: 50px;
+  min-width: 100px;
+  border: none !important;
+  border-radius: 20px !important;
+  background: linear-gradient(135deg,
+      rgba(22, 119, 255, 0.95),
+      rgba(88, 150, 255, 0.9)) !important;
+
+  color: #fff !important;
+
+  font-size: 20px !important;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 8px 20px rgba(22, 119, 255, 0.25);
+}
+
+/* hover */
+.apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 24px rgba(22, 119, 255, 0.35);
+
+}
+
+/* icon */
+.apply-btn .pi {
+  font-size: 14px;
+  margin-inline-end: 6px;
+}
+
+/*select*/
+
+.select-panel {
+  border-radius: 20px !important;
+  background: var(--surface-strong) !important;
+  font-size: large;
+}
+
+.select-panel .p-select-label {
+  font-weight: 600;
+  color: var(--text) !important;
+}
+
+
+.select-panel .p-select-option {
+  color: var(--text) !important;
+  background: var(--surface) !important;
+}
+
+.select-overlay {
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid var(--surface-border);
+
+}
+
+.select-overlay .p-select-option {
+  padding: 0.5rem !important;
+  font-weight: 500;
+  background: var(--surface-strong) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--surface-border);
+
+}
+
+.select-overlay .p-select-option:hover {
+  background: rgba(22, 119, 255, 0.35) !important;
+
+}
+
+.select-overlay .p-select-option-selected {
+  background: rgba(22, 119, 255, 0.35) !important;
+  color: var(--text-soft) !important;
+  font-weight: 600;
+}
+
+.select-overlay .select-list-container {
+  background: var(--surface-strong) !important;
+  padding: 0px !important;
+}
+
+.select-overlay .p-select-header {
+  padding: 0.3rem;
+  background: var(--surface-strong) !important;
+
+}
+
+.p-tablist-tab-list {
+  gap:3px !important;
 }

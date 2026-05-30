@@ -1,9 +1,9 @@
 import {
   BaseComponent
-} from "./chunk-J4CZ74AU.js";
+} from "./chunk-EI4WHRKM.js";
 import {
   BaseStyle
-} from "./chunk-QLJWVH4S.js";
+} from "./chunk-T4FYILNE.js";
 import {
   C,
   K,
@@ -13,10 +13,10 @@ import {
   W,
   Zt,
   v
-} from "./chunk-PNDCOZ5Q.js";
+} from "./chunk-XZW2Y64V.js";
 import {
   isPlatformBrowser
-} from "./chunk-FZNNPS64.js";
+} from "./chunk-PSAW27YH.js";
 import {
   Directive,
   Injectable,
@@ -32,7 +32,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵgetInheritedFactory
-} from "./chunk-LVESTRRP.js";
+} from "./chunk-AQX3ABGP.js";
 
 // node_modules/@primeuix/styles/dist/ripple/index.mjs
 var style = "\n    .p-ink {\n        display: block;\n        position: absolute;\n        background: dt('ripple.background');\n        border-radius: 100%;\n        transform: scale(0);\n        pointer-events: none;\n    }\n\n    .p-ink-active {\n        animation: ripple 0.4s linear;\n    }\n\n    @keyframes ripple {\n        100% {\n            opacity: 0;\n            transform: scale(2.5);\n        }\n    }\n";
@@ -229,4 +229,4 @@ export {
   Ripple,
   RippleModule
 };
-//# sourceMappingURL=chunk-QNJMC3YA.js.map
+//# sourceMappingURL=chunk-X3S2BAFE.js.map

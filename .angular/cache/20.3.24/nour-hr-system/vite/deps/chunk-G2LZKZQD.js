@@ -13,7 +13,7 @@ import {
   setClassMetadata,
   ɵɵdefineInjectable,
   ɵɵinject
-} from "./chunk-LVESTRRP.js";
+} from "./chunk-AQX3ABGP.js";
 
 // node_modules/@angular/animations/fesm2022/animations.mjs
 var AnimationBuilder = class _AnimationBuilder {
@@ -179,4 +179,4 @@ function isAnimationRenderer(renderer) {
   const type = renderer.ɵtype;
   return type === 0 || type === 1;
 }
-//# sourceMappingURL=chunk-JEK4OXM3.js.map
+//# sourceMappingURL=chunk-G2LZKZQD.js.map

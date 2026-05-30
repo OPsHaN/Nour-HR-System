@@ -1,20 +1,20 @@
 import {
-  Ripple,
-  RippleModule
-} from "./chunk-QNJMC3YA.js";
-import {
   ChevronLeftIcon,
   ChevronRightIcon
-} from "./chunk-TA7GBMX6.js";
+} from "./chunk-YWA53XI5.js";
+import {
+  Ripple,
+  RippleModule
+} from "./chunk-X3S2BAFE.js";
 import {
   BaseComponent,
   Bind,
   BindModule,
   PARENT_INSTANCE
-} from "./chunk-J4CZ74AU.js";
+} from "./chunk-EI4WHRKM.js";
 import {
   BaseStyle
-} from "./chunk-QLJWVH4S.js";
+} from "./chunk-T4FYILNE.js";
 import {
   K,
   PrimeTemplate,
@@ -27,12 +27,12 @@ import {
   s3 as s,
   v,
   z
-} from "./chunk-PNDCOZ5Q.js";
+} from "./chunk-XZW2Y64V.js";
 import {
   CommonModule,
   NgTemplateOutlet,
   isPlatformBrowser
-} from "./chunk-FZNNPS64.js";
+} from "./chunk-PSAW27YH.js";
 import "./chunk-U44TYWUZ.js";
 import {
   ChangeDetectionStrategy,
@@ -95,8 +95,10 @@ import {
   ɵɵtemplate,
   ɵɵtemplateRefExtractor,
   ɵɵviewQuery
-} from "./chunk-LVESTRRP.js";
-import "./chunk-RSS3ODKE.js";
+} from "./chunk-AQX3ABGP.js";
+import "./chunk-NGWI62ZP.js";
+import "./chunk-LQKJR2HS.js";
+import "./chunk-73FCWE6J.js";
 import "./chunk-WDMUDEB6.js";
 
 // node_modules/@primeuix/styles/dist/tabs/index.mjs

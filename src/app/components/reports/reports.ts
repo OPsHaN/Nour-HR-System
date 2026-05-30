@@ -74,6 +74,29 @@ export interface Employee {
   name: string;
 }
 
+export interface MonthlyPayrollRecord {
+  employeeId: number;
+  employeeName: string;
+  branchId: number;
+  branchName: string;
+  month: number;
+  year: number;
+  totalSalary: number;
+  totalDiscounts: number;
+  totalContractDiscount: number;
+  totalBouns: number;
+  totalBorrows: number;
+  totalCashBorrows: number;
+  netSalary: number;
+  bankName?: string;
+  bankAccount?: string;
+}
+
+export interface Branch {
+  id: string;
+  name: string;
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 @Component({
@@ -131,11 +154,26 @@ export class Reports implements OnInit {
   loadingPayroll = false;
   employees: Employee[] = [];
 
+
+// ── Monthly Payroll Tab ──────────────────────────────────────────────────────
+monthlyPayrollMonth: Date = new Date();
+monthlyPayrollData: MonthlyPayrollRecord[] = [];
+loadingMonthlyPayroll = false;
+
+// ── Branch Payroll Tab ───────────────────────────────────────────────────────
+branchPayrollMonth: Date = new Date();
+selectedBranchId: string | null = null;
+branchPayrollData: MonthlyPayrollRecord[] = [];
+loadingBranchPayroll = false;
+branches: Branch[] = [];
+
   constructor(private attendanceService: Apiservice, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadAllShifts();
     this.loadEmployees();
+    this.loadBranches();
+
   }
 
   // ── Tab Switch ───────────────────────────────────────────────────────────
@@ -145,6 +183,8 @@ export class Reports implements OnInit {
       case 0: if (!this.allShifts.length)       this.loadAllShifts();        break;
       case 1: if (!this.openLateShifts.length)  this.loadOpenLateShifts();   break;
       case 2: if (!this.absentEmployees.length)  this.loadAbsentEmployees();  break;
+      case 4: if (!this.monthlyPayrollData.length) this.loadMonthlyPayroll(); break;
+
     }
   }
 
@@ -207,6 +247,50 @@ export class Reports implements OnInit {
       error: () => (this.loadingPayroll = false),
     });
   }
+
+
+  // ── Loaders الجديدة ──────────────────────────────────────────────────────────
+
+loadMonthlyPayroll(): void {
+  if (!this.monthlyPayrollMonth) return;
+  const month = this.monthlyPayrollMonth.getMonth() + 1;
+  const year  = this.monthlyPayrollMonth.getFullYear();
+  this.loadingMonthlyPayroll = true;
+  this.monthlyPayrollData = [];
+  this.attendanceService.getAllMonthlyData(month, year).subscribe({
+    next: (data: any) => {
+      this.monthlyPayrollData = data ?? [];
+      this.loadingMonthlyPayroll = false;
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingMonthlyPayroll = false),
+  });
+}
+
+loadBranchPayroll(): void {
+  if (!this.selectedBranchId || !this.branchPayrollMonth) return;
+  const month = this.branchPayrollMonth.getMonth() + 1;
+  const year  = this.branchPayrollMonth.getFullYear();
+  this.loadingBranchPayroll = true;
+  this.branchPayrollData = [];
+  this.attendanceService.getAllMonthlyDatabyBranch(month, year, this.selectedBranchId).subscribe({
+    next: (data: any) => {
+      this.branchPayrollData = data ?? [];
+      this.loadingBranchPayroll = false;
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingBranchPayroll = false),
+  });
+}
+
+loadBranches(): void {
+  this.attendanceService.getAllBranches(1 , 999).subscribe({
+    next: (res: any) => {
+      this.branches = res.data ?? res ?? [];
+      this.cdr.detectChanges();
+    },
+  });
+}
 
 
 
@@ -272,7 +356,6 @@ export class Reports implements OnInit {
     return this.payrollDetails?.cashBorrows?.reduce((s, x) => s + x.amount, 0) ?? 0;
   }
 
-
   get presentCount(): number {
     return this.allShifts.filter(s => this.getShiftStatus(s) === 'present').length;
   }
@@ -284,6 +367,40 @@ export class Reports implements OnInit {
   get lateCount(): number {
     return this.allShifts.filter(s => this.getShiftStatus(s) === 'late').length;
   }
+
+  // ── Computed Getters ─────────────────────────────────────────────────────────
+
+get monthlyTotalSalary(): number {
+  return this.monthlyPayrollData.reduce((s, x) => s + x.totalSalary, 0);
+}
+get monthlyTotalDiscounts(): number {
+  return this.monthlyPayrollData.reduce((s, x) => s + x.totalDiscounts + x.totalContractDiscount, 0);
+}
+get monthlyTotalBonuses(): number {
+  return this.monthlyPayrollData.reduce((s, x) => s + x.totalBouns, 0);
+}
+get monthlyTotalBorrows(): number {
+  return this.monthlyPayrollData.reduce((s, x) => s + x.totalBorrows + x.totalCashBorrows, 0);
+}
+get monthlyTotalNet(): number {
+  return this.monthlyPayrollData.reduce((s, x) => s + x.netSalary, 0);
+}
+
+get branchTotalSalary(): number {
+  return this.branchPayrollData.reduce((s, x) => s + x.totalSalary, 0);
+}
+get branchTotalDiscounts(): number {
+  return this.branchPayrollData.reduce((s, x) => s + x.totalDiscounts + x.totalContractDiscount, 0);
+}
+get branchTotalBonuses(): number {
+  return this.branchPayrollData.reduce((s, x) => s + x.totalBouns, 0);
+}
+get branchTotalBorrows(): number {
+  return this.branchPayrollData.reduce((s, x) => s + x.totalBorrows + x.totalCashBorrows, 0);
+}
+get branchTotalNet(): number {
+  return this.branchPayrollData.reduce((s, x) => s + x.netSalary, 0);
+}
 
 formatTime(time?: string): string {
   if (!time) return '—';

@@ -313,6 +313,8 @@ export class Apiservice {
 
   }
 
+  
+
   getAllReportsForEmpolyee(employeeId: number) {
     return this.http.get(`${this.baseUrl}payroll/${employeeId}/details`);
   }

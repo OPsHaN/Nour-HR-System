@@ -16,6 +16,7 @@ import { Shortcut, SHORTCUTS_CONFIG } from "../../shortcut.config";
 import { ButtonModule } from "primeng/button";
 import { Apiservice } from "src/app/services/api.service";
 import { ConfirmationService } from "primeng/api";
+import { finalize } from "rxjs/operators";
 
 @Component({
   selector: "app-desktop",
@@ -37,6 +38,8 @@ export class Desktop implements OnDestroy {
   shiftStarted = false;
   loadingStart = false;
   loadingEnd = false;
+  shiftSeconds = 0;
+  shiftTimer: any;
 
   get isEmployee(): boolean {
     const role = localStorage.getItem("role");
@@ -236,23 +239,66 @@ export class Desktop implements OnDestroy {
 
   onStartShift(): void {
     this.loadingStart = true;
-    this.api.startShift().subscribe({
-      next: () => {
-        this.shiftStarted = true;
-        this.loadingStart = false;
-      },
-      error: () => (this.loadingStart = false),
-    });
+
+    this.api
+      .startShift()
+      .pipe(
+        finalize(() => {
+          this.loadingStart = false;
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.shiftStarted = true;
+          this.startCounter();
+          this.api.showSuccess("تم بدء شيفتك بنجاح");
+        },
+        error: () => {
+          this.api.showError(
+            "يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر",
+          );
+        },
+      });
   }
 
   onEndShift(): void {
     this.loadingEnd = true;
-    this.api.endShift().subscribe({
-      next: () => {
-        this.shiftStarted = false;
-        this.loadingEnd = false;
-      },
-      error: () => (this.loadingEnd = false),
-    });
+
+    this.api
+      .endShift()
+      .pipe(
+        finalize(() => {
+          this.loadingEnd = false;
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.shiftStarted = false;
+          this.api.showSuccess("تم إنهاء شيفتك بنجاح");
+        },
+        error: () => {
+          this.api.showError(
+            "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
+          );
+        },
+      });
+  }
+
+  startCounter(): void {
+    clearInterval(this.shiftTimer);
+
+    this.shiftTimer = setInterval(() => {
+      this.shiftSeconds++;
+    }, 1000);
+  }
+
+  get formattedTime(): string {
+    const hours = Math.floor(this.shiftSeconds / 3600);
+    const minutes = Math.floor((this.shiftSeconds % 3600) / 60);
+    const seconds = this.shiftSeconds % 60;
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
 }
