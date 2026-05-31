@@ -313,8 +313,6 @@ export class Apiservice {
 
   }
 
-  
-
   getAllReportsForEmpolyee(employeeId: number) {
     return this.http.get(`${this.baseUrl}payroll/${employeeId}/details`);
   }
@@ -328,6 +326,10 @@ export class Apiservice {
       `${this.baseUrl}payroll/${employeeId}/details?month=${month}&year=${year}`,
     );
   }
+
+addDeductionCalculator(body: { employeeIds: number[] }) {
+  return this.http.post(`${this.baseUrl}payroll/deduction-calculator`, body);
+}
 
   showError(msg: string) {
     this.messageService.add({

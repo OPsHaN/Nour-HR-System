@@ -12,6 +12,7 @@ import { Menu } from "primeng/menu";
 import { Tabs, TabPanels, TabPanel, TabList, Tab } from "primeng/tabs";
 import { Subscription } from "rxjs";
 import { forkJoin } from "rxjs";
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 
 @Component({
   selector: "app-employees",
@@ -29,6 +30,7 @@ import { forkJoin } from "rxjs";
     TabPanels,
     TabPanel,
     Menu,
+    ProgressSpinnerModule,
   ],
   templateUrl: "./employees.html",
   styleUrl: "./employees.css",
@@ -85,12 +87,38 @@ export class Employees {
   showGroupMode: boolean = false;
   selectedEmployeeIds: number[] = [];
   showGroupDialog: boolean = false;
-  groupAmount: number = 0;
+  groupAmount: number | null = null;
   groupReason: string = "";
   groupNotes: string = "";
-  groupActionType: "bonus" | "discount" = "bonus";
+  groupActionType: "bonus" | "discount" | "contractDiscount" = "bonus";
   evaluationResults: { evaluationCriteriaId: number; rating: string }[] = [];
+  groupSubType: "amount" | "days" = "amount";
+  loadingDeductionCalc = false;
+  deductionCalcData: {
+    employeeId: number;
+    employeeName: string;
+    deductions: {
+      halfDay: number;
+      oneDay: number;
+      twoDays: number;
+      threeDays: number;
+      fiveDays: number;
+      tenDays: number;
+    };
+  }[] = [];
 
+  selectedDayPerEmployee: Record<number, string> = {};
+  actionSubType: "amount" | "days" = "amount";
+  selectedSingleDay: string = "";
+
+  dayOptions = [
+    { key: "halfDay", label: "نص يوم" },
+    { key: "oneDay", label: "يوم" },
+    { key: "twoDays", label: "يومين" },
+    { key: "threeDays", label: "3 أيام" },
+    { key: "fiveDays", label: "5 أيام" },
+    { key: "tenDays", label: "10 أيام" },
+  ];
   constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
@@ -434,7 +462,7 @@ export class Employees {
     this.payrollViewType = "current";
     this.isCurrentMonth = true;
     this.employeeName = emp.name;
-     this.activeTabIndex = "0";
+    this.activeTabIndex = "0";
     // keep existing details until new data arrives
     // show dialog immediately so it doesn't 'disappear' on errors
     this.showEmployeeDetailsDialog = true;
@@ -627,6 +655,9 @@ export class Employees {
   openActionDialog(type: string, title: string, employee: any) {
     this.currentActionType = type;
     this.currentActionTitle = title + "  " + employee.name;
+    this.actionSubType = "amount";
+    this.selectedSingleDay = "";
+    this.deductionCalcData = [];
     this.actionForm = {
       employeeId: employee.id,
       amount: null,
@@ -672,6 +703,40 @@ export class Employees {
     }
 
     this.actionDialogVisible = true;
+  }
+
+  onActionSubTypeChange(): void {
+    this.actionForm.amount = null;
+    this.selectedSingleDay = "";
+    this.deductionCalcData = [];
+
+    if (this.actionSubType === "days") {
+      // بنبعت الـ employeeId الواحد
+      this.loadingDeductionCalc = true;
+      this.api
+        .addDeductionCalculator({ employeeIds: [this.actionForm.employeeId] })
+        .subscribe({
+          next: (data: any) => {
+            this.deductionCalcData = data ?? [];
+            this.loadingDeductionCalc = false;
+            this.cdr.detectChanges();
+          },
+          error: () => (this.loadingDeductionCalc = false),
+        });
+    }
+  }
+
+  getDeductionValue(key: string): number {
+    const deductions = this.deductionCalcData[0]?.deductions;
+    if (!deductions) return 0;
+    return deductions[key as keyof typeof deductions] ?? 0;
+  }
+
+  onSingleDaySelect(): void {
+    if (!this.deductionCalcData.length || !this.selectedSingleDay) return;
+    const deductions = this.deductionCalcData[0].deductions;
+    const key = this.selectedSingleDay as keyof typeof deductions;
+    this.actionForm.amount = Math.round(deductions[key]);
   }
 
   addEvaluationRow() {
@@ -783,6 +848,7 @@ export class Employees {
         this.actionLoading = false;
         this.cdr.detectChanges();
         this.api.showSuccess("تمت الإضافة بنجاح");
+        this.actionDialogVisible = false;
       },
       error: () => {
         this.actionLoading = false;
@@ -946,32 +1012,103 @@ export class Employees {
     this.groupNotes = "";
     this.groupActionType = "bonus";
     this.showGroupDialog = true;
+    this.groupSubType = "amount";
   }
 
   saveGroup() {
-    const payload = {
-      employeeIds: this.selectedEmployeeIds,
-      amount: this.groupAmount,
-      reason: this.groupReason,
-      notes: this.groupNotes || null,
-    };
+    if (this.groupSubType === "days") {
+      // بناء الـ payload من selectedDayPerEmployee
+      const variedPayload = this.deductionCalcData.map((row) => {
+        const dayKey = this.selectedDayPerEmployee[
+          row.employeeId
+        ] as keyof typeof row.deductions;
+        return {
+          employeeId: row.employeeId,
+          amount: Math.round(row.deductions[dayKey]),
+          reason: this.groupReason,
+          notes: this.groupNotes || null,
+        };
+      });
 
-    const call$ =
-      this.groupActionType === "bonus"
-        ? this.api.addBulkBonus(payload)
-        : this.api.addBulkDiscount(payload);
+      const call$ =
+        this.groupActionType === "bonus"
+          ? this.api.addBulkVariedBonus(variedPayload)
+          : this.groupActionType === "discount"
+            ? this.api.addBulkVariedDiscount(variedPayload)
+            : this.api.addBulkVariedContractDiscount(variedPayload);
 
-    call$.subscribe({
-      next: () => {
-        this.showGroupDialog = false;
-        this.showGroupMode = false;
-        this.selectedEmployeeIds = [];
-        this.cdr.detectChanges();
-        this.api.showSuccess("تم الإضافة بنجاح");
+      call$.subscribe({
+        next: () => {
+          this.showGroupDialog = false;
+          this.showGroupMode = false;
+          this.selectedEmployeeIds = [];
+          this.deductionCalcData = [];
+          this.selectedDayPerEmployee = {};
+          this.cdr.detectChanges();
+          this.api.showSuccess("تم الإضافة بنجاح");
+        },
+        error: (err) => console.error(err),
+      });
+    } else {
+      // بقيمة — المنطق الموجود
+      const payload = {
+        employeeIds: this.selectedEmployeeIds,
+        amount: this.groupAmount,
+        reason: this.groupReason,
+        notes: this.groupNotes || null,
+      };
 
-        // success toast
-      },
-      error: (err) => console.error(err),
-    });
+      const call$ =
+        this.groupActionType === "bonus"
+          ? this.api.addBulkBonus(payload)
+          : this.groupActionType === "discount"
+            ? this.api.addBulkDiscount(payload)
+            : this.api.addBulkVariedContractDiscount(payload);
+
+      call$.subscribe({
+        next: () => {
+          this.showGroupDialog = false;
+          this.showGroupMode = false;
+          this.selectedEmployeeIds = [];
+          this.cdr.detectChanges();
+          this.api.showSuccess("تم الإضافة بنجاح");
+        },
+        error: (err) => console.error(err),
+      });
+    }
+  }
+
+  // ── عند تغيير نوع القيمة ────────────────────────────────────────────────────
+  onSubTypeChange(): void {
+    this.groupAmount = null;
+    this.deductionCalcData = [];
+    this.selectedDayPerEmployee = {};
+
+    if (this.groupSubType === "days" && this.selectedEmployeeIds.length) {
+      this.loadDeductionCalculator();
+    }
+  }
+
+  loadDeductionCalculator(): void {
+    this.loadingDeductionCalc = true;
+    this.api
+      .addDeductionCalculator({ employeeIds: this.selectedEmployeeIds })
+      .subscribe({
+        next: (data: any) => {
+          this.deductionCalcData = data ?? [];
+          this.loadingDeductionCalc = false;
+          this.cdr.detectChanges();
+        },
+        error: () => (this.loadingDeductionCalc = false),
+      });
+  }
+
+  // ── validation ───────────────────────────────────────────────────────────────
+  isSaveGroupValid(): boolean {
+    if (!this.groupReason) return false;
+    if (this.groupSubType === "amount") return !!this.groupAmount;
+    return this.deductionCalcData.every(
+      (row) => !!this.selectedDayPerEmployee[row.employeeId],
+    );
   }
 }

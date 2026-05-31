@@ -19,22 +19,40 @@
       {{ showCreateEmployee ? '' : 'موظف جديد' }}
     </button>
 
+    <!-- زر الدخول لوضع المجموعات -->
     <button
       pButton
       type="button"
-      class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-1"
-      [class.btn-success]="!showGroupMode"
-      [class.btn-danger]="showGroupMode && !selectedEmployeeIds.length"
-      [class.btn-warning]="showGroupMode && selectedEmployeeIds.length"
-      (click)="showGroupMode && selectedEmployeeIds.length ? openGroupDialog() : toggleGroupMode()"
-      *ngIf="!showCreateEmployee"
+      class="btn btn-sm btn-success my-1 d-flex align-items-center justify-content-center gap-1"
+      (click)="toggleGroupMode()"
+      *ngIf="!showGroupMode && !showCreateEmployee"
     >
-      <i
-        class="pi"
-        [ngClass]="showGroupMode ? (selectedEmployeeIds.length ? 'pi-save' : 'pi-times') : 'pi-users'"
-      ></i>
-      {{ showGroupMode ? (selectedEmployeeIds.length ? 'حفظ المجموعة (' +
-      selectedEmployeeIds.length + ')' : 'إلغاء') : 'إضافة مجموعة' }}
+      <i class="pi pi-users"></i>
+      إضافة مجموعة
+    </button>
+
+    <!-- زر الحفظ -->
+    <button
+      pButton
+      type="button"
+      class="btn btn-sm btn-warning my-1 d-flex align-items-center justify-content-center gap-1"
+      (click)="openGroupDialog()"
+      *ngIf="showGroupMode && selectedEmployeeIds.length && !showCreateEmployee"
+    >
+      <i class="pi pi-save"></i>
+      حفظ المجموعة ({{ selectedEmployeeIds.length }})
+    </button>
+
+    <!-- زر الإلغاء -->
+    <button
+      pButton
+      type="button"
+      class="btn btn-sm btn-danger my-1 d-flex align-items-center justify-content-center gap-1"
+      (click)="toggleGroupMode()"
+      *ngIf="showGroupMode && !showCreateEmployee"
+    >
+      <i class="pi pi-times"></i>
+      إلغاء
     </button>
     <!-- فلتر الفرع -->
   </div>
@@ -1149,7 +1167,7 @@
   [style]="{
     width: currentActionType === 'evaluation'
       ? '35rem'
-      : '30rem'
+      : '35rem'
   }"
 >
   <!-- إضافة تقييم -->
@@ -1264,9 +1282,74 @@
 
   <div *ngIf="currentActionType !== 'evaluation'">
     <div class="end-service-content">
-      <div class="field">
-        <label>القيمة</label>
+      <!-- نوع القيمة (فقط للخصم والزيادة) -->
+      <div
+        class="field"
+        *ngIf="currentActionType === 'discount' || currentActionType === 'bonus' || currentActionType === 'contract'"
+      >
+        <label class="fw-light">نوع القيمة</label>
+        <select
+          class="custom-input"
+          [(ngModel)]="actionSubType"
+          (ngModelChange)="onActionSubTypeChange()"
+        >
+          <option value="amount">بقيمة</option>
+          <option value="days">بأيام</option>
+        </select>
+      </div>
 
+      <!-- جدول الأيام -->
+      <ng-container *ngIf="actionSubType === 'days'">
+        <div class="text-center py-3" *ngIf="loadingDeductionCalc">
+          <p-progressSpinner styleClass="w-3rem h-3rem" />
+        </div>
+
+        <div *ngIf="!loadingDeductionCalc && deductionCalcData.length">
+          <label class="fw-light my-1 d-block">اختر عدد الأيام</label>
+
+          <div class="table-responsive">
+            <p-table
+              [value]="[{}]"
+              styleClass="p-datatable-sm deduction-table mb-1"
+            >
+              <ng-template pTemplate="header">
+            <tr >
+                  <th *ngFor="let item of dayOptions" class="text-center">
+                    {{ item.label }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+            <tr >
+                  <td
+                    *ngFor="let item of dayOptions"
+                    class="text-center cursor-pointer "
+                    [class.selected-cell]="selectedSingleDay === item.key"
+                    (click)="selectedSingleDay = item.key; onSingleDaySelect()"
+                  >
+                    <div class="fw-light">
+                      {{ getDeductionValue(item.key) | number:'1.0-0' }} ج.م
+                    </div>
+
+                    <input
+                      type="radio"
+                      name="singleDay"
+                      [value]="item.key"
+                      [(ngModel)]="selectedSingleDay"
+                      hidden
+                    />
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- القيمة -->
+      <div class="field" *ngIf="actionSubType === 'amount'">
+        <label>القيمة</label>
         <input
           type="number"
           class="custom-input"
@@ -1274,9 +1357,20 @@
         />
       </div>
 
+      <!-- القيمة المحسوبة (readonly لما يختار أيام) -->
+      <div class="field" *ngIf="actionSubType === 'days' && actionForm.amount">
+        <label>القيمة المحسوبة</label>
+        <input
+          type="number"
+          class="custom-input"
+          [ngModel]="actionForm.amount"
+          readonly
+          style="background: var(--surface-100); cursor: not-allowed"
+        />
+      </div>
+
       <div class="field">
         <label>السبب</label>
-
         <input
           type="text"
           class="custom-input"
@@ -1286,7 +1380,6 @@
 
       <div class="field">
         <label>ملاحظات</label>
-
         <textarea
           rows="2"
           class="custom-input"
@@ -1299,11 +1392,11 @@
       <button
         type="button"
         [disabled]="
-          actionLoading ||
-          !actionForm.amount ||
-          !actionForm.reasonOfDiscount ||
-          !actionForm.notes
-        "
+        actionLoading ||
+        !actionForm.amount ||
+        !actionForm.reasonOfDiscount ||
+        !actionForm.notes
+      "
         class="submit-btn full my-2"
         (click)="saveAction()"
       >
@@ -1320,32 +1413,166 @@
   header="إضافة مجموعة"
   [(visible)]="showGroupDialog"
   [modal]="true"
-  [style]="{ width: '35rem' }"
+  [style]="{ width: groupSubType === 'days' ? '55rem' : '35rem' }"
   class="data-employee-dialog"
 >
-  <div class="details-grid">
+  <div class="group-grid">
+        <!-- الموظفين المختارين -->
+
+    <label>الموظفين المختارين ({{ selectedEmployeeIds.length }})</label>
+    <div class="detail-item">
+      <div class="d-flex flex-wrap gap-1 mt-1">
+        <span *ngFor="let id of selectedEmployeeIds" class="badge">
+          {{ getEmployeeName(id) }}
+        </span>
+      </div>
+    </div>
+
     <!-- نوع العملية -->
-    <div class="detail-item full-width">
+    <div class="field">
       <label>نوع العملية</label>
       <select class="custom-input" [(ngModel)]="groupActionType">
         <option value="bonus">زيادة</option>
         <option value="discount">خصم</option>
+        <option value="contractDiscount">خصم تعاقدات</option>
       </select>
     </div>
 
-    <!-- القيمة -->
-    <div class="detail-item full-width">
-      <label>القيمة <span class="text-danger">*</span></label>
-      <input
-        type="number"
+    <!-- نوع القيمة -->
+    <div class="field">
+      <label class="fw-light">نوع القيمة</label>
+      <select
         class="custom-input"
-        [(ngModel)]="groupAmount"
-        placeholder="أدخل القيمة"
-      />
+        [(ngModel)]="groupSubType"
+        (ngModelChange)="onSubTypeChange()"
+      >
+        <option value="amount">بقيمة</option>
+        <option value="days">بأيام</option>
+      </select>
     </div>
 
+    <!-- ── بقيمة ── -->
+    <ng-container *ngIf="groupSubType === 'amount'">
+      <div class="field">
+        <label>القيمة <span class="text-danger">*</span></label>
+        <input
+          type="number"
+          class="custom-input"
+          [(ngModel)]="groupAmount"
+          placeholder="أدخل القيمة"
+        />
+      </div>
+    </ng-container>
+
+    <!-- ── بأيام: جدول الخصومات ── -->
+    <ng-container *ngIf="groupSubType === 'days'">
+      <!-- loading -->
+      <div class="field text-center py-3" *ngIf="loadingDeductionCalc">
+        <p-progressSpinner styleClass="w-3rem h-3rem" />
+      </div>
+
+      <!-- جدول -->
+      <div
+        class="field"
+        *ngIf="!loadingDeductionCalc && deductionCalcData.length"
+      >
+        <label>اختر عدد الأيام</label>
+        <p-table
+          [value]="deductionCalcData"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '100%' }"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>الموظف</th>
+              <th style="text-align: center">نص يوم</th>
+              <th style="text-align: center">يوم</th>
+              <th style="text-align: center">يومين</th>
+              <th style="text-align: center">3 أيام</th>
+              <th style="text-align: center">5 أيام</th>
+              <th style="text-align: center">10 أيام</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr style="font-size: 20px">
+              <td>{{ row.employeeName }}</td>
+              <td style="text-align: center">
+                <label class="day-radio">
+                  <input
+                    type="radio"
+                    [name]="'day_' + row.employeeId"
+                    value="halfDay"
+                    [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
+                  />
+                  {{ row.deductions.halfDay | number:'1.0-0' }}
+                </label>
+              </td>
+              <td style="text-align: center">
+                <label class="day-radio">
+                  <input
+                    type="radio"
+                    [name]="'day_' + row.employeeId"
+                    value="oneDay"
+                    [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
+                  />
+                  {{ row.deductions.oneDay | number:'1.0-0' }}
+                </label>
+              </td>
+              <td style="text-align: center">
+                <label class="day-radio">
+                  <input
+                    type="radio"
+                    [name]="'day_' + row.employeeId"
+                    value="twoDays"
+                    [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
+                  />
+                  {{ row.deductions.twoDays | number:'1.0-0' }}
+                </label>
+              </td>
+              <td style="text-align: center">
+                <label class="day-radio">
+                  <input
+                    type="radio"
+                    [name]="'day_' + row.employeeId"
+                    value="threeDays"
+                    [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
+                  />
+                  {{ row.deductions.threeDays | number:'1.0-0' }}
+                </label>
+              </td>
+              <td style="text-align: center">
+                <label class="day-radio">
+                  <input
+                    type="radio"
+                    [name]="'day_' + row.employeeId"
+                    value="fiveDays"
+                    [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
+                  />
+                  {{ row.deductions.fiveDays | number:'1.0-0' }}
+                </label>
+              </td>
+              <td style="text-align: center">
+                <label class="day-radio">
+                  <input
+                    type="radio"
+                    [name]="'day_' + row.employeeId"
+                    value="tenDays"
+                    [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
+                  />
+                  {{ row.deductions.tenDays | number:'1.0-0' }}
+                </label>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <small class="text-muted mt-1 d-block"
+          >القيم بالجنيه المصري — اختر لكل موظف عدد الأيام</small
+        >
+      </div>
+    </ng-container>
+
     <!-- السبب -->
-    <div class="detail-item full-width">
+    <div class="field">
       <label>السبب <span class="text-danger">*</span></label>
       <input
         type="text"
@@ -1356,7 +1583,7 @@
     </div>
 
     <!-- ملاحظات -->
-    <div class="detail-item full-width">
+    <div class="field">
       <label>ملاحظات</label>
       <textarea
         class="custom-input"
@@ -1364,16 +1591,6 @@
         placeholder="ملاحظات إضافية (اختياري)"
         rows="3"
       ></textarea>
-    </div>
-
-    <!-- الموظفين المختارين -->
-    <div class="detail-item full-width">
-      <label>الموظفين المختارين ({{ selectedEmployeeIds.length }})</label>
-      <div class="d-flex flex-wrap gap-1 mt-1">
-        <span *ngFor="let id of selectedEmployeeIds" class="badge">
-          {{ getEmployeeName(id) }}
-        </span>
-      </div>
     </div>
   </div>
 
@@ -1384,8 +1601,8 @@
         type="button"
         class="btn"
         [class.btn-success]="groupActionType === 'bonus'"
-        [class.btn-danger]="groupActionType === 'discount'"
-        [disabled]="!groupAmount || !groupReason"
+        [class.btn-danger]="['discount', 'contractDiscount'].includes(groupActionType)"
+        [disabled]="!isSaveGroupValid()"
         (click)="saveGroup()"
       >
         <i class="pi pi-save me-1"></i>

@@ -25,7 +25,6 @@
   padding: 0.5rem 0.5rem !important;
   border-radius: 0 0 0.0rem 0.0rem !important;
   height: 100%
-
 }
 
 ::ng-deep.data-employee-dialog .p-dialog-footer {
@@ -43,6 +42,12 @@
   gap: 0.5rem;
 }
 
+.group-grid {
+  display: grid;
+  /* grid-template-columns: repeat(5, 1fr); */
+  gap: 0.5rem;
+}
+
 .detail-item {
   display: flex;
   flex-direction: column;
@@ -54,7 +59,7 @@
 }
 
 .detail-item.full-width {
-  border: 0.1rem solid var(--accent) !important;
+  /* border: 0.1rem solid var(--accent) !important; */
 }
 
 .detail-item label {
@@ -84,7 +89,7 @@
 /* labels */
 .end-service-content label {
   color: var(--text-soft);
-  padding-inline-start: 4px;
+  /* padding-inline-start: 4px; */
 }
 
 /* inputs + select + textarea */
@@ -314,4 +319,40 @@
   background: #fee2e2;
   color: #b91c1c;
   border-color: #fca5a5;
+}
+
+
+
+
+
+
+
+
+.deduction-table th {
+  border: 1px solid var(--surface);
+  color: var(--text-color);
+
+}
+
+.deduction-table td {
+  transition: all 0.2s;
+  min-width: 120px;
+  background: var(--surface);
+  color: var(--text-color);
+  font-size: 22px !important;
+
+
+}
+
+.deduction-table td:hover {
+  cursor: pointer;
+  background: var(--accent);
+}
+
+.selected-cell {
+  background: var(--accent) !important;
+  color: var(--text-color) !important;
+  font-weight: 700;
+    border: 1px solid var(--surface);
+
 }
