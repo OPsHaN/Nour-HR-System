@@ -66,9 +66,10 @@ input {
   border-bottom: 2px solid var(--surface-border);
   text-align: center;
   font-weight: 600;
-  padding: 15px;
+  padding: 10px;
   background-color: var(--accent) !important;
   color: #fff !important;
+  border:1px solid var(--surface);
 }
 
 .p-datatable .p-datatable-tbody>tr {
@@ -76,11 +77,11 @@ input {
   transition: 0.2s ease;
   color: var(--text);
   text-align: center;
-
 }
 
 .p-datatable .p-datatable-tbody>tr>td {
   text-align: center;
+
 }
 
 /* ✨ hover احترافي */

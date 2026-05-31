@@ -357,7 +357,7 @@
       <p-tabpanels>
         <!-- ===== Tab 1: بيانات الموظف ===== -->
         <p-tabpanel value="0">
-          <div class="evaluation-card mb-3">
+          <div class="evaluation-card mb-0">
             <div class="details-grid">
               <div class="detail-item">
                 <label>اسم الموظف</label>
@@ -565,7 +565,7 @@
             </button>
           </div>
 
-          <div class="evaluation-card mb-3" *ngIf="showPayrollDetails">
+          <div class="evaluation-card mb-0" *ngIf="showPayrollDetails">
             <!-- Cash Borrows -->
             <div
               class="detail-item full-width mb-3"
@@ -813,8 +813,16 @@
                 ><span>{{ employeeDetails.forgetedHours }} ساعة</span>
               </div>
               <div class="detail-item">
+                <label>إجمالى ساعات الاجازات</label
+                ><span>{{ employeeDetails.holidayHours }} ساعة</span>
+              </div>
+              <div class="detail-item">
                 <label>إجمالى التأمينات</label
                 ><span>{{ employeeDetails.insurence }} جنية</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى عدد الساعات المطلوبة</label
+                ><span>{{ employeeDetails.target }} ساعة</span>
               </div>
               <div class="detail-item">
                 <label>إجمالى السلف النقدية</label
@@ -1313,7 +1321,7 @@
               styleClass="p-datatable-sm deduction-table mb-1"
             >
               <ng-template pTemplate="header">
-            <tr >
+                <tr>
                   <th *ngFor="let item of dayOptions" class="text-center">
                     {{ item.label }}
                   </th>
@@ -1321,10 +1329,10 @@
               </ng-template>
 
               <ng-template pTemplate="body" let-row>
-            <tr >
+                <tr>
                   <td
                     *ngFor="let item of dayOptions"
-                    class="text-center cursor-pointer "
+                    class="text-center cursor-pointer"
                     [class.selected-cell]="selectedSingleDay === item.key"
                     (click)="selectedSingleDay = item.key; onSingleDaySelect()"
                   >
@@ -1417,11 +1425,11 @@
   class="data-employee-dialog"
 >
   <div class="group-grid">
-        <!-- الموظفين المختارين -->
+    <!-- الموظفين المختارين -->
 
     <label>الموظفين المختارين ({{ selectedEmployeeIds.length }})</label>
     <div class="detail-item">
-      <div class="d-flex flex-wrap gap-1 mt-1">
+      <div class="d-flex flex-wrap gap-1">
         <span *ngFor="let id of selectedEmployeeIds" class="badge">
           {{ getEmployeeName(id) }}
         </span>
@@ -1440,7 +1448,7 @@
 
     <!-- نوع القيمة -->
     <div class="field">
-      <label class="fw-light">نوع القيمة</label>
+      <label>نوع القيمة</label>
       <select
         class="custom-input"
         [(ngModel)]="groupSubType"

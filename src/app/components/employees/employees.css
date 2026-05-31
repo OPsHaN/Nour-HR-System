@@ -59,7 +59,7 @@
 }
 
 .detail-item.full-width {
-  /* border: 0.1rem solid var(--accent) !important; */
+  border: 0.1rem solid var(--accent) !important;
 }
 
 .detail-item label {
@@ -320,13 +320,6 @@
   color: #b91c1c;
   border-color: #fca5a5;
 }
-
-
-
-
-
-
-
 
 .deduction-table th {
   border: 1px solid var(--surface);
