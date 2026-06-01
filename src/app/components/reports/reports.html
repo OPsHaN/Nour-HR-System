@@ -4,12 +4,12 @@
     (valueChange)="onTabChange(+($event ?? 0))"
   >
     <p-tablist style="gap: 3px">
-      <p-tab [value]="0">الشيفتات</p-tab>
-      <p-tab [value]="1">المتأخرون / المفتوحة</p-tab>
-      <p-tab [value]="2">الغيابات</p-tab>
-      <p-tab [value]="3">كشف الرواتب</p-tab>
-      <p-tab [value]="4">الرواتب الشهرية</p-tab>
-      <p-tab [value]="5">رواتب الفرع</p-tab>
+      <p-tab [value]="0" *ngIf="!isAccountant">الشيفتات</p-tab>
+      <p-tab [value]="1" *ngIf="!isAccountant">المتأخرون / المفتوحة</p-tab>
+      <p-tab [value]="2" *ngIf="!isAccountant">الغيابات</p-tab>
+      <p-tab [value]="3" *ngIf="!isAccountant">كشف الرواتب</p-tab>
+      <p-tab [value]="4" *ngIf="isAccountant">الرواتب الشهرية</p-tab>
+      <p-tab [value]="5" *ngIf="isAccountant">رواتب الفرع</p-tab>
     </p-tablist>
 
     <p-tabpanels>
@@ -440,7 +440,7 @@
       </p-tabpanel>
 
       <!-- ===== Tab 5: الرواتب الشهرية ===== -->
-      <p-tabpanel [value]="4">
+      <p-tabpanel [value]="4" >
         <div class="filters-bar">
           <div class="filter-item">
             <label>الشهر</label>
@@ -569,7 +569,7 @@
       </p-tabpanel>
 
       <!-- ===== Tab 6: رواتب الفرع ===== -->
-      <p-tabpanel [value]="5">
+      <p-tabpanel [value]="5" >
         <div class="filters-bar">
           <div class="filter-item">
             <label>الفرع</label>

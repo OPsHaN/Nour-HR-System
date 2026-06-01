@@ -110,6 +110,10 @@
     float: none;
     justify-self: center;
     width: auto;
+    background: var(--surface);
+    border: 1px solid var(--text);
+     border-radius: 20px;
+     padding: 0.3rem 0.3rem;
   }
 }
 

@@ -90,6 +90,34 @@ export class AuthService {
     return Number(localStorage.getItem("branchId")) ?? 0;
   }
 
+  get isEmployee(): boolean {
+    return localStorage.getItem("role") === "Employee";
+  }
+
+  get isAdmin(): boolean {
+    return localStorage.getItem("role") === "Admin";
+  }
+
+  get isHR(): boolean {
+    return localStorage.getItem("role") === "HR";
+  }
+
+  get isAccountant(): boolean {
+    return localStorage.getItem("role") === "Accountant";
+  }
+
+  get isControl(): boolean {
+    return localStorage.getItem("role") === "Control";
+  }
+
+  get isManager(): boolean {
+    return localStorage.getItem("role") === "Manager";
+  }
+
+  get isAreaManager(): boolean {
+    return localStorage.getItem("role") === "Area Manager";
+  }
+
   setUserType(type: number) {
     this._userType.next(type);
   }

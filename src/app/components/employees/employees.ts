@@ -326,7 +326,7 @@ editEmployee(emp: any) {
       graduationYear: this.employeeDetails.graduationYear,
       nationalId: this.employeeDetails.nationalId,
       phoneNumber: this.employeeDetails.phoneNumber,
-      EmployeeType: this.employeeDetails.EmployeeType,
+      EmployeeType: this.employeeDetails.employeeType,
     };
 
     this.api.editEmployee(this.employeeDetails.id, payload).subscribe({

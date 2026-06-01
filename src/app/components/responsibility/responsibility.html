@@ -1,6 +1,6 @@
 <div
   class="sticky-header my-2 d-flex align-items-center gap-2 justify-content-between flex-wrap"
-  *ngIf="!isEmployee"
+  *ngIf="auth.isAdmin || auth.isHR "
 >
   <button
     pButton
@@ -17,38 +17,39 @@
     {{ showCreateResponsibility ? '' : 'عهدة جديدة' }}
   </button>
 
-    <div class="form d-flex align-items-center gap-2 flex-wrap justify-content-between" *ngIf="showSearchPanel">
-      <!-- قائمة الموظفين -->
-        <label>اختر الموظف</label>
-
-      <div class="field">
-        <p-select
-          [(ngModel)]="selectedEmployeeId"
-          [options]="employees"
-          optionLabel="name"
-          optionValue="id"
-          placeholder="اختر موظف"
-          [filter]="true"
-          filterPlaceholder="بحث..."
-          [pt]="{
+  <div
+    class="form d-flex align-items-center gap-2 flex-wrap justify-content-between"
+    *ngIf="showSearchPanel"
+  >
+    <!-- قائمة الموظفين -->
+    <div class="field">
+      <p-select
+        [(ngModel)]="selectedEmployeeId"
+        [options]="employees"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="اختر موظف"
+        [filter]="true"
+        filterPlaceholder="بحث..."
+        [pt]="{
       root: { class: 'select-panel' },
       pcOverlay: { root: { class: 'select-overlay' } },
       listContainer: { class: 'select-list-container' },
       header: { class: 'select-header' },
       label: { class: 'select-label' }
     }"
-        />
-      </div>
-
-      <button
-        type="button"
-        class="submit-btn full mx-1"
-        (click)="Search()"
-        [disabled]="!selectedEmployeeId || loading"
-      >
-        {{ loading ? 'جارى البحث...' : 'بحث' }}
-      </button>
+      />
     </div>
+
+    <button
+      type="button"
+      class="submit-btn full mx-1"
+      (click)="Search()"
+      [disabled]="!selectedEmployeeId || loading"
+    >
+      {{ loading ? 'جارى البحث...' : 'بحث' }}
+    </button>
+  </div>
 </div>
 
 <!-- CREATE RESPONSIBILITY -->
@@ -66,6 +67,7 @@
   [rows]="pageSize"
   [rowsPerPageOptions]="[5,10,20]"
   [loading]="loading"
+  [lazy]="true"
   [responsiveLayout]="'scroll'"
   [paginatorDropdownAppendTo]="'body'"
   dataKey="id"
@@ -77,7 +79,7 @@
       <th>#</th>
       <th>اسم العهدة</th>
       <th>تاريخ الإضافة</th>
-      <!-- <th>الإجراءات</th> -->
+      <th>الإجراءات</th>
     </tr>
   </ng-template>
 
@@ -86,16 +88,18 @@
       <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
       <td>{{ responsibility.name }}</td>
       <td>{{ responsibility.createdAt | date:'yyyy-MM-dd' }}</td>
-      <!-- <td>
-      <button
-        pButton
-        type="button"
-        class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-        (click)="confirmDelete(responsibility)"
-      >
-        <i class="pi pi-trash d-flex align-items-center justify-content-center"></i>
-      </button>
-    </td> -->
+      <td>
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+          (click)="deleteResponsibility(responsibility)"
+        >
+          <i
+            class="pi pi-trash d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
+      </td>
     </tr>
   </ng-template>
 

@@ -1,0 +1,63 @@
+<div
+  class="form d-flex align-items-center gap-2 flex-wrap my-2 justify-content-center"
+>
+  <div class="d-flex align-items-center gap-1">
+    <label>التاريخ من</label>
+    <input type="date" class="custom-input" [(ngModel)]="fromDate" />
+  </div>
+
+  <div class="d-flex align-items-center gap-1">
+    <label>إلى</label>
+    <input type="date" class="custom-input" [(ngModel)]="toDate" />
+
+    <button
+      type="button"
+      class="submit-btn"
+      (click)="loadMyShifts()"
+      [disabled]="!fromDate || !toDate || loading"
+    >
+      {{ loading ? 'جارى البحث...' : 'بحث' }}
+    </button>
+  </div>
+</div>
+
+<p-table
+  [value]="MyShift"
+  [paginator]="true"
+  [rows]="pageSize"
+  [rowsPerPageOptions]="[5,10,20]"
+  [loading]="loading"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
+  [responsiveLayout]="'scroll'"
+  [paginatorDropdownAppendTo]="'body'"
+  (onLazyLoad)="onPageChange($event)"
+  dataKey="id"
+  dir="rtl"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>اليوم</th>
+      <th>وقت البداية</th>
+      <th>وقت النهاية</th>
+      <th>إجمالي الساعات</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-shift let-ri="rowIndex">
+    <tr>
+      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
+      <td>{{ shift.day | date:'yyyy-MM-dd' }}</td>
+      <td>{{ formatTime(shift.start) }}</td>
+      <td>{{ formatTime(shift.end) }}</td>
+      <td>{{ shift.totalHours | number:'1.1-2' }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5" class="text-center py-4">لاتوجد أى بيانات</td>
+    </tr>
+  </ng-template>
+</p-table>

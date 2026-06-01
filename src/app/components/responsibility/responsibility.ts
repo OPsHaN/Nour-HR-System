@@ -7,6 +7,7 @@ import { TagModule } from "primeng/tag";
 import { ConfirmationService } from "primeng/api";
 import { Apiservice } from "src/app/services/api.service";
 import { SelectModule } from "primeng/select";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-responsibility",
@@ -34,6 +35,7 @@ export class Responsibility {
     private api: Apiservice,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
+    public auth : AuthService,
   ) {}
 
   ngOnInit() {
@@ -57,6 +59,7 @@ export class Responsibility {
       },
       error: () => {
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -95,15 +98,25 @@ export class Responsibility {
     this.loadResponsibilities();
   }
 
-  confirmDelete(responsibility: any) {
+  deleteResponsibility(item: any) {
     this.confirmationService.confirm({
-      message: "هل أنت متأكد من حذف العهدة ؟",
+      message: `هل أنت متأكد من حذف عهدة "${item.name}"؟`,
       header: "تأكيد الحذف",
       icon: "pi pi-exclamation-triangle",
-      acceptLabel: "نعم",
-      rejectLabel: "لا",
+      acceptLabel: "حذف",
+      rejectLabel: "إلغاء",
+      acceptButtonStyleClass: "p-button-danger",
       accept: () => {
-        // this.deleteResponsibility(responsibility.id);
+        this.api.deleteResponsibility(item.employeeId, item.id).subscribe({
+          next: () => {
+            this.cdr.detectChanges();
+            this.api.showSuccess("تم حذف العهدة بنجاح");
+            this.loadResponsibilities();
+          },
+          error: () => {
+            this.api.showError("حدث خطأ أثناء حذف العهدة");
+          },
+        });
       },
     });
   }

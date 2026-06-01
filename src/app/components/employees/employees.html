@@ -280,7 +280,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="8" class="text-center py-4">لاتوجد أى بيانات</td>
+      <td colspan="9" class="text-center py-4">لاتوجد أى بيانات</td>
     </tr>
   </ng-template>
 </p-table>
@@ -495,7 +495,7 @@
 
               <div class="detail-item">
                 <label>حالة الموظف</label>
-                <select  class= "custom-input" *ngIf="isEditMode" [(ngModel)]="employeeDetails.EmployeeType">
+                <select  class= "custom-input" *ngIf="isEditMode" [(ngModel)]="employeeDetails.employeeType">
                   <option value="">اختر حالة الموظف</option>
                   <option value="تحت التدريب">تحت التدريب</option>
                   <option value="تم التعيين">تم التعيين</option>

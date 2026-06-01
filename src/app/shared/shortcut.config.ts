@@ -23,6 +23,13 @@ type ShortcutConfig = {
 
 /* 🔥 CONFIG */
 export const SHORTCUTS_CONFIG = {
+    myshift: {
+    title: "مواعيد شيفتى",
+    icon: "schedule",
+    bg: "#1890ff",
+    roles: ["Employee" ] as UserRole[],
+    size: { width: 620, height: 420 },
+  },
   calendar: {
     title: "النتيجة",
     icon: "event",
@@ -55,7 +62,7 @@ export const SHORTCUTS_CONFIG = {
     title: "بنود التقييم",
     icon: "check_circle",
     bg: "#722ed1",
-    roles: ["Admin", "HR" , "Employee"] as UserRole[],
+    roles: ["Admin", "HR"  , "Area Manager"] as UserRole[],
     size: { width: 620, height: 480 },
   },
   banks: {
@@ -69,14 +76,14 @@ export const SHORTCUTS_CONFIG = {
     title: "التقارير ",
     icon: "bar_chart",
     bg: "#52c41a",
-    roles: ["Admin", "HR" , "Control" , "Area Manager" ] as UserRole[],
+    roles: ["Admin", "HR" , "Control" , "Area Manager" , "Accountant" ] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   responsibility: {
     title: "العهدة",
     icon: "work",
     bg: "#fa541c",
-    roles: ["Admin", "HR" , "Employee"] as UserRole[],
+    roles: ["Admin", "HR" , "Employee" , "Area Manager" , "Control" , "Accountant" ] as UserRole[],
     size: { width: 1100, height: 500 },
   },
 
@@ -84,14 +91,14 @@ export const SHORTCUTS_CONFIG = {
     title: "الطلبات",
     icon: "assignment",
     bg: "#fa8c16",
-    roles: ["Admin", "HR" , "Employee"] as UserRole[],
+    roles: ["Admin", "HR" , "Employee" , "Area Manager"  , "Control" , "Accountant" ] as UserRole[],
     size: { width: 620, height: 420 },
   },
   complaints: {
     title: "الشكاوى",
     icon: "report_problem",
     bg: "#f5222d",
-    roles: ["Admin", "HR" , "Employee"] as UserRole[],
+    roles: ["Admin", "HR" , "Employee" , "Area Manager"  , "Control" , "Accountant" ] as UserRole[],
     size: { width: 620, height: 420 },
   },
 } satisfies Record<string, ShortcutConfig>;

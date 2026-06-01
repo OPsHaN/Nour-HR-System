@@ -550,8 +550,9 @@ input {
 }
 
 .select-panel .p-select-label {
-  font-weight: 600;
+  /* font-weight: 600; */
   color: var(--text) !important;
+  font-size: 23px !important;
 }
 
 

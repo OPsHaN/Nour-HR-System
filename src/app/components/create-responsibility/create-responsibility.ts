@@ -15,9 +15,8 @@ import { SelectModule } from "primeng/select";
 export class CreateResponsibility implements OnInit {
   @Output() created = new EventEmitter<void>();
 
-  addType: "self" | "employee" = "self";
   responsibilityName = "";
-  selectedEmployeeId: string | number = "";
+  selectedEmployeeId: string = "";
   employees: any[] = [];
   loading = false;
 
@@ -39,34 +38,26 @@ export class CreateResponsibility implements OnInit {
     });
   }
 
-  onAddTypeChange(): void {
-    this.selectedEmployeeId = "";
+  Save(): void {
+    this.loading = true;
+    this.api
+      .addResponsibility(this.selectedEmployeeId, {
+        name: this.responsibilityName,
+      })
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.responsibilityName = "";
+          this.selectedEmployeeId = "";
+          this.created.emit();
+          this.cdr.detectChanges();
+          this.api.showSuccess("تم إضافة العهدة بنجاح");
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          this.api.showError("حدث خطأ أثناء إضافة العهدة");
+        },
+      });
   }
-
-  save(): void {
-  const employeeId =
-    this.addType === 'self'
-      ? localStorage.getItem('employeeId') || ''
-      : String(this.selectedEmployeeId);
-
-  if (!employeeId || !this.responsibilityName.trim()) return;
-
-  this.loading = true;
-  this.api.addResponsibility(employeeId, { name: this.responsibilityName }).subscribe({
-    next: () => {
-      this.loading = false;
-      this.responsibilityName = '';
-      this.selectedEmployeeId = '';
-      this.addType = 'self';
-      this.created.emit();
-      this.cdr.detectChanges();
-    },
-    error: () => {
-      this.loading = false;
-      this.cdr.detectChanges();
-    },
-  });
-}
-
-
 }

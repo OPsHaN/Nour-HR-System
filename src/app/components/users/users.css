@@ -12,7 +12,7 @@
 .input-wrapper {
     position: relative;
     margin: 0 auto;
-    width: 50%;
+    width: 60%;
 }
 
 .input-wrapper .custom-input {
@@ -39,13 +39,12 @@
     width: 100%;
 }
 
-.input-wrapper {
-    width: 100%;
-}
+
 
 @media screen and (max-width: 768px) {
     .input-wrapper {
         width: 100%;
+        
     }
 
     .custom-input {

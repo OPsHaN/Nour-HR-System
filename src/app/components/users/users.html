@@ -26,11 +26,13 @@
   dataKey="id"
   editMode="row"
   [paginator]="true"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
   [rows]="pageSize"
   [rowsPerPageOptions]="[5,10,20]"
   [paginatorDropdownAppendTo]="'body'"
-    [editingRowKeys]="editingRowKeys"
-
+  [editingRowKeys]="editingRowKeys"
+  (onLazyLoad)="onPageChange($event)"
   dir="rtl"
 >
   <!-- HEADER -->
@@ -158,8 +160,7 @@
           pButton
           icon="pi pi-pencil"
           class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
-            (click)="editingRowKeys[emp.id] = true"
-
+          (click)="editingRowKeys[emp.id] = true"
           pInitEditableRow
         >
           <i

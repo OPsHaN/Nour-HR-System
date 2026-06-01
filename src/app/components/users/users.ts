@@ -46,9 +46,10 @@ export class Users {
   }
 
   getEmployees() {
-    this.api.getAllUsers(1, 10).subscribe({
+    this.api.getAllUsers(this.page, this.pageSize).subscribe({
       next: (res: any) => {
         this.users = res.data || [];
+        this.totalRecords = res.totalCount ?? this.users.length;
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -114,5 +115,11 @@ export class Users {
         console.error(err);
       },
     });
+  }
+
+  onPageChange(event: any) {
+    this.page = event.first / event.rows + 1;
+    this.pageSize = event.rows;
+    this.getEmployees();
   }
 }

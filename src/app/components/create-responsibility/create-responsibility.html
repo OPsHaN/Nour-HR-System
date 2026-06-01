@@ -1,20 +1,7 @@
 <div class="panel">
   <div class="form">
-    <!-- نوع الإضافة -->
-    <div class="field">
-      <label>نوع الإضافة</label>
-      <select
-        class="custom-input"
-        [(ngModel)]="addType"
-        (ngModelChange)="onAddTypeChange()"
-      >
-        <option value="self">إضافة عهدة شخصية</option>
-        <option value="employee">إضافة عهدة لموظف</option>
-      </select>
-    </div>
-
     <!-- قائمة الموظفين -->
-    <div class="field" *ngIf="addType === 'employee'">
+    <div class="field" >
       <label>اختر الموظف <span class="required text-danger">*</span></label>
       <p-select
         [(ngModel)]="selectedEmployeeId"
@@ -48,8 +35,8 @@
     <button
       type="button"
       class="submit-btn full"
-      [disabled]="loading || !responsibilityName || (addType === 'employee' && !selectedEmployeeId)"
-      (click)="save()"
+      [disabled]="loading || !responsibilityName "
+      (click)="Save()"
     >
       {{ loading ? 'جارى الحفظ...' : 'إضافة العهدة' }}
     </button>
