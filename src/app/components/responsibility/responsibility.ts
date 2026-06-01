@@ -6,6 +6,7 @@ import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
 import { ConfirmationService } from "primeng/api";
 import { Apiservice } from "src/app/services/api.service";
+import { SelectModule } from "primeng/select";
 
 @Component({
   selector: "app-responsibility",
@@ -15,20 +16,21 @@ import { Apiservice } from "src/app/services/api.service";
     FormsModule,
     CommonModule,
     CreateResponsibility,
+    SelectModule,
   ],
   templateUrl: "./responsibility.html",
   styleUrl: "./responsibility.css",
 })
-
 export class Responsibility {
   page = 1;
   pageSize = 10;
   loading = false;
-  Responsibilities: any[] = [];
+  Responsibilities: any;
   showCreateResponsibility = false;
-
-
-    constructor(
+  selectedEmployeeId: string = "";
+  employees: any[] = [];
+  showSearchPanel = true;
+  constructor(
     private api: Apiservice,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
@@ -36,6 +38,11 @@ export class Responsibility {
 
   ngOnInit() {
     this.loadResponsibilities();
+    this.loadEmployees();
+  }
+
+  get isEmployee(): boolean {
+    return localStorage.getItem("role") === "Employee";
   }
 
   loadResponsibilities() {
@@ -51,13 +58,42 @@ export class Responsibility {
       error: () => {
         this.loading = false;
       },
-    }); 
-}
+    });
+  }
 
-    onResponsibilityCreated() {
-      this.showCreateResponsibility = false;
-      this.loadResponsibilities();
+  loadEmployees(): void {
+    this.api.getAllEmployees(1, 999).subscribe({
+      next: (res: any) => {
+        this.employees = res.data;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  Search() {
+    if (!this.selectedEmployeeId) {
+      return;
     }
+
+    this.loading = true;
+    this.api.getAllResponsibilities(this.selectedEmployeeId).subscribe({
+      next: (data) => {
+        this.Responsibilities = data;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  onResponsibilityCreated() {
+    this.showCreateResponsibility = false;
+    this.loadResponsibilities();
+  }
 
   confirmDelete(responsibility: any) {
     this.confirmationService.confirm({
@@ -70,7 +106,5 @@ export class Responsibility {
         // this.deleteResponsibility(responsibility.id);
       },
     });
-  }   
-
-
+  }
 }

@@ -34,7 +34,7 @@ export const SHORTCUTS_CONFIG = {
     title: "المستخدمين",
     icon: "groups",
     bg: "#1677ff",
-    roles: ["Admin", "HR"] as UserRole[],
+    roles: ["Admin"] as UserRole[],
     size: { width: 900, height: 600 },
   },
   employees: {

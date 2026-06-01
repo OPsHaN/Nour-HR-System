@@ -1,22 +1,60 @@
-<div class="sticky-header my-2">
-<button
-  pButton
-  type="button"
-  class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
-  [class.btn-success]="!showCreateResponsibility"
-  [class.btn-danger]="showCreateResponsibility"
-  (click)="showCreateResponsibility = !showCreateResponsibility"
+<div
+  class="sticky-header my-2 d-flex align-items-center gap-2 justify-content-between flex-wrap"
+  *ngIf="!isEmployee"
 >
-  <i
-    class="pi"
-    [ngClass]="showCreateResponsibility   ? 'pi-times' : 'pi-sitemap'"
-  ></i>
-  {{ showCreateResponsibility ? '' : 'عهدة جديدة' }}
-</button>
+  <button
+    pButton
+    type="button"
+    class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+    [class.btn-success]="!showCreateResponsibility"
+    [class.btn-danger]="showCreateResponsibility"
+    (click)="showCreateResponsibility = !showCreateResponsibility; showSearchPanel = !showSearchPanel"
+  >
+    <i
+      class="pi"
+      [ngClass]="showCreateResponsibility   ? 'pi-times' : 'pi-sitemap'"
+    ></i>
+    {{ showCreateResponsibility ? '' : 'عهدة جديدة' }}
+  </button>
+
+    <div class="form d-flex align-items-center gap-2 flex-wrap justify-content-between" *ngIf="showSearchPanel">
+      <!-- قائمة الموظفين -->
+        <label>اختر الموظف</label>
+
+      <div class="field">
+        <p-select
+          [(ngModel)]="selectedEmployeeId"
+          [options]="employees"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="اختر موظف"
+          [filter]="true"
+          filterPlaceholder="بحث..."
+          [pt]="{
+      root: { class: 'select-panel' },
+      pcOverlay: { root: { class: 'select-overlay' } },
+      listContainer: { class: 'select-list-container' },
+      header: { class: 'select-header' },
+      label: { class: 'select-label' }
+    }"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="submit-btn full mx-1"
+        (click)="Search()"
+        [disabled]="!selectedEmployeeId || loading"
+      >
+        {{ loading ? 'جارى البحث...' : 'بحث' }}
+      </button>
+    </div>
 </div>
 
 <!-- CREATE RESPONSIBILITY -->
-<app-create-responsibility *ngIf="showCreateResponsibility" (created)="onResponsibilityCreated()"
+<app-create-responsibility
+  *ngIf="showCreateResponsibility"
+  (created)="onResponsibilityCreated()"
 >
 </app-create-responsibility>
 
@@ -34,21 +72,21 @@
   dir="rtl"
 >
   <!-- HEADER -->
-<ng-template pTemplate="header">
-  <tr>
-    <th>#</th>
-    <th>اسم العهدة</th>
-    <th>تاريخ الإضافة</th>
-    <!-- <th>الإجراءات</th> -->
-  </tr>
-</ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>اسم العهدة</th>
+      <th>تاريخ الإضافة</th>
+      <!-- <th>الإجراءات</th> -->
+    </tr>
+  </ng-template>
 
-<ng-template pTemplate="body" let-responsibility let-ri="rowIndex">
-  <tr>
-    <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
-    <td>{{ responsibility.name }}</td>
-    <td>{{ responsibility.createdAt | date:'yyyy-MM-dd' }}</td>
-    <!-- <td>
+  <ng-template pTemplate="body" let-responsibility let-ri="rowIndex">
+    <tr>
+      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
+      <td>{{ responsibility.name }}</td>
+      <td>{{ responsibility.createdAt | date:'yyyy-MM-dd' }}</td>
+      <!-- <td>
       <button
         pButton
         type="button"
@@ -58,13 +96,12 @@
         <i class="pi pi-trash d-flex align-items-center justify-content-center"></i>
       </button>
     </td> -->
-  </tr>
-</ng-template>
+    </tr>
+  </ng-template>
 
-<ng-template pTemplate="emptymessage">
-  <tr>
-    <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
-  </tr>
-</ng-template>
-
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4" class="text-center py-4">لاتوجد أى بيانات</td>
+    </tr>
+  </ng-template>
 </p-table>

@@ -173,7 +173,7 @@
   [value]="employees"
   [paginator]="true"
   [rows]="pageSize"
-  [rowsPerPageOptions]="[5,10,20]"
+  [rowsPerPageOptions]="[5,10,20,50,100]"
   [loading]="loading"
   [lazy]="true"
   [totalRecords]="totalRecords"
@@ -189,7 +189,6 @@
       <th *ngIf="showGroupMode">
         <input type="checkbox" (change)="toggleSelectAll($event)" />
       </th>
-
       <th>#</th>
       <th>الاسم</th>
       <th>الوظيفة</th>
@@ -198,7 +197,6 @@
       <th>ساعات العمل</th>
       <th>الفرع</th>
       <th>حالة الموظف</th>
-
       <th>الإجراءات</th>
     </tr>
   </ng-template>
@@ -291,6 +289,7 @@
   header="إنهاء خدمة الموظف"
   [(visible)]="showEndServiceDialog"
   [modal]="true"
+  [draggable]="false"
   class="end-service-dialog"
   [style]="{ width: '24rem' }"
 >
@@ -344,21 +343,21 @@
   [header]="isEditMode ? 'تعديل بيانات الموظف' : 'بيانات الموظف ' + employeeName"
   [(visible)]="showEmployeeDetailsDialog"
   [modal]="true"
+  [draggable]="false"
   [style]="{ width: '100rem', 'max-height': '100%'}"
   class="data-employee-dialog"
 >
   <div *ngIf="employeeDetails">
     <p-tabs [(value)]="activeTabIndex">
       <p-tablist>
-        <p-tab value="0"><i class="pi pi-user me-2"></i> بيانات الموظف</p-tab>
-        <p-tab value="1"><i class="pi pi-wallet me-2"></i> بيانات المرتب</p-tab>
-        <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length"
-          ><i class="pi pi-chart-line me-2"></i> التقييمات</p-tab
+        <p-tab value="0"> بيانات الموظف</p-tab>
+        <p-tab value="1"> بيانات المرتب</p-tab>
+        <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length">
+          التقييمات</p-tab>
+        <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length">
+          سجل التنقلات</p-tab
         >
-        <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length"
-          ><i class="pi pi-history me-2"></i> سجل التنقلات</p-tab
-        >
-        <p-tab value="4"><i class="pi pi-box me-2"></i> العهد</p-tab>
+        <p-tab value="4"> العهد</p-tab>
       </p-tablist>
 
       <p-tabpanels>
@@ -496,7 +495,15 @@
 
               <div class="detail-item">
                 <label>حالة الموظف</label>
-                <span>{{ employeeDetails.employeeType || '-' }}</span>
+                <select  class= "custom-input" *ngIf="isEditMode" [(ngModel)]="employeeDetails.EmployeeType">
+                  <option value="">اختر حالة الموظف</option>
+                  <option value="تحت التدريب">تحت التدريب</option>
+                  <option value="تم التعيين">تم التعيين</option>
+                </select>
+
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.employeeType || '-' }}</span
+                >
               </div>
 
               <div class="detail-item">
@@ -817,7 +824,7 @@
                 >
               </div>
               <div class="detail-item">
-                <label>إجمالى الاجازات</label
+                <label>إجمالى أيام الأجازات</label
                 ><span>{{ employeeDetails.holidaies }} يوم</span>
               </div>
               <div class="detail-item">
@@ -1068,6 +1075,7 @@
   header="مواعيد الحضور والانصراف للموظف {{ this.employeeName }}"
   [(visible)]="showAttendanceDialog"
   [modal]="true"
+  [draggable]="false"
   [style]="{ width: '40rem' }"
   class="schedule-dialog"
 >
@@ -1226,6 +1234,7 @@
   [header]="currentActionTitle"
   [(visible)]="actionDialogVisible"
   [modal]="true"
+  [draggable]="false"
   class="end-service-dialog"
   [style]="{
     width: currentActionType === 'evaluation'
@@ -1502,6 +1511,7 @@
   header="إضافة مجموعة"
   [(visible)]="showGroupDialog"
   [modal]="true"
+  [draggable]="false"
   [style]="{ width: groupSubType === 'days' ? '55rem' : '35rem' }"
   class="data-employee-dialog"
 >

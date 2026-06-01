@@ -58,8 +58,9 @@ export class CreateEmployee {
       ],
       totalSalary: [0],
       salaryPerHour: [0],
-      // employeeType: ["", Validators.required],
-      insurence: [0, Validators.required],
+      EmployeeType: ["", Validators.required],
+      Insurence: [0, Validators.required],
+      Holidaies: [0, Validators.required],
     });
   }
 
