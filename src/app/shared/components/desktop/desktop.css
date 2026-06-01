@@ -108,14 +108,12 @@
     color: var(--text);
     padding: 0 0.4rem;
     float: none;
+    justify-self: center;
     width: auto;
   }
 }
 
-.shift-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
+
 
 .shift-buttons {
   display: flex;
@@ -125,10 +123,11 @@
 
 .shift-counter {
   padding: 0.4rem 0.8rem;
-  background: #f4f4f5;
+  background: var(--shortcut-bg);
+  color: var(--text);
   border-radius: 20px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   gap: 6px;

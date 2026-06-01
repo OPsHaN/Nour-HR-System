@@ -293,24 +293,23 @@ export class Apiservice {
   }
 
   getAbsentEmployees(fromDate: string, toDate: string) {
-    return this.http.get(`${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}`);
-  }
-
-  startShift(){
-    return this.http.post(
-      `${this.baseUrl}attendance/start`, {}
+    return this.http.get(
+      `${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}`,
     );
   }
 
-  endShift(){
-    return this.http.post(
-      `${this.baseUrl}attendance/end`, {}
-    );
+  startShift() {
+    return this.http.post(`${this.baseUrl}attendance/start`, {});
+  }
+
+  endShift() {
+    return this.http.post(`${this.baseUrl}attendance/end`, {});
   }
 
   getMyShifts(fromDate: string, toDate: string) {
-    return this.http.get(`${this.baseUrl}attendance/my-shifts?fromDate=${fromDate}&toDate=${toDate}`);
-
+    return this.http.get(
+      `${this.baseUrl}attendance/my-shifts?fromDate=${fromDate}&toDate=${toDate}`,
+    );
   }
 
   getAllReportsForEmpolyee(employeeId: number) {
@@ -327,9 +326,31 @@ export class Apiservice {
     );
   }
 
-addDeductionCalculator(body: { employeeIds: number[] }) {
-  return this.http.post(`${this.baseUrl}payroll/deduction-calculator`, body);
-}
+  addDeductionCalculator(body: { employeeIds: number[] }) {
+    return this.http.post(`${this.baseUrl}payroll/deduction-calculator`, body);
+  }
+
+  //Responsibilities//
+
+  getAllResponsibilities(employeeId: string) {
+    return this.http.get(
+      `${this.baseUrl}employees/${employeeId}/custody`,
+    );
+  }
+
+  addResponsibility(employeeId: string, responsibilityData: any) {
+    return this.http.post(
+      `${this.baseUrl}employees/${employeeId}/custody`,
+      responsibilityData,
+    );
+  }
+
+  deleteResponsibility(employeeId: string, responsibilityId: string) {
+    return this.http.delete(
+      `${this.baseUrl}employees/${employeeId}/custody/${responsibilityId}`,
+      {},
+    );
+  }
 
   showError(msg: string) {
     this.messageService.add({

@@ -5,6 +5,7 @@ import {
   Component,
   HostListener,
   OnDestroy,
+  OnInit,
   inject,
 } from "@angular/core";
 import { ShortcutsComponent } from "../shortcuts/shortcuts";
@@ -32,31 +33,32 @@ import { finalize } from "rxjs/operators";
   styleUrl: "./desktop.css",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Desktop implements OnDestroy {
-  userName: string = "";
-  // Shift state
+export class Desktop implements OnInit, OnDestroy {
+  userName = "";
+
+  // ── Shift State ────────────────────────────────────────────────────────────
   shiftStarted = false;
   loadingStart = false;
   loadingEnd = false;
-  shiftSeconds = 0;
-  shiftTimer: any;
+  formattedTime = "00:00:00";
+  private shiftStartTime: Date | null = null;
+  private timerInterval: any;
 
   get isEmployee(): boolean {
-    const role = localStorage.getItem("role");
-    return role === "Employee";
+    return localStorage.getItem("role") === "Employee";
   }
 
+  private get storageKey(): string {
+    const userId = localStorage.getItem("userId") ?? "default";
+    return `activeShift_${userId}`;
+  }
+
+  // ── Windows ────────────────────────────────────────────────────────────────
   protected windows: DesktopWindow[] = [];
   protected isDark = false;
   private registry = WINDOW_REGISTRY;
   private readonly cdr = inject(ChangeDetectorRef);
-  private dragState?:
-    | {
-        id: number;
-        offsetX: number;
-        offsetY: number;
-      }
-    | undefined;
+  private dragState?: { id: number; offsetX: number; offsetY: number };
   private nextId = 1;
 
   constructor(
@@ -64,13 +66,94 @@ export class Desktop implements OnDestroy {
     private confirmationService: ConfirmationService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userName = localStorage.getItem("name") || "مستخدم";
+    this.restoreShiftState();
   }
 
   ngOnDestroy(): void {
-    // Cleanup if needed
+    clearInterval(this.timerInterval);
   }
+
+  // ── Shift ──────────────────────────────────────────────────────────────────
+
+  onStartShift(): void {
+    this.loadingStart = true;
+    this.api
+      .startShift()
+      .pipe(finalize(() => { this.loadingStart = false; this.cdr.detectChanges(); }))
+      .subscribe({
+        next: () => {
+          this.shiftStarted = true;
+          this.shiftStartTime = new Date();
+          this.saveShiftState();
+          this.startTimer();
+          this.api.showSuccess("تم بدء شيفتك بنجاح");
+        },
+        error: () => {
+          this.api.showError("يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر");
+        },
+      });
+  }
+
+  onEndShift(): void {
+    this.loadingEnd = true;
+    this.api
+      .endShift()
+      .pipe(finalize(() => { this.loadingEnd = false; this.cdr.detectChanges(); }))
+      .subscribe({
+        next: () => {
+          this.shiftStarted = false;
+          this.shiftStartTime = null;
+          this.formattedTime = "00:00:00";
+          this.clearShiftState();
+          clearInterval(this.timerInterval);
+          this.api.showSuccess("تم إنهاء شيفتك بنجاح");
+        },
+        error: () => {
+          this.api.showError("يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر");
+        },
+      });
+  }
+
+  private startTimer(): void {
+    clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      if (!this.shiftStartTime) return;
+      const diff = Math.floor((Date.now() - this.shiftStartTime.getTime()) / 1000);
+      const h = Math.floor(diff / 3600).toString().padStart(2, "0");
+      const m = Math.floor((diff % 3600) / 60).toString().padStart(2, "0");
+      const s = (diff % 60).toString().padStart(2, "0");
+      this.formattedTime = `${h}:${m}:${s}`;
+      this.cdr.detectChanges();
+    }, 1000);
+  }
+
+  private restoreShiftState(): void {
+    const saved = localStorage.getItem(this.storageKey);
+    if (!saved) return;
+    try {
+      const { startTime } = JSON.parse(saved);
+      this.shiftStarted = true;
+      this.shiftStartTime = new Date(startTime);
+      this.startTimer();
+    } catch {
+      this.clearShiftState();
+    }
+  }
+
+  private saveShiftState(): void {
+    localStorage.setItem(
+      this.storageKey,
+      JSON.stringify({ startTime: this.shiftStartTime?.toISOString() }),
+    );
+  }
+
+  private clearShiftState(): void {
+    localStorage.removeItem(this.storageKey);
+  }
+
+  // ── Windows ────────────────────────────────────────────────────────────────
 
   protected openShortcut(shortcut: Shortcut): void {
     const baseWindow: DesktopWindow = {
@@ -87,63 +170,42 @@ export class Desktop implements OnDestroy {
       maximized: false,
       active: true,
     };
-
-    this.windows = this.windows.map((window) => ({ ...window, active: false }));
+    this.windows = this.windows.map((w) => ({ ...w, active: false }));
     this.windows = [...this.windows, baseWindow];
   }
 
   protected activateWindow(id: number): void {
-    this.windows = this.windows.map((window) => ({
-      ...window,
-      active: window.id === id,
-      minimized: window.id === id ? false : window.minimized,
+    this.windows = this.windows.map((w) => ({
+      ...w,
+      active: w.id === id,
+      minimized: w.id === id ? false : w.minimized,
     }));
   }
 
   protected minimizeWindow(id: number): void {
-    this.windows = this.windows.map((window) =>
-      window.id === id ? { ...window, minimized: true, active: false } : window,
+    this.windows = this.windows.map((w) =>
+      w.id === id ? { ...w, minimized: true, active: false } : w,
     );
   }
 
   protected closeWindow(id: number): void {
-    this.windows = this.windows.filter((window) => window.id !== id);
-    const topWindow = [...this.windows]
-      .reverse()
-      .find((window) => !window.minimized);
-    if (topWindow) {
-      this.activateWindow(topWindow.id);
-    }
+    this.windows = this.windows.filter((w) => w.id !== id);
+    const topWindow = [...this.windows].reverse().find((w) => !w.minimized);
+    if (topWindow) this.activateWindow(topWindow.id);
   }
 
   protected toggleMaximize(id: number): void {
-    this.windows = this.windows.map((window) => {
-      if (window.id !== id) {
-        return window;
+    this.windows = this.windows.map((w) => {
+      if (w.id !== id) return w;
+      if (w.maximized && w.previousRect) {
+        return { ...w, ...w.previousRect, maximized: false, previousRect: undefined, active: true, minimized: false };
       }
-
-      if (window.maximized && window.previousRect) {
-        return {
-          ...window,
-          ...window.previousRect,
-          maximized: false,
-          previousRect: undefined,
-          active: true,
-          minimized: false,
-        };
-      }
-
       return {
-        ...window,
-        previousRect: {
-          top: window.top,
-          left: window.left,
-          width: window.width,
-          height: window.height,
-        },
+        ...w,
+        previousRect: { top: w.top, left: w.left, width: w.width, height: w.height },
         top: 9,
         left: 10,
-        width: Math.max(window.width, globalThis.innerWidth - 20),
+        width: Math.max(w.width, globalThis.innerWidth - 20),
         height: globalThis.innerHeight - 100,
         maximized: true,
         active: true,
@@ -153,73 +215,35 @@ export class Desktop implements OnDestroy {
   }
 
   protected toggleTask(id: number): void {
-    const target = this.windows.find((window) => window.id === id);
-    if (!target) {
-      return;
-    }
-
-    if (target.minimized) {
-      this.activateWindow(id);
-      return;
-    }
-
-    if (target.active) {
-      this.minimizeWindow(id);
-      return;
-    }
-
+    const target = this.windows.find((w) => w.id === id);
+    if (!target) return;
+    if (target.minimized) { this.activateWindow(id); return; }
+    if (target.active)    { this.minimizeWindow(id); return; }
     this.activateWindow(id);
   }
 
   protected handleThemeChange(isDark: boolean): void {
     this.isDark = isDark;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
   protected startDrag(event: { event: MouseEvent; id: number }): void {
     const { event: mouseEvent, id } = event;
-    const target = this.windows.find((window) => window.id === id);
-    if (!target || target.maximized) {
-      return;
-    }
-
+    const target = this.windows.find((w) => w.id === id);
+    if (!target || target.maximized) return;
     this.activateWindow(id);
-    this.dragState = {
-      id,
-      offsetX: mouseEvent.clientX - target.left,
-      offsetY: mouseEvent.clientY - target.top,
-    };
+    this.dragState = { id, offsetX: mouseEvent.clientX - target.left, offsetY: mouseEvent.clientY - target.top };
   }
 
   @HostListener("window:mousemove", ["$event"])
   protected onMouseMove(event: MouseEvent): void {
-    if (!this.dragState) {
-      return;
-    }
-
-    this.windows = this.windows.map((window) => {
-      if (window.id !== this.dragState?.id) {
-        return window;
-      }
-
-      const nextLeft = Math.max(
-        10,
-        Math.min(
-          globalThis.innerWidth - window.width - 10,
-          event.clientX - this.dragState.offsetX,
-        ),
-      );
-      const nextTop = Math.max(
-        10,
-        Math.min(
-          globalThis.innerHeight - 120,
-          event.clientY - this.dragState.offsetY,
-        ),
-      );
+    if (!this.dragState) return;
+    this.windows = this.windows.map((w) => {
+      if (w.id !== this.dragState?.id) return w;
       return {
-        ...window,
-        left: nextLeft,
-        top: nextTop,
+        ...w,
+        left: Math.max(10, Math.min(globalThis.innerWidth - w.width - 10, event.clientX - this.dragState.offsetX)),
+        top:  Math.max(10, Math.min(globalThis.innerHeight - 120,          event.clientY - this.dragState.offsetY)),
       };
     });
   }
@@ -229,76 +253,11 @@ export class Desktop implements OnDestroy {
     this.dragState = undefined;
   }
 
-  protected trackByWindowId(_: number, window: DesktopWindow): number {
-    return window.id;
+  protected trackByWindowId(_: number, w: DesktopWindow): number {
+    return w.id;
   }
 
   private defaultSize(action: keyof typeof SHORTCUTS_CONFIG) {
     return SHORTCUTS_CONFIG[action]?.size ?? { width: 520, height: 360 };
-  }
-
-  onStartShift(): void {
-    this.loadingStart = true;
-
-    this.api
-      .startShift()
-      .pipe(
-        finalize(() => {
-          this.loadingStart = false;
-        }),
-      )
-      .subscribe({
-        next: () => {
-          this.shiftStarted = true;
-          this.startCounter();
-          this.api.showSuccess("تم بدء شيفتك بنجاح");
-        },
-        error: () => {
-          this.api.showError(
-            "يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر",
-          );
-        },
-      });
-  }
-
-  onEndShift(): void {
-    this.loadingEnd = true;
-
-    this.api
-      .endShift()
-      .pipe(
-        finalize(() => {
-          this.loadingEnd = false;
-        }),
-      )
-      .subscribe({
-        next: () => {
-          this.shiftStarted = false;
-          this.api.showSuccess("تم إنهاء شيفتك بنجاح");
-        },
-        error: () => {
-          this.api.showError(
-            "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
-          );
-        },
-      });
-  }
-
-  startCounter(): void {
-    clearInterval(this.shiftTimer);
-
-    this.shiftTimer = setInterval(() => {
-      this.shiftSeconds++;
-    }, 1000);
-  }
-
-  get formattedTime(): string {
-    const hours = Math.floor(this.shiftSeconds / 3600);
-    const minutes = Math.floor((this.shiftSeconds % 3600) / 60);
-    const seconds = this.shiftSeconds % 60;
-
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
 }

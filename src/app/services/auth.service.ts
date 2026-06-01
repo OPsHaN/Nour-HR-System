@@ -46,7 +46,6 @@ export class AuthService {
     try {
       const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
       const decodedPayload = atob(base64);
-
       return JSON.parse(decodedPayload);
     } catch (e) {
       console.error("Invalid token format", e);
@@ -76,14 +75,19 @@ export class AuthService {
   onLoginSuccess(token: string) {
     localStorage.setItem("token", token);
     this._isLoggedIn.next(true);
+    const decoded = this.getDecodedToken();
+    if (decoded) {
+      localStorage.setItem("employeeId", decoded.EmployeeId ?? "");
+      localStorage.setItem("branchId", decoded.BranchId ?? "");
+    }
   }
 
-  get userType(): number | null {
-    return this.getDecodedToken()?.Type ?? null;
+  get employeeId(): number {
+    return Number(localStorage.getItem("employeeId")) ?? 0;
   }
 
-  get userId(): number {
-    return this.getDecodedToken()?.UserId ?? 0;
+  get branchId(): number {
+    return Number(localStorage.getItem("branchId")) ?? 0;
   }
 
   setUserType(type: number) {

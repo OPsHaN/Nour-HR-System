@@ -106,7 +106,7 @@ export class Employees {
       tenDays: number;
     };
   }[] = [];
-
+  loadingResponsibilities = false;
   selectedDayPerEmployee: Record<number, string> = {};
   actionSubType: "amount" | "days" = "amount";
   selectedSingleDay: string = "";
@@ -197,6 +197,17 @@ export class Employees {
         );
       },
     },
+    {
+      label: "إضافة عهدة",
+      icon: "pi pi-box",
+      command: () => {
+        this.openActionDialog(
+          "responsibility",
+          "إضافة عهدة",
+          this.selectedEmployee,
+        );
+      },
+    },
   ];
 
   loadEmployees() {
@@ -213,6 +224,12 @@ export class Employees {
         this.loading = false;
       },
     });
+  }
+
+  onPageChange(event: any): void {
+    this.page = event.first / event.rows + 1;
+    this.pageSize = event.rows;
+    this.loadEmployees();
   }
 
   getEmployeeName(id: number): string {
@@ -265,34 +282,37 @@ export class Employees {
     });
   }
 
-  editEmployee(emp: any) {
-    this.isEditMode = true;
-    this.showPayrollDetails = false;
-    this.api.getHistoryByEmployeeId(emp.id).subscribe({
-      next: (historyRes) => {
-        this.api.getEmployeeById(emp.id).subscribe({
-          next: (employeeRes) => {
-            this.api.getMonthyDataForuser(emp.id).subscribe({
-              next: (payrollRes) => {
-                this.employeeDetails = {
-                  ...historyRes,
-                  ...employeeRes,
-                  ...payrollRes,
-                };
-              },
-            });
+editEmployee(emp: any) {
+  this.isEditMode = true;
+  this.showPayrollDetails = false;
+  this.loadingResponsibilities = true;
 
-            this.employeeDetails.hiringDate = this.employeeDetails.hiringDate
-              ? new Date(this.employeeDetails.hiringDate)
-              : null;
-            this.cdr.detectChanges();
-            this.showEmployeeDetailsDialog = true;
-          },
-        });
-      },
-    });
-  }
-
+  forkJoin({
+    history: this.api.getHistoryByEmployeeId(emp.id),
+    employee: this.api.getEmployeeById(emp.id),
+    payroll: this.api.getMonthyDataForuser(emp.id),
+    responsibilities: this.api.getAllResponsibilities(emp.id),
+  }).subscribe({
+    next: (res: any) => {
+      this.employeeDetails = {
+        ...res.history,
+        ...res.employee,
+        ...res.payroll,
+        responsibilities: res.responsibilities,
+        hiringDate: res.employee.hiringDate
+          ? new Date(res.employee.hiringDate)
+          : null,
+      };
+      this.loadingResponsibilities = false;
+      this.showEmployeeDetailsDialog = true;
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.loadingResponsibilities = false;
+      this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+    },
+  });
+}
   saveEmployeeEdits() {
     const payload = {
       theNameOfJob: this.employeeDetails.theNameOfJob,
@@ -501,6 +521,7 @@ export class Employees {
       employeHistory: this.api.getHistoryByEmployeeId(emp.id),
       evaluations: this.api.getEvaluations(emp.id),
       payroll: payrollRequest,
+      responsibilities: this.api.getAllResponsibilities(emp.id),
     }).subscribe({
       next: (res: any) => {
         this.employeeDetails = {
@@ -509,6 +530,7 @@ export class Employees {
           ...res.employeHistory,
           employeeHistory: res.branchHistory,
           evaluations: res.evaluations,
+          responsibilities: res.responsibilities,
         };
 
         this.showPayrollDetails = true;
@@ -663,6 +685,7 @@ export class Employees {
       amount: null,
       reasonOfDiscount: "",
       notes: "",
+      responsibilityName: "",
     };
 
     if (type === "evaluation") {
@@ -797,6 +820,38 @@ export class Employees {
         },
       });
 
+      return;
+    }
+
+    if (this.currentActionType === "responsibility") {
+      if (!this.actionForm.responsibilityName?.trim()) {
+        this.api.showError("يجب إدخال اسم العهدة");
+        return;
+      }
+      this.actionLoading = true;
+      this.api
+        .addResponsibility(this.actionForm.employeeId, {
+          name: this.actionForm.responsibilityName,
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.actionLoading = false;
+            this.actionDialogVisible = false;
+            this.actionForm.responsibilityName = "";
+            if (this.employeeDetails) {
+              this.employeeDetails.responsibilities = [
+                ...(this.employeeDetails.responsibilities || []),
+                res,
+              ];
+            }
+            this.api.showSuccess("تم إضافة العهدة بنجاح");
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.actionLoading = false;
+            this.api.showError("حدث خطأ أثناء إضافة العهدة");
+          },
+        });
       return;
     }
 
@@ -1110,5 +1165,31 @@ export class Employees {
     return this.deductionCalcData.every(
       (row) => !!this.selectedDayPerEmployee[row.employeeId],
     );
+  }
+
+  deleteResponsibility(item: any) {
+    this.confirmationService.confirm({
+      message: `هل أنت متأكد من حذف عهدة "${item.name}"؟`,
+      header: "تأكيد الحذف",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "حذف",
+      rejectLabel: "إلغاء",
+      acceptButtonStyleClass: "p-button-danger",
+      accept: () => {
+        this.api.deleteResponsibility(item.employeeId, item.id).subscribe({
+          next: () => {
+            this.employeeDetails.responsibilities =
+              this.employeeDetails.responsibilities.filter(
+                (r: any) => r.id !== item.id,
+              );
+            this.cdr.detectChanges();
+            this.api.showSuccess("تم حذف العهدة بنجاح");
+          },
+          error: () => {
+            this.api.showError("حدث خطأ أثناء حذف العهدة");
+          },
+        });
+      },
+    });
   }
 }

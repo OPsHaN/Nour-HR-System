@@ -175,6 +175,9 @@
   [rows]="pageSize"
   [rowsPerPageOptions]="[5,10,20]"
   [loading]="loading"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
+  (onPage)="onPageChange($event)"
   [responsiveLayout]="'scroll'"
   [paginatorDropdownAppendTo]="'body'"
   dataKey="id"
@@ -194,6 +197,8 @@
       <th>رقم الحساب</th>
       <th>ساعات العمل</th>
       <th>الفرع</th>
+      <th>حالة الموظف</th>
+
       <th>الإجراءات</th>
     </tr>
   </ng-template>
@@ -219,6 +224,7 @@
       <td>{{ emp.bankAccount }}</td>
       <td>{{ emp.shiftHours }}</td>
       <td>{{ emp.branchName }}</td>
+      <td>{{ emp.employeeType }}</td>
       <td>
         <button
           pButton
@@ -352,6 +358,7 @@
         <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length"
           ><i class="pi pi-history me-2"></i> سجل التنقلات</p-tab
         >
+        <p-tab value="4"><i class="pi pi-box me-2"></i> العهد</p-tab>
       </p-tablist>
 
       <p-tabpanels>
@@ -485,6 +492,11 @@
               <div class="detail-item">
                 <label>رقم الهاتف</label>
                 <span>{{ employeeDetails.phoneNumber || '-' }}</span>
+              </div>
+
+              <div class="detail-item">
+                <label>حالة الموظف</label>
+                <span>{{ employeeDetails.employeeType || '-' }}</span>
               </div>
 
               <div class="detail-item">
@@ -980,6 +992,49 @@
             </ng-template>
           </p-table>
         </p-tabpanel>
+
+        <!-- ===== Tab 5: العهد ===== -->
+        <p-tabpanel value="4">
+          <p-table
+            *ngIf="!loadingResponsibilities"
+            [value]="employeeDetails?.responsibilities || []"
+            styleClass="p-datatable-sm p-datatable-gridlines"
+            responsiveLayout="scroll"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>#</th>
+                <th>اسم العهدة</th>
+                <th>تاريخ الإضافة</th>
+                <th style="text-align: center">الإجراءات</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-ri="rowIndex">
+              <tr>
+                <td>{{ ri + 1 }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.createdAt | date:'yyyy-MM-dd' }}</td>
+                <td style="text-align: center">
+                  <button
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-danger mx-1 rounded-circle"
+                    (click)="deleteResponsibility(item)"
+                  >
+                    <i
+                      class="pi pi-trash d-flex align-items-center justify-content-center"
+                    ></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="4" class="text-center py-4">لا توجد عهد مسجلة</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabpanel>
       </p-tabpanels>
     </p-tabs>
   </div>
@@ -1288,7 +1343,9 @@
 
   <!-- باقى الأنواع -->
 
-  <div *ngIf="currentActionType !== 'evaluation'">
+  <div
+    *ngIf="currentActionType !== 'evaluation' && currentActionType !== 'responsibility'"
+  >
     <div class="end-service-content">
       <!-- نوع القيمة (فقط للخصم والزيادة) -->
       <div
@@ -1412,6 +1469,30 @@
         'إضافة زيادة' : currentActionType === 'borrow' ? 'إضافة سلفة' :
         currentActionType === 'discount' ? 'إضافة خصم' : currentActionType ===
         'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة نقدية' ) }}
+      </button>
+    </div>
+  </div>
+  <!-- إضافة عهدة -->
+  <div *ngIf="currentActionType === 'responsibility'">
+    <div class="end-service-content">
+      <div class="field">
+        <label>اسم العهدة <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          class="custom-input"
+          [(ngModel)]="actionForm.responsibilityName"
+          placeholder="مثال: لابتوب"
+        />
+      </div>
+    </div>
+    <div class="form">
+      <button
+        type="button"
+        class="submit-btn full my-2"
+        [disabled]="actionLoading || !actionForm.responsibilityName"
+        (click)="saveAction()"
+      >
+        {{ actionLoading ? 'جارى الحفظ...' : 'إضافة عهدة' }}
       </button>
     </div>
   </div>

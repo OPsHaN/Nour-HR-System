@@ -1,0 +1,57 @@
+<div class="panel">
+  <div class="form">
+    <!-- نوع الإضافة -->
+    <div class="field">
+      <label>نوع الإضافة</label>
+      <select
+        class="custom-input"
+        [(ngModel)]="addType"
+        (ngModelChange)="onAddTypeChange()"
+      >
+        <option value="self">إضافة عهدة شخصية</option>
+        <option value="employee">إضافة عهدة لموظف</option>
+      </select>
+    </div>
+
+    <!-- قائمة الموظفين -->
+    <div class="field" *ngIf="addType === 'employee'">
+      <label>اختر الموظف <span class="required text-danger">*</span></label>
+      <p-select
+        [(ngModel)]="selectedEmployeeId"
+        [options]="employees"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="اختر موظف"
+        [filter]="true"
+        filterPlaceholder="بحث..."
+        [pt]="{
+      root: { class: 'select-panel' },
+      pcOverlay: { root: { class: 'select-overlay' } },
+      listContainer: { class: 'select-list-container' },
+      header: { class: 'select-header' },
+      label: { class: 'select-label' }
+    }"
+      />
+    </div>
+
+    <!-- اسم العهدة -->
+    <div class="field">
+      <label>اسم العهدة <span class="required text-danger">*</span></label>
+      <input
+        type="text"
+        [(ngModel)]="responsibilityName"
+        placeholder="مثال: لابتوب"
+      />
+    </div>
+
+    <!-- زرار الحفظ -->
+    <button
+      type="button"
+      class="submit-btn full"
+      [disabled]="loading || !responsibilityName || (addType === 'employee' && !selectedEmployeeId)"
+      (click)="save()"
+    >
+      {{ loading ? 'جارى الحفظ...' : 'إضافة العهدة' }}
+    </button>
+  </div>
+</div>

@@ -79,15 +79,15 @@
         </select>
       </div>
 
-      <!-- Bank Name -->
+      <!-- Bank Id -->
       <div class="field">
         <label>
           اسم البنك
-          <span class="required text-danger" *ngIf="isRequired('bankName')"
+          <span class="required text-danger" *ngIf="isRequired('bankId')"
             >*</span
           >
         </label>
-        <select formControlName="bankName">
+        <select formControlName="bankId">
           <option [ngValue]="null">اختر البنك</option>
           <option *ngFor="let bank of banks" [ngValue]="bank.id">
             {{ bank.name }}
@@ -198,6 +198,18 @@
           >
         </label>
         <input type="text" formControlName="phoneNumber" maxlength="11" />
+      </div>
+
+            <!-- Insurance Number -->
+
+           <div class="field">
+        <label>
+           مبلغ التأمين
+          <span class="required text-danger" *ngIf="isRequired('insurence')"
+            >*</span
+          >
+        </label>
+        <input type="text" formControlName="insurence" />
       </div>
 
       <!-- Total Salary -->

@@ -15,9 +15,8 @@
 
           <div class="shift-buttons">
             <p-button
-              [pt]="{ root: { style: 'padding: 0.3rem 0.75rem ; border-radius : 30px'} }"
+              [pt]="{ root: { style: 'padding: 0.3rem 0.3rem ; border-radius : 30px ; font-size: 22px'} }"
               label="بدء الشيفت"
-              icon="pi pi-play"
               severity="success"
               [disabled]="shiftStarted"
               [loading]="loadingStart"
@@ -28,9 +27,8 @@
               {{ formattedTime }}
             </div>
             <p-button
-              [pt]="{ root: { style: 'padding: 0.3rem 0.75rem ; border-radius : 30px' } }"
+              [pt]="{ root: { style: 'padding: 0.3rem 0.3rem ; border-radius : 30px ; font-size: 22px' } }"
               label="إنهاء الشيفت"
-              icon="pi pi-stop"
               severity="danger"
               [disabled]="!shiftStarted"
               [loading]="loadingEnd"

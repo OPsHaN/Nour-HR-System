@@ -44,7 +44,7 @@ export class CreateEmployee {
       name: ["", Validators.required],
       role: ["", Validators.required],
       theNameOfJob: ["", Validators.required],
-      bankName: ["", Validators.required],
+      bankId: ["", Validators.required],
       bankAccount: ["", Validators.required],
       shiftHours: [8, Validators.required],
       branchId: [0, Validators.required],
@@ -58,6 +58,8 @@ export class CreateEmployee {
       ],
       totalSalary: [0],
       salaryPerHour: [0],
+      // employeeType: ["", Validators.required],
+      insurence: [0, Validators.required],
     });
   }
 
