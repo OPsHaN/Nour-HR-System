@@ -13,7 +13,7 @@ import { WindowComponent } from "../window/window";
 import { TaskbarComponent } from "../taskbar/taskbar";
 import { DesktopWindow } from "../../desktop-window.model";
 import { WINDOW_REGISTRY } from "../../window-registry";
-import { Shortcut, SHORTCUTS_CONFIG } from "../../shortcut.config";
+import { getShortcutsByRole, Shortcut, SHORTCUTS_CONFIG } from "../../shortcut.config";
 import { ButtonModule } from "primeng/button";
 import { Apiservice } from "src/app/services/api.service";
 import { ConfirmationService } from "primeng/api";
@@ -60,6 +60,7 @@ export class Desktop implements OnInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
   private dragState?: { id: number; offsetX: number; offsetY: number };
   private nextId = 1;
+  private readonly taskbarReserve = 92; // Height of the taskbar
 
   constructor(
     private api: Apiservice,
@@ -69,6 +70,7 @@ export class Desktop implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userName = localStorage.getItem("name") || "مستخدم";
     this.restoreShiftState();
+    this.openDefaultStartupWindows();
   }
 
   ngOnDestroy(): void {
@@ -156,22 +158,71 @@ export class Desktop implements OnInit, OnDestroy {
   // ── Windows ────────────────────────────────────────────────────────────────
 
   protected openShortcut(shortcut: Shortcut): void {
+    this.openWindow(shortcut);
+  }
+
+  private openWindow(
+    shortcut: Shortcut,
+    options?: { top?: number; left?: number; width?: number; height?: number; active?: boolean },
+  ): void {
+    const size = this.defaultSize(shortcut.action);
     const baseWindow: DesktopWindow = {
       id: this.nextId++,
       action: shortcut.action,
       component: this.registry[shortcut.action],
       title: shortcut.title,
       icon: shortcut.icon,
-      width: this.defaultSize(shortcut.action).width,
-      height: this.defaultSize(shortcut.action).height,
-      top: 72 + this.windows.length * 24,
-      left: 120 + this.windows.length * 32,
+      width: options?.width ?? size.width,
+      height: options?.height ?? size.height,
+      top: options?.top ?? 72 + this.windows.length * 24,
+      left: options?.left ?? 120 + this.windows.length * 32,
       minimized: false,
       maximized: false,
-      active: true,
+      active: options?.active ?? true,
     };
+
     this.windows = this.windows.map((w) => ({ ...w, active: false }));
     this.windows = [...this.windows, baseWindow];
+  }
+
+  private openDefaultStartupWindows(): void {
+    const shortcuts = getShortcutsByRole(this.getUserRole());
+    const startupShortcuts = shortcuts.slice(0, 2);
+
+    if (startupShortcuts.length < 2) return;
+
+    const viewportWidth = globalThis.innerWidth || 1440;
+    const viewportHeight = globalThis.innerHeight || 900;
+    const gap = 24;
+    const sideWidth = Math.max(320, Math.floor((viewportWidth - gap * 3) / 2));
+    const height = Math.min(420, viewportHeight - 140);
+    const top = Math.max(12, viewportHeight - 80 - height - 12);
+
+    const leftShortcut = startupShortcuts[0];
+    const rightShortcut = startupShortcuts[1];
+
+    this.openWindow(leftShortcut, {
+      top,
+      left: 10,
+      width: sideWidth,
+      height,
+      active: true,
+    });
+
+    this.openWindow(rightShortcut, {
+      top,
+      left: viewportWidth - sideWidth - 10,
+      width: sideWidth,
+      height,
+      active: false,
+    });
+  }
+
+  private getUserRole(): import("../../shortcut.config").UserRole {
+    const role = localStorage.getItem("role") as import("../../shortcut.config").UserRole | null;
+    return role && ["Admin", "HR", "Accountant", "Control", "Manager", "Employee", "Area Manager"].includes(role)
+      ? role
+      : "Employee";
   }
 
   protected activateWindow(id: number): void {
@@ -243,7 +294,13 @@ export class Desktop implements OnInit, OnDestroy {
       return {
         ...w,
         left: Math.max(10, Math.min(globalThis.innerWidth - w.width - 10, event.clientX - this.dragState.offsetX)),
-        top:  Math.max(10, Math.min(globalThis.innerHeight - 120,          event.clientY - this.dragState.offsetY)),
+        top: Math.max(
+          10,
+          Math.min(
+            globalThis.innerHeight - this.taskbarReserve - w.height,
+            event.clientY - this.dragState.offsetY,
+          ),
+        ),
       };
     });
   }

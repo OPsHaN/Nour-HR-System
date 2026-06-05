@@ -64,7 +64,7 @@
 .desktop__surface {
   position: relative;
   min-height: calc(100vh - 82px);
-  padding: 20px;
+  padding: 20px 20px ;
   overflow: hidden;
 }
 

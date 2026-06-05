@@ -1,16 +1,20 @@
 .shortcuts {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
   gap: 15px;
-  width: fit-content;
-  
+  width: 100%;
+  max-width: 100%;
 }
 
 .shortcut {
   display: grid;
   gap: 10px;
   justify-items: center;
-  width: 140px;
+  flex: 1 1 140px;
+  max-width: 140px;
+  min-width: 110px;
   padding: 12px 8px;
   color: inherit;
   background: var(--shortcut-bg);

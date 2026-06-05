@@ -180,19 +180,19 @@ export class Reports implements OnInit {
     public auth: AuthService,
   ) {}
 
-ngOnInit(): void {
-  if (this.auth.isAdmin || this.auth.isHR) {
-    this.loadAllShifts();
-    this.loadEmployees();
-    this.loadBranches();
-  }
+  ngOnInit(): void {
+    if (this.auth.isAdmin || this.auth.isHR) {
+      this.loadAllShifts();
+      this.loadEmployees();
+      this.loadBranches();
+    }
 
-  if (this.auth.isAccountant) {
-    this.loadMonthlyPayroll();
-    this.activeTabIndex = 4; 
- 
+    if (this.auth.isAccountant) {
+      this.loadMonthlyPayroll();
+      this.loadBranches();
+      this.activeTabIndex = 4;
+    }
   }
-}
 
   // ── Tab Switch ───────────────────────────────────────────────────────────
 
@@ -232,28 +232,25 @@ ngOnInit(): void {
         this.loadingShifts = false;
         this.cdr.detectChanges();
         this.api.showError("فشل تحميل البيانات");
-
       },
     });
   }
 
   loadOpenLateShifts(): void {
     this.loadingOpenLate = true;
-    this.api
-      .getAllOpenAndLateShifts(this.selectedShiftType)
-      .subscribe({
-        next: (res: any) => {
-          this.openLateShifts = res.data ?? [];
-          this.openLateTotalCount = res.totalCount ?? 0;
-          this.loadingOpenLate = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.loadingOpenLate = false;
-          this.cdr.detectChanges();
-          this.api.showError("فشل تحميل البيانات");
-        },
-      });
+    this.api.getAllOpenAndLateShifts(this.selectedShiftType).subscribe({
+      next: (res: any) => {
+        this.openLateShifts = res.data ?? [];
+        this.openLateTotalCount = res.totalCount ?? 0;
+        this.loadingOpenLate = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loadingOpenLate = false;
+        this.cdr.detectChanges();
+        this.api.showError("فشل تحميل البيانات");
+      },
+    });
   }
 
   loadAbsentEmployees(): void {
@@ -318,7 +315,7 @@ ngOnInit(): void {
       error: () => {
         this.loadingMonthlyPayroll = false;
         this.cdr.detectChanges();
-        this.api.showError("فشل تحميل البيانات");  
+        this.api.showError("فشل تحميل البيانات");
       },
     });
   }
@@ -368,7 +365,7 @@ ngOnInit(): void {
       error: () => {
         this.employees = [];
         this.cdr.detectChanges();
-         this.api.showError("فشل تحميل البيانات");
+        this.api.showError("فشل تحميل البيانات");
       },
     });
   }
