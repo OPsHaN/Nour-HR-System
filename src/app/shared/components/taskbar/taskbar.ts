@@ -29,6 +29,7 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() taskClick = new EventEmitter<number>();
   @Output() themeChange = new EventEmitter<boolean>();
+  @Output() websiteClick = new EventEmitter<void>();
 
   protected timeLabel = "";
   protected dateLabel = "";
@@ -75,6 +76,10 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
 
     this.themeToggle = isChecked;
     this.themeChange.emit(isChecked);
+  }
+
+  protected openWebsiteWindow(): void {
+    this.websiteClick.emit();
   }
 
   logout() {

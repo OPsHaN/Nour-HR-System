@@ -100,6 +100,13 @@ export const SHORTCUTS_CONFIG = {
     roles: ["Admin", "HR", "Employee", "Area Manager", "Control", "Accountant"] as UserRole[],
     size: { width: 620, height: 420 },
   },
+  website: {
+    title: "الموقع",
+    icon: "language",
+    bg: "#1677ff",
+    roles: ["Admin", "HR", "Accountant", "Control", "Manager", "Employee", "Area Manager"] as UserRole[],
+    size: { width: 980, height: 620 },
+  },
 } satisfies Record<string, ShortcutConfig>;
 
 /* 🔥 TYPES */

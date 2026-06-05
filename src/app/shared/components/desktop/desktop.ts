@@ -161,6 +161,14 @@ export class Desktop implements OnInit, OnDestroy {
     this.openWindow(shortcut);
   }
 
+  protected openWebsiteWindow(): void {
+    this.openWindow({
+      action: "website",
+      title: "الموقع",
+      icon: "language",
+    });
+  }
+
   private openWindow(
     shortcut: Shortcut,
     options?: { top?: number; left?: number; width?: number; height?: number; active?: boolean },
@@ -191,11 +199,11 @@ export class Desktop implements OnInit, OnDestroy {
 
     if (startupShortcuts.length < 2) return;
 
-    const viewportWidth = globalThis.innerWidth || 1440;
-    const viewportHeight = globalThis.innerHeight || 900;
-    const gap = 24;
-    const sideWidth = Math.max(320, Math.floor((viewportWidth - gap * 3) / 2));
-    const height = Math.min(420, viewportHeight - 140);
+    const viewportWidth = globalThis.innerWidth || 250;
+    const viewportHeight = globalThis.innerHeight || 250;
+    const gap = 300;
+    const sideWidth = Math.max(50, Math.floor((viewportWidth - gap * 3) / 2));
+    const height = Math.min(350, viewportHeight - 140);
     const top = Math.max(12, viewportHeight - 80 - height - 12);
 
     const leftShortcut = startupShortcuts[0];

@@ -27,6 +27,13 @@
   transition: transform 160ms ease, background-color 160ms ease;
 }
 
+.taskbar__logo-btn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
 .taskbar__logo {
   height: 70px;
   cursor: pointer;
