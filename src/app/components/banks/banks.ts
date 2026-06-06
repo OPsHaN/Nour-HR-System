@@ -20,6 +20,7 @@ export class Banks {
   loading = false;
   Banks: any[] = [];
   showCreateBank = false;
+  totalRecords = 0;
 
   constructor(
     private api: Apiservice,
@@ -36,6 +37,7 @@ export class Banks {
     this.api.getAllBanks().subscribe({
       next: (res: any) => {
         this.Banks = res;
+        this.totalRecords = res.totalCount;
         this.loading = false;
         this.cdr.detectChanges();
         console.log(res);
@@ -71,6 +73,12 @@ export class Banks {
         console.error(err);
       },
     });
+  }
+
+    onPageChange(event: any): void {
+    this.page = event.first / event.rows + 1;
+    this.pageSize = event.rows;
+    this.loadBanks();
   }
 
   onBankCreated() {

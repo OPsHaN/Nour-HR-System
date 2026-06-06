@@ -19,6 +19,7 @@ export class Branches {
   loading = false;
   Branches: any[] = [];
   showCreateBranch = false;
+  totalRecords = 0;
 
   constructor(
     private api: Apiservice,
@@ -36,6 +37,7 @@ export class Branches {
       next: (res: any) => {
         this.Branches = res.data;
         this.loading = false;
+        this.totalRecords = res.totalCount;
         this.cdr.detectChanges();
         console.log(res);
       },
@@ -70,6 +72,12 @@ export class Branches {
         console.error(err);
       },
     });
+  }
+
+  onPageChange(event: any): void {
+    this.page = event.first / event.rows + 1;
+    this.pageSize = event.rows;
+    this.loadBranches();
   }
 
   onBranchCreated() {

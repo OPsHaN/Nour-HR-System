@@ -13,7 +13,11 @@ import { WindowComponent } from "../window/window";
 import { TaskbarComponent } from "../taskbar/taskbar";
 import { DesktopWindow } from "../../desktop-window.model";
 import { WINDOW_REGISTRY } from "../../window-registry";
-import { getShortcutsByRole, Shortcut, SHORTCUTS_CONFIG } from "../../shortcut.config";
+import {
+  getStartupShortcutsByRole,
+  Shortcut,
+  SHORTCUTS_CONFIG,
+} from "../../shortcut.config";
 import { ButtonModule } from "primeng/button";
 import { Apiservice } from "src/app/services/api.service";
 import { ConfirmationService } from "primeng/api";
@@ -62,10 +66,7 @@ export class Desktop implements OnInit, OnDestroy {
   private nextId = 1;
   private readonly taskbarReserve = 92; // Height of the taskbar
 
-  constructor(
-    private api: Apiservice,
-    private confirmationService: ConfirmationService,
-  ) {}
+  constructor(private api: Apiservice) {}
 
   ngOnInit(): void {
     this.userName = localStorage.getItem("name") || "مستخدم";
@@ -83,7 +84,12 @@ export class Desktop implements OnInit, OnDestroy {
     this.loadingStart = true;
     this.api
       .startShift()
-      .pipe(finalize(() => { this.loadingStart = false; this.cdr.detectChanges(); }))
+      .pipe(
+        finalize(() => {
+          this.loadingStart = false;
+          this.cdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: () => {
           this.shiftStarted = true;
@@ -93,7 +99,9 @@ export class Desktop implements OnInit, OnDestroy {
           this.api.showSuccess("تم بدء شيفتك بنجاح");
         },
         error: () => {
-          this.api.showError("يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر");
+          this.api.showError(
+            "يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر",
+          );
         },
       });
   }
@@ -102,7 +110,12 @@ export class Desktop implements OnInit, OnDestroy {
     this.loadingEnd = true;
     this.api
       .endShift()
-      .pipe(finalize(() => { this.loadingEnd = false; this.cdr.detectChanges(); }))
+      .pipe(
+        finalize(() => {
+          this.loadingEnd = false;
+          this.cdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: () => {
           this.shiftStarted = false;
@@ -113,7 +126,9 @@ export class Desktop implements OnInit, OnDestroy {
           this.api.showSuccess("تم إنهاء شيفتك بنجاح");
         },
         error: () => {
-          this.api.showError("يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر");
+          this.api.showError(
+            "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
+          );
         },
       });
   }
@@ -122,9 +137,15 @@ export class Desktop implements OnInit, OnDestroy {
     clearInterval(this.timerInterval);
     this.timerInterval = setInterval(() => {
       if (!this.shiftStartTime) return;
-      const diff = Math.floor((Date.now() - this.shiftStartTime.getTime()) / 1000);
-      const h = Math.floor(diff / 3600).toString().padStart(2, "0");
-      const m = Math.floor((diff % 3600) / 60).toString().padStart(2, "0");
+      const diff = Math.floor(
+        (Date.now() - this.shiftStartTime.getTime()) / 1000,
+      );
+      const h = Math.floor(diff / 3600)
+        .toString()
+        .padStart(2, "0");
+      const m = Math.floor((diff % 3600) / 60)
+        .toString()
+        .padStart(2, "0");
       const s = (diff % 60).toString().padStart(2, "0");
       this.formattedTime = `${h}:${m}:${s}`;
       this.cdr.detectChanges();
@@ -164,14 +185,20 @@ export class Desktop implements OnInit, OnDestroy {
   protected openWebsiteWindow(): void {
     this.openWindow({
       action: "website",
-      title: "الموقع",
+      title: "أوبشن لتطوير البرمجيات",
       icon: "language",
     });
   }
 
   private openWindow(
     shortcut: Shortcut,
-    options?: { top?: number; left?: number; width?: number; height?: number; active?: boolean },
+    options?: {
+      top?: number;
+      left?: number;
+      width?: number;
+      height?: number;
+      active?: boolean;
+    },
   ): void {
     const size = this.defaultSize(shortcut.action);
     const baseWindow: DesktopWindow = {
@@ -194,20 +221,20 @@ export class Desktop implements OnInit, OnDestroy {
   }
 
   private openDefaultStartupWindows(): void {
-    const shortcuts = getShortcutsByRole(this.getUserRole());
-    const startupShortcuts = shortcuts.slice(0, 2);
+    const startupShortcuts = getStartupShortcutsByRole(
+      this.getUserRole(),
+    ).slice(0, 2);
 
-    if (startupShortcuts.length < 2) return;
+    if (startupShortcuts.length === 0) return;
 
     const viewportWidth = globalThis.innerWidth || 250;
     const viewportHeight = globalThis.innerHeight || 250;
     const gap = 300;
     const sideWidth = Math.max(50, Math.floor((viewportWidth - gap * 3) / 2));
-    const height = Math.min(350, viewportHeight - 140);
+    const height = Math.min(200, viewportHeight - 140);
     const top = Math.max(12, viewportHeight - 80 - height - 12);
 
-    const leftShortcut = startupShortcuts[0];
-    const rightShortcut = startupShortcuts[1];
+    const [leftShortcut, rightShortcut] = startupShortcuts;
 
     this.openWindow(leftShortcut, {
       top,
@@ -217,18 +244,31 @@ export class Desktop implements OnInit, OnDestroy {
       active: true,
     });
 
-    this.openWindow(rightShortcut, {
-      top,
-      left: viewportWidth - sideWidth - 10,
-      width: sideWidth,
-      height,
-      active: false,
-    });
+    if (rightShortcut) {
+      this.openWindow(rightShortcut, {
+        top,
+        left: viewportWidth - sideWidth - 10,
+        width: sideWidth,
+        height,
+        active: false,
+      });
+    }
   }
 
   private getUserRole(): import("../../shortcut.config").UserRole {
-    const role = localStorage.getItem("role") as import("../../shortcut.config").UserRole | null;
-    return role && ["Admin", "HR", "Accountant", "Control", "Manager", "Employee", "Area Manager"].includes(role)
+    const role = localStorage.getItem("role") as
+      | import("../../shortcut.config").UserRole
+      | null;
+    return role &&
+      [
+        "Admin",
+        "HR",
+        "Accountant",
+        "Control",
+        "Manager",
+        "Employee",
+        "Area Manager",
+      ].includes(role)
       ? role
       : "Employee";
   }
@@ -257,11 +297,23 @@ export class Desktop implements OnInit, OnDestroy {
     this.windows = this.windows.map((w) => {
       if (w.id !== id) return w;
       if (w.maximized && w.previousRect) {
-        return { ...w, ...w.previousRect, maximized: false, previousRect: undefined, active: true, minimized: false };
+        return {
+          ...w,
+          ...w.previousRect,
+          maximized: false,
+          previousRect: undefined,
+          active: true,
+          minimized: false,
+        };
       }
       return {
         ...w,
-        previousRect: { top: w.top, left: w.left, width: w.width, height: w.height },
+        previousRect: {
+          top: w.top,
+          left: w.left,
+          width: w.width,
+          height: w.height,
+        },
         top: 9,
         left: 10,
         width: Math.max(w.width, globalThis.innerWidth - 20),
@@ -276,8 +328,14 @@ export class Desktop implements OnInit, OnDestroy {
   protected toggleTask(id: number): void {
     const target = this.windows.find((w) => w.id === id);
     if (!target) return;
-    if (target.minimized) { this.activateWindow(id); return; }
-    if (target.active)    { this.minimizeWindow(id); return; }
+    if (target.minimized) {
+      this.activateWindow(id);
+      return;
+    }
+    if (target.active) {
+      this.minimizeWindow(id);
+      return;
+    }
     this.activateWindow(id);
   }
 
@@ -291,7 +349,11 @@ export class Desktop implements OnInit, OnDestroy {
     const target = this.windows.find((w) => w.id === id);
     if (!target || target.maximized) return;
     this.activateWindow(id);
-    this.dragState = { id, offsetX: mouseEvent.clientX - target.left, offsetY: mouseEvent.clientY - target.top };
+    this.dragState = {
+      id,
+      offsetX: mouseEvent.clientX - target.left,
+      offsetY: mouseEvent.clientY - target.top,
+    };
   }
 
   @HostListener("window:mousemove", ["$event"])
@@ -301,7 +363,13 @@ export class Desktop implements OnInit, OnDestroy {
       if (w.id !== this.dragState?.id) return w;
       return {
         ...w,
-        left: Math.max(10, Math.min(globalThis.innerWidth - w.width - 10, event.clientX - this.dragState.offsetX)),
+        left: Math.max(
+          10,
+          Math.min(
+            globalThis.innerWidth - w.width - 10,
+            event.clientX - this.dragState.offsetX,
+          ),
+        ),
         top: Math.max(
           10,
           Math.min(

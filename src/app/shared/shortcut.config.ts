@@ -13,11 +13,12 @@ export interface ShortcutTheme {
   color: string;
 }
 
-type ShortcutConfig = {
+export type ShortcutConfig = {
   title: string;
   icon: string;
   bg: string;
-  roles: UserRole[];
+  roles?: UserRole[];
+  startup?: boolean;
   size: { width: number; height: number };
 };
 
@@ -35,6 +36,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "event",
     bg: "#ff4d4f",
     roles: ["Admin", "HR", "Accountant", "Employee", "Area Manager", "Control"] as UserRole[],
+    startup: true,
     size: { width: 500, height: 650 },
   },
   users: {
@@ -49,7 +51,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "people",
     bg: "#13c2c2",
     roles: ["Admin", "HR"] as UserRole[],
-    size: { width: 1250, height: 600 },
+    size: { width: 1350, height: 600 },
   },
   branches: {
     title: "الفروع",
@@ -101,10 +103,10 @@ export const SHORTCUTS_CONFIG = {
     size: { width: 620, height: 420 },
   },
   website: {
-    title: "الموقع",
+    title: "أوبشن لتطوير البرمجيات",
     icon: "language",
     bg: "#1677ff",
-    roles: ["Admin", "HR", "Accountant", "Control", "Manager", "Employee", "Area Manager"] as UserRole[],
+    roles: [] as UserRole[],
     size: { width: 980, height: 620 },
   },
 } satisfies Record<string, ShortcutConfig>;
@@ -146,6 +148,14 @@ export function getShortcutsByRole(role: UserRole): Shortcut[] {
       icon: config.icon,
     };
   });
+}
+
+export function getStartupShortcutsByRole(role: UserRole): Shortcut[] {
+  const marked = getShortcutsByRole(role).filter((shortcut) =>
+    (SHORTCUTS_CONFIG[shortcut.action] as ShortcutConfig).startup,
+  );
+
+  return marked.length > 0 ? marked : getShortcutsByRole(role).slice(0, 2);
 }
 
 /* 🔥 THEME */
