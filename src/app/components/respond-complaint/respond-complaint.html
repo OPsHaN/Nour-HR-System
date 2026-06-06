@@ -1,0 +1,52 @@
+<p-dialog
+  [(visible)]="visible"
+  [header]="'الرد على الشكوى'"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  dir="rtl"
+  class="data-employee-dialog"
+  (onHide)="cancelled.emit()"
+>
+  <div class="field ">
+    <label class="fw-bold">نص الشكوى:</label>
+    <p class="custom-input mb-1 disabled">{{ complaint?.content }}</p>
+  </div>
+
+  <div class="field">
+    <label >الرد</label>
+    <textarea
+      class="custom-input  mb-1"
+      rows="4"
+      [(ngModel)]="form.response"
+      placeholder="اكتب ردك هنا..."
+    ></textarea>
+  </div>
+
+  <div class="field">
+    <label >الحالة</label>
+    <select class="custom-input p-2  mb-1" [(ngModel)]="form.status">
+      <option value="Resolved">تم الحل</option>
+      <option value="Rejected">مرفوضة</option>
+    </select>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="btn btn-success btn-sm mx-1"
+      (click)="submit()"
+      [disabled]="loading"
+    >
+      إرسال
+    </button>
+    <button
+      pButton
+      type="button"
+      class="btn btn-secondary btn-sm"
+      (click)="cancelled.emit()"
+    >
+      إلغاء
+    </button>
+  </ng-template>
+</p-dialog>

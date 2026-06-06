@@ -1,0 +1,58 @@
+.sticky-header {
+    position: static;
+    top: 0;
+    z-index: 1000;
+
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+
+    padding: 5px 0;
+}
+
+::ng-deep.data-employee-dialog .p-dialog {
+    height: auto !important;
+}
+
+::ng-deep.data-employee-dialog .p-dialog-header {
+    flex-direction: unset !important;
+    padding: 0.2rem 1rem !important;
+}
+
+::ng-deep.data-employee-dialog .p-dialog-content {
+    padding: 0.5rem 0.5rem !important;
+    /* border-radius: 0 0 0.0rem 0.0rem !important; */
+    height: 100%
+}
+
+::ng-deep.data-employee-dialog .p-dialog-footer {
+    flex-direction: unset !important;
+    padding: 0.2rem 0.2rem !important;
+    border-radius: 0 0 0.5rem 0.5rem !important;
+    background: var(--surface-strong) !important;
+    border-top: 0.1rem solid var(--surface-border) !important;
+    justify-content: center !important;
+}
+
+
+.shift-fieldset {
+    border: 3px solid var(--text);
+    border-radius: 10px;
+    padding: 0.4rem 0.75rem 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+
+
+    legend {
+        color: var(--text);
+        padding: 0 0.4rem;
+        float: none;
+        justify-self: center;
+        width: auto;
+        background: var(--surface);
+        border: 1px solid var(--text);
+        border-radius: 20px;
+        padding: 0.3rem 0.3rem;
+    }
+}

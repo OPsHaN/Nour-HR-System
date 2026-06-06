@@ -128,6 +128,7 @@ export class Reports implements OnInit {
 
   // ── Shifts Tab ──────────────────────────────────────────────────────────
   shiftsFromDate: Date = new Date();
+  shiftsToDate: Date = new Date();
   allShifts: ShiftRecord[] = [];
   shiftsTotalCount = 0;
   loadingShifts = false;
@@ -220,8 +221,9 @@ export class Reports implements OnInit {
 
   loadAllShifts(): void {
     const fromDate = this.formatDate(this.shiftsFromDate);
+    const toDate = this.formatDate(this.shiftsToDate);
     this.loadingShifts = true;
-    this.api.getAllShifts(fromDate).subscribe({
+    this.api.getAllShifts(fromDate, toDate).subscribe({
       next: (res: any) => {
         this.allShifts = res.data ?? [];
         this.shiftsTotalCount = res.totalCount ?? 0;

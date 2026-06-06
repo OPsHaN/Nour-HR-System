@@ -282,9 +282,10 @@ export class Apiservice {
 
   //reports//
 
-  getAllShifts(fromDate: string) {
+  getAllShifts(fromDate: string, toDate?: string) {
+    const endDate = toDate ?? fromDate;
     return this.http.get(
-      `${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}`,
+      `${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}&toDate=${endDate}`,
     );
   }
 
@@ -352,7 +353,34 @@ export class Apiservice {
     );
   }
 
-  //requests//
+  //complaints//
+
+  addComplaint(complaintData: any) {
+    return this.http.post(`${this.baseUrl}complaints`, complaintData);
+  }
+
+  getAllComplaints() {
+    return this.http.get(`${this.baseUrl}complaints`);
+  }
+
+  getAllComplaintsForUser(employeeId: string) {
+    return this.http.get(`${this.baseUrl}complaints?employeeId=${employeeId}`);
+  }
+
+  respondToComplaint(complaintId: string, respond: any) {
+    return this.http.put(`${this.baseUrl}complaints/${complaintId}/respond`, respond);
+  }
+
+  getUnseenComplaintsCount() {  
+    return this.http.get(`${this.baseUrl}complaints/unseen-count`);
+  }
+
+  markComplaintAsSeen(complaintId: string) {
+    return this.http.put(`${this.baseUrl}complaints/${complaintId}/mark-seen`, {});
+  }
+
+    //requests//
+
 
   showError(msg: string) {
     this.messageService.add({

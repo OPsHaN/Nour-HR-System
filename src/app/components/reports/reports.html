@@ -26,6 +26,16 @@
               [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
             />
           </div>
+          <div class="filter-item">
+            <label>إلى تاريخ</label>
+            <p-datepicker
+              [(ngModel)]="shiftsToDate"
+              dateFormat="yy-mm-dd"
+              placeholder="اختر تاريخ"
+              [appendTo]="'body'"
+              [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+            />
+          </div>
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"

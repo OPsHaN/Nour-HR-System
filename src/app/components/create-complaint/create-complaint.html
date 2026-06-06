@@ -1,0 +1,48 @@
+<div class="panel">
+  <div class="form">
+
+        <!-- الجهة المُرسَل إليها -->
+    <div class="field">
+      <label
+        >الجهة المُرسَل إليها <span class="required text-danger">*</span></label
+      >
+      <p-select
+        [(ngModel)]="form.RecipientRole"
+        [options]="recipientRoles"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="اختر الجهة"
+        [pt]="{
+          root: { class: 'select-panel' },
+          pcOverlay: { root: { class: 'select-overlay' } },
+          listContainer: { class: 'select-list-container' },
+          header: { class: 'select-header' },
+          label: { class: 'select-label' }
+        }"
+      />
+    </div>
+
+    
+    <!-- محتوى الشكوى -->
+    <div class="field">
+      <label>محتوى الشكوى <span class="required text-danger">*</span></label>
+      <textarea
+        class="custom-input"
+        [(ngModel)]="form.Content"
+        placeholder="اكتب تفاصيل الشكوى هنا..."
+        rows="4"
+      ></textarea>
+    </div>
+
+
+    <!-- زرار الإرسال -->
+    <button
+      type="button"
+      class="submit-btn full"
+      [disabled]="loading || !form.Content.trim() || !form.RecipientRole"
+      (click)="submit()"
+    >
+      {{ loading ? 'جارى الإرسال...' : 'إرسال الشكوى' }}
+    </button>
+  </div>
+</div>

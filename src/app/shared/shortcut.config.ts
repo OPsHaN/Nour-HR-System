@@ -100,7 +100,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "report_problem",
     bg: "#f5222d",
     roles: ["Admin", "HR", "Employee", "Area Manager", "Control", "Accountant"] as UserRole[],
-    size: { width: 620, height: 420 },
+    size: { width: 1200, height: 420 },
   },
   website: {
     title: "أوبشن لتطوير البرمجيات",
@@ -118,6 +118,7 @@ export interface Shortcut {
   action: WindowAction;
   title: string;
   icon: string;
+  badge?: number;
 }
 
 const CONFIG_KEYS = Object.keys(SHORTCUTS_CONFIG) as WindowAction[];

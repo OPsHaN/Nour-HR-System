@@ -5,6 +5,9 @@
       type="button"
       (click)="onShortcutClick(shortcut)"
     >
+      @if (shortcut.badge && shortcut.badge > 0) {
+        <span class="shortcut__badge">{{ shortcut.badge }}</span>
+      }
       <span
         class="shortcut__icon"
         [style.background]="getTheme(shortcut.action).bg"
