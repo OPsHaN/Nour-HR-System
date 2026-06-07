@@ -1,0 +1,34 @@
+<div class="panel">
+  <div class="form">
+
+    <div class="field">
+      <label>اختر الموظف <span class="text-danger">*</span></label>
+      <p-select
+        [(ngModel)]="form.employeeId"
+        [options]="employees"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="اختر موظف"
+        [filter]="true"
+        filterPlaceholder="بحث..."
+        [pt]="{
+          root: { class: 'select-panel' },
+          pcOverlay: { root: { class: 'select-overlay' } },
+          listContainer: { class: 'select-list-container' },
+          header: { class: 'select-header' },
+          label: { class: 'select-label' }
+        }"
+      />
+    </div>
+
+    <button
+      type="button"
+      class="submit-btn full"
+      [disabled]="loading || !form.employeeId"
+      (click)="submit()"
+    >
+      {{ loading ? 'جارى الإرسال...' : 'إرسال الطلب' }}
+    </button>
+
+  </div>
+</div>

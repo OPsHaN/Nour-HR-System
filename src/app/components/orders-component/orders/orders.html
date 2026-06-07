@@ -1,0 +1,736 @@
+<div class="reports-page">
+  <p-tabs
+    [(value)]="activeTabIndex"
+    (valueChange)="onTabChange(+($event ?? 0))"
+  >
+    <p-tablist style="gap: 3px">
+      <p-tab [value]="0">الساعات المنسية</p-tab>
+      <p-tab [value]="1">الإجازات</p-tab>
+      <p-tab [value]="2">السلف</p-tab>
+      <p-tab [value]="3">الأوفر تايم</p-tab>
+      <p-tab [value]="4">الاستقالات</p-tab>
+      <p-tab [value]="5" *ngIf="this.auth.isHR">التعيينات</p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      <!-- ===== Tab 1: الساعات المنسية ===== -->
+      <p-tabpanel [value]="0">
+        <div class="filters-bar">
+          <button
+            pButton
+            type="button"
+            class="btn btn-sm  my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-success]="!showCreateMissedHours"
+            [class.btn-danger]="showCreateMissedHours"
+            (click)="showCreateMissedHours = !showCreateMissedHours"
+          >
+            <i
+              class="pi"
+              [ngClass]="showCreateMissedHours ? 'pi-times' : 'pi-plus'"
+            ></i>
+            {{ showCreateMissedHours ? '' : 'طلب جديد' }}
+          </button>
+        </div>
+
+        <app-create-missed-hours
+          *ngIf="showCreateMissedHours"
+          (created)="onMissedHoursCreated()"
+        />
+
+        <p-table
+          *ngIf="!showCreateMissedHours"
+          [value]="missedHoursRequests"
+          [loading]="loadingMissedHours"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="missedHoursTotalRecords"
+          (onPage)="onMissedHoursPageChange($event)"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '50rem' }"
+          [paginatorDropdownAppendTo]="'body'"
+          dir="rtl"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>اسم الموظف</th>
+              <th>تاريخ الشيفت</th>
+              <th>تاريخ الطلب</th>
+              <th>السبب</th>
+              <th>ملاحظات</th>
+              <th>الحالة</th>
+              <th *ngIf="this.auth.isHR">الإجراءات</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-req let-ri="rowIndex">
+            <tr>
+              <td>{{ ri + 1 + (missedHoursPage - 1) * 10 }}</td>
+              <td>{{ req.employeeName }}</td>
+              <td>{{ req.shiftDate | date: 'yyyy/MM/dd' }}</td>
+              <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <td>{{ req.reason }}</td>
+              <td>{{ req.notes ?? '—' }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(req.status)">
+                  {{ getStatusLabel(req.status) }}
+                </span>
+              </td>
+              <td *ngIf="this.auth.isHR">
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  (click)="approveRequest('missedHours', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول"
+                >
+                  <i
+                    class="pi pi-check d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  (click)="openRejectDialog('TYPE', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="رفض"
+                >
+                  <i
+                    class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 2: الإجازات ===== -->
+      <p-tabpanel [value]="1">
+        <div class="filters-bar">
+          <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-success]="!showCreateLeave"
+            [class.btn-danger]="showCreateLeave"
+            (click)="showCreateLeave = !showCreateLeave"
+          >
+            <i
+              class="pi"
+              [ngClass]="showCreateLeave ? 'pi-times' : 'pi-plus'"
+            ></i>
+            {{ showCreateLeave ? '' : 'طلب جديد' }}
+          </button>
+        </div>
+
+        <app-create-holiday
+          *ngIf="showCreateLeave"
+          (created)="onLeaveCreated()"
+        />
+
+        <p-table
+          *ngIf="!showCreateLeave"
+          [value]="leaveRequests"
+          [loading]="loadingLeave"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="leaveTotalRecords"
+          (onPage)="onLeavePageChange($event)"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '55rem' }"
+          [paginatorDropdownAppendTo]="'body'"
+          dir="rtl"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>اسم الموظف</th>
+              <th>من تاريخ</th>
+              <th>إلى تاريخ</th>
+              <th>عدد الأيام</th>
+              <th>تاريخ الطلب</th>
+              <th>موافقة المدير</th>
+              <th>الحالة</th>
+              <th *ngIf="this.auth.isHR">الإجراءات</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-req let-ri="rowIndex">
+            <tr>
+              <td>{{ ri + 1 + (leavePage - 1) * 10 }}</td>
+              <td>{{ req.employeeName }}</td>
+              <td>{{ req.fromDate | date: 'yyyy/MM/dd' }}</td>
+              <td>{{ req.toDate | date: 'yyyy/MM/dd' }}</td>
+              <td>{{ req.totalDays }}</td>
+              <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <td>
+                <span
+                  *ngIf="req.areaManagerApproval !== null"
+                  class="badge"
+                  [ngClass]="req.areaManagerApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                >
+                  {{ req.areaManagerApproval ? 'موافق' : 'مرفوض' }}
+                </span>
+                <span *ngIf="req.areaManagerApproval === null">—</span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(req.status)">
+                  {{ getStatusLabel(req.status) }}
+                </span>
+              </td>
+              <td *ngIf="this.auth.isHR">
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  (click)="approveRequest('leave', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول HR"
+                >
+                  <i
+                    class="pi pi-check d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
+                  (click)="approveLeaveByAreaManager(req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول مدير المنطقة"
+                >
+                  <i
+                    class="pi pi-verified d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  (click)="openRejectDialog('TYPE', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="رفض"
+                >
+                  <i
+                    class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="9" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 3: السلف ===== -->
+      <p-tabpanel [value]="2">
+        <div class="filters-bar">
+          <button
+            pButton
+            type="button"
+            class="btn btn-sm  my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-success]="!showCreateLoan"
+            [class.btn-danger]="showCreateLoan"
+            (click)="showCreateLoan = !showCreateLoan"
+          >
+            <i
+              class="pi"
+              [ngClass]="showCreateLoan ? 'pi-times' : 'pi-plus'"
+            ></i>
+            {{ showCreateLoan ? '' : 'طلب جديد' }}
+          </button>
+        </div>
+
+        <app-create-borrow *ngIf="showCreateLoan" (created)="onLoanCreated()" />
+
+        <p-table
+          *ngIf="!showCreateLoan"
+          [value]="loanRequests"
+          [loading]="loadingLoan"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="loanTotalRecords"
+          (onPage)="onLoanPageChange($event)"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '50rem' }"
+          [paginatorDropdownAppendTo]="'body'"
+          dir="rtl"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>اسم الموظف</th>
+              <th>المبلغ (ج.م)</th>
+              <th>ملاحظات</th>
+              <th>تاريخ الطلب</th>
+              <th>تجاوز الربع؟</th>
+              <th>الحالة</th>
+              <th *ngIf="this.auth.isHR">الإجراءات</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-req let-ri="rowIndex">
+            <tr>
+              <td>{{ ri + 1 + (loanPage - 1) * 10 }}</td>
+              <td>{{ req.employeeName }}</td>
+              <td style="color: var(--orange-600); font-weight: 500">
+                {{ req.amount | number }}
+              </td>
+              <td>{{ req.notes ?? '—' }}</td>
+              <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="req.isOverQuarter ? 'bg-danger bg-opacity-25 text-danger' : 'bg-success bg-opacity-25 text-success'"
+                >
+                  {{ req.isOverQuarter ? 'نعم' : 'لا' }}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(req.status)">
+                  {{ getStatusLabel(req.status) }}
+                </span>
+              </td>
+              <td *ngIf="this.auth.isHR">
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  (click)="approveRequest('loan', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول"
+                >
+                  <i
+                    class="pi pi-check d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  (click)="openRejectDialog('TYPE', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="رفض"
+                >
+                  <i
+                    class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 4: الأوفر تايم ===== -->
+      <p-tabpanel [value]="3">
+        <div class="filters-bar">
+          <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-success]="!showCreateOvertime"
+            [class.btn-danger]="showCreateOvertime"
+            (click)="showCreateOvertime = !showCreateOvertime"
+          >
+            <i
+              class="pi"
+              [ngClass]="showCreateOvertime ? 'pi-times' : 'pi-plus'"
+            ></i>
+            {{ showCreateOvertime ? '' : 'طلب جديد' }}
+          </button>
+        </div>
+
+        <app-create-overtime
+          *ngIf="showCreateOvertime"
+          (created)="onOvertimeCreated()"
+        />
+
+        <p-table
+          *ngIf="!showCreateOvertime"
+          [value]="overtimeRequests"
+          [loading]="loadingOvertime"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="overtimeTotalRecords"
+          (onPage)="onOvertimePageChange($event)"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '60rem' }"
+          [paginatorDropdownAppendTo]="'body'"
+          dir="rtl"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>اسم الموظف</th>
+              <th>الساعات</th>
+              <th>ملاحظات</th>
+              <th>تاريخ الطلب</th>
+              <th>HR</th>
+              <th>مدير المنطقة</th>
+              <th>الكنترول</th>
+              <th>الحالة</th>
+              <th *ngIf="this.auth.isHR">الإجراءات</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-req let-ri="rowIndex">
+            <tr>
+              <td>{{ ri + 1 + (overtimePage - 1) * 10 }}</td>
+              <td>{{ req.employeeName }}</td>
+              <td>{{ req.hours }}</td>
+              <td>{{ req.notes ?? '—' }}</td>
+              <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <!-- HR Approval -->
+              <td>
+                <span
+                  *ngIf="req.hrApproval !== null"
+                  class="badge"
+                  [ngClass]="req.hrApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                >
+                  {{ req.hrApproval ? 'موافق' : 'مرفوض' }}
+                </span>
+                <span *ngIf="req.hrApproval === null">—</span>
+              </td>
+              <!-- Area Manager Approval -->
+              <td>
+                <span
+                  *ngIf="req.areaManagerApproval !== null"
+                  class="badge"
+                  [ngClass]="req.areaManagerApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                >
+                  {{ req.areaManagerApproval ? 'موافق' : 'مرفوض' }}
+                </span>
+                <span *ngIf="req.areaManagerApproval === null">—</span>
+              </td>
+              <!-- Control Approval -->
+              <td>
+                <span
+                  *ngIf="req.controlApproval !== null"
+                  class="badge"
+                  [ngClass]="req.controlApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                >
+                  {{ req.controlApproval ? 'موافق' : 'مرفوض' }}
+                </span>
+                <span *ngIf="req.controlApproval === null">—</span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(req.status)">
+                  {{ getStatusLabel(req.status) }}
+                </span>
+              </td>
+              <td *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isControl">
+                <button
+                  *ngIf="this.auth.isHR"
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  (click)="approveRequest('overtime', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول HR"
+                >
+                  <i
+                    class="pi pi-check d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  *ngIf="this.auth.isAreaManager"
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
+                  (click)="approveOvertimeByAreaManager(req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول مدير المنطقة"
+                >
+                  <i
+                    class="pi pi-verified d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  *ngIf="this.auth.isControl"
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+                  (click)="approveOvertimeByControl(req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول الكنترول"
+                >
+                  <i
+                    class="pi pi-shield d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  *ngIf="this.auth.isHR  || this.auth.isAreaManager || this.auth.isControl" 
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  (click)="openRejectDialog('TYPE', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="رفض"
+                >
+                  <i
+                    class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="10" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 5: الاستقالات ===== -->
+      <p-tabpanel [value]="4">
+        <div class="filters-bar">
+          <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-success]="!showCreateResignation"
+            [class.btn-danger]="showCreateResignation"
+            (click)="showCreateResignation = !showCreateResignation"
+          >
+            <i
+              class="pi"
+              [ngClass]="showCreateResignation ? 'pi-times' : 'pi-plus'"
+            ></i>
+            {{ showCreateResignation ? '' : 'طلب جديد' }}
+          </button>
+        </div>
+
+        <app-create-resignation
+          *ngIf="showCreateResignation"
+          (created)="onResignationCreated()"
+        />
+
+        <p-table
+          *ngIf="!showCreateResignation"
+          [value]="resignationRequests"
+          [loading]="loadingResignation"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="resignationTotalRecords"
+          (onPage)="onResignationPageChange($event)"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '45rem' }"
+          [paginatorDropdownAppendTo]="'body'"
+          dir="rtl"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>اسم الموظف</th>
+              <th>السبب</th>
+              <th>تاريخ الطلب</th>
+              <th>الحالة</th>
+              <th *ngIf="this.auth.isHR">الإجراءات</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-req let-ri="rowIndex">
+            <tr>
+              <td>{{ ri + 1 + (resignationPage - 1) * 10 }}</td>
+              <td>{{ req.employeeName }}</td>
+              <td>{{ req.reason }}</td>
+              <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(req.status)">
+                  {{ getStatusLabel(req.status) }}
+                </span>
+              </td>
+              <td *ngIf="this.auth.isHR">
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  (click)="approveRequest('resignation', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول"
+                >
+                  <i
+                    class="pi pi-check d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  (click)="openRejectDialog('TYPE', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="رفض"
+                >
+                  <i
+                    class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ===== Tab 6: التعيينات ===== -->
+      <p-tabpanel [value]="5">
+        <div class="filters-bar">
+          <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-success]="!showCreateAppointment"
+            [class.btn-danger]="showCreateAppointment"
+            (click)="showCreateAppointment = !showCreateAppointment"
+          >
+            <i
+              class="pi"
+              [ngClass]="showCreateAppointment ? 'pi-times' : 'pi-plus'"
+            ></i>
+            {{ showCreateAppointment ? '' : 'طلب جديد' }}
+          </button>
+        </div>
+
+        <app-create-appointment
+          *ngIf="showCreateAppointment"
+          (created)="onAppointmentCreated()"
+        />
+
+        <p-table
+          *ngIf="!showCreateAppointment"
+          [value]="appointmentRequests"
+          [loading]="loadingAppointment"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="appointmentTotalRecords"
+          (onPage)="onAppointmentPageChange($event)"
+          styleClass="p-datatable-sm p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '45rem' }"
+          [paginatorDropdownAppendTo]="'body'"
+          dir="rtl"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>اسم الموظف</th>
+              <th>تاريخ الطلب</th>
+              <th>الحالة</th>
+              <th *ngIf="this.auth.isHR">الإجراءات</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-req let-ri="rowIndex">
+            <tr>
+              <td>{{ ri + 1 + (appointmentPage - 1) * 10 }}</td>
+              <td>{{ req.employeeName || '—' }}</td>
+              <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(req.status)">
+                  {{ getStatusLabel(req.status) }}
+                </span>
+              </td>
+              <td>
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  (click)="approveRequest('appointment', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="قبول"
+                >
+                  <i
+                    class="pi pi-check d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  (click)="openRejectDialog('TYPE', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="رفض"
+                >
+                  <i
+                    class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" class="text-center p-4">لا توجد بيانات</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>
+
+<p-dialog
+  header="سبب الرفض"
+  [(visible)]="showRejectDialog"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+>
+  <div class="mb-3">
+    <label class="form-label fw-bold">سبب الرفض</label>
+
+    <textarea
+      rows="4"
+      class="form-control"
+      [(ngModel)]="rejectionReason"
+      placeholder="اكتب سبب الرفض"
+    >
+    </textarea>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="showRejectDialog = false"
+    >
+      إلغاء
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-danger"
+      [disabled]="!rejectionReason.trim()"
+      (click)="confirmReject()"
+    >
+      تأكيد الرفض
+    </button>
+  </div>
+</p-dialog>

@@ -1239,7 +1239,7 @@
   [style]="{
     width: currentActionType === 'evaluation'
       ? '35rem'
-      : '35rem'
+      : '40rem'
   }"
 >
   <!-- إضافة تقييم -->
@@ -1584,6 +1584,7 @@
           <ng-template pTemplate="header">
             <tr>
               <th>الموظف</th>
+              <th style="text-align: center">ربع يوم</th>
               <th style="text-align: center">نص يوم</th>
               <th style="text-align: center">يوم</th>
               <th style="text-align: center">يومين</th>
@@ -1595,6 +1596,17 @@
           <ng-template pTemplate="body" let-row>
             <tr style="font-size: 20px">
               <td>{{ row.employeeName }}</td>
+                            <td style="text-align: center">
+                <label class="day-radio">
+                  <input
+                    type="radio"
+                    [name]="'day_' + row.employeeId"
+                    value="halfDay"
+                    [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
+                  />
+                  {{ row.deductions.quarterDay | number:'1.0-0' }}
+                </label>
+              </td>
               <td style="text-align: center">
                 <label class="day-radio">
                   <input

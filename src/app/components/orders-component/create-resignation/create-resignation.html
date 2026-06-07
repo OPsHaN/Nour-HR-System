@@ -1,0 +1,24 @@
+<div class="panel">
+  <div class="form">
+
+    <div class="field">
+      <label>سبب الاستقالة <span class="text-danger">*</span></label>
+      <textarea
+        class="custom-input"
+        [(ngModel)]="form.reason"
+        rows="4"
+        placeholder="مثال: ظروف شخصية..."
+      ></textarea>
+    </div>
+
+    <button
+      type="button"
+      class="submit-btn full"
+      [disabled]="loading || !form.reason.trim()"
+      (click)="submit()"
+    >
+      {{ loading ? 'جارى الإرسال...' : 'إرسال الطلب' }}
+    </button>
+
+  </div>
+</div>

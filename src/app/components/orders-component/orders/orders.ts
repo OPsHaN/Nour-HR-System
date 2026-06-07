@@ -1,0 +1,480 @@
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { DatePickerModule } from "primeng/datepicker";
+import { SelectModule } from "primeng/select";
+import { TableModule } from "primeng/table";
+import { TagModule } from "primeng/tag";
+import { MessageModule } from "primeng/message";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "primeng/tabs";
+import { Apiservice } from "src/app/services/api.service";
+import { AuthService } from "src/app/services/auth.service";
+import { CreateOvertime } from "../create-overtime/create-overtime";
+import { CreateBorrow } from "../create-borrow/create-borrow";
+import { CreateHoliday } from "../create-holiday/create-holiday";
+import { CreateMissedHours } from "../create-missed-hours/create-missed-hours";
+import { CreateResignation } from "../create-resignation/create-resignation";
+import { CreateAppointment } from "../create-appointment/create-appointment";
+import { Dialog } from "primeng/dialog";
+
+@Component({
+  selector: "app-orders",
+  imports: [
+    Tab,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Tabs,
+    FormsModule,
+    CommonModule,
+    DatePickerModule,
+    SelectModule,
+    TableModule,
+    TagModule,
+    MessageModule,
+    CreateOvertime,
+    CreateBorrow,
+    CreateHoliday,
+    CreateMissedHours,
+    CreateResignation,
+    CreateAppointment,
+    Dialog
+],
+  templateUrl: "./orders.html",
+  styleUrl: "./orders.css",
+})
+export class Orders implements OnInit {
+  activeTabIndex = 0;
+
+  // --- Missed Hours ---
+  missedHoursRequests: any[] = [];
+  loadingMissedHours = false;
+  missedHoursTotalRecords = 0;
+  missedHoursPage = 1;
+  showCreateMissedHours = false;
+
+  // --- Leave (Holidays) ---
+  leaveRequests: any[] = [];
+  loadingLeave = false;
+  leaveTotalRecords = 0;
+  leavePage = 1;
+  showCreateLeave = false;
+
+  // --- Loan (Borrows) ---
+  loanRequests: any[] = [];
+  loadingLoan = false;
+  loanTotalRecords = 0;
+  loanPage = 1;
+  showCreateLoan = false;
+
+  // --- Overtime ---
+  overtimeRequests: any[] = [];
+  loadingOvertime = false;
+  overtimeTotalRecords = 0;
+  overtimePage = 1;
+  showCreateOvertime = false;
+
+  // --- Resignation ---
+  resignationRequests: any[] = [];
+  loadingResignation = false;
+  resignationTotalRecords = 0;
+  resignationPage = 1;
+  showCreateResignation = false;
+
+  // --- Appointment ---
+  appointmentRequests: any[] = [];
+  loadingAppointment = false;
+  appointmentTotalRecords = 0;
+  appointmentPage = 1;
+  showCreateAppointment = false;
+
+  showRejectDialog = false;
+  selectedRequestId = "";
+  selectedRequestType = "";
+  rejectionReason = "";
+
+  constructor(
+    private api: Apiservice,
+    private cdr: ChangeDetectorRef,
+    public auth: AuthService,
+  ) {}
+
+  ngOnInit() {
+    this.loadMissedHours();
+  }
+
+  get isEmployee(): boolean {
+    return !(
+      this.auth.isAdmin ||
+      this.auth.isHR ||
+      this.auth.isAreaManager ||
+      this.auth.isManager ||
+      this.auth.isControl ||
+      this.auth.isAccountant
+    );
+  }
+
+  get employeeId(): string {
+    return localStorage.getItem("employeeId") || "";
+  }
+
+  onTabChange(index: number) {
+    this.activeTabIndex = index;
+    if (index === 0 && !this.missedHoursRequests.length) this.loadMissedHours();
+    if (index === 1 && !this.leaveRequests.length) this.loadLeave();
+    if (index === 2 && !this.loanRequests.length) this.loadLoan();
+    if (index === 3 && !this.overtimeRequests.length) this.loadOvertime();
+    if (index === 4 && !this.resignationRequests.length) this.loadResignation();
+    if (index === 5 && !this.appointmentRequests.length) this.loadAppointment();
+  }
+
+  // ---- Loaders ----
+
+  loadMissedHours() {
+    this.loadingMissedHours = true;
+
+    const request = this.isEmployee
+      ? this.api.getForgetedHoursRequestsForUser(
+          this.employeeId,
+          this.missedHoursPage,
+          10,
+        )
+      : this.api.getForgetedHoursRequests(this.missedHoursPage, 10);
+
+    request.subscribe({
+      next: (res: any) => {
+        this.missedHoursRequests = res.data;
+        this.missedHoursTotalRecords = res.totalCount;
+        this.loadingMissedHours = false;
+        this.cdr.detectChanges();
+      },
+      error: () => (this.loadingMissedHours = false),
+    });
+  }
+
+  loadLeave() {
+    this.loadingLeave = true;
+
+    const request = this.isEmployee
+      ? this.api.getAllHolidaysForUser(this.employeeId, this.leavePage, 10)
+      : this.api.getAllHolidays(this.leavePage, 10);
+
+    request.subscribe({
+      next: (res: any) => {
+        this.leaveRequests = res.data;
+        this.leaveTotalRecords = res.totalCount;
+        this.loadingLeave = false;
+        this.cdr.detectChanges();
+      },
+      error: () => (this.loadingLeave = false),
+    });
+  }
+
+  loadLoan() {
+    this.loadingLoan = true;
+
+    const request = this.isEmployee
+      ? this.api.getAllBorrowsForUser(this.employeeId, this.loanPage, 10)
+      : this.api.getAllBorrows(this.loanPage, 10);
+
+    request.subscribe({
+      next: (res: any) => {
+        this.loanRequests = res.data;
+        this.loanTotalRecords = res.totalCount;
+        this.loadingLoan = false;
+        this.cdr.detectChanges();
+      },
+      error: () => (this.loadingLoan = false),
+    });
+  }
+
+  loadOvertime() {
+    this.loadingOvertime = true;
+
+    const request = this.isEmployee
+      ? this.api.getAllOvertimeForUser(this.employeeId, this.overtimePage, 10)
+      : this.api.getAllOvertime(this.overtimePage, 10);
+
+    request.subscribe({
+      next: (res: any) => {
+        this.overtimeRequests = res.data;
+        this.overtimeTotalRecords = res.totalCount;
+        this.loadingOvertime = false;
+        this.cdr.detectChanges();
+      },
+      error: () => (this.loadingOvertime = false),
+    });
+  }
+
+  loadResignation() {
+    this.loadingResignation = true;
+
+    const request = this.isEmployee
+      ? this.api.getAllResignationsForUser(
+          this.employeeId,
+          this.resignationPage,
+          10,
+        )
+      : this.api.getAllResignations(this.resignationPage, 10);
+
+    request.subscribe({
+      next: (res: any) => {
+        this.resignationRequests = res.data;
+        this.resignationTotalRecords = res.totalCount;
+        this.loadingResignation = false;
+        this.cdr.detectChanges();
+      },
+      error: () => (this.loadingResignation = false),
+    });
+  }
+
+  loadAppointment() {
+    this.loadingAppointment = true;
+
+    const request = this.isEmployee
+      ? this.api.getAllAppointmentsForUser(
+          this.employeeId,
+          this.appointmentPage,
+          10,
+        )
+      : this.api.getAllAppointments(this.appointmentPage, 10);
+
+    request.subscribe({
+      next: (res: any) => {
+        this.appointmentRequests = res.data;
+        this.appointmentTotalRecords = res.totalCount;
+        this.loadingAppointment = false;
+        this.cdr.detectChanges();
+      },
+      error: () => (this.loadingAppointment = false),
+    });
+  }
+
+  // ---- Pagination ----
+
+  onMissedHoursPageChange(event: any) {
+    this.missedHoursPage = event.first / event.rows + 1;
+    this.loadMissedHours();
+  }
+
+  onLeavePageChange(event: any) {
+    this.leavePage = event.first / event.rows + 1;
+    this.loadLeave();
+  }
+
+  onLoanPageChange(event: any) {
+    this.loanPage = event.first / event.rows + 1;
+    this.loadLoan();
+  }
+
+  onOvertimePageChange(event: any) {
+    this.overtimePage = event.first / event.rows + 1;
+    this.loadOvertime();
+  }
+
+  onResignationPageChange(event: any) {
+    this.resignationPage = event.first / event.rows + 1;
+    this.loadResignation();
+  }
+
+  onAppointmentPageChange(event: any) {
+    this.appointmentPage = event.first / event.rows + 1;
+    this.loadAppointment();
+  }
+
+  // ---- Approve / Reject ----
+
+  approveRequest(type: string, id: string) {
+    const payload = {
+      isApproved: true,
+      rejectionReason: null,
+    };
+
+    let call;
+
+    if (type === "missedHours") {
+      call = this.api.approveForgetedHoursRequest(id, payload);
+    } else if (type === "leave") {
+      call = this.api.approveHolidayRequestByHr(id, payload);
+    } else if (type === "loan") {
+      call = this.api.approveOrRejectBorrowRequest(id, payload);
+    } else if (type === "overtime") {
+      call = this.api.approveByHrOvertimeRequest(id, payload);
+    } else if (type === "resignation") {
+      call = this.api.approveResignationRequest(id, payload);
+    } else {
+      call = this.api.approveAppointmentRequest(id, payload);
+    }
+
+    call.subscribe({
+      next: () => {
+        this.api.showSuccess("تم القبول بنجاح");
+        this.reloadByType(type);
+      },
+      error: () => this.api.showError("حدث خطأ أثناء القبول"),
+    });
+  }
+
+  rejectRequest(type: string, id: string, rejectionReason: string) {
+    const payload = {
+      isApproved: false,
+      rejectionReason,
+    };
+
+    let call;
+
+    if (type === "missedHours") {
+      call = this.api.rejectForgetedHoursRequest(id, payload);
+    } else if (type === "loan") {
+      call = this.api.approveOrRejectBorrowRequest(id, payload);
+    } else if (type === "overtime") {
+      call = this.api.approveByHrOvertimeRequest(id, payload);
+    } else if (type === "resignation") {
+      call = this.api.approveResignationRequest(id, payload);
+    } else {
+      call = this.api.approveAppointmentRequest(id, payload);
+    }
+
+    call.subscribe({
+      next: () => {
+        this.api.showSuccess("تم الرفض");
+        this.reloadByType(type);
+      },
+      error: () => this.api.showError("حدث خطأ أثناء الرفض"),
+    });
+  }
+
+  // الإجازات — قبول مدير المنطقة
+  approveLeaveByAreaManager(id: string) {
+    const payload = {
+      isApproved: true,
+      cover: "علي محمد", // أو القيمة اللى جاية من المستخدم
+      rejectionReason: null,
+    };
+
+    this.api.approveHolidayRequestByAreaManager(id, payload).subscribe({
+      next: () => {
+        this.api.showSuccess("تم القبول بواسطة مدير المنطقة");
+        this.loadLeave();
+      },
+      error: () => this.api.showError("حدث خطأ"),
+    });
+  }
+
+  // الأوفر تايم — قبول مدير المنطقة
+  approveOvertimeByAreaManager(id: string) {
+    const payload = {
+      isApproved: true,
+      rejectionReason: null,
+    };
+
+    this.api.approveByAreaManagerOvertimeRequest(id, payload).subscribe({
+      next: () => {
+        this.api.showSuccess("تم القبول بواسطة مدير المنطقة");
+        this.loadOvertime();
+      },
+      error: () => this.api.showError("حدث خطأ"),
+    });
+  }
+
+  // الأوفر تايم — قبول الكنترول
+  approveOvertimeByControl(id: string) {
+    const payload = {
+      isApproved: true,
+      rejectionReason: null,
+    };
+
+    this.api.approveByControlOvertimeRequest(id, payload).subscribe({
+      next: () => {
+        this.api.showSuccess("تم القبول بواسطة الكنترول");
+        this.loadOvertime();
+      },
+      error: () => this.api.showError("حدث خطأ"),
+    });
+  }
+
+  // ---- Reload by type ----
+
+  reloadByType(type: string) {
+    if (type === "missedHours") this.loadMissedHours();
+    if (type === "leave") this.loadLeave();
+    if (type === "loan") this.loadLoan();
+    if (type === "overtime") this.loadOvertime();
+    if (type === "resignation") this.loadResignation();
+    if (type === "appointment") this.loadAppointment();
+  }
+
+  // ---- On Created ----
+
+  onMissedHoursCreated() {
+    this.showCreateMissedHours = false;
+    this.loadMissedHours();
+  }
+
+  onLeaveCreated() {
+    this.showCreateLeave = false;
+    this.loadLeave();
+  }
+
+  onLoanCreated() {
+    this.showCreateLoan = false;
+    this.loadLoan();
+  }
+
+  onOvertimeCreated() {
+    this.showCreateOvertime = false;
+    this.loadOvertime();
+  }
+
+  onResignationCreated() {
+    this.showCreateResignation = false;
+    this.loadResignation();
+  }
+
+  onAppointmentCreated() {
+    this.showCreateAppointment = false;
+    this.loadAppointment();
+  }
+
+  confirmReject() {
+  this.rejectRequest(
+    this.selectedRequestType,
+    this.selectedRequestId,
+    this.rejectionReason
+  );
+
+  this.showRejectDialog = false;
+}
+
+
+openRejectDialog(type: string, id: string) {
+  this.selectedRequestType = type;
+  this.selectedRequestId = id;
+  this.rejectionReason = '';
+  this.showRejectDialog = true;
+}
+
+  // ---- Helpers ----
+
+  getStatusLabel(status: string): string {
+    const map: Record<string, string> = {
+      Pending: "قيد الانتظار",
+      Approved: "مقبول",
+      Rejected: "مرفوض",
+      ControlApproved: "مقبول بواسطة الكنترول",
+      ApprovedByAreaManager: "مقبول بواسطة مدير المنطقة",
+    };
+    return map[status] ?? status;
+  }
+
+  getStatusClass(status: string): Record<string, boolean> {
+    return {
+      "bg-warning bg-opacity-25 text-warning": status === "Pending",
+      "bg-success bg-opacity-25 text-success":
+        status === "Approved" ||
+        status === "ControlApproved" ||
+        status === "ApprovedByAreaManager",
+      "bg-danger bg-opacity-25 text-danger": status === "Rejected",
+    };
+  }
+}

@@ -6,7 +6,7 @@ import { Employees } from "../components/employees/employees";
 import { Branches } from "../components/branches/branches";
 import { Criteria } from "../components/criteria/criteria";
 import { Banks } from "../components/banks/banks";
-import { Orders } from "../components/orders/orders";
+import { Orders } from "../components/orders-component/orders/orders";
 import { Complaint } from "../components/complaint/complaint";
 import { Responsibility } from "../components/responsibility/responsibility";
 import { MyShift } from "../components/my-shift/my-shift";

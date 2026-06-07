@@ -1,0 +1,36 @@
+<div class="panel">
+  <div class="form">
+
+    <div class="field">
+      <label>من تاريخ <span class="text-danger">*</span></label>
+      <p-datepicker
+        [(ngModel)]="form.fromDate"
+        dateFormat="yy-mm-dd"
+        placeholder="اختر تاريخ"
+        [appendTo]="'body'"
+        [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+      />
+    </div>
+
+    <div class="field">
+      <label>إلى تاريخ <span class="text-danger">*</span></label>
+      <p-datepicker
+        [(ngModel)]="form.toDate"
+        dateFormat="yy-mm-dd"
+        placeholder="اختر تاريخ"
+        [appendTo]="'body'"
+        [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+      />
+    </div>
+
+    <button
+      type="button"
+      class="submit-btn full"
+      [disabled]="loading || !form.fromDate || !form.toDate"
+      (click)="submit()"
+    >
+      {{ loading ? 'جارى الإرسال...' : 'إرسال الطلب' }}
+    </button>
+
+  </div>
+</div>

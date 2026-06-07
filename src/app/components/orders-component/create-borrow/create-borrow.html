@@ -1,0 +1,35 @@
+<div class="panel">
+  <div class="form">
+
+    <div class="field">
+      <label>المبلغ (ج.م) <span class="text-danger">*</span></label>
+      <input
+        class="custom-input"
+        type="number"
+        [(ngModel)]="form.amount"
+        placeholder="مثال: 1000"
+        min="1"
+      />
+    </div>
+
+    <div class="field">
+      <label>ملاحظات</label>
+      <textarea
+        class="custom-input"
+        [(ngModel)]="form.notes"
+        rows="3"
+        placeholder="مثال: ظروف طارئة..."
+      ></textarea>
+    </div>
+
+    <button
+      type="button"
+      class="submit-btn full"
+      [disabled]="loading || !form.amount || form.amount < 1"
+      (click)="submit()"
+    >
+      {{ loading ? 'جارى الإرسال...' : 'إرسال الطلب' }}
+    </button>
+
+  </div>
+</div>

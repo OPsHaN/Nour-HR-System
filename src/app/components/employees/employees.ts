@@ -112,6 +112,7 @@ export class Employees {
   selectedSingleDay: string = "";
 
   dayOptions = [
+    { key: "quarterDay", label: "ربع يوم" },
     { key: "halfDay", label: "نص يوم" },
     { key: "oneDay", label: "يوم" },
     { key: "twoDays", label: "يومين" },
@@ -282,37 +283,37 @@ export class Employees {
     });
   }
 
-editEmployee(emp: any) {
-  this.isEditMode = true;
-  this.showPayrollDetails = false;
-  this.loadingResponsibilities = true;
+  editEmployee(emp: any) {
+    this.isEditMode = true;
+    this.showPayrollDetails = false;
+    this.loadingResponsibilities = true;
 
-  forkJoin({
-    history: this.api.getHistoryByEmployeeId(emp.id),
-    employee: this.api.getEmployeeById(emp.id),
-    payroll: this.api.getMonthyDataForuser(emp.id),
-    responsibilities: this.api.getAllResponsibilities(emp.id),
-  }).subscribe({
-    next: (res: any) => {
-      this.employeeDetails = {
-        ...res.history,
-        ...res.employee,
-        ...res.payroll,
-        responsibilities: res.responsibilities,
-        hiringDate: res.employee.hiringDate
-          ? new Date(res.employee.hiringDate)
-          : null,
-      };
-      this.loadingResponsibilities = false;
-      this.showEmployeeDetailsDialog = true;
-      this.cdr.detectChanges();
-    },
-    error: () => {
-      this.loadingResponsibilities = false;
-      this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
-    },
-  });
-}
+    forkJoin({
+      history: this.api.getHistoryByEmployeeId(emp.id),
+      employee: this.api.getEmployeeById(emp.id),
+      payroll: this.api.getMonthyDataForuser(emp.id),
+      responsibilities: this.api.getAllResponsibilities(emp.id),
+    }).subscribe({
+      next: (res: any) => {
+        this.employeeDetails = {
+          ...res.history,
+          ...res.employee,
+          ...res.payroll,
+          responsibilities: res.responsibilities,
+          hiringDate: res.employee.hiringDate
+            ? new Date(res.employee.hiringDate)
+            : null,
+        };
+        this.loadingResponsibilities = false;
+        this.showEmployeeDetailsDialog = true;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.loadingResponsibilities = false;
+        this.api.showError("حدث خطأ أثناء تحميل بيانات الموظف");
+      },
+    });
+  }
   saveEmployeeEdits() {
     const payload = {
       theNameOfJob: this.employeeDetails.theNameOfJob,
