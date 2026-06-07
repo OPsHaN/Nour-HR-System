@@ -22,10 +22,21 @@ export class ShortcutsComponent {
   protected shortcuts: Shortcut[] = [];
   private readonly api = inject(Apiservice);
   private readonly cdr = inject(ChangeDetectorRef);
+  unseenCounts = {
+    overtime: 0,
+    borrows: 0,
+    holidays: 0,
+    resignations: 0,
+    appointments: 0,
+    forgotHours: 0,
+  };
 
   ngOnInit() {
     const role = this.getUserRole();
     this.shortcuts = getShortcutsByRole(role);
+
+      this.loadUnseenCounts();
+
 
     this.api.getUnseenComplaintsCount().subscribe({
       next: (response: any) => {
@@ -48,7 +59,10 @@ export class ShortcutsComponent {
         this.cdr.detectChanges();
       },
     });
+
+
   }
+  
 
   protected onShortcutClick(shortcut: Shortcut): void {
     this.shortcutClick.emit(shortcut);
@@ -68,6 +82,57 @@ export class ShortcutsComponent {
       ? (role as UserRole)
       : "Employee";
   }
+
+loadUnseenCounts() {
+  this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.overtime = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenBorrowsCount().subscribe((res: any) => {
+    this.unseenCounts.borrows = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.holidays = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.resignations = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.appointments = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
+    this.unseenCounts.forgotHours = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+}
+
+private updateOrdersBadge() {
+  const total =
+    this.unseenCounts.overtime +
+    this.unseenCounts.borrows +
+    this.unseenCounts.holidays +
+    this.unseenCounts.resignations +
+    this.unseenCounts.appointments +
+    this.unseenCounts.forgotHours;
+
+  this.shortcuts = this.shortcuts.map((shortcut) =>
+    shortcut.action === 'orders'
+      ? { ...shortcut, badge: total }
+      : shortcut
+  );
+
+  this.cdr.detectChanges();
+}
+
 }
 
 export { WindowAction };

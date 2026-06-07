@@ -64,7 +64,7 @@
 .desktop__surface {
   position: relative;
   min-height: calc(100vh - 82px);
-  padding: 20px 20px ;
+  padding: 20px 20px;
   overflow: hidden;
 }
 
@@ -106,14 +106,16 @@
   legend {
     font-size: 0.75rem;
     color: var(--text);
-    padding: 0 0.4rem;
+    padding: 0 0.0rem;
     float: none;
     justify-self: center;
     width: auto;
     background: var(--surface);
     border: 1px solid var(--text);
-     border-radius: 20px;
-     padding: 0.3rem 0.3rem;
+    border-radius: 20px;
+    padding: 0.3rem 0.3rem;
+    margin-bottom: .0rem !important;
+
   }
 }
 
@@ -136,3 +138,37 @@
   align-items: center;
   gap: 6px;
 }
+
+
+.mini-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mini-stat {
+  min-width: 85px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--text);
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
+}
+
+.mini-stat span {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1;
+}
+
+.mini-stat small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-color-secondary);
+}
+

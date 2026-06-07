@@ -35,6 +35,43 @@
               (onClick)="onEndShift()"
             />
           </div>
+
+          <div *ngIf="!isEmployee" class="mini-stats">
+            <div class="mini-stat">
+              <span>{{ unseenCounts.forgotHours }}</span>
+              <p class="mb-0">ساعات منسية</p>
+            </div>
+
+            <div class="mini-stat">
+              <span>{{ unseenCounts.holidays }}</span>
+              <p class="mb-0">الأجازات</p>
+            </div>
+
+            <div class="mini-stat">
+              <span>{{ unseenCounts.borrows }}</span>
+              <p class="mb-0">السلف</p>
+            </div>
+
+            <div class="mini-stat">
+              <span>{{ unseenCounts.overtime }}</span>
+              <p class="mb-0">الأوفر تايم</p>
+            </div>
+
+            <div class="mini-stat">
+              <span>{{ unseenCounts.resignations }}</span>
+              <p class="mb-0">إستقالات</p>
+            </div>
+
+            <div class="mini-stat">
+              <span>{{ unseenCounts.appointments }}</span>
+              <p class="mb-0">التعيينات</p>
+            </div>
+
+            <div class="mini-stat">
+              <span>{{ unseenCounts.complaints }}</span>
+              <p class="mb-0">الشكاوى</p>
+            </div>
+          </div>
         </fieldset>
       </div>
 
@@ -43,7 +80,12 @@
       </div>
     </div>
     <app-shortcuts
-      style="display: flex; justify-content: center; width: 100%; max-width: 100%;"
+      style="
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        max-width: 100%;
+      "
       (shortcutClick)="openShortcut($event)"
     ></app-shortcuts>
 

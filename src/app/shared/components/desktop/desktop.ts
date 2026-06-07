@@ -48,6 +48,16 @@ export class Desktop implements OnInit, OnDestroy {
   private shiftStartTime: Date | null = null;
   private timerInterval: any;
 
+  unseenCounts = {
+    overtime: 0,
+    borrows: 0,
+    holidays: 0,
+    resignations: 0,
+    appointments: 0,
+    forgotHours: 0,
+    complaints: 0,
+  };
+
   get isEmployee(): boolean {
     return localStorage.getItem("role") === "Employee";
   }
@@ -72,6 +82,10 @@ export class Desktop implements OnInit, OnDestroy {
     this.userName = localStorage.getItem("name") || "مستخدم";
     this.restoreShiftState();
     this.openDefaultStartupWindows();
+
+    if (!this.isEmployee) {
+      this.loadUnseenCounts();
+    }
   }
 
   ngOnDestroy(): void {
@@ -392,5 +406,35 @@ export class Desktop implements OnInit, OnDestroy {
 
   private defaultSize(action: keyof typeof SHORTCUTS_CONFIG) {
     return SHORTCUTS_CONFIG[action]?.size ?? { width: 520, height: 360 };
+  }
+
+  loadUnseenCounts() {
+    this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.overtime = res.count ;
+    });
+
+    this.api.getUnseenBorrowsCount().subscribe((res: any) => {
+      this.unseenCounts.borrows = res.count ;
+    });
+
+    this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.holidays = res.count ;
+    });
+
+    this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.resignations = res.count  ;
+    });
+
+    this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.appointments = res.count ;
+    });
+
+    this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
+      this.unseenCounts.forgotHours = res.count ;
+    });
+
+    this.api.getUnseenComplaintsCount().subscribe((res: any) => {
+      this.unseenCounts.complaints = res.count ;
+    });
   }
 }
