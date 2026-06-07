@@ -1,6 +1,11 @@
 <div class="panel">
-  <div class="form">
+  <p-message
+    severity="info"
+    text="يمكن تقديم طلب السلفة من يوم 10 إلى يوم 25 فقط من كل شهر"
+    styleClass="mb-3"
+  />
 
+  <div class="form">
     <div class="field">
       <label>المبلغ (ج.م) <span class="text-danger">*</span></label>
       <input
@@ -30,6 +35,5 @@
     >
       {{ loading ? 'جارى الإرسال...' : 'إرسال الطلب' }}
     </button>
-
   </div>
 </div>

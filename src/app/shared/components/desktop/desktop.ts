@@ -62,6 +62,10 @@ export class Desktop implements OnInit, OnDestroy {
     return localStorage.getItem("role") === "Employee";
   }
 
+  get isHr(): boolean {
+    return localStorage.getItem("role") === "HR";
+  }
+
   private get storageKey(): string {
     const userId = localStorage.getItem("userId") ?? "default";
     return `activeShift_${userId}`;

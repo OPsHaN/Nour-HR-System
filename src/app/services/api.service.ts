@@ -526,8 +526,8 @@ approveForgetedHoursRequest(id: string, data: any) {
     return this.http.get(`${this.baseUrl}resignations/unseen-count`);
   }
 
-  markResignationRequestAsSeen(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}resignations/${requestId}/mark-seen`, data);
+  markResignationRequestAsSeen(requestId: string) {
+    return this.http.put(`${this.baseUrl}resignations/${requestId}/mark-seen`, {});
   }
 
   //appointment//
@@ -552,8 +552,8 @@ approveForgetedHoursRequest(id: string, data: any) {
     return this.http.get(`${this.baseUrl}appointments/unseen-count`);
   }
 
-  markAppointmentRequestAsSeen(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}appointments/${requestId}/mark-seen`, data);
+  markAppointmentRequestAsSeen(requestId: string) {
+    return this.http.put(`${this.baseUrl}appointments/${requestId}/mark-seen`, {} );
   }
 
   showError(msg: string) {

@@ -94,7 +94,7 @@
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                  (click)="openRejectDialog('TYPE', req.id)"
+                  (click)="openRejectDialog('missedHours', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
                 >
@@ -217,7 +217,7 @@
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                  (click)="openRejectDialog('TYPE', req.id)"
+                  (click)="openRejectDialog('leave', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
                 >
@@ -323,7 +323,7 @@
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                  (click)="openRejectDialog('TYPE', req.id)"
+                  (click)="openRejectDialog('loan', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
                 >
@@ -485,7 +485,7 @@
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                  (click)="openRejectDialog('TYPE', req.id)"
+                  (click)="openRejectDialog('overtime', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
                 >
@@ -581,7 +581,7 @@
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                  (click)="openRejectDialog('TYPE', req.id)"
+                  (click)="openRejectDialog('resignation', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
                 >
@@ -675,7 +675,7 @@
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
-                  (click)="openRejectDialog('TYPE', req.id)"
+                  (click)="openRejectDialog('appointment', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
                 >
@@ -701,36 +701,28 @@
   header="سبب الرفض"
   [(visible)]="showRejectDialog"
   [modal]="true"
+    class="data-employee-dialog"
+
   [style]="{ width: '30rem' }"
 >
-  <div class="mb-3">
-    <label class="form-label fw-bold">سبب الرفض</label>
-
+  <div class=" field mb-1">
     <textarea
       rows="4"
-      class="form-control"
+      class="custom-input"
       [(ngModel)]="rejectionReason"
       placeholder="اكتب سبب الرفض"
     >
     </textarea>
   </div>
 
-  <div class="d-flex justify-content-end gap-2">
-    <button
-      type="button"
-      class="btn btn-secondary"
-      (click)="showRejectDialog = false"
-    >
-      إلغاء
-    </button>
-
-    <button
+  <div class="d-flex justify-content-center gap-2">
+   <button
       type="button"
       class="btn btn-danger"
       [disabled]="!rejectionReason.trim()"
       (click)="confirmReject()"
     >
-      تأكيد الرفض
+     إرسال
     </button>
   </div>
 </p-dialog>

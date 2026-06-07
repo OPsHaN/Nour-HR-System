@@ -38,8 +38,8 @@ import { Dialog } from "primeng/dialog";
     CreateMissedHours,
     CreateResignation,
     CreateAppointment,
-    Dialog
-],
+    Dialog,
+  ],
   templateUrl: "./orders.html",
   styleUrl: "./orders.css",
 })
@@ -309,6 +309,8 @@ export class Orders implements OnInit {
     call.subscribe({
       next: () => {
         this.api.showSuccess("تم القبول بنجاح");
+        this.markAsSeen(type, id);
+
         this.reloadByType(type);
       },
       error: () => this.api.showError("حدث خطأ أثناء القبول"),
@@ -338,7 +340,11 @@ export class Orders implements OnInit {
     call.subscribe({
       next: () => {
         this.api.showSuccess("تم الرفض");
-        this.reloadByType(type);
+        this.markAsSeen(type, id);
+
+        setTimeout(() => {
+          this.reloadByType(type);
+        }, 100);
       },
       error: () => this.api.showError("حدث خطأ أثناء الرفض"),
     });
@@ -437,22 +443,21 @@ export class Orders implements OnInit {
   }
 
   confirmReject() {
-  this.rejectRequest(
-    this.selectedRequestType,
-    this.selectedRequestId,
-    this.rejectionReason
-  );
+    this.rejectRequest(
+      this.selectedRequestType,
+      this.selectedRequestId,
+      this.rejectionReason,
+    );
 
-  this.showRejectDialog = false;
-}
+    this.showRejectDialog = false;
+  }
 
-
-openRejectDialog(type: string, id: string) {
-  this.selectedRequestType = type;
-  this.selectedRequestId = id;
-  this.rejectionReason = '';
-  this.showRejectDialog = true;
-}
+  openRejectDialog(type: string, id: string) {
+    this.selectedRequestType = type;
+    this.selectedRequestId = id;
+    this.rejectionReason = "";
+    this.showRejectDialog = true;
+  }
 
   // ---- Helpers ----
 
@@ -476,5 +481,40 @@ openRejectDialog(type: string, id: string) {
         status === "ApprovedByAreaManager",
       "bg-danger bg-opacity-25 text-danger": status === "Rejected",
     };
+  }
+
+  private markAsSeen(type: string, id: string) {
+    let call;
+
+    switch (type) {
+      case "missedHours":
+        call = this.api.markForgetedHoursRequestAsSeen(id);
+        break;
+
+      case "leave":
+        call = this.api.markHolidayRequestAsSeen(id);
+        break;
+
+      case "loan":
+        call = this.api.markBorrowAsSeen(id);
+        break;
+
+      case "overtime":
+        call = this.api.markOvertimeRequestAsSeen(id);
+        break;
+
+      case "resignation":
+        call = this.api.markResignationRequestAsSeen(id);
+        break;
+
+      case "appointment":
+        call = this.api.markAppointmentRequestAsSeen(id);
+        break;
+
+      default:
+        return;
+    }
+
+    call.subscribe();
   }
 }

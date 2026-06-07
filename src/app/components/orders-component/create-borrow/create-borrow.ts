@@ -3,11 +3,13 @@ import { Component, EventEmitter, Output } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { DatePickerModule } from "primeng/datepicker";
 import { Apiservice } from "src/app/services/api.service";
+import { MessageModule } from "primeng/message";
 
 
 @Component({
   selector: 'app-create-borrow',
-  imports: [CommonModule, FormsModule, DatePickerModule],
+  imports: [CommonModule, FormsModule, DatePickerModule , MessageModule,
+  ],
   templateUrl: './create-borrow.html',
   styleUrl: './create-borrow.css',
 })
