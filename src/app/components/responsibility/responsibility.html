@@ -85,7 +85,7 @@
 
   <ng-template pTemplate="body" let-responsibility let-ri="rowIndex">
     <tr>
-      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
+      <td>{{ responsibility.id }}</td>
       <td>{{ responsibility.name }}</td>
       <td>{{ responsibility.createdAt | date:'yyyy-MM-dd' }}</td>
       <td>

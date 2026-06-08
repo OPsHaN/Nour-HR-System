@@ -28,15 +28,21 @@ export const SHORTCUTS_CONFIG = {
     title: "مواعيد شيفتى",
     icon: "schedule",
     bg: "#1890ff",
-    roles: ["Admin", "Employee"] as UserRole[],
+    roles: ["Employee"] as UserRole[],
     size: { width: 620, height: 420 },
   },
   calendar: {
     title: "النتيجة",
     icon: "event",
     bg: "#ff4d4f",
-    roles: ["Admin", "HR", "Accountant", "Employee", "Area Manager", "Control"] as UserRole[],
-    startup: true,
+    roles: [
+      "Admin",
+      "HR",
+      "Accountant",
+      "Employee",
+      "Area Manager",
+      "Control",
+    ] as UserRole[],
     size: { width: 500, height: 650 },
   },
   users: {
@@ -78,28 +84,46 @@ export const SHORTCUTS_CONFIG = {
     title: "التقارير",
     icon: "bar_chart",
     bg: "#52c41a",
-    roles: ["Admin", "HR", "Control", "Area Manager", "Accountant"] as UserRole[],
+    roles: ["HR", "Control", "Area Manager", "Accountant"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   responsibility: {
     title: "العهدة",
     icon: "work",
     bg: "#fa541c",
-    roles: ["Admin", "HR", "Employee", "Area Manager", "Control", "Accountant"] as UserRole[],
+    roles: [
+      "HR",
+      "Employee",
+      "Area Manager",
+      "Control",
+      "Accountant",
+    ] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   orders: {
     title: "الطلبات",
     icon: "assignment",
     bg: "#fa8c16",
-    roles: ["Admin", "HR", "Employee", "Area Manager", "Control", "Accountant"] as UserRole[],
-    size: { width: 900, height: 420 },
+    roles: [
+      "HR",
+      "Employee",
+      "Area Manager",
+      "Control",
+      "Accountant",
+    ] as UserRole[],
+    size: { width: 1200, height: 420 },
   },
   complaints: {
     title: "الشكاوى",
     icon: "report_problem",
     bg: "#f5222d",
-    roles: ["Admin", "HR", "Employee", "Area Manager", "Control", "Accountant"] as UserRole[],
+    roles: [
+      "HR",
+      "Employee",
+      "Area Manager",
+      "Control",
+      "Accountant",
+    ] as UserRole[],
     size: { width: 1200, height: 420 },
   },
   website: {
@@ -107,7 +131,31 @@ export const SHORTCUTS_CONFIG = {
     icon: "language",
     bg: "#1677ff",
     roles: [] as UserRole[],
+    startup: true,
+
     size: { width: 980, height: 620 },
+  },
+  news: {
+    title: "النشرة الإخبارية",
+    icon: "campaign",
+    bg: "#f59e0b",
+    roles: [
+      "Admin",
+      "HR",
+      "Accountant",
+      "Employee",
+      "Area Manager",
+      "Control",
+    ] as UserRole[],
+    startup: true,
+    size: { width: 1100, height: 700 },
+  },
+  newsDetails: {
+    title: "تفاصيل الخبر",
+    icon: "article",
+    bg: "#3b82f6",
+    roles: [] as UserRole[],
+    size: { width: 1000, height: 700 },
   },
 } satisfies Record<string, ShortcutConfig>;
 
@@ -152,8 +200,8 @@ export function getShortcutsByRole(role: UserRole): Shortcut[] {
 }
 
 export function getStartupShortcutsByRole(role: UserRole): Shortcut[] {
-  const marked = getShortcutsByRole(role).filter((shortcut) =>
-    (SHORTCUTS_CONFIG[shortcut.action] as ShortcutConfig).startup,
+  const marked = getShortcutsByRole(role).filter(
+    (shortcut) => (SHORTCUTS_CONFIG[shortcut.action] as ShortcutConfig).startup,
   );
 
   return marked.length > 0 ? marked : getShortcutsByRole(role).slice(0, 2);

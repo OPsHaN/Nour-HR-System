@@ -197,7 +197,7 @@
       <th>ساعات العمل</th>
       <th>الفرع</th>
       <th>حالة الموظف</th>
-      <th>الإجراءات</th>
+      <th *ngIf="this.auth.isHR ">الإجراءات</th>
     </tr>
   </ng-template>
 
@@ -215,7 +215,7 @@
         />
       </td>
 
-      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
+      <td>{{ emp.id }}</td>
       <td>{{ emp.name }}</td>
       <td>{{ emp.theNameOfJob }}</td>
       <td>{{ emp.bankName }}</td>
@@ -223,7 +223,7 @@
       <td>{{ emp.shiftHours }}</td>
       <td>{{ emp.branchName }}</td>
       <td>{{ emp.employeeType }}</td>
-      <td>
+      <td *ngIf="this.auth.isHR ">
         <button
           pButton
           type="button"
@@ -523,6 +523,19 @@
               <div class="detail-item">
                 <label>سبب إنهاء الخدمة</label>
                 <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
+              </div>
+
+               <div class="detail-item">
+                <label>وضع الموظف</label>
+                <select  class= "custom-input" *ngIf="isEditMode" [(ngModel)]="employeeDetails.status">
+                  <option value="">اختر حالة الموظف</option>
+                  <option value="Active">نشط</option>
+                  <option value="Stopped">متوقف</option>
+                </select>
+
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.status === 'Active' ? 'نشط' : employeeDetails.status === 'Stopped' ? 'متوقف' : '-' }}</span
+                >
               </div>
             </div>
           </div>

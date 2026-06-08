@@ -57,13 +57,11 @@ export class Login {
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
-
           // حفظ البيانات في localStorage
           localStorage.setItem("name", res.name);
           // localStorage.setItem("fullName", res.FullName || "");
           // localStorage.setItem("img", res.Img || "");
           localStorage.setItem("role", res.role);
-
           this.authService.onLoginSuccess(res.token);
 
           this.showSuccess("تم تسجيل الدخول بنجاح");

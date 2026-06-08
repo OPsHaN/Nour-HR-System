@@ -13,6 +13,7 @@ import { Tabs, TabPanels, TabPanel, TabList, Tab } from "primeng/tabs";
 import { Subscription } from "rxjs";
 import { forkJoin } from "rxjs";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-employees",
@@ -124,6 +125,7 @@ export class Employees {
     private api: Apiservice,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -148,13 +150,13 @@ export class Employees {
       },
     },
 
-    {
-      label: "إضافة سلفة",
-      icon: "pi pi-wallet",
-      command: () => {
-        this.openActionDialog("borrow", "إضافة سلفة", this.selectedEmployee);
-      },
-    },
+    // {
+    //   label: "إضافة سلفة",
+    //   icon: "pi pi-wallet",
+    //   command: () => {
+    //     this.openActionDialog("borrow", "إضافة سلفة", this.selectedEmployee);
+    //   },
+    // },
 
     {
       label: "إضافة خصم",

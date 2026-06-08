@@ -9,7 +9,7 @@
       <p-tab [value]="2">السلف</p-tab>
       <p-tab [value]="3">الأوفر تايم</p-tab>
       <p-tab [value]="4">الاستقالات</p-tab>
-      <p-tab [value]="5" *ngIf="this.auth.isHR">التعيينات</p-tab>
+      <p-tab [value]="5" *ngIf="this.auth.isHR || this.auth.isAreaManager">التعيينات</p-tab>
     </p-tablist>
 
     <p-tabpanels>
@@ -19,7 +19,7 @@
           <button
             pButton
             type="button"
-            class="btn btn-sm  my-1 d-flex align-items-center justify-content-center gap-2"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
             [class.btn-success]="!showCreateMissedHours"
             [class.btn-danger]="showCreateMissedHours"
             (click)="showCreateMissedHours = !showCreateMissedHours"
@@ -242,7 +242,7 @@
           <button
             pButton
             type="button"
-            class="btn btn-sm  my-1 d-flex align-items-center justify-content-center gap-2"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
             [class.btn-success]="!showCreateLoan"
             [class.btn-danger]="showCreateLoan"
             (click)="showCreateLoan = !showCreateLoan"
@@ -440,7 +440,9 @@
                   {{ getStatusLabel(req.status) }}
                 </span>
               </td>
-              <td *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isControl">
+              <td
+                *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isControl"
+              >
                 <button
                   *ngIf="this.auth.isHR"
                   pButton
@@ -481,7 +483,7 @@
                   ></i>
                 </button>
                 <button
-                  *ngIf="this.auth.isHR  || this.auth.isAreaManager || this.auth.isControl" 
+                  *ngIf="this.auth.isHR  || this.auth.isAreaManager || this.auth.isControl"
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
@@ -604,6 +606,7 @@
       <p-tabpanel [value]="5">
         <div class="filters-bar">
           <button
+          *ngIf="this.auth.isAreaManager"
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
@@ -701,11 +704,10 @@
   header="سبب الرفض"
   [(visible)]="showRejectDialog"
   [modal]="true"
-    class="data-employee-dialog"
-
+  class="data-employee-dialog"
   [style]="{ width: '30rem' }"
 >
-  <div class=" field mb-1">
+  <div class="field mb-1">
     <textarea
       rows="4"
       class="custom-input"
@@ -716,13 +718,13 @@
   </div>
 
   <div class="d-flex justify-content-center gap-2">
-   <button
+    <button
       type="button"
       class="btn btn-danger"
       [disabled]="!rejectionReason.trim()"
       (click)="confirmReject()"
     >
-     إرسال
+      إرسال
     </button>
   </div>
 </p-dialog>

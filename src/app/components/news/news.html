@@ -1,0 +1,34 @@
+<div
+  class="news-toast"
+  *ngIf="currentNews"
+  (click)="openNews(currentNews.uuid)"
+>
+
+<!-- <button
+  class="all-news-btn"
+  (click)="openAllNews(); $event.stopPropagation()"
+>
+  <span class="material-icons">feed</span>
+
+  <span class="badge">
+    {{ newsList.length }}
+  </span>
+</button> -->
+
+  <div class="title">
+    🔔 {{ currentNews.title }}
+  </div>
+
+  <div class="news-meta">
+    <span>
+      <strong>المصدر:</strong>
+      {{ currentNews.source }}
+    </span>
+
+    <span>
+      <strong>التاريخ:</strong>
+      {{ currentNews.publishedAt | date:'dd/MM/yyyy' }}
+    </span>
+  </div>
+
+</div>

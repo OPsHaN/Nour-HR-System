@@ -1,0 +1,29 @@
+<div class="news-details" *ngIf="news">
+
+  <div class="news-header">
+
+    <div class="news-badge">
+      <span class="material-icons">campaign</span>
+      {{ news.source }}
+    </div>
+
+    <h1 class="news-title">
+      {{ news.title }}
+    </h1>
+
+    <div class="news-meta">
+      <span class="material-icons">schedule</span>
+      {{ news.publishedAt | date:'yyyy/MM/dd HH:mm' }}
+    </div>
+
+  </div>
+
+  <div class="news-cover" *ngIf="news.imageUrl">
+    <img [src]="news.imageUrl" alt="news image" />
+  </div>
+
+  <div class="news-content">
+    {{ news.body }}
+  </div>
+
+</div>

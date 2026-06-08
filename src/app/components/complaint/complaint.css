@@ -2,10 +2,8 @@
     position: static;
     top: 0;
     z-index: 1000;
-
     background: var(--surface);
     backdrop-filter: blur(10px);
-
     padding: 5px 0;
 }
 
@@ -20,7 +18,7 @@
 
 ::ng-deep.data-employee-dialog .p-dialog-content {
     padding: 0.5rem 0.5rem !important;
-    /* border-radius: 0 0 0.0rem 0.0rem !important; */
+    /* border-radius: 0.0rem !important; */
     height: 100%
 }
 

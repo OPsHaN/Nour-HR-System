@@ -47,7 +47,7 @@
 
   <ng-template pTemplate="body" let-shift let-ri="rowIndex">
     <tr>
-      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
+      <td>{{ shift.id }}</td>
       <td>{{ shift.day | date:'yyyy-MM-dd' }}</td>
       <td>{{ formatTime(shift.start) }}</td>
       <td>{{ formatTime(shift.end) }}</td>

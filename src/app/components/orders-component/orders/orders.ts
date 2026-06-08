@@ -93,6 +93,16 @@ export class Orders implements OnInit {
   selectedRequestType = "";
   rejectionReason = "";
 
+
+    unseenCounts = {
+    overtime: 0,
+    borrows: 0,
+    holidays: 0,
+    resignations: 0,
+    appointments: 0,
+    forgotHours: 0,
+  };
+
   constructor(
     private api: Apiservice,
     private cdr: ChangeDetectorRef,
@@ -101,6 +111,7 @@ export class Orders implements OnInit {
 
   ngOnInit() {
     this.loadMissedHours();
+    this.loadUnseenCounts();
   }
 
   get isEmployee(): boolean {
@@ -517,4 +528,49 @@ export class Orders implements OnInit {
 
     call.subscribe();
   }
+
+
+  loadUnseenCounts() {
+  this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.overtime = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenBorrowsCount().subscribe((res: any) => {
+    this.unseenCounts.borrows = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.holidays = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.resignations = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.appointments = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+
+  this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
+    this.unseenCounts.forgotHours = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
+}
+
+private updateOrdersBadge() {
+  const total =
+    this.unseenCounts.overtime +
+    this.unseenCounts.borrows +
+    this.unseenCounts.holidays +
+    this.unseenCounts.resignations +
+    this.unseenCounts.appointments +
+    this.unseenCounts.forgotHours;
+  this.cdr.detectChanges();
+}
+
 }

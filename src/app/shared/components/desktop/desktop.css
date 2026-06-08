@@ -165,10 +165,10 @@
   line-height: 1;
 }
 
-.mini-stat small {
+.mini-stat p {
   display: block;
   margin-top: 4px;
-  font-size: 11px;
+  font-size: 18px;
   color: var(--text-color-secondary);
 }
 

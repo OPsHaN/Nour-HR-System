@@ -11,6 +11,8 @@ import { Complaint } from "../components/complaint/complaint";
 import { Responsibility } from "../components/responsibility/responsibility";
 import { MyShift } from "../components/my-shift/my-shift";
 import { WebsiteComponent } from "./components/website/website.component";
+import { News } from "../components/news/news";
+import { NewsDetails } from "../components/news-details/news-details";
 
 export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   calendar: CalendarComponent,
@@ -24,5 +26,7 @@ export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   complaints:Complaint,
   responsibility:Responsibility,
   myshift:MyShift,
-  website: WebsiteComponent,  
+  website: WebsiteComponent,
+  news:News,
+  newsDetails:NewsDetails
 };

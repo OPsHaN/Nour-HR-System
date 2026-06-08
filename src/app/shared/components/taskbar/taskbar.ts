@@ -82,6 +82,8 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
     this.websiteClick.emit();
   }
 
+
+
   logout() {
     this.confirmationService.confirm({
       message: "هل تريد تسجيل الخروج؟",
@@ -90,7 +92,11 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
       acceptLabel: "نعم",
       rejectLabel: "لا",
       accept: () => {
-        localStorage.clear();
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("name");
+      localStorage.removeItem("employeeId");
+
         this.router.navigate(["/login"]);
         this.showSuccess("تم تسجيل الخروج بنجاح");
       },

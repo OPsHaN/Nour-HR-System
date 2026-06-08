@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   HostListener,
+  NgZone,
   OnDestroy,
   OnInit,
   inject,
@@ -62,13 +63,13 @@ export class Desktop implements OnInit, OnDestroy {
     return localStorage.getItem("role") === "Employee";
   }
 
-  get isHr(): boolean {
+  get isHR(): boolean {
     return localStorage.getItem("role") === "HR";
   }
 
   private get storageKey(): string {
-    const userId = localStorage.getItem("userId") ?? "default";
-    return `activeShift_${userId}`;
+    const employeeId = localStorage.getItem("employeeId") ?? "default";
+    return `activeShift_${employeeId}`;
   }
 
   // ── Windows ────────────────────────────────────────────────────────────────
@@ -80,16 +81,33 @@ export class Desktop implements OnInit, OnDestroy {
   private nextId = 1;
   private readonly taskbarReserve = 92; // Height of the taskbar
 
-  constructor(private api: Apiservice) {}
+  constructor(
+    private api: Apiservice,
+    private ngZone: NgZone,
+        private confirmationService: ConfirmationService,
+
+  ) {}
 
   ngOnInit(): void {
     this.userName = localStorage.getItem("name") || "مستخدم";
     this.restoreShiftState();
     this.openDefaultStartupWindows();
 
-    if (!this.isEmployee) {
+    if (this.isHR) {
       this.loadUnseenCounts();
     }
+
+    window.addEventListener("open-news-window", () => {
+      this.ngZone.run(() => {
+        this.openWindow({
+          action: "newsDetails",
+          title: "تفاصيل الخبر",
+          icon: "article",
+        });
+
+        this.cdr.detectChanges();
+      });
+    });
   }
 
   ngOnDestroy(): void {
@@ -125,31 +143,46 @@ export class Desktop implements OnInit, OnDestroy {
   }
 
   onEndShift(): void {
-    this.loadingEnd = true;
-    this.api
-      .endShift()
-      .pipe(
-        finalize(() => {
-          this.loadingEnd = false;
-          this.cdr.detectChanges();
-        }),
-      )
-      .subscribe({
-        next: () => {
-          this.shiftStarted = false;
-          this.shiftStartTime = null;
-          this.formattedTime = "00:00:00";
-          this.clearShiftState();
-          clearInterval(this.timerInterval);
-          this.api.showSuccess("تم إنهاء شيفتك بنجاح");
-        },
-        error: () => {
-          this.api.showError(
-            "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
-          );
-        },
-      });
-  }
+  this.confirmationService.confirm({
+    message: "هل تريد إنهاء الشيفت؟",
+    header: "تأكيد إنهاء الشيفت",
+    icon: "pi pi-exclamation-triangle",
+    acceptLabel: "نعم",
+    rejectLabel: "لا",
+
+    accept: () => {
+
+      this.loadingEnd = true;
+
+      this.api
+        .endShift()
+        .pipe(
+          finalize(() => {
+            this.loadingEnd = false;
+            this.cdr.detectChanges();
+          }),
+        )
+        .subscribe({
+          next: () => {
+            this.shiftStarted = false;
+            this.shiftStartTime = null;
+            this.formattedTime = "00:00:00";
+
+            this.clearShiftState();
+            clearInterval(this.timerInterval);
+
+            this.api.showSuccess("تم إنهاء شيفتك بنجاح");
+          },
+          error: () => {
+            this.api.showError(
+              "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
+            );
+          },
+        });
+
+    },
+  });
+}
 
   private startTimer(): void {
     clearInterval(this.timerInterval);
@@ -171,6 +204,10 @@ export class Desktop implements OnInit, OnDestroy {
   }
 
   private restoreShiftState(): void {
+    console.log("EmployeeId", localStorage.getItem("employeeId"));
+    console.log("Storage Key", this.storageKey);
+    console.log("Saved", localStorage.getItem(this.storageKey));
+
     const saved = localStorage.getItem(this.storageKey);
     if (!saved) return;
     try {
@@ -247,16 +284,16 @@ export class Desktop implements OnInit, OnDestroy {
 
     const viewportWidth = globalThis.innerWidth || 250;
     const viewportHeight = globalThis.innerHeight || 250;
-    const gap = 300;
-    const sideWidth = Math.max(50, Math.floor((viewportWidth - gap * 3) / 2));
-    const height = Math.min(200, viewportHeight - 140);
+    const gap = 150;
+    const sideWidth = Math.max(100, Math.floor((viewportWidth - gap * 3) / 2));
+    const height = Math.min(190, viewportHeight - 140);
     const top = Math.max(12, viewportHeight - 80 - height - 12);
 
     const [leftShortcut, rightShortcut] = startupShortcuts;
 
     this.openWindow(leftShortcut, {
       top,
-      left: 10,
+      left: viewportWidth - sideWidth - 10,
       width: sideWidth,
       height,
       active: true,
@@ -265,7 +302,7 @@ export class Desktop implements OnInit, OnDestroy {
     if (rightShortcut) {
       this.openWindow(rightShortcut, {
         top,
-        left: viewportWidth - sideWidth - 10,
+        left: 10,
         width: sideWidth,
         height,
         active: false,
@@ -414,31 +451,31 @@ export class Desktop implements OnInit, OnDestroy {
 
   loadUnseenCounts() {
     this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.overtime = res.count ;
+      this.unseenCounts.overtime = res.count;
     });
 
     this.api.getUnseenBorrowsCount().subscribe((res: any) => {
-      this.unseenCounts.borrows = res.count ;
+      this.unseenCounts.borrows = res.count;
     });
 
     this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.holidays = res.count ;
+      this.unseenCounts.holidays = res.count;
     });
 
     this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.resignations = res.count  ;
+      this.unseenCounts.resignations = res.count;
     });
 
     this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.appointments = res.count ;
+      this.unseenCounts.appointments = res.count;
     });
 
     this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
-      this.unseenCounts.forgotHours = res.count ;
+      this.unseenCounts.forgotHours = res.count;
     });
 
     this.api.getUnseenComplaintsCount().subscribe((res: any) => {
-      this.unseenCounts.complaints = res.count ;
+      this.unseenCounts.complaints = res.count;
     });
   }
 }
