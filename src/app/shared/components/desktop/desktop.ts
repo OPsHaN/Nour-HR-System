@@ -151,9 +151,7 @@ export class Desktop implements OnInit, OnDestroy {
     rejectLabel: "لا",
 
     accept: () => {
-
       this.loadingEnd = true;
-
       this.api
         .endShift()
         .pipe(
