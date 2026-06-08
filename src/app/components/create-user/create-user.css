@@ -1,0 +1,55 @@
+:host ::ng-deep .p-multiselect {
+    width: 100%;
+    border: 1px solid var(--surface-border);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    font-size: 18px;
+    transition: 0.2s ease;
+}
+
+:host ::ng-deep .p-multiselect-label {
+    color: var(--text);
+    font-size: 18px;
+    padding: 0;
+}
+
+:host ::ng-deep .p-multiselect-trigger {
+    color: var(--text);
+}
+
+:host ::ng-deep .p-placeholder {
+    color: var(--text);
+}
+
+:host ::ng-deep .p-multiselect-chip {
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+:host ::ng-deep .p-multiselect .p-multiselect-overlay {
+    background: var(--surface);
+    color: var(--text);
+  border: 1px solid var(--surface-border);
+    border-radius: 25px;
+
+}
+
+
+:host ::ng-deep.p-multiselect-option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.custom{
+        width: 100%;
+    padding: 13px;
+    border: 1px solid var(--surface-border);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    font-size: 20px;
+    transition: 0.2s ease;
+}

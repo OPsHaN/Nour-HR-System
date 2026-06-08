@@ -1,7 +1,15 @@
 import {
+  RouterLink,
+  RouterLinkActive,
+  RouterModule
+} from "./chunk-E5MASREY.js";
+import {
   Badge,
   BadgeModule
 } from "./chunk-EADL62UE.js";
+import {
+  Ripple
+} from "./chunk-AOXS6N5V.js";
 import {
   Tooltip,
   TooltipModule
@@ -14,9 +22,6 @@ import {
   DomHandler
 } from "./chunk-MGURJNYV.js";
 import "./chunk-2K2SXMT3.js";
-import {
-  Ripple
-} from "./chunk-AOXS6N5V.js";
 import {
   BaseComponent,
   Bind,
@@ -44,11 +49,6 @@ import {
   transition,
   trigger
 } from "./chunk-42VGZS34.js";
-import {
-  RouterLink,
-  RouterLinkActive,
-  RouterModule
-} from "./chunk-E5MASREY.js";
 import {
   DomSanitizer
 } from "./chunk-RXI3C7IT.js";
@@ -130,8 +130,8 @@ import {
   ɵɵtextInterpolate,
   ɵɵviewQuery
 } from "./chunk-HQGRJDEA.js";
-import "./chunk-EKEPJHDJ.js";
 import "./chunk-5UG2FXJ4.js";
+import "./chunk-EKEPJHDJ.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
 import "./chunk-WDMUDEB6.js";

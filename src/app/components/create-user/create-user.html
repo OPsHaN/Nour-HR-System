@@ -62,7 +62,8 @@
           *
         </span></label
       >
-      <select formControlName="Role">
+      <select formControlName="Role"         class="custom"
+>
         <option value="">اختر المنصب</option>
         <option value="Admin">مسؤل</option>
         <option value="Accountant">محاسب</option>
@@ -70,8 +71,24 @@
         <option value="Employee">موظف</option>
         <option value="Manager">مدير</option>
         <option value="Control">كنترول</option>
-        <option value="Area Manager">مدير منطقة</option>
+        <option value="AreaManager">مدير منطقة</option>
       </select>
+    </div>
+
+    <!-- Branches -->
+    <div class="field" *ngIf="form.get('Role')?.value === 'AreaManager'">
+      <label>الفروع</label>
+
+      <p-multiSelect
+        class="custom"
+        formControlName="BranchIds"
+        [options]="Branches"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="اختر الفروع"
+        display="chip"
+      >
+      </p-multiSelect>
     </div>
   </form>
   <div class="form">
