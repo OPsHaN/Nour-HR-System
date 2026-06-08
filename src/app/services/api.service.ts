@@ -556,6 +556,19 @@ approveForgetedHoursRequest(id: string, data: any) {
     return this.http.put(`${this.baseUrl}appointments/${requestId}/mark-seen`, {} );
   }
 
+  //news//
+
+  getNews(page:number , pageSize:number){
+    return this.http.get(`${this.baseUrl}news?page=${page}&pageSize=${pageSize}`);
+  }
+
+
+   getIdOfNews(uuid:string){
+    return this.http.get(`${this.baseUrl}news/${uuid}`)
+   }
+
+
+
   showError(msg: string) {
     this.messageService.add({
       severity: "error",

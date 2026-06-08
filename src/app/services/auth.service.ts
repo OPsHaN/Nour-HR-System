@@ -146,7 +146,22 @@ export class AuthService {
 
   /** ✅ دالة واحدة تنفذ تسجيل الخروج المحلي بالكامل */
   private handleLocalLogout() {
+    // Preserve any active shift entries so an employee's ongoing shift
+    // remains visible after logging out and back in.
+    const preserved: { [key: string]: string } = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+      if (key.startsWith("activeShift_")) {
+        const val = localStorage.getItem(key);
+        if (val !== null) preserved[key] = val;
+      }
+    }
+
     localStorage.clear();
+
+    // restore preserved keys
+    Object.keys(preserved).forEach((k) => localStorage.setItem(k, preserved[k]));
     this._isLoggedIn.next(false);
     this.activePage = "desktop";
 
