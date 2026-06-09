@@ -5,7 +5,7 @@ export type UserRole =
   | "Control"
   | "Manager"
   | "Employee"
-  | "Area Manager";
+  | "AreaManager";
 
 export interface ShortcutTheme {
   icon: string;
@@ -40,7 +40,7 @@ export const SHORTCUTS_CONFIG = {
       "HR",
       "Accountant",
       "Employee",
-      "Area Manager",
+      "AreaManager",
       "Control",
     ] as UserRole[],
     size: { width: 500, height: 650 },
@@ -56,7 +56,7 @@ export const SHORTCUTS_CONFIG = {
     title: "الموظفين",
     icon: "people",
     bg: "#13c2c2",
-    roles: ["Admin", "HR"] as UserRole[],
+    roles: ["Admin", "HR" , "AreaManager"] as UserRole[],
     size: { width: 1350, height: 600 },
   },
   branches: {
@@ -70,21 +70,21 @@ export const SHORTCUTS_CONFIG = {
     title: "بنود التقييم",
     icon: "check_circle",
     bg: "#722ed1",
-    roles: ["Admin", "HR", "Area Manager"] as UserRole[],
+    roles: ["Admin", "HR", "AreaManager"] as UserRole[],
     size: { width: 620, height: 480 },
   },
   banks: {
     title: "البنوك",
     icon: "account_balance",
     bg: "#eb2f96",
-    roles: ["Admin", "HR", "Area Manager"] as UserRole[],
+    roles: ["Admin", "HR", "AreaManager"] as UserRole[],
     size: { width: 620, height: 480 },
   },
   reports: {
     title: "التقارير",
     icon: "bar_chart",
     bg: "#52c41a",
-    roles: ["HR", "Control", "Area Manager", "Accountant"] as UserRole[],
+    roles: ["HR", "Control", "AreaManager", "Accountant"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   responsibility: {
@@ -94,7 +94,6 @@ export const SHORTCUTS_CONFIG = {
     roles: [
       "HR",
       "Employee",
-      "Area Manager",
       "Control",
       "Accountant",
     ] as UserRole[],
@@ -107,7 +106,7 @@ export const SHORTCUTS_CONFIG = {
     roles: [
       "HR",
       "Employee",
-      "Area Manager",
+      "AreaManager",
       "Control",
       "Accountant",
     ] as UserRole[],
@@ -120,7 +119,7 @@ export const SHORTCUTS_CONFIG = {
     roles: [
       "HR",
       "Employee",
-      "Area Manager",
+      "AreaManager",
       "Control",
       "Accountant",
     ] as UserRole[],
@@ -144,7 +143,7 @@ export const SHORTCUTS_CONFIG = {
       "HR",
       "Accountant",
       "Employee",
-      "Area Manager",
+      "AreaManager",
       "Control",
     ] as UserRole[],
     startup: true,
@@ -157,6 +156,13 @@ export const SHORTCUTS_CONFIG = {
     roles: [] as UserRole[],
     size: { width: 1000, height: 700 },
   },
+  logs: {
+  title: "سجل العمليات",
+  icon: "history",
+  bg: "#8b5cf6",
+  roles: ["Admin"] as UserRole[],
+  size: { width: 1000, height: 700 },
+},
 } satisfies Record<string, ShortcutConfig>;
 
 /* 🔥 TYPES */

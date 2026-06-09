@@ -1,0 +1,38 @@
+<p-table
+  [value]="logs"
+  [paginator]="true"
+  [rows]="pageSize"
+  [rowsPerPageOptions]="[5,10,20,50]"
+  [loading]="loading"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
+  (onPage)="onPageChange($event)"
+  [responsiveLayout]="'scroll'"
+  [paginatorDropdownAppendTo]="'body'"
+  dataKey="id"
+  dir="rtl"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>اسم المستخدم</th>
+      <th>الإجراء</th>
+      <th>التاريخ</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-log let-ri="rowIndex">
+    <tr>
+      <td>{{ ri + 1 }}</td>
+      <td>{{ log.userName }}</td>
+      <td>{{ log.action }}</td>
+      <td>{{ log.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4" class="text-center py-4">لا توجد أى بيانات</td>
+    </tr>
+  </ng-template>
+</p-table>

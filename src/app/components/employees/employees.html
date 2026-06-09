@@ -69,7 +69,7 @@
       ></i>
       تصدير Excel
     </button> -->
-    <div *ngIf="!showCreateEmployee" class="gap-2">
+    <div *ngIf="this.auth.isHR || this.auth.isAdmin && !showCreateEmployee" class="gap-2">
       <select
         class="custom-input toolbar-select"
         [(ngModel)]="selectedBranchFilter"
@@ -197,7 +197,7 @@
       <th>ساعات العمل</th>
       <th>الفرع</th>
       <th>حالة الموظف</th>
-      <th *ngIf="this.auth.isHR ">الإجراءات</th>
+      <th *ngIf="this.auth.isHR || this.auth.isAreaManager ">الإجراءات</th>
     </tr>
   </ng-template>
 
@@ -223,6 +223,19 @@
       <td>{{ emp.shiftHours }}</td>
       <td>{{ emp.branchName }}</td>
       <td>{{ emp.employeeType }}</td>
+      <td *ngIf="this.auth.isAreaManager">
+                <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+          icon="pi pi-pencil"
+          (click)="openMenu($event, emp)"
+        >
+          <i
+            class="pi pi-plus d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
+      </td>
       <td *ngIf="this.auth.isHR ">
         <button
           pButton

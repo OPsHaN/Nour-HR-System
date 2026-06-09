@@ -335,9 +335,7 @@ export class Apiservice {
   //Responsibilities//
 
   getAllResponsibilities(employeeId: string) {
-    return this.http.get(
-      `${this.baseUrl}employees/${employeeId}/custody`,
-    );
+    return this.http.get(`${this.baseUrl}employees/${employeeId}/custody`);
   }
 
   addResponsibility(employeeId: string, responsibilityData: any) {
@@ -369,40 +367,54 @@ export class Apiservice {
   }
 
   respondToComplaint(complaintId: string, respond: any) {
-    return this.http.put(`${this.baseUrl}complaints/${complaintId}/respond`, respond);
+    return this.http.put(
+      `${this.baseUrl}complaints/${complaintId}/respond`,
+      respond,
+    );
   }
 
-  getUnseenComplaintsCount() {  
+  getUnseenComplaintsCount() {
     return this.http.get(`${this.baseUrl}complaints/unseen-count`);
   }
 
   markComplaintAsSeen(complaintId: string) {
-    return this.http.put(`${this.baseUrl}complaints/${complaintId}/mark-seen`, {});
+    return this.http.put(
+      `${this.baseUrl}complaints/${complaintId}/mark-seen`,
+      {},
+    );
   }
 
-    //forgeted-hours-requests//
+  //forgeted-hours-requests//
 
- getForgetedHoursRequests(page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}forgeted-hours?page=${page}&pageSize=${pageSize}`);
+  getForgetedHoursRequests(page: number, pageSize: number) {
+    return this.http.get(
+      `${this.baseUrl}forgeted-hours?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
-  getForgetedHoursRequestsForUser(employeeId: string, page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}forgeted-hours?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
+  getForgetedHoursRequestsForUser(
+    employeeId: string,
+    page: number,
+    pageSize: number,
+  ) {
+    return this.http.get(
+      `${this.baseUrl}forgeted-hours?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   addForgetedHoursRequest(requestData: any) {
     return this.http.post(`${this.baseUrl}forgeted-hours`, requestData);
   }
 
-approveForgetedHoursRequest(id: string, data: any) {
-  return this.http.put(
-    `${this.baseUrl}forgeted-hours/${id}/approve`,
-    data
-  );
-}
+  approveForgetedHoursRequest(id: string, data: any) {
+    return this.http.put(`${this.baseUrl}forgeted-hours/${id}/approve`, data);
+  }
 
-  rejectForgetedHoursRequest(requestId: string , data: any) {
-    return this.http.put(`${this.baseUrl}forgeted-hours/${requestId}/approve-reject`, data);
+  rejectForgetedHoursRequest(requestId: string, data: any) {
+    return this.http.put(
+      `${this.baseUrl}forgeted-hours/${requestId}/approve-reject`,
+      data,
+    );
   }
 
   getUnseenForgetedHoursRequest() {
@@ -410,9 +422,11 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   markForgetedHoursRequestAsSeen(requestId: string) {
-    return this.http.put(`${this.baseUrl}forgeted-hours/${requestId}/mark-seen`, {});
+    return this.http.put(
+      `${this.baseUrl}forgeted-hours/${requestId}/mark-seen`,
+      {},
+    );
   }
-
 
   //holiday //
 
@@ -421,19 +435,29 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   getAllHolidays(page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}holidays?page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}holidays?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   getAllHolidaysForUser(employeeId: string, page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}holidays?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}holidays?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`,
+    );
   }
 
-  approveHolidayRequestByHr(requestId: string , data: any) {
-    return this.http.put(`${this.baseUrl}holidays/${requestId}/hr-approve`, data);
+  approveHolidayRequestByHr(requestId: string, data: any) {
+    return this.http.put(
+      `${this.baseUrl}holidays/${requestId}/hr-approve`,
+      data,
+    );
   }
 
   approveHolidayRequestByAreaManager(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}holidays/${requestId}/area-manager-approve`, data);
+    return this.http.put(
+      `${this.baseUrl}holidays/${requestId}/area-manager-approve`,
+      data,
+    );
   }
 
   getUnseenHolidayRequestsCount() {
@@ -451,15 +475,22 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   getAllBorrows(page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}borrows?page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}borrows?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   getAllBorrowsForUser(employeeId: string, page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}borrows?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}borrows?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   approveOrRejectBorrowRequest(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}borrows/${requestId}/approve-reject`, data);
+    return this.http.put(
+      `${this.baseUrl}borrows/${requestId}/approve-reject`,
+      data,
+    );
   }
 
   getUnseenBorrowsCount() {
@@ -477,23 +508,36 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   getAllOvertime(page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}overtime?page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}overtime?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   getAllOvertimeForUser(employeeId: string, page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}overtime?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}overtime?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   approveByHrOvertimeRequest(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}overtime/${requestId}/hr-approve`, data);
+    return this.http.put(
+      `${this.baseUrl}overtime/${requestId}/hr-approve`,
+      data,
+    );
   }
 
   approveByAreaManagerOvertimeRequest(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}overtime/${requestId}/area-manager-approve`, data);
+    return this.http.put(
+      `${this.baseUrl}overtime/${requestId}/area-manager-approve`,
+      data,
+    );
   }
 
   approveByControlOvertimeRequest(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}overtime/${requestId}/control-approve`, data);
+    return this.http.put(
+      `${this.baseUrl}overtime/${requestId}/control-approve`,
+      data,
+    );
   }
 
   getUnseenOvertimeRequestsCount() {
@@ -511,15 +555,26 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   getAllResignations(page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}resignations?page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}resignations?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
-  getAllResignationsForUser(employeeId: string, page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}resignations?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
+  getAllResignationsForUser(
+    employeeId: string,
+    page: number,
+    pageSize: number,
+  ) {
+    return this.http.get(
+      `${this.baseUrl}resignations?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   approveResignationRequest(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}resignations/${requestId}/approve-reject`, data);
+    return this.http.put(
+      `${this.baseUrl}resignations/${requestId}/approve-reject`,
+      data,
+    );
   }
 
   getUnseenResignationRequestsCount() {
@@ -527,7 +582,10 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   markResignationRequestAsSeen(requestId: string) {
-    return this.http.put(`${this.baseUrl}resignations/${requestId}/mark-seen`, {});
+    return this.http.put(
+      `${this.baseUrl}resignations/${requestId}/mark-seen`,
+      {},
+    );
   }
 
   //appointment//
@@ -537,15 +595,26 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   getAllAppointments(page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}appointments?page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}appointments?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
-  getAllAppointmentsForUser(employeeId: string, page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}appointments?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
+  getAllAppointmentsForUser(
+    employeeId: string,
+    page: number,
+    pageSize: number,
+  ) {
+    return this.http.get(
+      `${this.baseUrl}appointments?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   approveAppointmentRequest(requestId: string, data: any) {
-    return this.http.put(`${this.baseUrl}appointments/${requestId}/approve-reject`, data);
+    return this.http.put(
+      `${this.baseUrl}appointments/${requestId}/approve-reject`,
+      data,
+    );
   }
 
   getUnseenAppointmentRequestsCount() {
@@ -553,21 +622,29 @@ approveForgetedHoursRequest(id: string, data: any) {
   }
 
   markAppointmentRequestAsSeen(requestId: string) {
-    return this.http.put(`${this.baseUrl}appointments/${requestId}/mark-seen`, {} );
+    return this.http.put(
+      `${this.baseUrl}appointments/${requestId}/mark-seen`,
+      {},
+    );
   }
 
   //news//
 
-  getNews(page:number , pageSize:number){
-    return this.http.get(`${this.baseUrl}news?page=${page}&pageSize=${pageSize}`);
+  getNews(page: number, pageSize: number) {
+    return this.http.get(
+      `${this.baseUrl}news?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
+  getIdOfNews(uuid: string) {
+    return this.http.get(`${this.baseUrl}news/${uuid}`);
+  }
 
-   getIdOfNews(uuid:string){
-    return this.http.get(`${this.baseUrl}news/${uuid}`)
-   }
+  //logs//
 
-
+  getAllLogs(){
+    return this.http.get(`${this.baseUrl}audit`)
+  }
 
   showError(msg: string) {
     this.messageService.add({

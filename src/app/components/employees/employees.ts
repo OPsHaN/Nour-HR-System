@@ -125,7 +125,7 @@ export class Employees {
     private api: Apiservice,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
-    public auth: AuthService
+    public auth: AuthService,
   ) {}
 
   ngOnInit() {
@@ -213,20 +213,58 @@ export class Employees {
     },
   ];
 
+  get isAreaManager(): boolean {
+    return localStorage.getItem("role") === "AreaManager";
+  }
+
+  get branchIds(): string[] {
+    const raw = localStorage.getItem("branchId"); // نفس نمط "role"
+    return raw ? raw.split(",").map((id: string) => id.trim()) : [];
+  }
+  
+
   loadEmployees() {
     this.loading = true;
 
-    this.api.getAllEmployees(this.page, this.pageSize).subscribe({
-      next: (res: any) => {
-        this.employees = res.data;
-        this.totalRecords = res.totalCount;
+    if (this.isAreaManager) {
+      const branchIds = this.branchIds;
+
+      if (!branchIds.length) {
         this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loading = false;
-      },
-    });
+        return;
+      }
+
+      const requests = branchIds.map((branchId) =>
+        this.api.getAllEmployeesByBranch(this.page, this.pageSize, branchId),
+      );
+
+      forkJoin(requests).subscribe({
+        next: (results: any[]) => {
+          this.employees = results.flatMap((res) => res.data);
+          this.totalRecords = results.reduce(
+            (sum, res) => sum + res.totalCount,
+            0,
+          );
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
+    } else {
+      this.api.getAllEmployees(this.page, this.pageSize).subscribe({
+        next: (res: any) => {
+          this.employees = res.data;
+          this.totalRecords = res.totalCount;
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
+    }
   }
 
   onPageChange(event: any): void {

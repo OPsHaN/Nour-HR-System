@@ -78,7 +78,7 @@ export class AuthService {
     const decoded = this.getDecodedToken();
     if (decoded) {
       localStorage.setItem("employeeId", decoded.EmployeeId ?? "");
-      localStorage.setItem("branchId", decoded.BranchId ?? "");
+      localStorage.setItem("branchId", decoded.BranchIds ?? "");
     }
   }
 
@@ -115,7 +115,7 @@ export class AuthService {
   }
 
   get isAreaManager(): boolean {
-    return localStorage.getItem("role") === "Area Manager";
+    return localStorage.getItem("role") === "AreaManager";
   }
 
   setUserType(type: number) {
