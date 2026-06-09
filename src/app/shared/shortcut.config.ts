@@ -5,7 +5,8 @@ export type UserRole =
   | "Control"
   | "Manager"
   | "Employee"
-  | "AreaManager";
+  | "AreaManager"
+  | "CEO";
 
 export interface ShortcutTheme {
   icon: string;
@@ -30,6 +31,13 @@ export const SHORTCUTS_CONFIG = {
     bg: "#1890ff",
     roles: ["Employee"] as UserRole[],
     size: { width: 620, height: 420 },
+  },
+  mydetails: {
+    title: "بياناتى",
+    icon: "person",
+    bg: "#10b981",
+    roles: ["Employee"] as UserRole[],
+    size: { width: 700, height: 500 },
   },
   calendar: {
     title: "النتيجة",
@@ -56,7 +64,7 @@ export const SHORTCUTS_CONFIG = {
     title: "الموظفين",
     icon: "people",
     bg: "#13c2c2",
-    roles: ["Admin", "HR" , "AreaManager"] as UserRole[],
+    roles: ["Admin", "HR", "AreaManager"] as UserRole[],
     size: { width: 1350, height: 600 },
   },
   branches: {
@@ -84,19 +92,14 @@ export const SHORTCUTS_CONFIG = {
     title: "التقارير",
     icon: "bar_chart",
     bg: "#52c41a",
-    roles: ["HR", "Control", "AreaManager", "Accountant"] as UserRole[],
+    roles: ["HR", "Control", "Accountant"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   responsibility: {
     title: "العهدة",
     icon: "work",
     bg: "#fa541c",
-    roles: [
-      "HR",
-      "Employee",
-      "Control",
-      "Accountant",
-    ] as UserRole[],
+    roles: ["HR", "Employee", "Control", "Accountant"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   orders: {
@@ -119,6 +122,7 @@ export const SHORTCUTS_CONFIG = {
     roles: [
       "HR",
       "Employee",
+      "CEO",
       "AreaManager",
       "Control",
       "Accountant",
@@ -149,7 +153,7 @@ export const SHORTCUTS_CONFIG = {
     startup: true,
     size: { width: 1100, height: 700 },
   },
-  newsDetails: {
+  newsdetails: {
     title: "تفاصيل الخبر",
     icon: "article",
     bg: "#3b82f6",
@@ -157,12 +161,12 @@ export const SHORTCUTS_CONFIG = {
     size: { width: 1000, height: 700 },
   },
   logs: {
-  title: "سجل العمليات",
-  icon: "history",
-  bg: "#8b5cf6",
-  roles: ["Admin"] as UserRole[],
-  size: { width: 1000, height: 700 },
-},
+    title: "سجل العمليات",
+    icon: "history",
+    bg: "#8b5cf6",
+    roles: ["Admin"] as UserRole[],
+    size: { width: 1000, height: 700 },
+  },
 } satisfies Record<string, ShortcutConfig>;
 
 /* 🔥 TYPES */

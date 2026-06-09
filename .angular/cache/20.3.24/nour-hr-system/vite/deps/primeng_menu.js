@@ -1,36 +1,31 @@
 import {
-  RouterLink,
-  RouterLinkActive,
-  RouterModule
-} from "./chunk-E5MASREY.js";
+  Tooltip,
+  TooltipModule
+} from "./chunk-2SSEWDET.js";
+import {
+  zindexutils
+} from "./chunk-PSJOJ324.js";
 import {
   Badge,
   BadgeModule
-} from "./chunk-EADL62UE.js";
-import {
-  Ripple
-} from "./chunk-AOXS6N5V.js";
-import {
-  Tooltip,
-  TooltipModule
-} from "./chunk-3GHH7M5M.js";
-import {
-  zindexutils
-} from "./chunk-P5652PBR.js";
+} from "./chunk-BSYPZTRY.js";
 import {
   ConnectedOverlayScrollHandler,
   DomHandler
-} from "./chunk-MGURJNYV.js";
-import "./chunk-2K2SXMT3.js";
+} from "./chunk-EGGV6YTJ.js";
+import "./chunk-WODD5JVG.js";
+import {
+  Ripple
+} from "./chunk-6SYOD7H3.js";
 import {
   BaseComponent,
   Bind,
   BindModule,
   PARENT_INSTANCE
-} from "./chunk-D4OHXISA.js";
+} from "./chunk-KQAJKOGO.js";
 import {
   BaseStyle
-} from "./chunk-GZNVFE7P.js";
+} from "./chunk-AQ2JVO4R.js";
 import {
   D,
   I,
@@ -42,7 +37,7 @@ import {
   bt,
   s3 as s,
   z
-} from "./chunk-BCFKIK2E.js";
+} from "./chunk-3ZYU6KZ7.js";
 import {
   animate,
   style,
@@ -50,10 +45,15 @@ import {
   trigger
 } from "./chunk-42VGZS34.js";
 import {
+  RouterLink,
+  RouterLinkActive,
+  RouterModule
+} from "./chunk-ML2H4OTA.js";
+import {
   DomSanitizer
-} from "./chunk-RXI3C7IT.js";
-import "./chunk-URIRBN3G.js";
-import "./chunk-JHM6IA3L.js";
+} from "./chunk-43KLBKAY.js";
+import "./chunk-LKTP7HDW.js";
+import "./chunk-B6RXACYE.js";
 import {
   CommonModule,
   NgForOf,
@@ -61,7 +61,7 @@ import {
   NgStyle,
   NgTemplateOutlet,
   isPlatformBrowser
-} from "./chunk-VYDKEIKQ.js";
+} from "./chunk-DJPJSDB3.js";
 import "./chunk-U44TYWUZ.js";
 import {
   ChangeDetectionStrategy,
@@ -129,12 +129,12 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate,
   ɵɵviewQuery
-} from "./chunk-HQGRJDEA.js";
-import "./chunk-5UG2FXJ4.js";
+} from "./chunk-7TLMVOLW.js";
 import "./chunk-EKEPJHDJ.js";
+import "./chunk-5UG2FXJ4.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
-import "./chunk-WDMUDEB6.js";
+import "./chunk-3OV72XIM.js";
 
 // node_modules/@primeuix/styles/dist/menu/index.mjs
 var style2 = "\n    .p-menu {\n        background: dt('menu.background');\n        color: dt('menu.color');\n        border: 1px solid dt('menu.border.color');\n        border-radius: dt('menu.border.radius');\n        min-width: 12.5rem;\n    }\n\n    .p-menu-list {\n        margin: 0;\n        padding: dt('menu.list.padding');\n        outline: 0 none;\n        list-style: none;\n        display: flex;\n        flex-direction: column;\n        gap: dt('menu.list.gap');\n    }\n\n    .p-menu-item-content {\n        transition:\n            background dt('menu.transition.duration'),\n            color dt('menu.transition.duration');\n        border-radius: dt('menu.item.border.radius');\n        color: dt('menu.item.color');\n        overflow: hidden;\n    }\n\n    .p-menu-item-link {\n        cursor: pointer;\n        display: flex;\n        align-items: center;\n        text-decoration: none;\n        overflow: hidden;\n        position: relative;\n        color: inherit;\n        padding: dt('menu.item.padding');\n        gap: dt('menu.item.gap');\n        user-select: none;\n        outline: 0 none;\n    }\n\n    .p-menu-item-label {\n        line-height: 1;\n    }\n\n    .p-menu-item-icon {\n        color: dt('menu.item.icon.color');\n    }\n\n    .p-menu-item.p-focus .p-menu-item-content {\n        color: dt('menu.item.focus.color');\n        background: dt('menu.item.focus.background');\n    }\n\n    .p-menu-item.p-focus .p-menu-item-icon {\n        color: dt('menu.item.icon.focus.color');\n    }\n\n    .p-menu-item:not(.p-disabled) .p-menu-item-content:hover {\n        color: dt('menu.item.focus.color');\n        background: dt('menu.item.focus.background');\n    }\n\n    .p-menu-item:not(.p-disabled) .p-menu-item-content:hover .p-menu-item-icon {\n        color: dt('menu.item.icon.focus.color');\n    }\n\n    .p-menu-overlay {\n        box-shadow: dt('menu.shadow');\n    }\n\n    .p-menu-submenu-label {\n        background: dt('menu.submenu.label.background');\n        padding: dt('menu.submenu.label.padding');\n        color: dt('menu.submenu.label.color');\n        font-weight: dt('menu.submenu.label.font.weight');\n    }\n\n    .p-menu-separator {\n        border-block-start: 1px solid dt('menu.separator.border.color');\n    }\n";

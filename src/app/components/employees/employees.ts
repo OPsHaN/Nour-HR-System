@@ -14,6 +14,8 @@ import { Subscription } from "rxjs";
 import { forkJoin } from "rxjs";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { AuthService } from "src/app/services/auth.service";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: "app-employees",
@@ -276,6 +278,62 @@ export class Employees {
   getEmployeeName(id: number): string {
     return this.employees.find((e: any) => e.id === id)?.name ?? "";
   }
+
+  exportAllToExcel(): void {
+  const pageSize = 100; // جيب 100 موظف في كل call
+  const totalPages = Math.ceil(this.totalRecords / pageSize);
+  const requests = [];
+
+  for (let page = 1; page <= totalPages; page++) {
+    requests.push(this.api.getAllEmployees(page, pageSize));
+  }
+
+  this.loading = true;
+
+  forkJoin(requests).subscribe({
+    next: (results: any[]) => {
+      const allEmployees = results.flatMap((res: any) => res.data);
+      this.generateExcel(allEmployees);
+      this.loading = false;
+    },
+    error: () => {
+      this.loading = false;
+    }
+  });
+}
+
+private generateExcel(employees: any[]): void {
+  const exportData = employees.map((emp) => ({
+    '#': emp.id,
+    'الاسم': emp.name,
+    'الوظيفة': emp.theNameOfJob,
+    'البنك': emp.bankName,
+    'رقم الحساب': emp.bankAccount,
+    'ساعات العمل': emp.shiftHours,
+    'الفرع': emp.branchName,
+    'حالة الموظف': emp.employeeType,
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(exportData);
+  const workbook = XLSX.utils.book_new();
+
+  worksheet['!cols'] = [
+    { wch: 6 },
+    { wch: 22 },
+    { wch: 20 },
+    { wch: 18 },
+    { wch: 20 },
+    { wch: 14 },
+    { wch: 14 },
+    { wch: 16 },
+  ];
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'الموظفون');
+
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+  saveAs(blob, `الموظفين_${new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}.xlsx`);
+}
 
   toggleSelectAll(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;

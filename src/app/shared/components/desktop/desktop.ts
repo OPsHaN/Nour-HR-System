@@ -100,7 +100,7 @@ export class Desktop implements OnInit, OnDestroy {
     window.addEventListener("open-news-window", () => {
       this.ngZone.run(() => {
         this.openWindow({
-          action: "newsDetails",
+          action: "newsdetails",
           title: "تفاصيل الخبر",
           icon: "article",
         });

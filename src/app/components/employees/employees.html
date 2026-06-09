@@ -54,6 +54,19 @@
       <i class="pi pi-times"></i>
       إلغاء
     </button>
+
+    <button
+      pButton
+      type="button"
+      class="btn btn-sm btn-success my-1 d-flex align-items-center justify-content-center gap-1"
+      (click)="exportAllToExcel()"
+      [disabled]="loading"
+            *ngIf="!showCreateEmployee"
+
+    >
+      <i class="pi pi-file-excel me-2"></i>
+      {{ loading ? 'جاري التحميل...' : 'تصدير Excel' }}
+    </button>
     <!-- فلتر الفرع -->
   </div>
   <div class="d-flex justify-content-end gap-2 align-items-center">
@@ -69,7 +82,10 @@
       ></i>
       تصدير Excel
     </button> -->
-    <div *ngIf="this.auth.isHR || this.auth.isAdmin && !showCreateEmployee" class="gap-2">
+    <div
+      *ngIf="(this.auth.isHR || this.auth.isAdmin) && !showCreateEmployee"
+      class="gap-2"
+    >
       <select
         class="custom-input toolbar-select"
         [(ngModel)]="selectedBranchFilter"
@@ -224,7 +240,7 @@
       <td>{{ emp.branchName }}</td>
       <td>{{ emp.employeeType }}</td>
       <td *ngIf="this.auth.isAreaManager">
-                <button
+        <button
           pButton
           type="button"
           class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
@@ -366,7 +382,8 @@
         <p-tab value="0"> بيانات الموظف</p-tab>
         <p-tab value="1"> بيانات المرتب</p-tab>
         <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length">
-          التقييمات</p-tab>
+          التقييمات</p-tab
+        >
         <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length">
           سجل التنقلات</p-tab
         >
@@ -508,7 +525,11 @@
 
               <div class="detail-item">
                 <label>حالة الموظف</label>
-                <select  class= "custom-input" *ngIf="isEditMode" [(ngModel)]="employeeDetails.employeeType">
+                <select
+                  class="custom-input"
+                  *ngIf="isEditMode"
+                  [(ngModel)]="employeeDetails.employeeType"
+                >
                   <option value="">اختر حالة الموظف</option>
                   <option value="تحت التدريب">تحت التدريب</option>
                   <option value="تم التعيين">تم التعيين</option>
@@ -538,16 +559,21 @@
                 <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
               </div>
 
-               <div class="detail-item">
+              <div class="detail-item">
                 <label>وضع الموظف</label>
-                <select  class= "custom-input" *ngIf="isEditMode" [(ngModel)]="employeeDetails.status">
+                <select
+                  class="custom-input"
+                  *ngIf="isEditMode"
+                  [(ngModel)]="employeeDetails.status"
+                >
                   <option value="">اختر حالة الموظف</option>
                   <option value="Active">نشط</option>
                   <option value="Stopped">متوقف</option>
                 </select>
 
                 <span *ngIf="!isEditMode"
-                  >{{ employeeDetails.status === 'Active' ? 'نشط' : employeeDetails.status === 'Stopped' ? 'متوقف' : '-' }}</span
+                  >{{ employeeDetails.status === 'Active' ? 'نشط' :
+                  employeeDetails.status === 'Stopped' ? 'متوقف' : '-' }}</span
                 >
               </div>
             </div>
@@ -1622,7 +1648,7 @@
           <ng-template pTemplate="body" let-row>
             <tr style="font-size: 20px">
               <td>{{ row.employeeName }}</td>
-                            <td style="text-align: center">
+              <td style="text-align: center">
                 <label class="day-radio">
                   <input
                     type="radio"

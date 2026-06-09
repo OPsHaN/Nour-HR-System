@@ -1,24 +1,21 @@
 <div class="sticky-header">
-<button
-  pButton
-  type="button"
-  class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
-  [class.btn-success]="!showCreateBank"
-  [class.btn-danger]="showCreateBank"
-  (click)="showCreateBank = !showCreateBank"
->
-  <i
-    class="pi"
-    [ngClass]="showCreateBank ? 'pi-times' : 'pi-building'"
-  ></i>
+  <button
+    *ngIf="this.auth.isAdmin"
+    pButton
+    type="button"
+    class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+    [class.btn-success]="!showCreateBank"
+    [class.btn-danger]="showCreateBank"
+    (click)="showCreateBank = !showCreateBank"
+  >
+    <i class="pi" [ngClass]="showCreateBank ? 'pi-times' : 'pi-building'"></i>
 
-  {{ showCreateBank ? '' : 'بنك جديد' }}
-</button>
+    {{ showCreateBank ? '' : 'بنك جديد' }}
+  </button>
 </div>
 
 <!-- CREATE BANK -->
-<app-create-bank *ngIf="showCreateBank" (created)="onBankCreated()"
->
+<app-create-bank *ngIf="showCreateBank" (created)="onBankCreated()">
 </app-create-bank>
 
 <!-- TABLE -->
@@ -29,7 +26,7 @@
   [rows]="pageSize"
   [rowsPerPageOptions]="[5,10,20,50]"
   [loading]="loading"
-    [lazy]="true"
+  [lazy]="true"
   [totalRecords]="totalRecords"
   (onPage)="onPageChange($event)"
   [responsiveLayout]="'scroll'"
@@ -37,7 +34,6 @@
   dataKey="id"
   dir="rtl"
 >
-
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
@@ -50,22 +46,14 @@
   <!-- BODY -->
   <ng-template pTemplate="body" let-bank let-ri="rowIndex">
     <tr>
-
       <!-- Row Number -->
-      <td>
-        {{ ri + 1 + (page - 1) * pageSize }}
-      </td>
+      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
 
       <!-- Bank Name -->
-      <td>
-        {{ bank.name }}
-      </td>
+      <td>{{ bank.name }}</td>
 
       <!-- Actions -->
       <td>
-
-
-
         <!-- Delete -->
         <button
           pButton
@@ -73,9 +61,10 @@
           class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
           (click)="confirmDelete(bank)"
         >
-          <i class="pi pi-trash d-flex align-items-center justify-content-center"></i>
+          <i
+            class="pi pi-trash d-flex align-items-center justify-content-center"
+          ></i>
         </button>
-
       </td>
     </tr>
   </ng-template>
@@ -84,5 +73,4 @@
       <td colspan="3" class="text-center py-4">لاتوجد أى بيانات</td>
     </tr>
   </ng-template>
-
 </p-table>

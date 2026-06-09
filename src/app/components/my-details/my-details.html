@@ -1,0 +1,494 @@
+<div *ngIf="loading" class="text-center py-5">
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+</div>
+
+<div class="reports-page">
+  <div *ngIf="!loading && employeeDetails">
+    <p-tabs [(value)]="activeTabIndex">
+      <p-tablist>
+        <p-tab value="0">بيانات الموظف</p-tab>
+        <p-tab value="1">بيانات المرتب</p-tab>
+        <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length"
+          >التقييمات</p-tab
+        >
+        <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length"
+          >سجل التنقلات</p-tab
+        >
+        <p-tab value="4" *ngIf="employeeDetails?.attendance?.length"
+          >الحضور و الإنصراف</p-tab
+        >
+      </p-tablist>
+
+      <p-tabpanels>
+        <!-- ===== Tab 1: بيانات الموظف ===== -->
+        <p-tabpanel value="0">
+          <div class="evaluation-card">
+            <div class="details-grid">
+              <div class="detail-item">
+                <label>اسم الموظف</label>
+                <span>{{ employeeDetails.name || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>المسمى الوظيفي</label>
+                <span>{{ employeeDetails.theNameOfJob || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>الدور الوظيفي</label>
+                <span>
+                  {{ employeeDetails.role === 'static' ? 'ثابت' :
+                  employeeDetails.role === 'changable' ? 'متغير' :
+                  employeeDetails.role === 'delivery' ? 'دليفري' : '-' }}
+                </span>
+              </div>
+              <div class="detail-item">
+                <label>الفرع</label>
+                <span>{{ employeeDetails.branchName || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>عدد ساعات الشيفت</label>
+                <span>{{ employeeDetails.shiftHours || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>اسم البنك</label>
+                <span>{{ employeeDetails.bankName || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>رقم الحساب البنكي</label>
+                <span>{{ employeeDetails.bankAccount || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>تاريخ التعيين</label>
+                <span
+                  >{{ employeeDetails.hiringDate | date:'yyyy-MM-dd' }}</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>المؤهل الدراسي</label>
+                <span>{{ employeeDetails.qualification || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>سنة التخرج</label>
+                <span>{{ employeeDetails.graduationYear || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>الرقم القومي</label>
+                <span>{{ employeeDetails.nationalId || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>رقم الهاتف</label>
+                <span>{{ employeeDetails.phoneNumber || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>حالة الموظف</label>
+                <span>{{ employeeDetails.employeeType || '-' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>وضع الموظف</label>
+                <span>
+                  {{ employeeDetails.status === 'Active' ? 'نشط' :
+                  employeeDetails.status === 'Stopped' ? 'متوقف' : '-' }}
+                </span>
+              </div>
+              <div class="detail-item" *ngIf="employeeDetails.endOfServiceDate">
+                <label>تاريخ إنهاء الخدمة</label>
+                <span
+                  >{{ employeeDetails.endOfServiceDate | date:'yyyy-MM-dd'
+                  }}</span
+                >
+              </div>
+              <div class="detail-item" *ngIf="employeeDetails.endOfServiceType">
+                <label>نوع إنهاء الخدمة</label>
+                <span>{{ employeeDetails.endOfServiceType }}</span>
+              </div>
+              <div
+                class="detail-item"
+                *ngIf="employeeDetails.endOfServiceReason"
+              >
+                <label>سبب إنهاء الخدمة</label>
+                <span>{{ employeeDetails.endOfServiceReason }}</span>
+              </div>
+            </div>
+          </div>
+        </p-tabpanel>
+
+        <!-- ===== Tab 2: بيانات المرتب ===== -->
+        <p-tabpanel value="1">
+          <!-- Payroll Filter Toolbar -->
+          <div class="payroll-toolbar mb-3">
+            <div class="toolbar-group">
+              <label class="toolbar-label">نوع العرض</label>
+              <select
+                class="custom-input toolbar-select"
+                [(ngModel)]="payrollViewType"
+              >
+                <option value="current">الشهر الحالي</option>
+                <option value="custom">شهر وسنة أخرى</option>
+              </select>
+            </div>
+
+            <ng-container *ngIf="payrollViewType === 'custom'">
+              <div class="toolbar-group">
+                <label class="toolbar-label">الشهر</label>
+                <select
+                  class="custom-input toolbar-select"
+                  [(ngModel)]="selectedMonth"
+                >
+                  <option [ngValue]="1">يناير</option>
+                  <option [ngValue]="2">فبراير</option>
+                  <option [ngValue]="3">مارس</option>
+                  <option [ngValue]="4">أبريل</option>
+                  <option [ngValue]="5">مايو</option>
+                  <option [ngValue]="6">يونيو</option>
+                  <option [ngValue]="7">يوليو</option>
+                  <option [ngValue]="8">أغسطس</option>
+                  <option [ngValue]="9">سبتمبر</option>
+                  <option [ngValue]="10">أكتوبر</option>
+                  <option [ngValue]="11">نوفمبر</option>
+                  <option [ngValue]="12">ديسمبر</option>
+                </select>
+              </div>
+              <div class="toolbar-group">
+                <label class="toolbar-label">السنة</label>
+                <input
+                  type="number"
+                  class="custom-input toolbar-year"
+                  [(ngModel)]="selectedYear"
+                />
+              </div>
+            </ng-container>
+
+            <button
+              pButton
+              type="button"
+              class="btn btn-primary payroll-refresh-btn"
+              (click)="reloadPayrollData()"
+            >
+              <i class="pi pi-refresh"></i> عرض
+            </button>
+          </div>
+
+          <div *ngIf="showPayrollDetails" class="evaluation-card">
+            <!-- السلف النقدية -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.cashBorrows?.length"
+            >
+              <h6 class="section-title text-info">السلف النقدية</h6>
+              <p-table
+                [value]="employeeDetails.cashBorrows"
+                styleClass="p-datatable-sm"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reason || '-' }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.dateOfBorrow | date:'yyyy-MM-dd' }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- الزيادات -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.bonuses?.length"
+            >
+              <h6 class="section-title text-success">الزيادات</h6>
+              <p-table
+                [value]="employeeDetails.bonuses"
+                styleClass="p-datatable-sm"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reason || '-' }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.dateOfBonus | date:'yyyy-MM-dd' }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- خصومات التعاقدات -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.contractDiscounts?.length"
+            >
+              <h6 class="section-title text-warning">خصومات التعاقدات</h6>
+              <p-table
+                [value]="employeeDetails.contractDiscounts"
+                styleClass="p-datatable-sm"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reasonOfDiscount || '-' }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- الخصومات -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.discounts?.length"
+            >
+              <h6 class="section-title text-danger">الخصومات</h6>
+              <p-table
+                [value]="employeeDetails.discounts"
+                styleClass="p-datatable-sm"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>القيمة</th>
+                    <th>السبب</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.amount }} ج</td>
+                    <td>{{ item.reasonOfDiscount || '-' }}</td>
+                    <td>{{ item.notes || '-' }}</td>
+                    <td>{{ item.date | date:'yyyy-MM-dd' }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
+            <!-- ملخص المرتب -->
+            <div class="details-grid mt-3">
+              <div class="detail-item">
+                <label>عدد الساعات</label
+                ><span>{{ employeeDetails.hours | number:'1.0-2' }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>الساعات الإضافية</label
+                ><span>{{ employeeDetails.hoursOverTime }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>سعر الساعة</label
+                ><span>{{ employeeDetails.salaryPerHour }} جنية</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالي المرتب</label
+                ><span
+                  >{{ employeeDetails.totalSalary | number:'1.0-2' }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالي الخصومات</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalDiscounts }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالي السلف</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalBorrows }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالي الزيادات</label
+                ><span class="text-success"
+                  >{{ employeeDetails.totalBouns }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالي أيام الإجازات</label
+                ><span>{{ employeeDetails.holidaies }} يوم</span>
+              </div>
+              <div class="detail-item">
+                <label>الساعات المنسية</label
+                ><span>{{ employeeDetails.forgetedHours }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>ساعات الإجازات</label
+                ><span>{{ employeeDetails.holidayHours }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>التأمينات</label
+                ><span>{{ employeeDetails.insurence }} جنية</span>
+              </div>
+              <div class="detail-item">
+                <label>الساعات المطلوبة</label
+                ><span>{{ employeeDetails.target }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالي السلف النقدية</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalCashBorrows }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>صافي المرتب</label>
+                <span
+                  [class.text-danger]="employeeDetails.netSalary < 0"
+                  [class.text-success]="employeeDetails.netSalary >= 0"
+                >
+                  {{ employeeDetails.netSalary | number:'1.0-2' }} جنية
+                </span>
+              </div>
+            </div>
+          </div>
+        </p-tabpanel>
+
+        <!-- ===== Tab 3: التقييمات ===== -->
+        <p-tabpanel value="2" *ngIf="employeeDetails?.evaluations?.length">
+          <div
+            class="evaluation-card mb-2"
+            *ngFor="let evaluation of employeeDetails.evaluations"
+          >
+            <div class="details-grid mb-2">
+              <div class="detail-item">
+                <label>الربع</label><span>{{ evaluation.quarter }}</span>
+              </div>
+              <div class="detail-item">
+                <label>السنة</label><span>{{ evaluation.year }}</span>
+              </div>
+              <div class="detail-item">
+                <label>تم التقييم بواسطة</label
+                ><span>{{ evaluation.evaluatedBy || '-' }}</span>
+              </div>
+            </div>
+            <p-table
+              [value]="evaluation.results"
+              styleClass="p-datatable-sm"
+              responsiveLayout="scroll"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>البند</th>
+                  <th>التقييم</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.criteriaName || '-' }}</td>
+                  <td>
+                    <span
+                      class="evaluation-rate"
+                      [ngClass]="{
+                      'rate-excellent': item.rating === 'ممتاز',
+                      'rate-good': item.rating === 'جيد',
+                      'rate-weak': item.rating === 'ضعيف'
+                    }"
+                    >
+                      <i
+                        class="pi"
+                        [ngClass]="{
+                      'pi-star-fill': item.rating === 'ممتاز',
+                      'pi-check-circle': item.rating === 'جيد',
+                      'pi-times-circle': item.rating === 'ضعيف'
+                    }"
+                      ></i>
+                      {{ item.rating }}
+                    </span>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </p-tabpanel>
+
+        <!-- ===== Tab 4: سجل التنقلات ===== -->
+        <p-tabpanel value="3" *ngIf="employeeDetails?.employeeHistory?.length">
+          <p-table
+            [value]="employeeDetails.employeeHistory"
+            styleClass="p-datatable-sm"
+            responsiveLayout="scroll"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>تاريخ البدء</th>
+                <th>الفرع</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.startDate | date:'yyyy-MM-dd' }}</td>
+                <td>{{ item.branchName }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="2" class="text-center py-4">لا يوجد سجل تنقلات</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabpanel>
+        <p-tabpanel value="4" *ngIf="employeeDetails?.attendance?.length">
+          <p-table
+            [value]="employeeDetails.attendance"
+            styleClass="p-datatable-sm"
+            responsiveLayout="scroll"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>اليوم</th>
+                <th>الحضور</th>
+                <th>الانصراف</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>
+                  {{ item.dayOfWeek === 0 ? "الأحد" : item.dayOfWeek === 1 ?
+                  "الإثنين" : item.dayOfWeek === 2 ? "الثلاثاء" : item.dayOfWeek
+                  === 3 ? "الأربعاء" : item.dayOfWeek === 4 ? "الخميس" :
+                  item.dayOfWeek === 5 ? "الجمعة" : item.dayOfWeek === 6 ?
+                  "السبت" : "-" }}
+                </td>
+
+                <td>{{ formatTime(item.checkInTime) }}</td>
+
+                <td>{{ formatTime(item.checkOutTime) }}</td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3" class="text-center py-4">
+                  لا توجد بيانات حضور وانصراف
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</div>

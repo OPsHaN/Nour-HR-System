@@ -4,18 +4,20 @@
     (valueChange)="onTabChange(+($event ?? 0))"
   >
     <p-tablist style="gap: 3px">
-      <p-tab [value]="0">الساعات المنسية</p-tab>
-      <p-tab [value]="1">الإجازات</p-tab>
-      <p-tab [value]="2">السلف</p-tab>
-      <p-tab [value]="3">الأوفر تايم</p-tab>
-      <p-tab [value]="4">الاستقالات</p-tab>
-      <p-tab [value]="5" *ngIf="this.auth.isHR || this.auth.isAreaManager">التعيينات</p-tab>
+      <p-tab [value]="0" *ngIf="this.auth.isHR || this.auth.isEmployee">الساعات المنسية</p-tab>
+      <p-tab [value]="1" *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee">الإجازات</p-tab>
+      <p-tab [value]="2" *ngIf="this.auth.isHR || this.auth.isEmployee" >السلف</p-tab>
+      <p-tab [value]="3" *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee">الأوفر تايم</p-tab>
+      <p-tab [value]="4" *ngIf="this.auth.isHR || this.auth.isEmployee">الاستقالات</p-tab>
+      <p-tab [value]="5" *ngIf="this.auth.isHR || this.auth.isAreaManager "
+        >التعيينات</p-tab
+      >
     </p-tablist>
 
     <p-tabpanels>
       <!-- ===== Tab 1: الساعات المنسية ===== -->
       <p-tabpanel [value]="0">
-        <div class="filters-bar">
+        <div class="filters-bar" *ngIf="this.auth.isEmployee">
           <button
             pButton
             type="button"
@@ -115,7 +117,7 @@
 
       <!-- ===== Tab 2: الإجازات ===== -->
       <p-tabpanel [value]="1">
-        <div class="filters-bar">
+        <div class="filters-bar" *ngIf="this.auth.isEmployee">
           <button
             pButton
             type="button"
@@ -202,6 +204,7 @@
                   ></i>
                 </button>
                 <button
+                  *ngIf="this.auth.isAreaManager"
                   pButton
                   type="button"
                   class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
@@ -238,7 +241,7 @@
 
       <!-- ===== Tab 3: السلف ===== -->
       <p-tabpanel [value]="2">
-        <div class="filters-bar">
+        <div class="filters-bar" *ngIf="this.auth.isEmployee">
           <button
             pButton
             type="button"
@@ -344,7 +347,7 @@
 
       <!-- ===== Tab 4: الأوفر تايم ===== -->
       <p-tabpanel [value]="3">
-        <div class="filters-bar">
+        <div class="filters-bar" *ngIf="this.auth.isEmployee">
           <button
             pButton
             type="button"
@@ -508,7 +511,7 @@
 
       <!-- ===== Tab 5: الاستقالات ===== -->
       <p-tabpanel [value]="4">
-        <div class="filters-bar">
+        <div class="filters-bar" *ngIf="this.auth.isEmployee">
           <button
             pButton
             type="button"
@@ -606,7 +609,7 @@
       <p-tabpanel [value]="5">
         <div class="filters-bar">
           <button
-          *ngIf="this.auth.isAreaManager"
+            *ngIf="this.auth.isAreaManager"
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"

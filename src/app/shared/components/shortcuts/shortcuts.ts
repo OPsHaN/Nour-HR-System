@@ -68,7 +68,7 @@ export class ShortcutsComponent {
   private getUserRole(): UserRole {
     const role = localStorage.getItem("role");
 
-    const allowed: UserRole[] = ["Admin", "HR", "Accountant", "Employee" , "AreaManager"];
+    const allowed: UserRole[] = ["Admin", "HR", "Accountant", "Employee" , "AreaManager" , "Control"];
 
     return allowed.includes(role as UserRole) ? (role as UserRole) : "Employee";
   }

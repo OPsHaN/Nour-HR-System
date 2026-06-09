@@ -23,8 +23,8 @@ interface NewsItem {
 export class News {
   articles: NewsItem[] = [];
   totalCount = 0;
-  currentPage = 21;
-  pageSize = 10;
+  currentPage = 1;
+  pageSize = 100;
   isLoading = false;
   newsList: any[] = [];
   private rotationSubscription?: Subscription;

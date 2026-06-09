@@ -7,6 +7,7 @@ import { TagModule } from "primeng/tag";
 import { TableModule } from "primeng/table";
 import { Apiservice } from "src/app/services/api.service";
 import { ConfirmationService } from "primeng/api";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-banks",
@@ -26,6 +27,8 @@ export class Banks {
     private api: Apiservice,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
+        public auth: AuthService,
+    
   ) {}
 
   ngOnInit() {

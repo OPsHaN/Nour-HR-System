@@ -1,49 +1,55 @@
 import {
   Checkbox
-} from "./chunk-PH5QQZJ2.js";
+} from "./chunk-I6WEAPP4.js";
 import {
   IconField,
   InputIcon,
   Overlay
-} from "./chunk-CL4VDZM7.js";
+} from "./chunk-UMCUKY55.js";
 import {
   Scroller
-} from "./chunk-OVDJJG6W.js";
+} from "./chunk-LMWR4NEZ.js";
 import {
   BaseEditableHolder,
   InputText
-} from "./chunk-3JUEBZH3.js";
+} from "./chunk-5WA5FGO3.js";
+import {
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  NgControlStatus,
+  NgModel
+} from "./chunk-CW7LAIGQ.js";
 import {
   AutoFocus,
   Fluid
-} from "./chunk-CM544LSG.js";
+} from "./chunk-Q7H5SKLQ.js";
+import {
+  Tooltip
+} from "./chunk-2SSEWDET.js";
+import {
+  ObjectUtils
+} from "./chunk-PSJOJ324.js";
+import {
+  DomHandler,
+  unblockBodyScroll
+} from "./chunk-EGGV6YTJ.js";
 import {
   CheckIcon,
   ChevronDownIcon,
   SearchIcon,
   TimesCircleIcon,
   TimesIcon
-} from "./chunk-K4EHDCWX.js";
-import {
-  Tooltip
-} from "./chunk-3GHH7M5M.js";
-import {
-  ObjectUtils
-} from "./chunk-P5652PBR.js";
-import {
-  DomHandler,
-  unblockBodyScroll
-} from "./chunk-MGURJNYV.js";
-import "./chunk-2K2SXMT3.js";
+} from "./chunk-R5SRWZSJ.js";
+import "./chunk-WODD5JVG.js";
 import {
   BaseComponent,
   Bind,
   BindModule,
   PARENT_INSTANCE
-} from "./chunk-D4OHXISA.js";
+} from "./chunk-KQAJKOGO.js";
 import {
   BaseStyle
-} from "./chunk-GZNVFE7P.js";
+} from "./chunk-AQ2JVO4R.js";
 import {
   C2 as C,
   FilterService,
@@ -65,14 +71,8 @@ import {
   vt,
   y,
   z
-} from "./chunk-BCFKIK2E.js";
+} from "./chunk-3ZYU6KZ7.js";
 import "./chunk-42VGZS34.js";
-import {
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-  NgControlStatus,
-  NgModel
-} from "./chunk-3PLTZ5R4.js";
 import {
   CommonModule,
   NgClass,
@@ -80,7 +80,7 @@ import {
   NgIf,
   NgStyle,
   NgTemplateOutlet
-} from "./chunk-VYDKEIKQ.js";
+} from "./chunk-DJPJSDB3.js";
 import "./chunk-U44TYWUZ.js";
 import {
   ChangeDetectionStrategy,
@@ -154,15 +154,15 @@ import {
   ɵɵtwoWayListener,
   ɵɵtwoWayProperty,
   ɵɵviewQuery
-} from "./chunk-HQGRJDEA.js";
-import "./chunk-5UG2FXJ4.js";
+} from "./chunk-7TLMVOLW.js";
 import "./chunk-EKEPJHDJ.js";
+import "./chunk-5UG2FXJ4.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
 import {
   __spreadProps,
   __spreadValues
-} from "./chunk-WDMUDEB6.js";
+} from "./chunk-3OV72XIM.js";
 
 // node_modules/@primeuix/styles/dist/chip/index.mjs
 var style = "\n    .p-chip {\n        display: inline-flex;\n        align-items: center;\n        background: dt('chip.background');\n        color: dt('chip.color');\n        border-radius: dt('chip.border.radius');\n        padding-block: dt('chip.padding.y');\n        padding-inline: dt('chip.padding.x');\n        gap: dt('chip.gap');\n    }\n\n    .p-chip-icon {\n        color: dt('chip.icon.color');\n        font-size: dt('chip.icon.font.size');\n        width: dt('chip.icon.size');\n        height: dt('chip.icon.size');\n    }\n\n    .p-chip-image {\n        border-radius: 50%;\n        width: dt('chip.image.width');\n        height: dt('chip.image.height');\n        margin-inline-start: calc(-1 * dt('chip.padding.y'));\n    }\n\n    .p-chip:has(.p-chip-remove-icon) {\n        padding-inline-end: dt('chip.padding.y');\n    }\n\n    .p-chip:has(.p-chip-image) {\n        padding-block-start: calc(dt('chip.padding.y') / 2);\n        padding-block-end: calc(dt('chip.padding.y') / 2);\n    }\n\n    .p-chip-remove-icon {\n        cursor: pointer;\n        font-size: dt('chip.remove.icon.size');\n        width: dt('chip.remove.icon.size');\n        height: dt('chip.remove.icon.size');\n        color: dt('chip.remove.icon.color');\n        border-radius: 50%;\n        transition:\n            outline-color dt('chip.transition.duration'),\n            box-shadow dt('chip.transition.duration');\n        outline-color: transparent;\n    }\n\n    .p-chip-remove-icon:focus-visible {\n        box-shadow: dt('chip.remove.icon.focus.ring.shadow');\n        outline: dt('chip.remove.icon.focus.ring.width') dt('chip.remove.icon.focus.ring.style') dt('chip.remove.icon.focus.ring.color');\n        outline-offset: dt('chip.remove.icon.focus.ring.offset');\n    }\n";
