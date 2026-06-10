@@ -1,67 +1,69 @@
 import {
   Checkbox
-} from "./chunk-I6WEAPP4.js";
+} from "./chunk-VLWPNGPY.js";
 import {
   IconField,
-  InputIcon,
+  InputIcon
+} from "./chunk-BPM4LGEE.js";
+import {
+  Tooltip
+} from "./chunk-QCHQPJJS.js";
+import {
+  Chip
+} from "./chunk-7UR647HJ.js";
+import {
   Overlay
-} from "./chunk-UMCUKY55.js";
+} from "./chunk-7667JDLD.js";
 import {
   Scroller
-} from "./chunk-LMWR4NEZ.js";
+} from "./chunk-KJAR4EVI.js";
 import {
   BaseEditableHolder,
   InputText
-} from "./chunk-5WA5FGO3.js";
-import {
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-  NgControlStatus,
-  NgModel
-} from "./chunk-CW7LAIGQ.js";
-import {
-  AutoFocus,
-  Fluid
-} from "./chunk-Q7H5SKLQ.js";
-import {
-  Tooltip
-} from "./chunk-2SSEWDET.js";
+} from "./chunk-MOA4R72C.js";
 import {
   ObjectUtils
 } from "./chunk-PSJOJ324.js";
+import "./chunk-WODD5JVG.js";
+import {
+  AutoFocus,
+  Fluid
+} from "./chunk-OVUTU4CF.js";
 import {
   DomHandler,
   unblockBodyScroll
-} from "./chunk-EGGV6YTJ.js";
+} from "./chunk-Z4GVF5BI.js";
 import {
   CheckIcon,
   ChevronDownIcon,
   SearchIcon,
-  TimesCircleIcon,
   TimesIcon
-} from "./chunk-R5SRWZSJ.js";
-import "./chunk-WODD5JVG.js";
+} from "./chunk-6OHEX6VO.js";
 import {
   BaseComponent,
-  Bind,
-  BindModule,
   PARENT_INSTANCE
-} from "./chunk-KQAJKOGO.js";
+} from "./chunk-MDU26JFA.js";
 import {
   BaseStyle
-} from "./chunk-AQ2JVO4R.js";
+} from "./chunk-YN36FFF2.js";
 import {
-  C2 as C,
   FilterService,
   Footer,
   Header,
-  J,
-  Lt,
-  M,
   OverlayService,
   PrimeTemplate,
   SharedModule,
-  TranslationKeys,
+  TranslationKeys
+} from "./chunk-5DMWIRBC.js";
+import {
+  Bind,
+  BindModule
+} from "./chunk-PTLVBNX5.js";
+import {
+  C2 as C,
+  J,
+  Lt,
+  M,
   b,
   bt,
   k2 as k,
@@ -71,7 +73,13 @@ import {
   vt,
   y,
   z
-} from "./chunk-3ZYU6KZ7.js";
+} from "./chunk-TIK557PQ.js";
+import {
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  NgControlStatus,
+  NgModel
+} from "./chunk-CW7LAIGQ.js";
 import "./chunk-42VGZS34.js";
 import {
   CommonModule,
@@ -142,7 +150,6 @@ import {
   ɵɵreference,
   ɵɵresetView,
   ɵɵrestoreView,
-  ɵɵsanitizeUrl,
   ɵɵstyleMap,
   ɵɵstyleProp,
   ɵɵtemplate,
@@ -164,568 +171,12 @@ import {
   __spreadValues
 } from "./chunk-3OV72XIM.js";
 
-// node_modules/@primeuix/styles/dist/chip/index.mjs
-var style = "\n    .p-chip {\n        display: inline-flex;\n        align-items: center;\n        background: dt('chip.background');\n        color: dt('chip.color');\n        border-radius: dt('chip.border.radius');\n        padding-block: dt('chip.padding.y');\n        padding-inline: dt('chip.padding.x');\n        gap: dt('chip.gap');\n    }\n\n    .p-chip-icon {\n        color: dt('chip.icon.color');\n        font-size: dt('chip.icon.font.size');\n        width: dt('chip.icon.size');\n        height: dt('chip.icon.size');\n    }\n\n    .p-chip-image {\n        border-radius: 50%;\n        width: dt('chip.image.width');\n        height: dt('chip.image.height');\n        margin-inline-start: calc(-1 * dt('chip.padding.y'));\n    }\n\n    .p-chip:has(.p-chip-remove-icon) {\n        padding-inline-end: dt('chip.padding.y');\n    }\n\n    .p-chip:has(.p-chip-image) {\n        padding-block-start: calc(dt('chip.padding.y') / 2);\n        padding-block-end: calc(dt('chip.padding.y') / 2);\n    }\n\n    .p-chip-remove-icon {\n        cursor: pointer;\n        font-size: dt('chip.remove.icon.size');\n        width: dt('chip.remove.icon.size');\n        height: dt('chip.remove.icon.size');\n        color: dt('chip.remove.icon.color');\n        border-radius: 50%;\n        transition:\n            outline-color dt('chip.transition.duration'),\n            box-shadow dt('chip.transition.duration');\n        outline-color: transparent;\n    }\n\n    .p-chip-remove-icon:focus-visible {\n        box-shadow: dt('chip.remove.icon.focus.ring.shadow');\n        outline: dt('chip.remove.icon.focus.ring.width') dt('chip.remove.icon.focus.ring.style') dt('chip.remove.icon.focus.ring.color');\n        outline-offset: dt('chip.remove.icon.focus.ring.offset');\n    }\n";
-
-// node_modules/primeng/fesm2022/primeng-chip.mjs
-var _c0 = ["removeicon"];
-var _c1 = ["*"];
-function Chip_img_1_Template(rf, ctx) {
-  if (rf & 1) {
-    const _r1 = ɵɵgetCurrentView();
-    ɵɵelementStart(0, "img", 4);
-    ɵɵlistener("error", function Chip_img_1_Template_img_error_0_listener($event) {
-      ɵɵrestoreView(_r1);
-      const ctx_r1 = ɵɵnextContext();
-      return ɵɵresetView(ctx_r1.imageError($event));
-    });
-    ɵɵelementEnd();
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext();
-    ɵɵclassMap(ctx_r1.cx("image"));
-    ɵɵproperty("pBind", ctx_r1.ptm("image"))("src", ctx_r1.image, ɵɵsanitizeUrl)("alt", ctx_r1.alt);
-  }
-}
-function Chip_ng_template_2_span_0_Template(rf, ctx) {
-  if (rf & 1) {
-    ɵɵelement(0, "span", 6);
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext(2);
-    ɵɵclassMap(ctx_r1.icon);
-    ɵɵproperty("pBind", ctx_r1.ptm("icon"))("ngClass", ctx_r1.cx("icon"));
-  }
-}
-function Chip_ng_template_2_Template(rf, ctx) {
-  if (rf & 1) {
-    ɵɵtemplate(0, Chip_ng_template_2_span_0_Template, 1, 4, "span", 5);
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext();
-    ɵɵproperty("ngIf", ctx_r1.icon);
-  }
-}
-function Chip_div_4_Template(rf, ctx) {
-  if (rf & 1) {
-    ɵɵelementStart(0, "div", 7);
-    ɵɵtext(1);
-    ɵɵelementEnd();
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext();
-    ɵɵclassMap(ctx_r1.cx("label"));
-    ɵɵproperty("pBind", ctx_r1.ptm("label"));
-    ɵɵadvance();
-    ɵɵtextInterpolate(ctx_r1.label);
-  }
-}
-function Chip_ng_container_5_ng_container_1_span_1_Template(rf, ctx) {
-  if (rf & 1) {
-    const _r3 = ɵɵgetCurrentView();
-    ɵɵelementStart(0, "span", 11);
-    ɵɵlistener("click", function Chip_ng_container_5_ng_container_1_span_1_Template_span_click_0_listener($event) {
-      ɵɵrestoreView(_r3);
-      const ctx_r1 = ɵɵnextContext(3);
-      return ɵɵresetView(ctx_r1.close($event));
-    })("keydown", function Chip_ng_container_5_ng_container_1_span_1_Template_span_keydown_0_listener($event) {
-      ɵɵrestoreView(_r3);
-      const ctx_r1 = ɵɵnextContext(3);
-      return ɵɵresetView(ctx_r1.onKeydown($event));
-    });
-    ɵɵelementEnd();
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext(3);
-    ɵɵclassMap(ctx_r1.removeIcon);
-    ɵɵproperty("pBind", ctx_r1.ptm("removeIcon"))("ngClass", ctx_r1.cx("removeIcon"));
-    ɵɵattribute("tabindex", ctx_r1.disabled ? -1 : 0)("aria-label", ctx_r1.removeAriaLabel);
-  }
-}
-function Chip_ng_container_5_ng_container_1__svg_svg_2_Template(rf, ctx) {
-  if (rf & 1) {
-    const _r4 = ɵɵgetCurrentView();
-    ɵɵnamespaceSVG();
-    ɵɵelementStart(0, "svg", 12);
-    ɵɵlistener("click", function Chip_ng_container_5_ng_container_1__svg_svg_2_Template_svg_click_0_listener($event) {
-      ɵɵrestoreView(_r4);
-      const ctx_r1 = ɵɵnextContext(3);
-      return ɵɵresetView(ctx_r1.close($event));
-    })("keydown", function Chip_ng_container_5_ng_container_1__svg_svg_2_Template_svg_keydown_0_listener($event) {
-      ɵɵrestoreView(_r4);
-      const ctx_r1 = ɵɵnextContext(3);
-      return ɵɵresetView(ctx_r1.onKeydown($event));
-    });
-    ɵɵelementEnd();
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext(3);
-    ɵɵclassMap(ctx_r1.cx("removeIcon"));
-    ɵɵproperty("pBind", ctx_r1.ptm("removeIcon"));
-    ɵɵattribute("tabindex", ctx_r1.disabled ? -1 : 0)("aria-label", ctx_r1.removeAriaLabel);
-  }
-}
-function Chip_ng_container_5_ng_container_1_Template(rf, ctx) {
-  if (rf & 1) {
-    ɵɵelementContainerStart(0);
-    ɵɵtemplate(1, Chip_ng_container_5_ng_container_1_span_1_Template, 1, 6, "span", 9)(2, Chip_ng_container_5_ng_container_1__svg_svg_2_Template, 1, 5, "svg", 10);
-    ɵɵelementContainerEnd();
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext(2);
-    ɵɵadvance();
-    ɵɵproperty("ngIf", ctx_r1.removeIcon);
-    ɵɵadvance();
-    ɵɵproperty("ngIf", !ctx_r1.removeIcon);
-  }
-}
-function Chip_ng_container_5_span_2_1_ng_template_0_Template(rf, ctx) {
-}
-function Chip_ng_container_5_span_2_1_Template(rf, ctx) {
-  if (rf & 1) {
-    ɵɵtemplate(0, Chip_ng_container_5_span_2_1_ng_template_0_Template, 0, 0, "ng-template");
-  }
-}
-function Chip_ng_container_5_span_2_Template(rf, ctx) {
-  if (rf & 1) {
-    const _r5 = ɵɵgetCurrentView();
-    ɵɵelementStart(0, "span", 13);
-    ɵɵlistener("click", function Chip_ng_container_5_span_2_Template_span_click_0_listener($event) {
-      ɵɵrestoreView(_r5);
-      const ctx_r1 = ɵɵnextContext(2);
-      return ɵɵresetView(ctx_r1.close($event));
-    })("keydown", function Chip_ng_container_5_span_2_Template_span_keydown_0_listener($event) {
-      ɵɵrestoreView(_r5);
-      const ctx_r1 = ɵɵnextContext(2);
-      return ɵɵresetView(ctx_r1.onKeydown($event));
-    });
-    ɵɵtemplate(1, Chip_ng_container_5_span_2_1_Template, 1, 0, null, 14);
-    ɵɵelementEnd();
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext(2);
-    ɵɵclassMap(ctx_r1.cx("removeIcon"));
-    ɵɵproperty("pBind", ctx_r1.ptm("removeIcon"));
-    ɵɵattribute("tabindex", ctx_r1.disabled ? -1 : 0)("aria-label", ctx_r1.removeAriaLabel);
-    ɵɵadvance();
-    ɵɵproperty("ngTemplateOutlet", ctx_r1.removeIconTemplate || ctx_r1._removeIconTemplate);
-  }
-}
-function Chip_ng_container_5_Template(rf, ctx) {
-  if (rf & 1) {
-    ɵɵelementContainerStart(0);
-    ɵɵtemplate(1, Chip_ng_container_5_ng_container_1_Template, 3, 2, "ng-container", 3)(2, Chip_ng_container_5_span_2_Template, 2, 6, "span", 8);
-    ɵɵelementContainerEnd();
-  }
-  if (rf & 2) {
-    const ctx_r1 = ɵɵnextContext();
-    ɵɵadvance();
-    ɵɵproperty("ngIf", !ctx_r1.removeIconTemplate && !ctx_r1._removeIconTemplate);
-    ɵɵadvance();
-    ɵɵproperty("ngIf", ctx_r1.removeIconTemplate || ctx_r1._removeIconTemplate);
-  }
-}
-var classes = {
-  root: ({
-    instance
-  }) => ["p-chip p-component", {
-    "p-disabled": instance.disabled
-  }],
-  image: "p-chip-image",
-  icon: "p-chip-icon",
-  label: "p-chip-label",
-  removeIcon: "p-chip-remove-icon"
-};
-var ChipStyle = class _ChipStyle extends BaseStyle {
-  name = "chip";
-  style = style;
-  classes = classes;
-  static ɵfac = /* @__PURE__ */ (() => {
-    let ɵChipStyle_BaseFactory;
-    return function ChipStyle_Factory(__ngFactoryType__) {
-      return (ɵChipStyle_BaseFactory || (ɵChipStyle_BaseFactory = ɵɵgetInheritedFactory(_ChipStyle)))(__ngFactoryType__ || _ChipStyle);
-    };
-  })();
-  static ɵprov = ɵɵdefineInjectable({
-    token: _ChipStyle,
-    factory: _ChipStyle.ɵfac
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ChipStyle, [{
-    type: Injectable
-  }], null, null);
-})();
-var ChipClasses;
-(function(ChipClasses2) {
-  ChipClasses2["root"] = "p-chip";
-  ChipClasses2["image"] = "p-chip-image";
-  ChipClasses2["icon"] = "p-chip-icon";
-  ChipClasses2["label"] = "p-chip-label";
-  ChipClasses2["removeIcon"] = "p-chip-remove-icon";
-})(ChipClasses || (ChipClasses = {}));
-var CHIP_INSTANCE = new InjectionToken("CHIP_INSTANCE");
-var Chip = class _Chip extends BaseComponent {
-  $pcChip = inject(CHIP_INSTANCE, {
-    optional: true,
-    skipSelf: true
-  }) ?? void 0;
-  bindDirectiveInstance = inject(Bind, {
-    self: true
-  });
-  onAfterViewChecked() {
-    this.bindDirectiveInstance.setAttrs(this.ptms(["host", "root"]));
-  }
-  /**
-   * Defines the text to display.
-   * @group Props
-   */
-  label;
-  /**
-   * Defines the icon to display.
-   * @group Props
-   */
-  icon;
-  /**
-   * Defines the image to display.
-   * @group Props
-   */
-  image;
-  /**
-   * Alt attribute of the image.
-   * @group Props
-   */
-  alt;
-  /**
-   * Class of the element.
-   * @deprecated since v20.0.0, use `class` instead.
-   * @group Props
-   */
-  styleClass;
-  /**
-   * When present, it specifies that the element should be disabled.
-   * @group Props
-   */
-  disabled = false;
-  /**
-   * Whether to display a remove icon.
-   * @group Props
-   */
-  removable = false;
-  /**
-   * Icon of the remove element.
-   * @group Props
-   */
-  removeIcon;
-  /**
-   * Callback to invoke when a chip is removed.
-   * @param {MouseEvent} event - Mouse event.
-   * @group Emits
-   */
-  onRemove = new EventEmitter();
-  /**
-   * This event is triggered if an error occurs while loading an image file.
-   * @param {Event} event - Browser event.
-   * @group Emits
-   */
-  onImageError = new EventEmitter();
-  visible = true;
-  get removeAriaLabel() {
-    return this.config.getTranslation(TranslationKeys.ARIA)["removeLabel"];
-  }
-  /**
-   * Used to pass all properties of the chipProps to the Chip component.
-   * @group Props
-   */
-  get chipProps() {
-    return this._chipProps;
-  }
-  set chipProps(val) {
-    this._chipProps = val;
-    if (val && typeof val === "object") {
-      Object.entries(val).forEach(([k2, v]) => this[`_${k2}`] !== v && (this[`_${k2}`] = v));
-    }
-  }
-  _chipProps;
-  _componentStyle = inject(ChipStyle);
-  removeIconTemplate;
-  templates;
-  _removeIconTemplate;
-  onAfterContentInit() {
-    this.templates.forEach((item) => {
-      switch (item.getType()) {
-        case "removeicon":
-          this._removeIconTemplate = item.template;
-          break;
-        default:
-          this._removeIconTemplate = item.template;
-          break;
-      }
-    });
-  }
-  onChanges(simpleChanges) {
-    if (simpleChanges.chipProps && simpleChanges.chipProps.currentValue) {
-      const {
-        currentValue
-      } = simpleChanges.chipProps;
-      if (currentValue.label !== void 0) {
-        this.label = currentValue.label;
-      }
-      if (currentValue.icon !== void 0) {
-        this.icon = currentValue.icon;
-      }
-      if (currentValue.image !== void 0) {
-        this.image = currentValue.image;
-      }
-      if (currentValue.alt !== void 0) {
-        this.alt = currentValue.alt;
-      }
-      if (currentValue.styleClass !== void 0) {
-        this.styleClass = currentValue.styleClass;
-      }
-      if (currentValue.removable !== void 0) {
-        this.removable = currentValue.removable;
-      }
-      if (currentValue.removeIcon !== void 0) {
-        this.removeIcon = currentValue.removeIcon;
-      }
-    }
-  }
-  close(event) {
-    this.visible = false;
-    this.onRemove.emit(event);
-  }
-  onKeydown(event) {
-    if (event.key === "Enter" || event.key === "Backspace") {
-      this.close(event);
-    }
-  }
-  imageError(event) {
-    this.onImageError.emit(event);
-  }
-  static ɵfac = /* @__PURE__ */ (() => {
-    let ɵChip_BaseFactory;
-    return function Chip_Factory(__ngFactoryType__) {
-      return (ɵChip_BaseFactory || (ɵChip_BaseFactory = ɵɵgetInheritedFactory(_Chip)))(__ngFactoryType__ || _Chip);
-    };
-  })();
-  static ɵcmp = ɵɵdefineComponent({
-    type: _Chip,
-    selectors: [["p-chip"]],
-    contentQueries: function Chip_ContentQueries(rf, ctx, dirIndex) {
-      if (rf & 1) {
-        ɵɵcontentQuery(dirIndex, _c0, 4);
-        ɵɵcontentQuery(dirIndex, PrimeTemplate, 4);
-      }
-      if (rf & 2) {
-        let _t;
-        ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.removeIconTemplate = _t.first);
-        ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.templates = _t);
-      }
-    },
-    hostVars: 5,
-    hostBindings: function Chip_HostBindings(rf, ctx) {
-      if (rf & 2) {
-        ɵɵattribute("aria-label", ctx.label);
-        ɵɵclassMap(ctx.cn(ctx.cx("root"), ctx.styleClass));
-        ɵɵstyleProp("display", !ctx.visible && "none");
-      }
-    },
-    inputs: {
-      label: "label",
-      icon: "icon",
-      image: "image",
-      alt: "alt",
-      styleClass: "styleClass",
-      disabled: [2, "disabled", "disabled", booleanAttribute],
-      removable: [2, "removable", "removable", booleanAttribute],
-      removeIcon: "removeIcon",
-      chipProps: "chipProps"
-    },
-    outputs: {
-      onRemove: "onRemove",
-      onImageError: "onImageError"
-    },
-    features: [ɵɵProvidersFeature([ChipStyle, {
-      provide: CHIP_INSTANCE,
-      useExisting: _Chip
-    }, {
-      provide: PARENT_INSTANCE,
-      useExisting: _Chip
-    }]), ɵɵHostDirectivesFeature([Bind]), ɵɵInheritDefinitionFeature],
-    ngContentSelectors: _c1,
-    decls: 6,
-    vars: 4,
-    consts: [["iconTemplate", ""], [3, "pBind", "class", "src", "alt", "error", 4, "ngIf", "ngIfElse"], [3, "pBind", "class", 4, "ngIf"], [4, "ngIf"], [3, "error", "pBind", "src", "alt"], [3, "pBind", "class", "ngClass", 4, "ngIf"], [3, "pBind", "ngClass"], [3, "pBind"], ["role", "button", 3, "pBind", "class", "click", "keydown", 4, "ngIf"], ["role", "button", 3, "pBind", "class", "ngClass", "click", "keydown", 4, "ngIf"], ["data-p-icon", "times-circle", "role", "button", 3, "pBind", "class", "click", "keydown", 4, "ngIf"], ["role", "button", 3, "click", "keydown", "pBind", "ngClass"], ["data-p-icon", "times-circle", "role", "button", 3, "click", "keydown", "pBind"], ["role", "button", 3, "click", "keydown", "pBind"], [4, "ngTemplateOutlet"]],
-    template: function Chip_Template(rf, ctx) {
-      if (rf & 1) {
-        ɵɵprojectionDef();
-        ɵɵprojection(0);
-        ɵɵtemplate(1, Chip_img_1_Template, 1, 5, "img", 1)(2, Chip_ng_template_2_Template, 1, 1, "ng-template", null, 0, ɵɵtemplateRefExtractor)(4, Chip_div_4_Template, 2, 4, "div", 2)(5, Chip_ng_container_5_Template, 3, 2, "ng-container", 3);
-      }
-      if (rf & 2) {
-        const iconTemplate_r6 = ɵɵreference(3);
-        ɵɵadvance();
-        ɵɵproperty("ngIf", ctx.image)("ngIfElse", iconTemplate_r6);
-        ɵɵadvance(3);
-        ɵɵproperty("ngIf", ctx.label);
-        ɵɵadvance();
-        ɵɵproperty("ngIf", ctx.removable);
-      }
-    },
-    dependencies: [CommonModule, NgClass, NgIf, NgTemplateOutlet, TimesCircleIcon, SharedModule, Bind],
-    encapsulation: 2,
-    changeDetection: 0
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Chip, [{
-    type: Component,
-    args: [{
-      selector: "p-chip",
-      standalone: true,
-      imports: [CommonModule, TimesCircleIcon, SharedModule, Bind],
-      template: `
-        <ng-content></ng-content>
-        <img [pBind]="ptm('image')" [class]="cx('image')" [src]="image" *ngIf="image; else iconTemplate" (error)="imageError($event)" [alt]="alt" />
-        <ng-template #iconTemplate><span [pBind]="ptm('icon')" *ngIf="icon" [class]="icon" [ngClass]="cx('icon')"></span></ng-template>
-        <div [pBind]="ptm('label')" [class]="cx('label')" *ngIf="label">{{ label }}</div>
-        <ng-container *ngIf="removable">
-            <ng-container *ngIf="!removeIconTemplate && !_removeIconTemplate">
-                <span
-                    [pBind]="ptm('removeIcon')"
-                    *ngIf="removeIcon"
-                    [class]="removeIcon"
-                    [ngClass]="cx('removeIcon')"
-                    (click)="close($event)"
-                    (keydown)="onKeydown($event)"
-                    [attr.tabindex]="disabled ? -1 : 0"
-                    [attr.aria-label]="removeAriaLabel"
-                    role="button"
-                ></span>
-                <svg
-                    [pBind]="ptm('removeIcon')"
-                    data-p-icon="times-circle"
-                    *ngIf="!removeIcon"
-                    [class]="cx('removeIcon')"
-                    (click)="close($event)"
-                    (keydown)="onKeydown($event)"
-                    [attr.tabindex]="disabled ? -1 : 0"
-                    [attr.aria-label]="removeAriaLabel"
-                    role="button"
-                />
-            </ng-container>
-            <span
-                [pBind]="ptm('removeIcon')"
-                *ngIf="removeIconTemplate || _removeIconTemplate"
-                [attr.tabindex]="disabled ? -1 : 0"
-                [class]="cx('removeIcon')"
-                (click)="close($event)"
-                (keydown)="onKeydown($event)"
-                [attr.aria-label]="removeAriaLabel"
-                role="button"
-            >
-                <ng-template *ngTemplateOutlet="removeIconTemplate || _removeIconTemplate"></ng-template>
-            </span>
-        </ng-container>
-    `,
-      changeDetection: ChangeDetectionStrategy.OnPush,
-      encapsulation: ViewEncapsulation.None,
-      providers: [ChipStyle, {
-        provide: CHIP_INSTANCE,
-        useExisting: Chip
-      }, {
-        provide: PARENT_INSTANCE,
-        useExisting: Chip
-      }],
-      host: {
-        "[class]": "cn(cx('root'), styleClass)",
-        "[style.display]": '!visible && "none"',
-        "[attr.aria-label]": "label"
-      },
-      hostDirectives: [Bind]
-    }]
-  }], null, {
-    label: [{
-      type: Input
-    }],
-    icon: [{
-      type: Input
-    }],
-    image: [{
-      type: Input
-    }],
-    alt: [{
-      type: Input
-    }],
-    styleClass: [{
-      type: Input
-    }],
-    disabled: [{
-      type: Input,
-      args: [{
-        transform: booleanAttribute
-      }]
-    }],
-    removable: [{
-      type: Input,
-      args: [{
-        transform: booleanAttribute
-      }]
-    }],
-    removeIcon: [{
-      type: Input
-    }],
-    onRemove: [{
-      type: Output
-    }],
-    onImageError: [{
-      type: Output
-    }],
-    chipProps: [{
-      type: Input
-    }],
-    removeIconTemplate: [{
-      type: ContentChild,
-      args: ["removeicon", {
-        descendants: false
-      }]
-    }],
-    templates: [{
-      type: ContentChildren,
-      args: [PrimeTemplate]
-    }]
-  });
-})();
-var ChipModule = class _ChipModule {
-  static ɵfac = function ChipModule_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _ChipModule)();
-  };
-  static ɵmod = ɵɵdefineNgModule({
-    type: _ChipModule,
-    imports: [Chip, SharedModule],
-    exports: [Chip, SharedModule]
-  });
-  static ɵinj = ɵɵdefineInjector({
-    imports: [Chip, SharedModule, SharedModule]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ChipModule, [{
-    type: NgModule,
-    args: [{
-      imports: [Chip, SharedModule],
-      exports: [Chip, SharedModule]
-    }]
-  }], null, null);
-})();
-
 // node_modules/@primeuix/styles/dist/multiselect/index.mjs
-var style2 = "\n    .p-multiselect {\n        display: inline-flex;\n        cursor: pointer;\n        position: relative;\n        user-select: none;\n        background: dt('multiselect.background');\n        border: 1px solid dt('multiselect.border.color');\n        transition:\n            background dt('multiselect.transition.duration'),\n            color dt('multiselect.transition.duration'),\n            border-color dt('multiselect.transition.duration'),\n            outline-color dt('multiselect.transition.duration'),\n            box-shadow dt('multiselect.transition.duration');\n        border-radius: dt('multiselect.border.radius');\n        outline-color: transparent;\n        box-shadow: dt('multiselect.shadow');\n    }\n\n    .p-multiselect:not(.p-disabled):hover {\n        border-color: dt('multiselect.hover.border.color');\n    }\n\n    .p-multiselect:not(.p-disabled).p-focus {\n        border-color: dt('multiselect.focus.border.color');\n        box-shadow: dt('multiselect.focus.ring.shadow');\n        outline: dt('multiselect.focus.ring.width') dt('multiselect.focus.ring.style') dt('multiselect.focus.ring.color');\n        outline-offset: dt('multiselect.focus.ring.offset');\n    }\n\n    .p-multiselect.p-variant-filled {\n        background: dt('multiselect.filled.background');\n    }\n\n    .p-multiselect.p-variant-filled:not(.p-disabled):hover {\n        background: dt('multiselect.filled.hover.background');\n    }\n\n    .p-multiselect.p-variant-filled.p-focus {\n        background: dt('multiselect.filled.focus.background');\n    }\n\n    .p-multiselect.p-invalid {\n        border-color: dt('multiselect.invalid.border.color');\n    }\n\n    .p-multiselect.p-disabled {\n        opacity: 1;\n        background: dt('multiselect.disabled.background');\n    }\n\n    .p-multiselect-dropdown {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        flex-shrink: 0;\n        background: transparent;\n        color: dt('multiselect.dropdown.color');\n        width: dt('multiselect.dropdown.width');\n        border-start-end-radius: dt('multiselect.border.radius');\n        border-end-end-radius: dt('multiselect.border.radius');\n    }\n\n    .p-multiselect-clear-icon {\n        align-self: center;\n        color: dt('multiselect.clear.icon.color');\n        inset-inline-end: dt('multiselect.dropdown.width');\n    }\n\n    .p-multiselect-label-container {\n        overflow: hidden;\n        flex: 1 1 auto;\n        cursor: pointer;\n    }\n\n    .p-multiselect-label {\n        white-space: nowrap;\n        cursor: pointer;\n        overflow: hidden;\n        text-overflow: ellipsis;\n        padding: dt('multiselect.padding.y') dt('multiselect.padding.x');\n        color: dt('multiselect.color');\n    }\n\n    .p-multiselect-display-chip .p-multiselect-label {\n        display: flex;\n        align-items: center;\n        gap: calc(dt('multiselect.padding.y') / 2);\n    }\n\n    .p-multiselect-label.p-placeholder {\n        color: dt('multiselect.placeholder.color');\n    }\n\n    .p-multiselect.p-invalid .p-multiselect-label.p-placeholder {\n        color: dt('multiselect.invalid.placeholder.color');\n    }\n\n    .p-multiselect.p-disabled .p-multiselect-label {\n        color: dt('multiselect.disabled.color');\n    }\n\n    .p-multiselect-label-empty {\n        overflow: hidden;\n        visibility: hidden;\n    }\n\n    .p-multiselect-overlay {\n        position: absolute;\n        top: 0;\n        left: 0;\n        background: dt('multiselect.overlay.background');\n        color: dt('multiselect.overlay.color');\n        border: 1px solid dt('multiselect.overlay.border.color');\n        border-radius: dt('multiselect.overlay.border.radius');\n        box-shadow: dt('multiselect.overlay.shadow');\n        min-width: 100%;\n    }\n\n    .p-multiselect-header {\n        display: flex;\n        align-items: center;\n        padding: dt('multiselect.list.header.padding');\n    }\n\n    .p-multiselect-header .p-checkbox {\n        margin-inline-end: dt('multiselect.option.gap');\n    }\n\n    .p-multiselect-filter-container {\n        flex: 1 1 auto;\n    }\n\n    .p-multiselect-filter {\n        width: 100%;\n    }\n\n    .p-multiselect-list-container {\n        overflow: auto;\n    }\n\n    .p-multiselect-list {\n        margin: 0;\n        padding: 0;\n        list-style-type: none;\n        padding: dt('multiselect.list.padding');\n        display: flex;\n        flex-direction: column;\n        gap: dt('multiselect.list.gap');\n    }\n\n    .p-multiselect-option {\n        cursor: pointer;\n        font-weight: normal;\n        white-space: nowrap;\n        position: relative;\n        overflow: hidden;\n        display: flex;\n        align-items: center;\n        gap: dt('multiselect.option.gap');\n        padding: dt('multiselect.option.padding');\n        border: 0 none;\n        color: dt('multiselect.option.color');\n        background: transparent;\n        transition:\n            background dt('multiselect.transition.duration'),\n            color dt('multiselect.transition.duration'),\n            border-color dt('multiselect.transition.duration'),\n            box-shadow dt('multiselect.transition.duration'),\n            outline-color dt('multiselect.transition.duration');\n        border-radius: dt('multiselect.option.border.radius');\n    }\n\n    .p-multiselect-option:not(.p-multiselect-option-selected):not(.p-disabled).p-focus {\n        background: dt('multiselect.option.focus.background');\n        color: dt('multiselect.option.focus.color');\n    }\n\n    .p-multiselect-option.p-multiselect-option-selected {\n        background: dt('multiselect.option.selected.background');\n        color: dt('multiselect.option.selected.color');\n    }\n\n    .p-multiselect-option.p-multiselect-option-selected.p-focus {\n        background: dt('multiselect.option.selected.focus.background');\n        color: dt('multiselect.option.selected.focus.color');\n    }\n\n    .p-multiselect-option-group {\n        cursor: auto;\n        margin: 0;\n        padding: dt('multiselect.option.group.padding');\n        background: dt('multiselect.option.group.background');\n        color: dt('multiselect.option.group.color');\n        font-weight: dt('multiselect.option.group.font.weight');\n    }\n\n    .p-multiselect-empty-message {\n        padding: dt('multiselect.empty.message.padding');\n    }\n\n    .p-multiselect-label .p-chip {\n        padding-block-start: calc(dt('multiselect.padding.y') / 2);\n        padding-block-end: calc(dt('multiselect.padding.y') / 2);\n        border-radius: dt('multiselect.chip.border.radius');\n    }\n\n    .p-multiselect-label:has(.p-chip) {\n        padding: calc(dt('multiselect.padding.y') / 2) calc(dt('multiselect.padding.x') / 2);\n    }\n\n    .p-multiselect-fluid {\n        display: flex;\n        width: 100%;\n    }\n\n    .p-multiselect-sm .p-multiselect-label {\n        font-size: dt('multiselect.sm.font.size');\n        padding-block: dt('multiselect.sm.padding.y');\n        padding-inline: dt('multiselect.sm.padding.x');\n    }\n\n    .p-multiselect-sm .p-multiselect-dropdown .p-icon {\n        font-size: dt('multiselect.sm.font.size');\n        width: dt('multiselect.sm.font.size');\n        height: dt('multiselect.sm.font.size');\n    }\n\n    .p-multiselect-lg .p-multiselect-label {\n        font-size: dt('multiselect.lg.font.size');\n        padding-block: dt('multiselect.lg.padding.y');\n        padding-inline: dt('multiselect.lg.padding.x');\n    }\n\n    .p-multiselect-lg .p-multiselect-dropdown .p-icon {\n        font-size: dt('multiselect.lg.font.size');\n        width: dt('multiselect.lg.font.size');\n        height: dt('multiselect.lg.font.size');\n    }\n\n    .p-floatlabel-in .p-multiselect-filter {\n        padding-block-start: dt('multiselect.padding.y');\n        padding-block-end: dt('multiselect.padding.y');\n    }\n";
+var style = "\n    .p-multiselect {\n        display: inline-flex;\n        cursor: pointer;\n        position: relative;\n        user-select: none;\n        background: dt('multiselect.background');\n        border: 1px solid dt('multiselect.border.color');\n        transition:\n            background dt('multiselect.transition.duration'),\n            color dt('multiselect.transition.duration'),\n            border-color dt('multiselect.transition.duration'),\n            outline-color dt('multiselect.transition.duration'),\n            box-shadow dt('multiselect.transition.duration');\n        border-radius: dt('multiselect.border.radius');\n        outline-color: transparent;\n        box-shadow: dt('multiselect.shadow');\n    }\n\n    .p-multiselect:not(.p-disabled):hover {\n        border-color: dt('multiselect.hover.border.color');\n    }\n\n    .p-multiselect:not(.p-disabled).p-focus {\n        border-color: dt('multiselect.focus.border.color');\n        box-shadow: dt('multiselect.focus.ring.shadow');\n        outline: dt('multiselect.focus.ring.width') dt('multiselect.focus.ring.style') dt('multiselect.focus.ring.color');\n        outline-offset: dt('multiselect.focus.ring.offset');\n    }\n\n    .p-multiselect.p-variant-filled {\n        background: dt('multiselect.filled.background');\n    }\n\n    .p-multiselect.p-variant-filled:not(.p-disabled):hover {\n        background: dt('multiselect.filled.hover.background');\n    }\n\n    .p-multiselect.p-variant-filled.p-focus {\n        background: dt('multiselect.filled.focus.background');\n    }\n\n    .p-multiselect.p-invalid {\n        border-color: dt('multiselect.invalid.border.color');\n    }\n\n    .p-multiselect.p-disabled {\n        opacity: 1;\n        background: dt('multiselect.disabled.background');\n    }\n\n    .p-multiselect-dropdown {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        flex-shrink: 0;\n        background: transparent;\n        color: dt('multiselect.dropdown.color');\n        width: dt('multiselect.dropdown.width');\n        border-start-end-radius: dt('multiselect.border.radius');\n        border-end-end-radius: dt('multiselect.border.radius');\n    }\n\n    .p-multiselect-clear-icon {\n        align-self: center;\n        color: dt('multiselect.clear.icon.color');\n        inset-inline-end: dt('multiselect.dropdown.width');\n    }\n\n    .p-multiselect-label-container {\n        overflow: hidden;\n        flex: 1 1 auto;\n        cursor: pointer;\n    }\n\n    .p-multiselect-label {\n        white-space: nowrap;\n        cursor: pointer;\n        overflow: hidden;\n        text-overflow: ellipsis;\n        padding: dt('multiselect.padding.y') dt('multiselect.padding.x');\n        color: dt('multiselect.color');\n    }\n\n    .p-multiselect-display-chip .p-multiselect-label {\n        display: flex;\n        align-items: center;\n        gap: calc(dt('multiselect.padding.y') / 2);\n    }\n\n    .p-multiselect-label.p-placeholder {\n        color: dt('multiselect.placeholder.color');\n    }\n\n    .p-multiselect.p-invalid .p-multiselect-label.p-placeholder {\n        color: dt('multiselect.invalid.placeholder.color');\n    }\n\n    .p-multiselect.p-disabled .p-multiselect-label {\n        color: dt('multiselect.disabled.color');\n    }\n\n    .p-multiselect-label-empty {\n        overflow: hidden;\n        visibility: hidden;\n    }\n\n    .p-multiselect-overlay {\n        position: absolute;\n        top: 0;\n        left: 0;\n        background: dt('multiselect.overlay.background');\n        color: dt('multiselect.overlay.color');\n        border: 1px solid dt('multiselect.overlay.border.color');\n        border-radius: dt('multiselect.overlay.border.radius');\n        box-shadow: dt('multiselect.overlay.shadow');\n        min-width: 100%;\n    }\n\n    .p-multiselect-header {\n        display: flex;\n        align-items: center;\n        padding: dt('multiselect.list.header.padding');\n    }\n\n    .p-multiselect-header .p-checkbox {\n        margin-inline-end: dt('multiselect.option.gap');\n    }\n\n    .p-multiselect-filter-container {\n        flex: 1 1 auto;\n    }\n\n    .p-multiselect-filter {\n        width: 100%;\n    }\n\n    .p-multiselect-list-container {\n        overflow: auto;\n    }\n\n    .p-multiselect-list {\n        margin: 0;\n        padding: 0;\n        list-style-type: none;\n        padding: dt('multiselect.list.padding');\n        display: flex;\n        flex-direction: column;\n        gap: dt('multiselect.list.gap');\n    }\n\n    .p-multiselect-option {\n        cursor: pointer;\n        font-weight: normal;\n        white-space: nowrap;\n        position: relative;\n        overflow: hidden;\n        display: flex;\n        align-items: center;\n        gap: dt('multiselect.option.gap');\n        padding: dt('multiselect.option.padding');\n        border: 0 none;\n        color: dt('multiselect.option.color');\n        background: transparent;\n        transition:\n            background dt('multiselect.transition.duration'),\n            color dt('multiselect.transition.duration'),\n            border-color dt('multiselect.transition.duration'),\n            box-shadow dt('multiselect.transition.duration'),\n            outline-color dt('multiselect.transition.duration');\n        border-radius: dt('multiselect.option.border.radius');\n    }\n\n    .p-multiselect-option:not(.p-multiselect-option-selected):not(.p-disabled).p-focus {\n        background: dt('multiselect.option.focus.background');\n        color: dt('multiselect.option.focus.color');\n    }\n\n    .p-multiselect-option.p-multiselect-option-selected {\n        background: dt('multiselect.option.selected.background');\n        color: dt('multiselect.option.selected.color');\n    }\n\n    .p-multiselect-option.p-multiselect-option-selected.p-focus {\n        background: dt('multiselect.option.selected.focus.background');\n        color: dt('multiselect.option.selected.focus.color');\n    }\n\n    .p-multiselect-option-group {\n        cursor: auto;\n        margin: 0;\n        padding: dt('multiselect.option.group.padding');\n        background: dt('multiselect.option.group.background');\n        color: dt('multiselect.option.group.color');\n        font-weight: dt('multiselect.option.group.font.weight');\n    }\n\n    .p-multiselect-empty-message {\n        padding: dt('multiselect.empty.message.padding');\n    }\n\n    .p-multiselect-label .p-chip {\n        padding-block-start: calc(dt('multiselect.padding.y') / 2);\n        padding-block-end: calc(dt('multiselect.padding.y') / 2);\n        border-radius: dt('multiselect.chip.border.radius');\n    }\n\n    .p-multiselect-label:has(.p-chip) {\n        padding: calc(dt('multiselect.padding.y') / 2) calc(dt('multiselect.padding.x') / 2);\n    }\n\n    .p-multiselect-fluid {\n        display: flex;\n        width: 100%;\n    }\n\n    .p-multiselect-sm .p-multiselect-label {\n        font-size: dt('multiselect.sm.font.size');\n        padding-block: dt('multiselect.sm.padding.y');\n        padding-inline: dt('multiselect.sm.padding.x');\n    }\n\n    .p-multiselect-sm .p-multiselect-dropdown .p-icon {\n        font-size: dt('multiselect.sm.font.size');\n        width: dt('multiselect.sm.font.size');\n        height: dt('multiselect.sm.font.size');\n    }\n\n    .p-multiselect-lg .p-multiselect-label {\n        font-size: dt('multiselect.lg.font.size');\n        padding-block: dt('multiselect.lg.padding.y');\n        padding-inline: dt('multiselect.lg.padding.x');\n    }\n\n    .p-multiselect-lg .p-multiselect-dropdown .p-icon {\n        font-size: dt('multiselect.lg.font.size');\n        width: dt('multiselect.lg.font.size');\n        height: dt('multiselect.lg.font.size');\n    }\n\n    .p-floatlabel-in .p-multiselect-filter {\n        padding-block-start: dt('multiselect.padding.y');\n        padding-block-end: dt('multiselect.padding.y');\n    }\n";
 
 // node_modules/primeng/fesm2022/primeng-multiselect.mjs
-var _c02 = ["pMultiSelectItem", ""];
-var _c12 = (a0) => ({
+var _c0 = ["pMultiSelectItem", ""];
+var _c1 = (a0) => ({
   $implicit: a0
 });
 var _c2 = (a0, a1) => ({
@@ -782,7 +233,7 @@ var _c8 = ["footer"];
 var _c9 = ["emptyfilter"];
 var _c10 = ["empty"];
 var _c11 = ["selecteditems"];
-var _c122 = ["loadingicon"];
+var _c12 = ["loadingicon"];
 var _c13 = ["filtericon"];
 var _c14 = ["removetokenicon"];
 var _c15 = ["chipicon"];
@@ -1469,7 +920,7 @@ function MultiSelect_ng_template_14_ng_template_8_ng_template_2_ng_container_0_n
   if (rf & 2) {
     const option_r18 = ɵɵnextContext(2).$implicit;
     const ctx_r1 = ɵɵnextContext(3);
-    ɵɵproperty("ngTemplateOutlet", ctx_r1.groupTemplate)("ngTemplateOutletContext", ɵɵpureFunction1(2, _c12, option_r18.optionGroup));
+    ɵɵproperty("ngTemplateOutlet", ctx_r1.groupTemplate)("ngTemplateOutletContext", ɵɵpureFunction1(2, _c1, option_r18.optionGroup));
   }
 }
 function MultiSelect_ng_template_14_ng_template_8_ng_template_2_ng_container_0_Template(rf, ctx) {
@@ -1705,10 +1156,10 @@ function MultiSelect_ng_template_14_Template(rf, ctx) {
     ɵɵattribute("tabindex", 0)("data-p-hidden-accessible", true)("data-p-hidden-focusable", true);
   }
 }
-var style3 = (
+var style2 = (
   /*css*/
   `
-    ${style2}
+    ${style}
 
     /* For PrimeNG */
    .p-multiselect.ng-invalid.ng-dirty {
@@ -1728,7 +1179,7 @@ var inlineStyles = {
     position: instance.$appendTo() === "self" ? "relative" : void 0
   })
 };
-var classes2 = {
+var classes = {
   root: ({
     instance
   }) => ["p-multiselect p-component p-inputwrapper", {
@@ -1779,8 +1230,8 @@ var classes2 = {
 };
 var MultiSelectStyle = class _MultiSelectStyle extends BaseStyle {
   name = "multiselect";
-  style = style3;
-  classes = classes2;
+  style = style2;
+  classes = classes;
   inlineStyles = inlineStyles;
   static ɵfac = /* @__PURE__ */ (() => {
     let ɵMultiSelectStyle_BaseFactory;
@@ -1919,7 +1370,7 @@ var MultiSelectItem = class _MultiSelectItem extends BaseComponent {
       onMouseEnter: "onMouseEnter"
     },
     features: [ɵɵProvidersFeature([MultiSelectStyle]), ɵɵInheritDefinitionFeature],
-    attrs: _c02,
+    attrs: _c0,
     decls: 4,
     vars: 12,
     consts: [["icon", ""], [3, "ngModel", "binary", "tabindex", "variant", "ariaLabel", "pt"], [4, "ngIf"], [4, "ngTemplateOutlet", "ngTemplateOutletContext"]],
@@ -1937,7 +1388,7 @@ var MultiSelectItem = class _MultiSelectItem extends BaseComponent {
         ɵɵadvance();
         ɵɵproperty("ngIf", !ctx.template);
         ɵɵadvance();
-        ɵɵproperty("ngTemplateOutlet", ctx.template)("ngTemplateOutletContext", ɵɵpureFunction1(10, _c12, ctx.option));
+        ɵɵproperty("ngTemplateOutlet", ctx.template)("ngTemplateOutletContext", ɵɵpureFunction1(10, _c1, ctx.option));
       }
     },
     dependencies: [CommonModule, NgIf, NgTemplateOutlet, Checkbox, FormsModule, NgControlStatus, NgModel, SharedModule],
@@ -3486,7 +2937,7 @@ var MultiSelect = class _MultiSelect extends BaseEditableHolder {
         ɵɵcontentQuery(dirIndex, _c9, 4);
         ɵɵcontentQuery(dirIndex, _c10, 4);
         ɵɵcontentQuery(dirIndex, _c11, 4);
-        ɵɵcontentQuery(dirIndex, _c122, 4);
+        ɵɵcontentQuery(dirIndex, _c12, 4);
         ɵɵcontentQuery(dirIndex, _c13, 4);
         ɵɵcontentQuery(dirIndex, _c14, 4);
         ɵɵcontentQuery(dirIndex, _c15, 4);

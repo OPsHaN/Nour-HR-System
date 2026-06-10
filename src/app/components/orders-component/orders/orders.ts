@@ -16,6 +16,10 @@ import { CreateMissedHours } from "../create-missed-hours/create-missed-hours";
 import { CreateResignation } from "../create-resignation/create-resignation";
 import { CreateAppointment } from "../create-appointment/create-appointment";
 import { Dialog } from "primeng/dialog";
+import { forkJoin } from "rxjs";
+import { AutoCompleteModule } from "primeng/autocomplete";
+import { Observable } from "rxjs";
+import { TooltipModule } from "primeng/tooltip";
 
 @Component({
   selector: "app-orders",
@@ -39,6 +43,8 @@ import { Dialog } from "primeng/dialog";
     CreateResignation,
     CreateAppointment,
     Dialog,
+    AutoCompleteModule,
+    TooltipModule,
   ],
   templateUrl: "./orders.html",
   styleUrl: "./orders.css",
@@ -93,8 +99,7 @@ export class Orders implements OnInit {
   selectedRequestType = "";
   rejectionReason = "";
 
-
-    unseenCounts = {
+  unseenCounts = {
     overtime: 0,
     borrows: 0,
     holidays: 0,
@@ -103,6 +108,17 @@ export class Orders implements OnInit {
     forgotHours: 0,
   };
 
+  selectedLeaveId: number | null = null;
+  showCoverDialog = false;
+  coverEmployee: any = null;
+  filteredEmployees: any[] = [];
+
+  employees: any[] = [];
+  totalRecords = 0;
+  page = 1;
+  pageSize = 10;
+  loading = false;
+
   constructor(
     private api: Apiservice,
     private cdr: ChangeDetectorRef,
@@ -110,8 +126,14 @@ export class Orders implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadMissedHours();
-    this.loadUnseenCounts();
+    if (this.auth.isHR) {
+      this.loadMissedHours();
+      this.loadUnseenCounts();
+    }
+
+    if (this.auth.isAreaManager) {
+      this.activeTabIndex = 1;
+    }
   }
 
   get isEmployee(): boolean {
@@ -127,6 +149,15 @@ export class Orders implements OnInit {
 
   get employeeId(): string {
     return localStorage.getItem("employeeId") || "";
+  }
+
+  get isAreaManager(): boolean {
+    return localStorage.getItem("role") === "AreaManager";
+  }
+
+  get branchIds(): string[] {
+    const raw = localStorage.getItem("branchId"); // نفس نمط "role"
+    return raw ? raw.split(",").map((id: string) => id.trim()) : [];
   }
 
   onTabChange(index: number) {
@@ -301,7 +332,7 @@ export class Orders implements OnInit {
       rejectionReason: null,
     };
 
-    let call;
+    let call!: Observable<any>;
 
     if (type === "missedHours") {
       call = this.api.approveForgetedHoursRequest(id, payload);
@@ -310,7 +341,13 @@ export class Orders implements OnInit {
     } else if (type === "loan") {
       call = this.api.approveOrRejectBorrowRequest(id, payload);
     } else if (type === "overtime") {
-      call = this.api.approveByHrOvertimeRequest(id, payload);
+      if (this.auth.isHR) {
+        call = this.api.approveByHrOvertimeRequest(id, payload);
+      } else if (this.auth.isAreaManager) {
+        call = this.api.approveByAreaManagerOvertimeRequest(id, payload);
+      } else if (this.auth.isControl) {
+        call = this.api.approveByControlOvertimeRequest(id, payload);
+      }
     } else if (type === "resignation") {
       call = this.api.approveResignationRequest(id, payload);
     } else {
@@ -334,14 +371,20 @@ export class Orders implements OnInit {
       rejectionReason,
     };
 
-    let call;
+    let call!: Observable<any>;
 
     if (type === "missedHours") {
       call = this.api.rejectForgetedHoursRequest(id, payload);
     } else if (type === "loan") {
       call = this.api.approveOrRejectBorrowRequest(id, payload);
     } else if (type === "overtime") {
-      call = this.api.approveByHrOvertimeRequest(id, payload);
+      if (this.auth.isHR) {
+        call = this.api.approveByHrOvertimeRequest(id, payload);
+      } else if (this.auth.isAreaManager) {
+        call = this.api.approveByAreaManagerOvertimeRequest(id, payload);
+      } else if (this.auth.isControl) {
+        call = this.api.approveByControlOvertimeRequest(id, payload);
+      }
     } else if (type === "resignation") {
       call = this.api.approveResignationRequest(id, payload);
     } else {
@@ -352,7 +395,6 @@ export class Orders implements OnInit {
       next: () => {
         this.api.showSuccess("تم الرفض");
         this.markAsSeen(type, id);
-
         setTimeout(() => {
           this.reloadByType(type);
         }, 100);
@@ -361,21 +403,69 @@ export class Orders implements OnInit {
     });
   }
 
+  loadEmployees() {
+    this.loading = true;
+
+    if (this.isAreaManager) {
+      const branchIds = this.branchIds;
+
+      if (!branchIds.length) {
+        this.loading = false;
+        return;
+      }
+
+      const requests = branchIds.map((branchId) =>
+        this.api.getAllEmployeesByBranch(this.page, this.pageSize, branchId),
+      );
+
+      forkJoin(requests).subscribe({
+        next: (results: any[]) => {
+          this.employees = results.flatMap((res) => res.data);
+          this.totalRecords = results.reduce(
+            (sum, res) => sum + res.totalCount,
+            0,
+          );
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
+    }
+  }
   // الإجازات — قبول مدير المنطقة
-  approveLeaveByAreaManager(id: string) {
+
+  approveLeaveByAreaManager(id: number) {
+    this.selectedLeaveId = id;
+    this.coverEmployee = null;
+    this.showCoverDialog = true;
+    this.loadEmployees();
+  }
+
+  confirmAreaManagerApproval() {
+    if (this.selectedLeaveId == null) {
+      return;
+    }
+
     const payload = {
       isApproved: true,
-      cover: "علي محمد", // أو القيمة اللى جاية من المستخدم
+      cover: this.coverEmployee,
       rejectionReason: null,
     };
 
-    this.api.approveHolidayRequestByAreaManager(id, payload).subscribe({
-      next: () => {
-        this.api.showSuccess("تم القبول بواسطة مدير المنطقة");
-        this.loadLeave();
-      },
-      error: () => this.api.showError("حدث خطأ"),
-    });
+    this.api
+      .approveHolidayRequestByAreaManager(
+        this.selectedLeaveId.toString(),
+        payload,
+      )
+      .subscribe({
+        next: () => {
+          this.showCoverDialog = false;
+          this.api.showSuccess("تمت الموافقة بنجاح");
+          this.loadLeave();
+        },
+      });
   }
 
   // الأوفر تايم — قبول مدير المنطقة
@@ -469,7 +559,6 @@ export class Orders implements OnInit {
     this.rejectionReason = "";
     this.showRejectDialog = true;
   }
-
   // ---- Helpers ----
 
   getStatusLabel(status: string): string {
@@ -477,8 +566,10 @@ export class Orders implements OnInit {
       Pending: "قيد الانتظار",
       Approved: "مقبول",
       Rejected: "مرفوض",
-      ControlApproved: "مقبول بواسطة الكنترول",
-      ApprovedByAreaManager: "مقبول بواسطة مدير المنطقة",
+      ControlApproved: "مقبول من الكنترول",
+      AreaManagerApproved: "مقبول من مدير المنطقة",
+      ControlRejected: "مرفوض من الكنترول",
+      AreaManagerRejected: "مرفوض من مدير المنطقة",
     };
     return map[status] ?? status;
   }
@@ -489,8 +580,11 @@ export class Orders implements OnInit {
       "bg-success bg-opacity-25 text-success":
         status === "Approved" ||
         status === "ControlApproved" ||
-        status === "ApprovedByAreaManager",
-      "bg-danger bg-opacity-25 text-danger": status === "Rejected",
+        status === "AreaManagerApproved",
+      "bg-danger bg-opacity-25 text-danger":
+        status === "Rejected" ||
+        status === "ControlRejected" ||
+        status === "AreaManagerRejected",
     };
   }
 
@@ -529,48 +623,46 @@ export class Orders implements OnInit {
     call.subscribe();
   }
 
-
   loadUnseenCounts() {
-  this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
-    this.unseenCounts.overtime = res.count ?? 0;
-    this.updateOrdersBadge();
-  });
+    this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.overtime = res.count ?? 0;
+      this.updateOrdersBadge();
+    });
 
-  this.api.getUnseenBorrowsCount().subscribe((res: any) => {
-    this.unseenCounts.borrows = res.count ?? 0;
-    this.updateOrdersBadge();
-  });
+    this.api.getUnseenBorrowsCount().subscribe((res: any) => {
+      this.unseenCounts.borrows = res.count ?? 0;
+      this.updateOrdersBadge();
+    });
 
-  this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
-    this.unseenCounts.holidays = res.count ?? 0;
-    this.updateOrdersBadge();
-  });
+    this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.holidays = res.count ?? 0;
+      this.updateOrdersBadge();
+    });
 
-  this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
-    this.unseenCounts.resignations = res.count ?? 0;
-    this.updateOrdersBadge();
-  });
+    this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.resignations = res.count ?? 0;
+      this.updateOrdersBadge();
+    });
 
-  this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
-    this.unseenCounts.appointments = res.count ?? 0;
-    this.updateOrdersBadge();
-  });
+    this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
+      this.unseenCounts.appointments = res.count ?? 0;
+      this.updateOrdersBadge();
+    });
 
-  this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
-    this.unseenCounts.forgotHours = res.count ?? 0;
-    this.updateOrdersBadge();
-  });
-}
+    this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
+      this.unseenCounts.forgotHours = res.count ?? 0;
+      this.updateOrdersBadge();
+    });
+  }
 
-private updateOrdersBadge() {
-  const total =
-    this.unseenCounts.overtime +
-    this.unseenCounts.borrows +
-    this.unseenCounts.holidays +
-    this.unseenCounts.resignations +
-    this.unseenCounts.appointments +
-    this.unseenCounts.forgotHours;
-  this.cdr.detectChanges();
-}
-
+  private updateOrdersBadge() {
+    const total =
+      this.unseenCounts.overtime +
+      this.unseenCounts.borrows +
+      this.unseenCounts.holidays +
+      this.unseenCounts.resignations +
+      this.unseenCounts.appointments +
+      this.unseenCounts.forgotHours;
+    this.cdr.detectChanges();
+  }
 }

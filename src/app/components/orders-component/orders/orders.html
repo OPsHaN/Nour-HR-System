@@ -4,11 +4,25 @@
     (valueChange)="onTabChange(+($event ?? 0))"
   >
     <p-tablist style="gap: 3px">
-      <p-tab [value]="0" *ngIf="this.auth.isHR || this.auth.isEmployee">الساعات المنسية</p-tab>
-      <p-tab [value]="1" *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee">الإجازات</p-tab>
-      <p-tab [value]="2" *ngIf="this.auth.isHR || this.auth.isEmployee" >السلف</p-tab>
-      <p-tab [value]="3" *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee">الأوفر تايم</p-tab>
-      <p-tab [value]="4" *ngIf="this.auth.isHR || this.auth.isEmployee">الاستقالات</p-tab>
+      <p-tab [value]="0" *ngIf="this.auth.isHR || this.auth.isEmployee"
+        >الساعات المنسية</p-tab
+      >
+      <p-tab
+        [value]="1"
+        *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee"
+        >الإجازات</p-tab
+      >
+      <p-tab [value]="2" *ngIf="this.auth.isHR || this.auth.isEmployee"
+        >السلف</p-tab
+      >
+      <p-tab
+        [value]="3"
+        *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee || this.auth.isControl"
+        >الأوفر تايم</p-tab
+      >
+      <p-tab [value]="4" *ngIf="this.auth.isHR || this.auth.isEmployee"
+        >الاستقالات</p-tab
+      >
       <p-tab [value]="5" *ngIf="this.auth.isHR || this.auth.isAreaManager "
         >التعيينات</p-tab
       >
@@ -63,7 +77,7 @@
               <th>السبب</th>
               <th>ملاحظات</th>
               <th>الحالة</th>
-              <th *ngIf="this.auth.isHR">الإجراءات</th>
+              <th *ngIf="this.auth.isHR ">الإجراءات</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
@@ -162,9 +176,12 @@
               <th>إلى تاريخ</th>
               <th>عدد الأيام</th>
               <th>تاريخ الطلب</th>
+              <th>الموظف البديل</th>
               <th>موافقة المدير</th>
               <th>الحالة</th>
-              <th *ngIf="this.auth.isHR">الإجراءات</th>
+              <th *ngIf=" this.auth.isHR || this.auth.isAreaManager ">
+                الإجراءات
+              </th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
@@ -175,6 +192,7 @@
               <td>{{ req.toDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.totalDays }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <td>{{ req.areaManagerCover }}</td>
               <td>
                 <span
                   *ngIf="req.areaManagerApproval !== null"
@@ -190,8 +208,9 @@
                   {{ getStatusLabel(req.status) }}
                 </span>
               </td>
-              <td *ngIf="this.auth.isHR">
+              <td *ngIf=" this.auth.isHR || this.auth.isAreaManager ">
                 <button
+                  *ngIf="this.auth.isHR"
                   pButton
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
@@ -395,7 +414,11 @@
               <th>مدير المنطقة</th>
               <th>الكنترول</th>
               <th>الحالة</th>
-              <th *ngIf="this.auth.isHR">الإجراءات</th>
+              <th
+                *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isControl"
+              >
+                الإجراءات
+              </th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
@@ -406,37 +429,60 @@
               <td>{{ req.notes ?? '—' }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <!-- HR Approval -->
+              <!-- HR Approval column -->
               <td>
                 <span
                   *ngIf="req.hrApproval !== null"
                   class="badge"
-                  [ngClass]="req.hrApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [ngClass]="req.hrApproval === 'Approved' ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [pTooltip]="req.hrApproval === 'Rejected' ? req.hrRejectionReason : ''"
+                  tooltipPosition="top"
                 >
-                  {{ req.hrApproval ? 'موافق' : 'مرفوض' }}
+                  {{ req.hrApproval === 'Approved' ? 'موافق' : 'مرفوض' }}
                 </span>
-                <span *ngIf="req.hrApproval === null">—</span>
+                <span
+                  *ngIf="req.hrApproval === null"
+                  class="badge bg-warning bg-opacity-25 text-warning"
+                >
+                  قيد الانتظار
+                </span>
               </td>
               <!-- Area Manager Approval -->
               <td>
                 <span
                   *ngIf="req.areaManagerApproval !== null"
                   class="badge"
-                  [ngClass]="req.areaManagerApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [ngClass]="req.areaManagerApproval === 'Approved' ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                    [pTooltip]="req.areaManagerApproval === 'Rejected' ? req.areaManagerRejectionReason : ''"
+                  tooltipPosition="top"
                 >
-                  {{ req.areaManagerApproval ? 'موافق' : 'مرفوض' }}
+                  {{ req.areaManagerApproval === 'Approved' ? 'موافق' : 'مرفوض'
+                  }}
                 </span>
-                <span *ngIf="req.areaManagerApproval === null">—</span>
+                <span
+                  *ngIf="req.areaManagerApproval === null"
+                  class="badge bg-warning bg-opacity-25 text-warning"
+                >
+                  قيد الانتظار
+                </span>
               </td>
               <!-- Control Approval -->
               <td>
                 <span
                   *ngIf="req.controlApproval !== null"
                   class="badge"
-                  [ngClass]="req.controlApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [ngClass]="req.controlApproval === 'Approved' ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [pTooltip]="req.controlApproval === 'Rejected' ? req.controlRejectionReason : ''"
+                  tooltipPosition="top"
                 >
-                  {{ req.controlApproval ? 'موافق' : 'مرفوض' }}
+                  {{ req.controlApproval === 'Approved' ? 'موافق' : 'مرفوض' }}
                 </span>
-                <span *ngIf="req.controlApproval === null">—</span>
+                <span
+                  *ngIf="req.controlApproval === null"
+                  class="badge bg-warning bg-opacity-25 text-warning"
+                >
+                  قيد الانتظار
+                </span>
               </td>
               <td>
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
@@ -452,37 +498,39 @@
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
                   (click)="approveRequest('overtime', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.hrApproval !== null"
                   title="قبول HR"
                 >
                   <i
                     class="pi pi-check d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
+
                 <button
                   *ngIf="this.auth.isAreaManager"
                   pButton
                   type="button"
                   class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
                   (click)="approveOvertimeByAreaManager(req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.areaManagerApproval !== null"
                   title="قبول مدير المنطقة"
                 >
                   <i
                     class="pi pi-verified d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
+
                 <button
                   *ngIf="this.auth.isControl"
                   pButton
                   type="button"
                   class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
                   (click)="approveOvertimeByControl(req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.controlApproval !== null"
                   title="قبول الكنترول"
                 >
                   <i
-                    class="pi pi-shield d-flex align-items-center justify-content-center"
+                    class="pi pi-check d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
                 <button
@@ -491,7 +539,9 @@
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
                   (click)="openRejectDialog('overtime', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="(this.auth.isHR && req.hrApproval !== null) || 
+              (this.auth.isAreaManager && req.areaManagerApproval !== null) || 
+              (this.auth.isControl && req.controlApproval !== null)"
                   title="رفض"
                 >
                   <i
@@ -728,6 +778,35 @@
       (click)="confirmReject()"
     >
       إرسال
+    </button>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="اختيار الموظف البديل"
+  [(visible)]="showCoverDialog"
+  [modal]="true"
+  class="data-employee-dialog"
+  [style]="{ width: '25rem' }"
+>
+  <div class="field">
+    <label>الموظف البديل</label>
+
+    <select class="custom-input toolbar-select" [(ngModel)]="coverEmployee">
+      <option *ngFor="let employee of employees" [value]="employee.name">
+        {{ employee.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="d-flex justify-content-center gap-2 my-2">
+    <button
+      type="button"
+      class="btn btn-success"
+      [disabled]="!coverEmployee"
+      (click)="confirmAreaManagerApproval()"
+    >
+      موافقة
     </button>
   </div>
 </p-dialog>

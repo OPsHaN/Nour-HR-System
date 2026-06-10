@@ -1,6 +1,5 @@
 <div class="panel">
   <div class="form">
-
     <div class="field">
       <label>تاريخ الشيفت <span class="text-danger">*</span></label>
       <p-datepicker
@@ -14,12 +13,31 @@
 
     <div class="field">
       <label>السبب <span class="text-danger">*</span></label>
-      <input class="custom-input" type="text" [(ngModel)]="form.reason" placeholder="مثال: انقطاع الكهرباء" />
+      <select class="custom-input toolbar-select" [(ngModel)]="form.reason">
+        <option
+          value="سهو بصمة">سهو بصمة
+        </option>
+        <option
+          value="قطع اليتار الكهربائى"> قطع اليتار الكهربائى
+        </option>
+        <option
+          value="انقطاع خدمة الانترنت"> انقطاع خدمة الانترنت
+        </option>
+        <option
+          value="اخرى">
+          اخرى
+        </option>
+      </select>
     </div>
 
     <div class="field">
       <label>ملاحظات</label>
-      <textarea class="custom-input" [(ngModel)]="form.notes" rows="3" placeholder="أي تفاصيل إضافية..."></textarea>
+      <textarea
+        class="custom-input"
+        [(ngModel)]="form.notes"
+        rows="3"
+        placeholder="أي تفاصيل إضافية..."
+      ></textarea>
     </div>
 
     <button
@@ -30,6 +48,5 @@
     >
       {{ loading ? 'جارى الإرسال...' : 'إرسال الطلب' }}
     </button>
-
   </div>
 </div>

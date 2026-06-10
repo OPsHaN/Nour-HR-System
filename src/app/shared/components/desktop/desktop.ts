@@ -48,6 +48,11 @@ export class Desktop implements OnInit, OnDestroy {
   formattedTime = "00:00:00";
   private shiftStartTime: Date | null = null;
   private timerInterval: any;
+  managerBranches: string[] = [];
+    page = 1;
+  pageSize = 999;
+  loading = false;
+  Branches: any[] = [];
 
   unseenCounts = {
     overtime: 0,
@@ -67,6 +72,10 @@ export class Desktop implements OnInit, OnDestroy {
     return localStorage.getItem("role") === "HR";
   }
 
+    get isAreaManager(): boolean {
+    return localStorage.getItem("role") === "AreaManager";
+  }
+
   private get storageKey(): string {
     const employeeId = localStorage.getItem("employeeId") ?? "default";
     return `activeShift_${employeeId}`;
@@ -84,8 +93,7 @@ export class Desktop implements OnInit, OnDestroy {
   constructor(
     private api: Apiservice,
     private ngZone: NgZone,
-        private confirmationService: ConfirmationService,
-
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit(): void {
@@ -95,6 +103,10 @@ export class Desktop implements OnInit, OnDestroy {
 
     if (this.isHR) {
       this.loadUnseenCounts();
+    }
+
+    if(this.isAreaManager){
+      this.loadBranches();
     }
 
     window.addEventListener("open-news-window", () => {
@@ -112,6 +124,29 @@ export class Desktop implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
+  }
+
+  loadBranches() {
+    this.api.getAllBranches(this.page, this.pageSize).subscribe({
+      next: (res: any) => {
+        this.Branches = res.data;
+
+        const branchIds = (localStorage.getItem("branchId") || "")
+          .split(",")
+          .map((id) => +id.trim());
+
+        this.managerBranches = this.Branches.filter((b: any) =>
+          branchIds.includes(b.id),
+        ).map((b: any) => b.name);
+
+       this.cdr.detectChanges();
+
+        console.log(this.managerBranches);
+      },
+      error: () => {
+        this.loading = false;
+      },
+    });
   }
 
   // ── Shift ──────────────────────────────────────────────────────────────────
@@ -143,44 +178,43 @@ export class Desktop implements OnInit, OnDestroy {
   }
 
   onEndShift(): void {
-  this.confirmationService.confirm({
-    message: "هل تريد إنهاء الشيفت؟",
-    header: "تأكيد إنهاء الشيفت",
-    icon: "pi pi-exclamation-triangle",
-    acceptLabel: "نعم",
-    rejectLabel: "لا",
+    this.confirmationService.confirm({
+      message: "هل تريد إنهاء الشيفت؟",
+      header: "تأكيد إنهاء الشيفت",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "نعم",
+      rejectLabel: "لا",
 
-    accept: () => {
-      this.loadingEnd = true;
-      this.api
-        .endShift()
-        .pipe(
-          finalize(() => {
-            this.loadingEnd = false;
-            this.cdr.detectChanges();
-          }),
-        )
-        .subscribe({
-          next: () => {
-            this.shiftStarted = false;
-            this.shiftStartTime = null;
-            this.formattedTime = "00:00:00";
+      accept: () => {
+        this.loadingEnd = true;
+        this.api
+          .endShift()
+          .pipe(
+            finalize(() => {
+              this.loadingEnd = false;
+              this.cdr.detectChanges();
+            }),
+          )
+          .subscribe({
+            next: () => {
+              this.shiftStarted = false;
+              this.shiftStartTime = null;
+              this.formattedTime = "00:00:00";
 
-            this.clearShiftState();
-            clearInterval(this.timerInterval);
+              this.clearShiftState();
+              clearInterval(this.timerInterval);
 
-            this.api.showSuccess("تم إنهاء شيفتك بنجاح");
-          },
-          error: () => {
-            this.api.showError(
-              "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
-            );
-          },
-        });
-
-    },
-  });
-}
+              this.api.showSuccess("تم إنهاء شيفتك بنجاح");
+            },
+            error: () => {
+              this.api.showError(
+                "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
+              );
+            },
+          });
+      },
+    });
+  }
 
   private startTimer(): void {
     clearInterval(this.timerInterval);

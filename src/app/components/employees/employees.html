@@ -3,6 +3,7 @@
 >
   <div class="d-flex justify-content-start align-items-center gap-2">
     <button
+      *ngIf=" this.auth.isHR"
       pButton
       type="button"
       class="btn btn-sm btn-success me-1 my-1 d-flex align-items-center justify-content-center gap-1"
@@ -25,7 +26,7 @@
       type="button"
       class="btn btn-sm btn-success my-1 d-flex align-items-center justify-content-center gap-1"
       (click)="toggleGroupMode()"
-      *ngIf="!showGroupMode && !showCreateEmployee"
+      *ngIf="!showGroupMode && !showCreateEmployee  && this.auth.isHR"
     >
       <i class="pi pi-users"></i>
       إضافة مجموعة
@@ -58,11 +59,10 @@
     <button
       pButton
       type="button"
-      class="btn btn-sm btn-success my-1 d-flex align-items-center justify-content-center gap-1"
+      class="btn btn-sm btn-success me-1 my-1 d-flex align-items-center justify-content-center gap-1"
       (click)="exportAllToExcel()"
       [disabled]="loading"
-            *ngIf="!showCreateEmployee"
-
+      *ngIf="!showCreateEmployee"
     >
       <i class="pi pi-file-excel me-2"></i>
       {{ loading ? 'جاري التحميل...' : 'تصدير Excel' }}
@@ -245,10 +245,21 @@
           type="button"
           class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
           icon="pi pi-pencil"
-          (click)="openMenu($event, emp)"
+         (click)="openEvaluation(emp)"
         >
           <i
             class="pi pi-plus d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
+                <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          icon="pi pi-id-card"
+          (click)="openEmployeeDetails(emp)"
+        >
+          <i
+            class="pi pi-id-card d-flex align-items-center justify-content-center"
           ></i>
         </button>
       </td>

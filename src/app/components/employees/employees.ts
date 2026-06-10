@@ -215,6 +215,16 @@ export class Employees {
     },
   ];
 
+  openEvaluation(emp: any) {
+  this.selectedEmployee = emp;
+
+  this.openActionDialog(
+    "evaluation",
+    "إضافة تقييم",
+    emp
+  );
+}
+
   get isAreaManager(): boolean {
     return localStorage.getItem("role") === "AreaManager";
   }

@@ -37,7 +37,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "person",
     bg: "#10b981",
     roles: ["Employee"] as UserRole[],
-    size: { width: 700, height: 500 },
+    size: { width: 1024, height: 500 },
   },
   calendar: {
     title: "النتيجة",
@@ -99,7 +99,7 @@ export const SHORTCUTS_CONFIG = {
     title: "العهدة",
     icon: "work",
     bg: "#fa541c",
-    roles: ["HR", "Employee", "Control", "Accountant"] as UserRole[],
+    roles: ["HR", "Control", "Accountant"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   orders: {
@@ -151,7 +151,7 @@ export const SHORTCUTS_CONFIG = {
       "Control",
     ] as UserRole[],
     startup: true,
-    size: { width: 1100, height: 700 },
+    size: { width: 650, height: 230 },
   },
   newsdetails: {
     title: "تفاصيل الخبر",

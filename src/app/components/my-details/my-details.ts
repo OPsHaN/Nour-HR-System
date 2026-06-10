@@ -39,6 +39,7 @@ export class MyDetails {
   selectedMonth: number = new Date().getMonth() + 1;
   selectedYear: number = new Date().getFullYear();
   showPayrollDetails = false;
+  payrollNoData = false;
 
   constructor(
     private api: Apiservice,
@@ -50,12 +51,13 @@ export class MyDetails {
     this.loadData();
   }
 
- get employeeId(): string {
-  return localStorage.getItem("employeeId") || "";
-}
+  get employeeId(): string {
+    return localStorage.getItem("employeeId") || "";
+  }
 
   loadData(): void {
     this.loading = true;
+    this.payrollNoData = false;
 
     const payrollRequest =
       this.payrollViewType === "current"
@@ -70,11 +72,15 @@ export class MyDetails {
       employee: this.api.getEmployeeById(this.employeeId),
       payroll: payrollRequest,
       attendance: this.api.getScheduleByEmployeeId(this.employeeId),
+      history: this.api.getHistoryByEmployeeId(this.employeeId),
+      resposiblity: this.api.getAllResponsibilities(this.employeeId),
     }).subscribe({
       next: (res: any) => {
         this.employeeDetails = {
           ...res.employee,
           ...res.payroll,
+          ...res.history,
+          resposiblity: res.resposiblity || [],
           attendance: (res.attendance || []).map((item: any) => ({
             ...item,
             isEditing: false,
@@ -82,11 +88,15 @@ export class MyDetails {
         };
 
         this.showPayrollDetails = true;
+        this.payrollNoData = false;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
+        this.showPayrollDetails = false;
+        this.payrollNoData = true;
         this.loading = false;
-        this.api.showError("لايوجد بيانات لهذا الشهر");
+        this.cdr.detectChanges();
       },
     });
   }
@@ -95,7 +105,7 @@ export class MyDetails {
     this.loadData();
   }
 
-    formatTime(time: string): string {
+  formatTime(time: string): string {
     if (!time) return "-";
     const [hours, minutes] = time.split(":");
     let hour = +hours;

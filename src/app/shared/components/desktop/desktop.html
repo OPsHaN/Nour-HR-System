@@ -72,6 +72,14 @@
               <p class="mb-0">الشكاوى</p>
             </div>
           </div>
+
+          <div *ngIf="isAreaManager" class="manager-branches">
+            <div class="d-flex flex-wrap gap-2">
+              <span *ngFor="let branch of managerBranches" class="mini-stat">
+                <p class="mb-0">{{ branch }}</p>
+              </span>
+            </div>
+          </div>
         </fieldset>
       </div>
 

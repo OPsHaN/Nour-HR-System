@@ -170,3 +170,26 @@
   }
 
 }
+
+.no-payroll-data {
+  text-align: center;
+  padding: 40px 20px;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.no-payroll-data i {
+  font-size: 3rem;
+  color: #f59e0b;
+  margin-bottom: 10px;
+}
+
+.no-payroll-data h5 {
+  margin: 10px 0;
+  color: #374151;
+}
+
+.no-payroll-data p {
+  color: #6b7280;
+}
