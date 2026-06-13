@@ -12,6 +12,12 @@ import { loadingInterceptor } from "./app/shared/interceptor/loading.interceptor
 import { providePrimeNG } from "primeng/config";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import Lara from '@primeng/themes/lara';
+import localeAr from '@angular/common/locales/ar';
+import localeArExtra from '@angular/common/locales/extra/ar';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeAr, 'ar', localeArExtra);
+
 
 bootstrapApplication(AppComponent, {
   providers: [

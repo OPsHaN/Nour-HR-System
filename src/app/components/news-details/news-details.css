@@ -34,9 +34,9 @@
 }
 
 .news-title {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
     font-size: 2rem;
-    line-height: 1.7;
+    /* line-height: 1.7; */
     color: #1f2937;
     font-weight: 700;
     color: var(--text);
@@ -74,7 +74,7 @@
     border: 1px solid var(--text);
     box-shadow: 0 0px 10px var(--text);
     font-size: 1.15rem;
-    line-height: 2.3;
+    line-height: 2;
     color: var(--text);
 
     white-space: pre-line;

@@ -44,10 +44,105 @@
 @media screen and (max-width: 768px) {
     .input-wrapper {
         width: 100%;
-        
+
     }
 
     .custom-input {
         width: 100%;
     }
+}
+
+::ng-deep .branches-dialog .p-dialog-header {
+    flex-direction: unset !important;
+    padding: 0.2rem 1rem !important;
+}
+
+::ng-deep .branches-dialog .p-dialog {
+    height: 100vh !important;
+}
+
+::ng-deep.branches-dialog .p-dialog-header {
+    flex-direction: unset !important;
+    padding: 0.2rem 1rem !important;
+}
+
+::ng-deep.branches-dialog .p-dialog-content {
+    padding: 0.5rem 0.5rem !important;
+    /* border-radius: 0 0 0.0rem 0.0rem !important; */
+    height: 100%;
+    overflow: visible !important;
+}
+
+
+
+:host ::ng-deep .p-multiselect {
+    width: 100%;
+    border: 1px solid var(--surface-border);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    font-size: 18px;
+    transition: 0.2s ease;
+}
+
+:host ::ng-deep .p-multiselect-label {
+    color: var(--text);
+    font-size: 18px;
+    padding: 0;
+}
+
+:host ::ng-deep .p-multiselect-trigger {
+    color: var(--text);
+}
+
+:host ::ng-deep .p-placeholder {
+    color: var(--text);
+}
+
+:host ::ng-deep .p-multiselect-chip {
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+:host ::ng-deep .p-multiselect .p-multiselect-overlay {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--surface-border);
+    border-radius: 25px;
+
+}
+
+
+:host ::ng-deep.p-multiselect-option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.custom {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--surface-border);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    font-size: 20px;
+    transition: 0.2s ease;
+}
+
+::ng-deep .p-multiselect-panel {
+    z-index: 10000 !important;
+}
+
+::ng-deep .p-chip {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    font-size: 20px;
+    padding: 10px;
+}
+
+::ng-deep.p-chip-remove-icon {
+    width: 20px !important;
+
 }

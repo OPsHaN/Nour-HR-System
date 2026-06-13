@@ -1,6 +1,6 @@
 import {
   BaseEditableHolder
-} from "./chunk-MOA4R72C.js";
+} from "./chunk-B2U5V2S6.js";
 import {
   CheckIcon,
   MinusIcon
@@ -9,16 +9,16 @@ import {
   PARENT_INSTANCE
 } from "./chunk-MDU26JFA.js";
 import {
+  Bind,
+  BindModule
+} from "./chunk-PTLVBNX5.js";
+import {
   BaseStyle
 } from "./chunk-YN36FFF2.js";
 import {
   PrimeTemplate,
   SharedModule
 } from "./chunk-5DMWIRBC.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-PTLVBNX5.js";
 import {
   k2 as k,
   q
@@ -743,4 +743,4 @@ export {
   Checkbox,
   CheckboxModule
 };
-//# sourceMappingURL=chunk-VLWPNGPY.js.map
+//# sourceMappingURL=chunk-SUSIUQVU.js.map

@@ -3,15 +3,15 @@ import {
   PARENT_INSTANCE
 } from "./chunk-MDU26JFA.js";
 import {
+  Bind,
+  BindModule
+} from "./chunk-PTLVBNX5.js";
+import {
   BaseStyle
 } from "./chunk-YN36FFF2.js";
 import {
   SharedModule
 } from "./chunk-5DMWIRBC.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-PTLVBNX5.js";
 import {
   P,
   R,
@@ -603,7 +603,10 @@ var BadgeModule = class _BadgeModule {
 })();
 
 export {
+  BadgeStyle,
+  BadgeClasses,
+  BadgeDirective,
   Badge,
   BadgeModule
 };
-//# sourceMappingURL=chunk-2OEPUYHF.js.map
+//# sourceMappingURL=chunk-BE2UHOGH.js.map

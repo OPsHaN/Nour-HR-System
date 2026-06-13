@@ -1,6 +1,4 @@
-import { getLocaleCurrencyCode } from "@angular/common";
-import { Employees } from "./../components/employees/employees";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MessageService } from "primeng/api";
 
@@ -9,6 +7,9 @@ import { MessageService } from "primeng/api";
 })
 export class Apiservice {
   private baseUrl = "https://hrnourtest.runasp.net/api/";
+  private readonly noSpinnerHeaders = new HttpHeaders({
+    "ignore-spinner": "true",
+  });
 
   constructor(
     private http: HttpClient,
@@ -374,7 +375,9 @@ export class Apiservice {
   }
 
   getUnseenComplaintsCount() {
-    return this.http.get(`${this.baseUrl}complaints/unseen-count`);
+    return this.http.get(`${this.baseUrl}complaints/unseen-count`, {
+      headers: this.noSpinnerHeaders,
+    });
   }
 
   markComplaintAsSeen(complaintId: string) {
@@ -418,7 +421,9 @@ export class Apiservice {
   }
 
   getUnseenForgetedHoursRequest() {
-    return this.http.get(`${this.baseUrl}forgeted-hours/unseen-count`);
+    return this.http.get(`${this.baseUrl}forgeted-hours/unseen-count`, {
+      headers: this.noSpinnerHeaders,
+    });
   }
 
   markForgetedHoursRequestAsSeen(requestId: string) {
@@ -461,7 +466,9 @@ export class Apiservice {
   }
 
   getUnseenHolidayRequestsCount() {
-    return this.http.get(`${this.baseUrl}holidays/unseen-count`);
+    return this.http.get(`${this.baseUrl}holidays/unseen-count`, {
+      headers: this.noSpinnerHeaders,
+    });
   }
 
   markHolidayRequestAsSeen(requestId: string) {
@@ -494,7 +501,9 @@ export class Apiservice {
   }
 
   getUnseenBorrowsCount() {
-    return this.http.get(`${this.baseUrl}borrows/unseen-count`);
+    return this.http.get(`${this.baseUrl}borrows/unseen-count`, {
+      headers: this.noSpinnerHeaders,
+    });
   }
 
   markBorrowAsSeen(requestId: string) {
@@ -541,7 +550,9 @@ export class Apiservice {
   }
 
   getUnseenOvertimeRequestsCount() {
-    return this.http.get(`${this.baseUrl}overtime/unseen-count`);
+    return this.http.get(`${this.baseUrl}overtime/unseen-count`, {
+      headers: this.noSpinnerHeaders,
+    });
   }
 
   markOvertimeRequestAsSeen(requestId: string) {
@@ -578,7 +589,9 @@ export class Apiservice {
   }
 
   getUnseenResignationRequestsCount() {
-    return this.http.get(`${this.baseUrl}resignations/unseen-count`);
+    return this.http.get(`${this.baseUrl}resignations/unseen-count`, {
+      headers: this.noSpinnerHeaders,
+    });
   }
 
   markResignationRequestAsSeen(requestId: string) {
@@ -618,7 +631,9 @@ export class Apiservice {
   }
 
   getUnseenAppointmentRequestsCount() {
-    return this.http.get(`${this.baseUrl}appointments/unseen-count`);
+    return this.http.get(`${this.baseUrl}appointments/unseen-count`, {
+      headers: this.noSpinnerHeaders,
+    });
   }
 
   markAppointmentRequestAsSeen(requestId: string) {
@@ -642,8 +657,22 @@ export class Apiservice {
 
   //logs//
 
-  getAllLogs(){
-    return this.http.get(`${this.baseUrl}audit`)
+  getAllLogs() {
+    return this.http.get(`${this.baseUrl}audit`);
+  }
+
+  //areamanagers//
+
+  getBranchesForAreaManagers(uuid:string){
+    return this.http.get(`${this.baseUrl}auth/users/${uuid}/branches`)
+  }
+
+  addBranchesToAreaManagers(uuid:string , banchId:number){
+    return this.http.post(`${this.baseUrl}auth/users/${uuid}/branches/${banchId}` , {})
+  }
+
+  deleteBracnhesAreaManagers(uuid:string , banchId:number){
+    return this.http.delete(`${this.baseUrl}auth/users/${uuid}/branches/${banchId}`)
   }
 
   showError(msg: string) {

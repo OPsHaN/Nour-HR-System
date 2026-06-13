@@ -224,6 +224,200 @@ input {
   color: var(--text) !important;
 }
 
+
+
+/* ============================================
+   p-multiselect - التصميم الكامل
+   ============================================ */
+
+/* الصندوق الأساسي (المغلق) */
+.p-multiselect {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 18px;
+  color: var(--text);
+  transition: 0.2s ease;
+  box-shadow: none;
+}
+
+.p-multiselect:hover {
+  border-color: var(--primary-color, #6366f1);
+}
+
+.p-multiselect.p-focus {
+  border-color: var(--primary-color, #6366f1);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+/* النص/اللابل داخل الصندوق */
+.p-multiselect-label {
+  color: var(--text);
+  font-size: 16px;
+  padding: 0.65rem 1rem;
+}
+
+.p-multiselect-label.p-placeholder {
+  color: var(--text-muted, #9ca3af);
+}
+
+/* أيقونة السهم */
+.p-multiselect-trigger {
+  color: var(--text);
+  width: 2.5rem;
+}
+
+.p-multiselect-trigger-icon {
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   الـ Chips (لو display="chip")
+   ============================================ */
+.p-multiselect-chip {
+  background: var(--primary-color, #6366f1);
+  color: var(--accent);
+  border-radius: 12px;
+  font-size: 13px;
+  padding: 0.2rem 0.6rem;
+  margin: 0.15rem;
+}
+
+.p-multiselect-chip .p-multiselect-chip-icon {
+  color: var(--accent);
+  margin-right: 0.4rem;
+}
+
+.p-multiselect-chip-item.p-focus {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+}
+
+/* ============================================
+   Panel (القائمة المنسدلة - appendTo body)
+   ============================================ */
+.p-multiselect-overlay {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--surface-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  z-index: 10000 !important;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+/* الهيدر (لو فيه search/select all) */
+.p-multiselect-header {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--surface-border) !important;
+  padding: 0.6rem 0.8rem !important;
+}
+
+.p-multiselect-filter-container input {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--surface-border) !important;
+  border-radius: 10px !important;
+  padding: 0.4rem 0.8rem !important;
+}
+
+/* جسم القائمة */
+.p-multiselect-list-container {
+  background: var(--surface) !important;
+  padding: 0.3rem;
+  max-height: 250px;
+}
+
+.p-multiselect-list {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* كل عنصر/خيار */
+.p-multiselect-option {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-radius: 10px !important;
+  padding: 0.6rem 0.8rem !important;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.p-multiselect-option:hover {
+  background: var(--surface-hover, rgba(99, 102, 241, 0.08)) !important;
+}
+
+.p-multiselect-option.p-multiselect-option-selected {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: var(--primary-color) !important;
+  font-weight: 600;
+}
+
+.p-multiselect-option.p-focus {
+  background: var(--surface-hover, rgba(99, 102, 241, 0.08)) !important;
+}
+
+/* ============================================
+   Checkbox داخل كل Option
+   ============================================ */
+.p-multiselect-option .p-checkbox {
+  width: 30px !important;
+  height: 20px !important;
+  flex-shrink: 0;
+}
+
+.p-multiselect-option .p-checkbox-box {
+  width: 30px !important;
+  height: 25px !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+}
+
+.p-multiselect-option .p-checkbox-box.p-highlight {
+  background: var(--primary-color, #6366f1) !important;
+  border-color: var(--primary-color, #6366f1) !important;
+}
+
+.p-multiselect-option .p-checkbox-icon {
+  color: var(--accent) !important;
+  font-size: 12px !important;
+}
+
+/* ============================================
+   رسالة "مفيش نتائج"
+   ============================================ */
+.p-multiselect-empty-message {
+  color: var(--text-muted, #9ca3af) !important;
+  text-align: center;
+  padding: 1rem !important;
+}
+
+/* ============================================
+   Scrollbar للقائمة (اختياري - تجميلي)
+   ============================================ */
+.p-multiselect-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.p-multiselect-list-container::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 10px;
+}
+
+.p-multiselect-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+
 .panel {
   display: grid;
   align-content: start;
@@ -506,7 +700,7 @@ input {
 }
 
 .badge {
-  color: var(--text) !important;
+  color: white !important;
   background: rgba(222, 221, 221, 0.75);
 }
 

@@ -168,6 +168,19 @@
           ></i>
         </button>
 
+        <!-- Show -->
+
+        <button
+          *ngIf=" emp.role === 'AreaManager'"
+          pButton
+          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          (click)="openBranchesDialog(emp)"
+        >
+          <i
+            class="pi pi-building d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
+
         <!-- Save -->
         <button
           *ngIf="editing"
@@ -215,3 +228,52 @@
     </tr>
   </ng-template>
 </p-table>
+
+<p-dialog
+  header="فروع المدير: {{ selectedManager?.name }}"
+  [(visible)]="branchesDialogVisible"
+  [modal]="true"
+  [style]="{ width: '650px' }"
+  [draggable]="false"
+  styleClass="branches-dialog"
+  dir="rtl"
+>
+  <div *ngIf="loadingBranches" class="text-center py-3">جاري التحميل...</div>
+
+  <div *ngIf="!loadingBranches">
+    <label class="d-block mb-2">الفروع:</label>
+    <p-multiSelect
+      class="custom w-100"
+      [options]="allBranches"
+      [(ngModel)]="selectedBranchIds"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="اختر الفروع"
+      display="chip"
+    ></p-multiSelect>
+    <!-- 👇 عرض الفروع المختارة تحت -->
+
+    <div
+      class="selected-branches mt-3 d-flex flex-wrap gap-2"
+      *ngIf="selectedBranchIds.length > 0"
+    >
+      <p-chip
+        *ngFor="let branchId of selectedBranchIds"
+        [label]="getBranchName(branchId)"
+        [removable]="true"
+        (onRemove)="removeBranchChip(branchId)"
+      ></p-chip>
+    </div>
+  </div>
+
+  <div class="form">
+    <button
+      type="button"
+      class="submit-btn full mt-5"
+      [disabled]="loadingBranches || savingBranches"
+      (click)="saveBranches()"
+    >
+      حفظ الفروع
+    </button>
+  </div>
+</p-dialog>

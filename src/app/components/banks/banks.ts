@@ -43,7 +43,6 @@ export class Banks {
         this.totalRecords = res.totalCount;
         this.loading = false;
         this.cdr.detectChanges();
-        console.log(res);
       },
       error: () => {
         this.loading = false;

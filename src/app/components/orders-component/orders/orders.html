@@ -4,28 +4,77 @@
     (valueChange)="onTabChange(+($event ?? 0))"
   >
     <p-tablist style="gap: 3px">
-      <p-tab [value]="0" *ngIf="this.auth.isHR || this.auth.isEmployee"
-        >الساعات المنسية</p-tab
-      >
+      <p-tab [value]="0" *ngIf="this.auth.isHR || this.auth.isEmployee">
+        <span class="tab-with-badge">
+          الساعات المنسية
+          <p-badge
+            *ngIf="unseenCounts.forgotHours > 0"
+            [value]="unseenCounts.forgotHours.toString()"
+            severity="danger"
+          ></p-badge>
+        </span>
+      </p-tab>
+
       <p-tab
         [value]="1"
         *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee"
-        >الإجازات</p-tab
       >
-      <p-tab [value]="2" *ngIf="this.auth.isHR || this.auth.isEmployee"
-        >السلف</p-tab
-      >
+        <span class="tab-with-badge">
+          الإجازات
+          <p-badge
+            *ngIf="unseenCounts.holidays > 0"
+            [value]="unseenCounts.holidays.toString()"
+            severity="danger"
+          ></p-badge>
+        </span>
+      </p-tab>
+
+      <p-tab [value]="2" *ngIf="this.auth.isHR || this.auth.isEmployee">
+        <span class="tab-with-badge">
+          السلف
+          <p-badge
+            *ngIf="unseenCounts.borrows > 0"
+            [value]="unseenCounts.borrows.toString()"
+            severity="danger"
+          ></p-badge>
+        </span>
+      </p-tab>
+
       <p-tab
         [value]="3"
         *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isEmployee || this.auth.isControl"
-        >الأوفر تايم</p-tab
       >
-      <p-tab [value]="4" *ngIf="this.auth.isHR || this.auth.isEmployee"
-        >الاستقالات</p-tab
-      >
-      <p-tab [value]="5" *ngIf="this.auth.isHR || this.auth.isAreaManager "
-        >التعيينات</p-tab
-      >
+        <span class="tab-with-badge">
+          الأوفر تايم
+          <p-badge
+            *ngIf="unseenCounts.overtime > 0"
+            [value]="unseenCounts.overtime.toString()"
+            severity="danger"
+          ></p-badge>
+        </span>
+      </p-tab>
+
+      <p-tab [value]="4" *ngIf="this.auth.isHR || this.auth.isEmployee">
+        <span class="tab-with-badge">
+          الاستقالات
+          <p-badge
+            *ngIf="unseenCounts.resignations > 0"
+            [value]="unseenCounts.resignations.toString()"
+            severity="danger"
+          ></p-badge>
+        </span>
+      </p-tab>
+
+      <p-tab [value]="5" *ngIf="this.auth.isHR || this.auth.isAreaManager">
+        <span class="tab-with-badge">
+          التعيينات
+          <p-badge
+            *ngIf="unseenCounts.appointments > 0"
+            [value]="unseenCounts.appointments.toString()"
+            severity="danger"
+          ></p-badge>
+        </span>
+      </p-tab>
     </p-tablist>
 
     <p-tabpanels>
@@ -197,7 +246,7 @@
                 <span
                   *ngIf="req.areaManagerApproval !== null"
                   class="badge"
-                  [ngClass]="req.areaManagerApproval ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [ngClass]="req.areaManagerApproval ? 'bg-success  text-success' : 'bg-danger  text-danger'"
                 >
                   {{ req.areaManagerApproval ? 'موافق' : 'مرفوض' }}
                 </span>
@@ -318,7 +367,7 @@
               <td>
                 <span
                   class="badge"
-                  [ngClass]="req.isOverQuarter ? 'bg-danger bg-opacity-25 text-danger' : 'bg-success bg-opacity-25 text-success'"
+                  [ngClass]="req.isOverQuarter ? 'bg-danger  text-danger' : 'bg-success  text-success'"
                 >
                   {{ req.isOverQuarter ? 'نعم' : 'لا' }}
                 </span>
@@ -434,7 +483,7 @@
                 <span
                   *ngIf="req.hrApproval !== null"
                   class="badge"
-                  [ngClass]="req.hrApproval === 'Approved' ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [ngClass]="req.hrApproval === 'Approved' ? 'bg-success  text-success' : 'bg-danger  text-danger'"
                   [pTooltip]="req.hrApproval === 'Rejected' ? req.hrRejectionReason : ''"
                   tooltipPosition="top"
                 >
@@ -442,7 +491,7 @@
                 </span>
                 <span
                   *ngIf="req.hrApproval === null"
-                  class="badge bg-warning bg-opacity-25 text-warning"
+                  class="badge bg-warning  text-warning"
                 >
                   قيد الانتظار
                 </span>
@@ -452,8 +501,8 @@
                 <span
                   *ngIf="req.areaManagerApproval !== null"
                   class="badge"
-                  [ngClass]="req.areaManagerApproval === 'Approved' ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
-                    [pTooltip]="req.areaManagerApproval === 'Rejected' ? req.areaManagerRejectionReason : ''"
+                  [ngClass]="req.areaManagerApproval === 'Approved' ? 'bg-success  text-success' : 'bg-danger  text-danger'"
+                  [pTooltip]="req.areaManagerApproval === 'Rejected' ? req.areaManagerRejectionReason : ''"
                   tooltipPosition="top"
                 >
                   {{ req.areaManagerApproval === 'Approved' ? 'موافق' : 'مرفوض'
@@ -461,7 +510,7 @@
                 </span>
                 <span
                   *ngIf="req.areaManagerApproval === null"
-                  class="badge bg-warning bg-opacity-25 text-warning"
+                  class="badge bg-warning  text-warning"
                 >
                   قيد الانتظار
                 </span>
@@ -471,7 +520,7 @@
                 <span
                   *ngIf="req.controlApproval !== null"
                   class="badge"
-                  [ngClass]="req.controlApproval === 'Approved' ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'"
+                  [ngClass]="req.controlApproval === 'Approved' ? 'bg-success  text-success' : 'bg-danger  text-danger'"
                   [pTooltip]="req.controlApproval === 'Rejected' ? req.controlRejectionReason : ''"
                   tooltipPosition="top"
                 >
@@ -479,7 +528,7 @@
                 </span>
                 <span
                   *ngIf="req.controlApproval === null"
-                  class="badge bg-warning bg-opacity-25 text-warning"
+                  class="badge bg-warning  text-warning"
                 >
                   قيد الانتظار
                 </span>

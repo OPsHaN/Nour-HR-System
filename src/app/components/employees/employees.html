@@ -65,7 +65,7 @@
       *ngIf="!showCreateEmployee"
     >
       <i class="pi pi-file-excel me-2"></i>
-      {{ loading ? 'جاري التحميل...' : 'تصدير Excel' }}
+      {{ loading ? 'جاري التحميل...' : 'تحميل Excel' }}
     </button>
     <!-- فلتر الفرع -->
   </div>
@@ -245,13 +245,13 @@
           type="button"
           class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
           icon="pi pi-pencil"
-         (click)="openEvaluation(emp)"
+          (click)="openEvaluation(emp)"
         >
           <i
             class="pi pi-plus d-flex align-items-center justify-content-center"
           ></i>
         </button>
-                <button
+        <button
           pButton
           type="button"
           class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
@@ -390,15 +390,15 @@
   <div *ngIf="employeeDetails">
     <p-tabs [(value)]="activeTabIndex">
       <p-tablist>
-        <p-tab value="0"> بيانات الموظف</p-tab>
-        <p-tab value="1"> بيانات المرتب</p-tab>
-        <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length">
+        <p-tab value="0" *ngIf="this.auth.isHR"> بيانات الموظف</p-tab>
+        <p-tab value="1" *ngIf="this.auth.isHR"> بيانات المرتب</p-tab>
+        <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length || this.auth.isAreaManager || this.auth.isHR">
           التقييمات</p-tab
         >
-        <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length">
+        <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length || this.auth.isHR">
           سجل التنقلات</p-tab
         >
-        <p-tab value="4"> العهد</p-tab>
+        <p-tab value="4" *ngIf="this.auth.isHR"> العهد</p-tab>
       </p-tablist>
 
       <p-tabpanels>
@@ -1110,7 +1110,7 @@
   </div>
 
   <!-- Footer Actions -->
-  <ng-template pTemplate="footer">
+  <ng-template pTemplate="footer" *ngIf="this.auth.isHR">
     <div class="dialog-actions d-flex justify-content-center my-1">
       <button
         *ngIf="!isEditMode"

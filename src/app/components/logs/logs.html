@@ -23,12 +23,12 @@
 
   <ng-template pTemplate="body" let-log let-ri="rowIndex">
     <tr>
-      <td>{{ ri + 1 }}</td>
+      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
       <td>{{ log.userName }}</td>
       <td>{{ log.action }}</td>
-      <td>{{ log.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
-    </tr>
-  </ng-template>
+      <td>{{ formatArabicDate(log.createdAt) }}</td>
+    </tr></ng-template
+  >
 
   <ng-template pTemplate="emptymessage">
     <tr>

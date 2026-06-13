@@ -20,6 +20,7 @@ import { forkJoin } from "rxjs";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { Observable } from "rxjs";
 import { TooltipModule } from "primeng/tooltip";
+import { BadgeModule } from "primeng/badge";
 
 @Component({
   selector: "app-orders",
@@ -45,6 +46,7 @@ import { TooltipModule } from "primeng/tooltip";
     Dialog,
     AutoCompleteModule,
     TooltipModule,
+    BadgeModule,
   ],
   templateUrl: "./orders.html",
   styleUrl: "./orders.css",
@@ -125,16 +127,20 @@ export class Orders implements OnInit {
     public auth: AuthService,
   ) {}
 
-  ngOnInit() {
-    if (this.auth.isHR) {
-      this.loadMissedHours();
-      this.loadUnseenCounts();
-    }
-
-    if (this.auth.isAreaManager) {
-      this.activeTabIndex = 1;
-    }
+ngOnInit() {
+  if (this.auth.isHR || this.auth.isEmployee) {
+    this.loadMissedHours();
   }
+
+  if (this.auth.isHR || this.auth.isEmployee || this.auth.isAreaManager) {
+    this.loadUnseenCounts();
+  }
+
+  if (this.auth.isAreaManager) {
+    this.activeTabIndex = 1;
+    this.loadLeave();
+  }
+}
 
   get isEmployee(): boolean {
     return !(
@@ -576,12 +582,12 @@ export class Orders implements OnInit {
 
   getStatusClass(status: string): Record<string, boolean> {
     return {
-      "bg-warning bg-opacity-25 text-warning": status === "Pending",
-      "bg-success bg-opacity-25 text-success":
+      "bg-warning  text-warning": status === "Pending",
+      "bg-success  text-success":
         status === "Approved" ||
         status === "ControlApproved" ||
         status === "AreaManagerApproved",
-      "bg-danger bg-opacity-25 text-danger":
+      "bg-danger  text-danger":
         status === "Rejected" ||
         status === "ControlRejected" ||
         status === "AreaManagerRejected",

@@ -6,6 +6,9 @@ import {
   Output,
   inject,
 } from "@angular/core";
+import { interval, Subject } from "rxjs";
+import { startWith, takeUntil } from "rxjs/operators";
+
 import {
   getShortcutTheme,
   getShortcutsByRole,
@@ -14,6 +17,7 @@ import {
   WindowAction,
 } from "../../shortcut.config";
 import { Apiservice } from "src/app/services/api.service";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-shortcuts",
@@ -24,10 +28,13 @@ import { Apiservice } from "src/app/services/api.service";
 })
 export class ShortcutsComponent {
   @Output() shortcutClick = new EventEmitter<Shortcut>();
+  private readonly POLLING_INTERVAL = 50000; 
+  private destroy$ = new Subject<void>();
 
   protected shortcuts: Shortcut[] = [];
   private readonly api = inject(Apiservice);
   private readonly cdr = inject(ChangeDetectorRef);
+  public readonly auth = inject(AuthService)
   unseenCounts = {
     overtime: 0,
     borrows: 0,
@@ -41,11 +48,19 @@ export class ShortcutsComponent {
     const role = this.getUserRole();
     this.shortcuts = getShortcutsByRole(role);
 
-    if (this.isHR) {
-      this.loadUnseenCounts();
-
-      this.loadUnseenComplaint();
+    if (this.isHR || this.isEmployee || this.auth.isAreaManager) {
+      interval(this.POLLING_INTERVAL)
+        .pipe(startWith(0), takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.loadUnseenCounts();
+          this.loadUnseenComplaint();
+        });
     }
+  }
+
+    ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get isEmployee(): boolean {
@@ -100,12 +115,15 @@ export class ShortcutsComponent {
     });
   }
 
-  loadUnseenCounts() {
-    this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.overtime = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
+loadUnseenCounts() {
+  // الأوفر تايم - متاح لكل الأدوار المسموح لها (HR, Employee, AreaManager)
+  this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
+    this.unseenCounts.overtime = res.count ?? 0;
+    this.updateOrdersBadge();
+  });
 
+  // باقي الـ APIs - بس لو الدور HR أو Employee (مش AreaManager)
+  if (this.isHR || this.isEmployee) {
     this.api.getUnseenBorrowsCount().subscribe((res: any) => {
       this.unseenCounts.borrows = res.count ?? 0;
       this.updateOrdersBadge();
@@ -131,22 +149,26 @@ export class ShortcutsComponent {
       this.updateOrdersBadge();
     });
   }
+}
 
-  private updateOrdersBadge() {
-    const total =
-      this.unseenCounts.overtime +
+private updateOrdersBadge() {
+  let total = this.unseenCounts.overtime;
+
+  if (this.isHR || this.isEmployee) {
+    total +=
       this.unseenCounts.borrows +
       this.unseenCounts.holidays +
       this.unseenCounts.resignations +
       this.unseenCounts.appointments +
       this.unseenCounts.forgotHours;
-
-    this.shortcuts = this.shortcuts.map((shortcut) =>
-      shortcut.action === "orders" ? { ...shortcut, badge: total } : shortcut,
-    );
-
-    this.cdr.detectChanges();
   }
+
+  this.shortcuts = this.shortcuts.map((shortcut) =>
+    shortcut.action === "orders" ? { ...shortcut, badge: total } : shortcut,
+  );
+
+  this.cdr.detectChanges();
+}
 }
 
 export { WindowAction };

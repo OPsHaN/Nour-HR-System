@@ -14,8 +14,8 @@ import { Subscription } from "rxjs";
 import { forkJoin } from "rxjs";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { AuthService } from "src/app/services/auth.service";
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: "app-employees",
@@ -113,6 +113,8 @@ export class Employees {
   selectedDayPerEmployee: Record<number, string> = {};
   actionSubType: "amount" | "days" = "amount";
   selectedSingleDay: string = "";
+  loadingEvaluations = false;
+  evaluations: any[] = [];
 
   dayOptions = [
     { key: "quarterDay", label: "ربع يوم" },
@@ -216,14 +218,10 @@ export class Employees {
   ];
 
   openEvaluation(emp: any) {
-  this.selectedEmployee = emp;
+    this.selectedEmployee = emp;
 
-  this.openActionDialog(
-    "evaluation",
-    "إضافة تقييم",
-    emp
-  );
-}
+    this.openActionDialog("evaluation", "إضافة تقييم", emp);
+  }
 
   get isAreaManager(): boolean {
     return localStorage.getItem("role") === "AreaManager";
@@ -233,7 +231,6 @@ export class Employees {
     const raw = localStorage.getItem("branchId"); // نفس نمط "role"
     return raw ? raw.split(",").map((id: string) => id.trim()) : [];
   }
-  
 
   loadEmployees() {
     this.loading = true;
@@ -290,60 +287,66 @@ export class Employees {
   }
 
   exportAllToExcel(): void {
-  const pageSize = 100; // جيب 100 موظف في كل call
-  const totalPages = Math.ceil(this.totalRecords / pageSize);
-  const requests = [];
+    const pageSize = 100; // جيب 100 موظف في كل call
+    const totalPages = Math.ceil(this.totalRecords / pageSize);
+    const requests = [];
 
-  for (let page = 1; page <= totalPages; page++) {
-    requests.push(this.api.getAllEmployees(page, pageSize));
+    for (let page = 1; page <= totalPages; page++) {
+      requests.push(this.api.getAllEmployees(page, pageSize));
+    }
+
+    this.loading = true;
+
+    forkJoin(requests).subscribe({
+      next: (results: any[]) => {
+        const allEmployees = results.flatMap((res: any) => res.data);
+        this.generateExcel(allEmployees);
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      },
+    });
   }
 
-  this.loading = true;
+  private generateExcel(employees: any[]): void {
+    const exportData = employees.map((emp) => ({
+      "#": emp.id,
+      الاسم: emp.name,
+      الوظيفة: emp.theNameOfJob,
+      البنك: emp.bankName,
+      "رقم الحساب": emp.bankAccount,
+      "ساعات العمل": emp.shiftHours,
+      الفرع: emp.branchName,
+      "حالة الموظف": emp.employeeType,
+    }));
 
-  forkJoin(requests).subscribe({
-    next: (results: any[]) => {
-      const allEmployees = results.flatMap((res: any) => res.data);
-      this.generateExcel(allEmployees);
-      this.loading = false;
-    },
-    error: () => {
-      this.loading = false;
-    }
-  });
-}
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
 
-private generateExcel(employees: any[]): void {
-  const exportData = employees.map((emp) => ({
-    '#': emp.id,
-    'الاسم': emp.name,
-    'الوظيفة': emp.theNameOfJob,
-    'البنك': emp.bankName,
-    'رقم الحساب': emp.bankAccount,
-    'ساعات العمل': emp.shiftHours,
-    'الفرع': emp.branchName,
-    'حالة الموظف': emp.employeeType,
-  }));
+    worksheet["!cols"] = [
+      { wch: 6 },
+      { wch: 22 },
+      { wch: 20 },
+      { wch: 18 },
+      { wch: 20 },
+      { wch: 14 },
+      { wch: 14 },
+      { wch: 16 },
+    ];
 
-  const worksheet = XLSX.utils.json_to_sheet(exportData);
-  const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "الموظفون");
 
-  worksheet['!cols'] = [
-    { wch: 6 },
-    { wch: 22 },
-    { wch: 20 },
-    { wch: 18 },
-    { wch: 20 },
-    { wch: 14 },
-    { wch: 14 },
-    { wch: 16 },
-  ];
-
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'الموظفون');
-
-  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-  saveAs(blob, `الموظفين_${new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}.xlsx`);
-}
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(
+      blob,
+      `الموظفين_${new Date().toLocaleDateString("en-GB").replace(/\//g, "-")}.xlsx`,
+    );
+  }
 
   toggleSelectAll(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
@@ -381,7 +384,6 @@ private generateExcel(employees: any[]): void {
     this.api.getAllCriteria(this.page, 20).subscribe({
       next: (res: any) => {
         this.Criteria = res.data;
-        console.log(this.Criteria);
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -588,14 +590,18 @@ private generateExcel(employees: any[]): void {
 
   openEmployeeDetails(emp: any) {
     this.selectedEmployeeForPayroll = emp;
-    // when explicitly opening details, default to current month
+    this.employeeName = emp.name;
+    this.showEmployeeDetailsDialog = true;
+
+    if (this.isAreaManager) {
+      this.activeTabIndex = "2";
+      this.loadEvaluationsOnly(emp.id);
+      return;
+    }
+
     this.payrollViewType = "current";
     this.isCurrentMonth = true;
-    this.employeeName = emp.name;
     this.activeTabIndex = "0";
-    // keep existing details until new data arrives
-    // show dialog immediately so it doesn't 'disappear' on errors
-    this.showEmployeeDetailsDialog = true;
     this.selectedMonth = new Date().getMonth() + 1;
     this.selectedYear = new Date().getFullYear();
 
@@ -1057,6 +1063,31 @@ private generateExcel(employees: any[]): void {
             this.api.showError("حدث خطأ أثناء الحذف");
           },
         });
+      },
+    });
+  }
+
+  loadEvaluationsOnly(empId: string) {
+    this.loadingEvaluations = true;
+
+    this.api.getEvaluations(+empId).subscribe({
+      next: (res: any) => {
+        this.evaluations = res ?? [];
+
+        // نحط البيانات في employeeDetails عشان الـ template الحالي يشتغل من غير تعديل كبير
+        this.employeeDetails = {
+          evaluations: this.evaluations,
+        };
+
+        this.loadingEvaluations = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
+        this.evaluations = [];
+        this.employeeDetails = { evaluations: [] };
+        this.loadingEvaluations = false;
+        this.cdr.detectChanges();
       },
     });
   }

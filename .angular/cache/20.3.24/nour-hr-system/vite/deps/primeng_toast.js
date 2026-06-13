@@ -14,6 +14,9 @@ import {
   PARENT_INSTANCE
 } from "./chunk-MDU26JFA.js";
 import {
+  Bind
+} from "./chunk-PTLVBNX5.js";
+import {
   BaseStyle
 } from "./chunk-YN36FFF2.js";
 import {
@@ -21,9 +24,6 @@ import {
   PrimeTemplate,
   SharedModule
 } from "./chunk-5DMWIRBC.js";
-import {
-  Bind
-} from "./chunk-PTLVBNX5.js";
 import {
   _t,
   l,
@@ -102,8 +102,8 @@ import {
   ɵɵtextInterpolate,
   ɵɵtextInterpolate1
 } from "./chunk-7TLMVOLW.js";
-import "./chunk-EKEPJHDJ.js";
 import "./chunk-5UG2FXJ4.js";
+import "./chunk-EKEPJHDJ.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
 import "./chunk-3OV72XIM.js";

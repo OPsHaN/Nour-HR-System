@@ -11,16 +11,16 @@ import {
   PARENT_INSTANCE
 } from "./chunk-MDU26JFA.js";
 import {
+  Bind,
+  BindModule
+} from "./chunk-PTLVBNX5.js";
+import {
   BaseStyle
 } from "./chunk-YN36FFF2.js";
 import {
   PrimeTemplate,
   SharedModule
 } from "./chunk-5DMWIRBC.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-PTLVBNX5.js";
 import {
   K,
   Q,
@@ -100,8 +100,8 @@ import {
   ɵɵtemplateRefExtractor,
   ɵɵviewQuery
 } from "./chunk-7TLMVOLW.js";
-import "./chunk-EKEPJHDJ.js";
 import "./chunk-5UG2FXJ4.js";
+import "./chunk-EKEPJHDJ.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
 import "./chunk-3OV72XIM.js";
