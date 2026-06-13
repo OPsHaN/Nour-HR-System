@@ -198,6 +198,8 @@
   [paginatorDropdownAppendTo]="'body'"
   dataKey="id"
   dir="rtl"
+  styleClass="p-datatable-sm p-datatable-gridlines"
+
 >
   <!-- HEADER -->
   <ng-template pTemplate="header">
@@ -392,10 +394,16 @@
       <p-tablist>
         <p-tab value="0" *ngIf="this.auth.isHR"> بيانات الموظف</p-tab>
         <p-tab value="1" *ngIf="this.auth.isHR"> بيانات المرتب</p-tab>
-        <p-tab value="2" *ngIf="employeeDetails?.evaluations?.length || this.auth.isAreaManager || this.auth.isHR">
+        <p-tab
+          value="2"
+          *ngIf="employeeDetails?.evaluations?.length || this.auth.isAreaManager || this.auth.isHR"
+        >
           التقييمات</p-tab
         >
-        <p-tab value="3" *ngIf="employeeDetails?.employeeHistory?.length || this.auth.isHR">
+        <p-tab
+          value="3"
+          *ngIf="employeeDetails?.employeeHistory?.length || this.auth.isHR"
+        >
           سجل التنقلات</p-tab
         >
         <p-tab value="4" *ngIf="this.auth.isHR"> العهد</p-tab>
@@ -657,7 +665,7 @@
               <p-table
                 [value]="employeeDetails.cashBorrows"
                 responsiveLayout="scroll"
-                styleClass="p-datatable-sm"
+                styleClass="p-datatable-sm p-datatable-gridlines"
               >
                 <ng-template pTemplate="header">
                   <tr>
@@ -707,7 +715,7 @@
               <p-table
                 [value]="employeeDetails.bonuses"
                 responsiveLayout="scroll"
-                styleClass="p-datatable-sm"
+                styleClass="p-datatable-sm p-datatable-gridlines"
               >
                 <ng-template pTemplate="header">
                   <tr>
@@ -757,7 +765,7 @@
               <p-table
                 [value]="employeeDetails.contractDiscounts"
                 responsiveLayout="scroll"
-                styleClass="p-datatable-sm"
+                styleClass="p-datatable-sm p-datatable-gridlines"
               >
                 <ng-template pTemplate="header">
                   <tr>
@@ -807,7 +815,7 @@
               <p-table
                 [value]="employeeDetails.discounts"
                 responsiveLayout="scroll"
-                styleClass="p-datatable-sm"
+               styleClass="p-datatable-sm p-datatable-gridlines"
               >
                 <ng-template pTemplate="header">
                   <tr>
@@ -992,7 +1000,7 @@
             <p-table
               [value]="evaluation.results"
               responsiveLayout="scroll"
-              styleClass="p-datatable-sm"
+    styleClass="p-datatable-sm p-datatable-gridlines"
             >
               <ng-template pTemplate="header">
                 <tr>
@@ -1041,7 +1049,7 @@
           <p-table
             [value]="employeeDetails.employeeHistory"
             responsiveLayout="scroll"
-            styleClass="p-datatable-sm"
+    styleClass="p-datatable-sm p-datatable-gridlines"
           >
             <ng-template pTemplate="header">
               <tr>
@@ -1154,7 +1162,7 @@
   <p-table
     [value]="employeeAttendance"
     responsiveLayout="scroll"
-    styleClass="p-datatable-sm"
+    styleClass="p-datatable-sm p-datatable-gridlines"
   >
     <!-- Header -->
     <ng-template pTemplate="header">

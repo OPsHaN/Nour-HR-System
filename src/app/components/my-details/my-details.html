@@ -182,7 +182,7 @@
               <h6 class="section-title text-info">السلف النقدية</h6>
               <p-table
                 [value]="employeeDetails.cashBorrows"
-                styleClass="p-datatable-sm"
+                styleClass="p-datatable-sm p-datatable-gridlines"
                 responsiveLayout="scroll"
               >
                 <ng-template pTemplate="header">
@@ -212,7 +212,7 @@
               <h6 class="section-title text-success">الزيادات</h6>
               <p-table
                 [value]="employeeDetails.bonuses"
-                styleClass="p-datatable-sm"
+                styleClass="p-datatable-sm p-datatable-gridlines"
                 responsiveLayout="scroll"
               >
                 <ng-template pTemplate="header">
@@ -242,7 +242,7 @@
               <h6 class="section-title text-warning">خصومات التعاقدات</h6>
               <p-table
                 [value]="employeeDetails.contractDiscounts"
-                styleClass="p-datatable-sm"
+                styleClass="p-datatable-sm p-datatable-gridlines"
                 responsiveLayout="scroll"
               >
                 <ng-template pTemplate="header">
@@ -272,7 +272,7 @@
               <h6 class="section-title text-danger">الخصومات</h6>
               <p-table
                 [value]="employeeDetails.discounts"
-                styleClass="p-datatable-sm"
+                styleClass="p-datatable-sm p-datatable-gridlines"
                 responsiveLayout="scroll"
               >
                 <ng-template pTemplate="header">
@@ -391,7 +391,7 @@
             </div>
             <p-table
               [value]="evaluation.results"
-              styleClass="p-datatable-sm"
+              styleClass="p-datatable-sm p-datatable-gridlines"
               responsiveLayout="scroll"
             >
               <ng-template pTemplate="header">
@@ -433,7 +433,7 @@
         <p-tabpanel value="3" *ngIf="employeeDetails?.employeeHistory?.length">
           <p-table
             [value]="employeeDetails.employeeHistory"
-            styleClass="p-datatable-sm"
+            styleClass="p-datatable-sm p-datatable-gridlines"
             responsiveLayout="scroll"
           >
             <ng-template pTemplate="header">
@@ -460,7 +460,7 @@
         <p-tabpanel value="4" *ngIf="employeeDetails?.attendance?.length">
           <p-table
             [value]="employeeDetails.attendance"
-            styleClass="p-datatable-sm"
+            styleClass="p-datatable-sm p-datatable-gridlines"
             responsiveLayout="scroll"
           >
             <ng-template pTemplate="header">
@@ -501,7 +501,7 @@
         <p-tabpanel value="5" *ngIf="employeeDetails?.resposiblity?.length">
           <p-table
             [value]="employeeDetails.resposiblity"
-            styleClass="p-datatable-sm"
+            styleClass="p-datatable-sm p-datatable-gridlines"
             responsiveLayout="scroll"
           >
             <ng-template pTemplate="header">

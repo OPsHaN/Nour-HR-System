@@ -34,7 +34,7 @@
   [editingRowKeys]="editingRowKeys"
   (onLazyLoad)="onPageChange($event)"
   dir="rtl"
->
+  styleClass="p-datatable-sm p-datatable-gridlines">
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
@@ -121,7 +121,7 @@
               <option value="Employee">موظف</option>
               <option value="Manager">مدير</option>
               <option value="Control">كنترول</option>
-              <option value="Area Manager">مدير منطقة</option>
+              <option value="AreaManager">مدير منطقة</option>
             </select>
           </ng-template>
           <ng-template pTemplate="output"> {{ emp.role }} </ng-template>
