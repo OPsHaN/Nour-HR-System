@@ -174,6 +174,60 @@
           </div>
 
           <div *ngIf="showPayrollDetails" class="evaluation-card">
+            <!-- installment Borrows -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.installmentBorrows?.length"
+            >
+              <h6 class="section-title text-primary">السلف المرحلة</h6>
+
+              <p-table
+                [value]="employeeDetails.installmentBorrows"
+                responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>إجمالي المبلغ</th>
+                    <th>القسط الشهري</th>
+                    <th>عدد الأشهر</th>
+                    <th>الأشهر المتبقية</th>
+                    <th>شهر البداية</th>
+                    <th>سنة البداية</th>
+                    <th>الحالة</th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.totalAmount | number:'1.0-0' }} ج</td>
+                    <td>{{ item.monthlyAmount | number:'1.0-0' }} ج</td>
+                    <td>{{ item.totalMonths }}</td>
+                    <td>{{ item.remainingMonths }}</td>
+                    <td>{{ item.startMonth }}</td>
+                    <td>{{ item.startYear }}</td>
+
+                    <td>
+                      <span
+                        class="badge"
+                        [ngClass]="item.isActive ? 'bg-success' : 'bg-secondary'"
+                      >
+                        {{ item.isActive ? 'نشطة' : 'منتهية' }}
+                      </span>
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="8" class="text-center py-4">
+                      لا توجد سلف مرحلة
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
             <!-- السلف النقدية -->
             <div
               class="detail-item full-width mb-3"
@@ -511,12 +565,12 @@
               </tr>
             </ng-template>
 
-      <ng-template pTemplate="body" let-item let-ri="rowIndex">
-    <tr>
-      <td>{{ item.name }}</td>
-      <td>{{ item.createdAt | date:'yyyy-MM-dd' }}</td>
-    </tr>
-  </ng-template>
+            <ng-template pTemplate="body" let-item let-ri="rowIndex">
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.createdAt | date:'yyyy-MM-dd' }}</td>
+              </tr>
+            </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
                 <td colspan="2" class="text-center py-4">

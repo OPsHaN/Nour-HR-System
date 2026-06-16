@@ -59,7 +59,7 @@
     <button
       pButton
       type="button"
-      class="btn btn-sm btn-success me-1 my-1 d-flex align-items-center justify-content-center gap-1"
+      class="btn btn-sm btn-success me-0 my-1 d-flex align-items-center justify-content-center gap-1"
       (click)="exportAllToExcel()"
       [disabled]="loading"
       *ngIf="!showCreateEmployee"
@@ -199,7 +199,6 @@
   dataKey="id"
   dir="rtl"
   styleClass="p-datatable-sm p-datatable-gridlines"
-
 >
   <!-- HEADER -->
   <ng-template pTemplate="header">
@@ -656,6 +655,74 @@
           </div>
 
           <div class="evaluation-card mb-0" *ngIf="showPayrollDetails">
+
+            <!-- installment Borrows -->
+            <div
+              class="detail-item full-width mb-3"
+              *ngIf="employeeDetails?.installmentBorrows?.length"
+            >
+              <h6 class="section-title text-primary">السلف المرحلة</h6>
+
+              <p-table
+                [value]="employeeDetails.installmentBorrows"
+                responsiveLayout="scroll"
+                styleClass="p-datatable-sm p-datatable-gridlines"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>إجمالي المبلغ</th>
+                    <th>القسط الشهري</th>
+                    <th>عدد الأشهر</th>
+                    <th>الأشهر المتبقية</th>
+                    <th>شهر البداية</th>
+                    <th>سنة البداية</th>
+                    <th>الحالة</th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-item>
+                  <tr>
+                    <td>{{ item.totalAmount | number:'1.0-0' }} ج</td>
+                    <td>{{ item.monthlyAmount | number:'1.0-0' }} ج</td>
+                    <td>{{ item.totalMonths }}</td>
+                    <td>{{ item.remainingMonths }}</td>
+                    <td>{{ item.startMonth }}</td>
+                    <td>{{ item.startYear }}</td>
+
+                    <td>
+                      <span
+                        class="badge"
+                        [ngClass]="item.isActive ? 'bg-success' : 'bg-secondary'"
+                      >
+                        {{ item.isActive ? 'نشطة' : 'منتهية' }}
+                      </span>
+                    </td>
+
+                    <!-- <td>
+                      <button
+                        pButton
+                        type="button"
+                        class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                        (click)="deleteAction(item.id, 'installmentBorrow')"
+                      >
+                        <i
+                          class="pi pi-trash d-flex align-items-center justify-content-center"
+                        ></i>
+                      </button>
+                    </td> -->
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="8" class="text-center py-4">
+                      لا توجد سلف مرحلة
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+
             <!-- Cash Borrows -->
             <div
               class="detail-item full-width mb-3"
@@ -815,7 +882,7 @@
               <p-table
                 [value]="employeeDetails.discounts"
                 responsiveLayout="scroll"
-               styleClass="p-datatable-sm p-datatable-gridlines"
+                styleClass="p-datatable-sm p-datatable-gridlines"
               >
                 <ng-template pTemplate="header">
                   <tr>
@@ -1000,7 +1067,7 @@
             <p-table
               [value]="evaluation.results"
               responsiveLayout="scroll"
-    styleClass="p-datatable-sm p-datatable-gridlines"
+              styleClass="p-datatable-sm p-datatable-gridlines"
             >
               <ng-template pTemplate="header">
                 <tr>
@@ -1049,7 +1116,7 @@
           <p-table
             [value]="employeeDetails.employeeHistory"
             responsiveLayout="scroll"
-    styleClass="p-datatable-sm p-datatable-gridlines"
+            styleClass="p-datatable-sm p-datatable-gridlines"
           >
             <ng-template pTemplate="header">
               <tr>
@@ -1308,10 +1375,12 @@
   [draggable]="false"
   class="end-service-dialog"
   [style]="{
-    width: currentActionType === 'evaluation'
-      ? '35rem'
-      : '40rem'
-  }"
+  width: currentActionType === 'evaluation'
+    ? '35rem'
+    : currentActionType === 'installmentBorrow'
+    ? '30rem'
+    : '40rem'
+}"
 >
   <!-- إضافة تقييم -->
   <div *ngIf="currentActionType === 'evaluation'">
@@ -1421,10 +1490,97 @@
     </div>
   </div>
 
+  <!-- إضافة سلفة مرحلة -->
+  <div *ngIf="currentActionType === 'installmentBorrow'">
+    <div class="end-service-content">
+      <div class="field">
+        <label>إجمالي المبلغ <span class="text-danger">*</span></label>
+        <input
+          type="number"
+          class="custom-input"
+          [(ngModel)]="actionForm.totalAmount"
+          placeholder="مثال: 9000"
+        />
+      </div>
+
+      <div class="field">
+        <label>عدد الأشهر <span class="text-danger">*</span></label>
+        <input
+          type="number"
+          class="custom-input"
+          [(ngModel)]="actionForm.totalMonths"
+          placeholder="مثال: 3"
+          min="1"
+        />
+      </div>
+
+      <!-- معاينة القسط الشهري -->
+      <div
+        class="field"
+        *ngIf="actionForm.totalAmount && actionForm.totalMonths"
+      >
+        <label>القسط الشهري</label>
+        <input
+          type="text"
+          class="custom-input"
+          [value]="(actionForm.totalAmount / actionForm.totalMonths) | number:'1.0-2'"
+          readonly
+          style="background: var(--surface-100); cursor: not-allowed"
+        />
+      </div>
+
+      <div class="field">
+        <label>شهر البداية <span class="text-danger">*</span></label>
+        <select class="custom-input py-2" [(ngModel)]="actionForm.startMonth">
+          <option [ngValue]="1">يناير</option>
+          <option [ngValue]="2">فبراير</option>
+          <option [ngValue]="3">مارس</option>
+          <option [ngValue]="4">أبريل</option>
+          <option [ngValue]="5">مايو</option>
+          <option [ngValue]="6">يونيو</option>
+          <option [ngValue]="7">يوليو</option>
+          <option [ngValue]="8">أغسطس</option>
+          <option [ngValue]="9">سبتمبر</option>
+          <option [ngValue]="10">أكتوبر</option>
+          <option [ngValue]="11">نوفمبر</option>
+          <option [ngValue]="12">ديسمبر</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>سنة البداية <span class="text-danger">*</span></label>
+        <input
+          type="number"
+          class="custom-input"
+          [(ngModel)]="actionForm.startYear"
+          placeholder="مثال: 2026"
+        />
+      </div>
+    </div>
+
+    <div class="form">
+      <button
+        type="button"
+        class="submit-btn full my-2"
+        [disabled]="
+        actionLoading ||
+        !actionForm.totalAmount ||
+        !actionForm.totalMonths ||
+        !actionForm.startMonth ||
+        !actionForm.startYear
+      "
+        (click)="saveAction()"
+      >
+        {{ actionLoading ? 'جارى الحفظ...' : 'إضافة سلفة مرحلة' }}
+      </button>
+    </div>
+  </div>
+
   <!-- باقى الأنواع -->
 
   <div
-    *ngIf="currentActionType !== 'evaluation' && currentActionType !== 'responsibility'"
+    *ngIf="currentActionType !== 'evaluation' && currentActionType !== 'responsibility' && currentActionType !== 'installmentBorrow'
+"
   >
     <div class="end-service-content">
       <!-- نوع القيمة (فقط للخصم والزيادة) -->
@@ -1546,9 +1702,10 @@
         (click)="saveAction()"
       >
         {{ actionLoading ? 'جارى الحفظ...' : ( currentActionType === 'bonus' ?
-        'إضافة زيادة' : currentActionType === 'borrow' ? 'إضافة سلفة' :
-        currentActionType === 'discount' ? 'إضافة خصم' : currentActionType ===
-        'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة نقدية' ) }}
+        'إضافة زيادة' : currentActionType === 'installmentBorrow' ? ' إضافة سلفة
+        مرحلة' : currentActionType === 'discount' ? 'إضافة خصم' :
+        currentActionType === 'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة
+        نقدية' ) }}
       </button>
     </div>
   </div>

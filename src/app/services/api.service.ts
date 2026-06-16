@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MessageService } from "primeng/api";
 
@@ -59,10 +59,20 @@ export class Apiservice {
     );
   }
 
-  getAllEmployees(page: number, pagesize: number) {
-    return this.http.get(
-      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}`,
-    );
+  getAllEmployees(
+    page: number,
+    pagesize: number,
+    branchId = "",
+    bankId = "",
+    role = "",
+  ) {
+    let url = `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}`;
+
+    if (branchId) url += `&branchId=${branchId}`;
+    if (bankId) url += `&bankId=${bankId}`;
+    if (role) url += `&role=${role}`;
+
+    return this.http.get(url);
   }
 
   getAllEmployeesByBranch(page: number, pagesize: number, branchId: string) {
@@ -96,9 +106,22 @@ export class Apiservice {
   }
 
   getAllEmployessByName(page: number, pagesize: number, name: string) {
-    return this.http.get(
-      `${this.baseUrl}employees?page=${page}&pageSize=${pagesize}&name=${name}`,
-    );
+    const params = new HttpParams()
+      .set("page", page)
+      .set("pageSize", pagesize)
+      .set("name", name.trim());
+
+    return this.http.get(`${this.baseUrl}employees`, { params });
+  }
+
+
+    getAllUsersByName(page: number, pagesize: number , name: string) {
+    const params = new HttpParams()
+      .set("page", page)
+      .set("pageSize", pagesize)
+      .set("name", name.trim());
+
+    return this.http.get(`${this.baseUrl}auth/users`, { params });
   }
 
   getHistoryByEmployeeId(id: string) {
@@ -148,6 +171,14 @@ export class Apiservice {
 
   addContractDiscount(data: any) {
     return this.http.post(`${this.baseUrl}payroll/contract-discount`, data);
+  }
+
+  addInstallmentsBorrow(data: any) {
+    return this.http.post(`${this.baseUrl}borrows/installment`, data);
+  }
+
+  getInstallmentsBorrow(employeeId:string){
+    return this.http.get(`${this.baseUrl}borrows/installment/${employeeId}`)
   }
 
   addBonus(data: any) {
@@ -663,16 +694,21 @@ export class Apiservice {
 
   //areamanagers//
 
-  getBranchesForAreaManagers(uuid:string){
-    return this.http.get(`${this.baseUrl}auth/users/${uuid}/branches`)
+  getBranchesForAreaManagers(uuid: string) {
+    return this.http.get(`${this.baseUrl}auth/users/${uuid}/branches`);
   }
 
-  addBranchesToAreaManagers(uuid:string , banchId:number){
-    return this.http.post(`${this.baseUrl}auth/users/${uuid}/branches/${banchId}` , {})
+  addBranchesToAreaManagers(uuid: string, banchId: number) {
+    return this.http.post(
+      `${this.baseUrl}auth/users/${uuid}/branches/${banchId}`,
+      {},
+    );
   }
 
-  deleteBracnhesAreaManagers(uuid:string , banchId:number){
-    return this.http.delete(`${this.baseUrl}auth/users/${uuid}/branches/${banchId}`)
+  deleteBracnhesAreaManagers(uuid: string, banchId: number) {
+    return this.http.delete(
+      `${this.baseUrl}auth/users/${uuid}/branches/${banchId}`,
+    );
   }
 
   showError(msg: string) {

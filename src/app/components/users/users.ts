@@ -53,6 +53,7 @@ export class Users {
   selectedBranchIds: number[] = [];
   originalBranchIds: number[] = [];
   savingBranches = false;
+  searchTerm: string = "";
 
   constructor(
     private api: Apiservice,
@@ -60,9 +61,7 @@ export class Users {
     private cdr: ChangeDetectorRef,
   ) {}
 
-  ngOnInit(): void {
-    this.getEmployees();
-  }
+
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -248,4 +247,32 @@ export class Users {
       },
     });
   }
+
+    onSearchTermChange() {
+    this.page = 1;
+
+    if (!this.searchTerm.trim()) {
+    this.getEmployees();
+      return;
+    }
+
+    this.api
+      .getAllUsersByName(this.page, this.pageSize, this.searchTerm)
+      .subscribe({
+        next: (res: any) => {
+          this.users = res.data ?? res;
+          this.totalRecords = res.totalCount ?? this.users.length;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+  }
+
+  clearSearch() {
+    this.searchTerm = "";
+    this.getEmployees();
+  }
+
 }

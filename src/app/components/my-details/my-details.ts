@@ -74,6 +74,8 @@ export class MyDetails {
       attendance: this.api.getScheduleByEmployeeId(this.employeeId),
       history: this.api.getHistoryByEmployeeId(this.employeeId),
       resposiblity: this.api.getAllResponsibilities(this.employeeId),
+            installmentBorrows : this.api.getInstallmentsBorrow(this.employeeId)
+
     }).subscribe({
       next: (res: any) => {
         this.employeeDetails = {
@@ -84,6 +86,7 @@ export class MyDetails {
           attendance: (res.attendance || []).map((item: any) => ({
             ...item,
             isEditing: false,
+           installmentBorrows: res.installmentBorrows,
           })),
         };
 

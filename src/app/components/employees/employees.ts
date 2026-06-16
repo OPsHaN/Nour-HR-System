@@ -153,15 +153,6 @@ export class Employees {
         this.openActionDialog("bonus", "إضافة زيادة", this.selectedEmployee);
       },
     },
-
-    // {
-    //   label: "إضافة سلفة",
-    //   icon: "pi pi-wallet",
-    //   command: () => {
-    //     this.openActionDialog("borrow", "إضافة سلفة", this.selectedEmployee);
-    //   },
-    // },
-
     {
       label: "إضافة خصم",
       icon: "pi pi-minus-circle",
@@ -191,6 +182,13 @@ export class Employees {
           "إضافة سلفة نقدية",
           this.selectedEmployee,
         );
+      },
+    },
+    {
+      label: "إضافة  سلفة مرحلة",
+      icon: "pi pi-wallet",
+      command: () => {
+        this.openActionDialog("installmentBorrow", "إضافة سلفة مرحلة", this.selectedEmployee);
       },
     },
     {
@@ -244,14 +242,14 @@ export class Employees {
       }
 
       const requests = branchIds.map((branchId) =>
-        this.api.getAllEmployeesByBranch(this.page, this.pageSize, branchId),
+        this.api.getAllEmployees(this.page, this.pageSize, branchId),
       );
 
       forkJoin(requests).subscribe({
         next: (results: any[]) => {
-          this.employees = results.flatMap((res) => res.data);
+          this.employees = results.flatMap((res: any) => res.data);
           this.totalRecords = results.reduce(
-            (sum, res) => sum + res.totalCount,
+            (sum, res: any) => sum + res.totalCount,
             0,
           );
           this.loading = false;
@@ -262,17 +260,25 @@ export class Employees {
         },
       });
     } else {
-      this.api.getAllEmployees(this.page, this.pageSize).subscribe({
-        next: (res: any) => {
-          this.employees = res.data;
-          this.totalRecords = res.totalCount;
-          this.loading = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.loading = false;
-        },
-      });
+      this.api
+        .getAllEmployees(
+          this.page,
+          this.pageSize,
+          this.selectedBranchFilter,
+          this.selectedBankFilter,
+          this.selectedRoleFilter,
+        )
+        .subscribe({
+          next: (res: any) => {
+            this.employees = res.data;
+            this.totalRecords = res.totalCount;
+            this.loading = false;
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.loading = false;
+          },
+        });
     }
   }
 
@@ -287,13 +293,37 @@ export class Employees {
   }
 
   exportAllToExcel(): void {
-    const pageSize = 100; // جيب 100 موظف في كل call
+    const pageSize = 100;
     const totalPages = Math.ceil(this.totalRecords / pageSize);
-    const requests = [];
+    const requests: any[] = [];
 
     for (let page = 1; page <= totalPages; page++) {
-      requests.push(this.api.getAllEmployees(page, pageSize));
+      if (this.isAreaManager) {
+        this.branchIds.forEach((branchId) => {
+          requests.push(
+            this.api.getAllEmployessWithAllFilters(
+              page,
+              pageSize,
+              branchId,
+              this.selectedBankFilter,
+              this.selectedRoleFilter,
+            ),
+          );
+        });
+      } else {
+        requests.push(
+          this.api.getAllEmployessWithAllFilters(
+            page,
+            pageSize,
+            this.selectedBranchFilter,
+            this.selectedBankFilter,
+            this.selectedRoleFilter,
+          ),
+        );
+      }
     }
+
+    if (!requests.length) return;
 
     this.loading = true;
 
@@ -638,6 +668,7 @@ export class Employees {
       evaluations: this.api.getEvaluations(emp.id),
       payroll: payrollRequest,
       responsibilities: this.api.getAllResponsibilities(emp.id),
+      installmentBorrows : this.api.getInstallmentsBorrow(emp.id)
     }).subscribe({
       next: (res: any) => {
         this.employeeDetails = {
@@ -647,6 +678,7 @@ export class Employees {
           employeeHistory: res.branchHistory,
           evaluations: res.evaluations,
           responsibilities: res.responsibilities,
+          installmentBorrows: res.installmentBorrows,
         };
 
         this.showPayrollDetails = true;
@@ -764,6 +796,8 @@ export class Employees {
   }
 
   onSearchTermChange() {
+    this.page = 1;
+
     if (!this.searchTerm.trim()) {
       this.loadEmployees();
       return;
@@ -788,61 +822,83 @@ export class Employees {
     this.loadEmployees();
   }
 
-  exportToExcel() {}
 
-  openActionDialog(type: string, title: string, employee: any) {
-    this.currentActionType = type;
-    this.currentActionTitle = title + "  " + employee.name;
-    this.actionSubType = "amount";
-    this.selectedSingleDay = "";
-    this.deductionCalcData = [];
+openActionDialog(type: string, title: string, employee: any) {
+  this.currentActionType = type;
+  this.currentActionTitle = `${title} ${employee.name}`;
+
+  this.actionSubType = "amount";
+  this.selectedSingleDay = "";
+  this.deductionCalcData = [];
+  this.evaluationResults = [];
+
+  // Default Form
+  this.actionForm = {
+    employeeId: employee.id,
+
+    amount: null,
+    reasonOfDiscount: "",
+    notes: "",
+
+    responsibilityName: "",
+
+    // Installment Borrow
+    totalAmount: null,
+    totalMonths: null,
+    startMonth: new Date().getMonth() + 1,
+    startYear: new Date().getFullYear(),
+  };
+
+  // Evaluation
+  if (type === "evaluation") {
     this.actionForm = {
       employeeId: employee.id,
-      amount: null,
-      reasonOfDiscount: "",
-      notes: "",
-      responsibilityName: "",
+      quarter: "Q1",
+      year: new Date().getFullYear(),
     };
 
-    if (type === "evaluation") {
-      this.actionForm = {
-        employeeId: employee.id,
-        quarter: "Q1",
-        year: new Date().getFullYear(),
-        results: [
-          {
-            evaluationCriteriaId: null,
-            rating: "",
-          },
-        ],
-      };
-      this.actionItems = this.employeeDetails?.evaluations || [];
-    }
+    this.evaluationResults = [
+      {
+        evaluationCriteriaId: 0,
+        rating: "",
+      },
+    ];
 
-    switch (type) {
-      case "bonus":
-        this.actionItems = this.employeeDetails?.bonuses || [];
-        break;
-
-      case "borrow":
-        this.actionItems = this.employeeDetails?.borrows || [];
-        break;
-
-      case "discount":
-        this.actionItems = this.employeeDetails?.discounts || [];
-        break;
-
-      case "contract":
-        this.actionItems = this.employeeDetails?.contractDiscounts || [];
-        break;
-
-      case "cashBorrow":
-        this.actionItems = this.employeeDetails?.cashBorrows || [];
-        break;
-    }
-
-    this.actionDialogVisible = true;
+    this.actionItems = this.employeeDetails?.evaluations || [];
   }
+
+  switch (type) {
+    case "bonus":
+      this.actionItems = this.employeeDetails?.bonuses || [];
+      break;
+
+    case "borrow":
+      this.actionItems = this.employeeDetails?.borrows || [];
+      break;
+
+    case "discount":
+      this.actionItems = this.employeeDetails?.discounts || [];
+      break;
+
+    case "contract":
+      this.actionItems = this.employeeDetails?.contractDiscounts || [];
+      break;
+
+    case "cashBorrow":
+      this.actionItems = this.employeeDetails?.cashBorrows || [];
+      break;
+
+    case "installmentBorrow":
+      this.actionItems = this.employeeDetails?.installmentBorrows || [];
+      break;
+
+    case "responsibility":
+      this.actionItems = this.employeeDetails?.responsibilities || [];
+      break;
+  }
+
+  this.actionDialogVisible = true;
+}
 
   onActionSubTypeChange(): void {
     this.actionForm.amount = null;
@@ -886,147 +942,208 @@ export class Employees {
     this.evaluationResults.splice(index, 1);
   }
 
-  saveAction() {
-    // ===== Evaluation =====
-    if (this.currentActionType === "evaluation") {
-      if (!this.actionForm.quarter || !this.actionForm.year) {
-        this.api.showError("يجب إدخال الربع والسنة");
-        return;
-      }
-
-      if (!this.evaluationResults.length) {
-        this.api.showError("يجب إضافة بند تقييم واحد على الأقل");
-        return;
-      }
-
-      const invalidResult = this.evaluationResults.some(
-        (x) => !x.evaluationCriteriaId || !x.rating,
-      );
-
-      if (invalidResult) {
-        this.api.showError("يجب استكمال جميع معايير التقييم");
-        return;
-      }
-
-      this.actionLoading = true;
-
-      const evaluationPayload = {
-        employeeId: this.actionForm.employeeId,
-        quarter: this.actionForm.quarter,
-        year: this.actionForm.year,
-        results: this.evaluationResults.map((r) => ({
-          evaluationCriteriaId: r.evaluationCriteriaId,
-          rating: r.rating,
-        })),
-      };
-
-      this.api.addEvaluations(evaluationPayload).subscribe({
-        next: (res: any) => {
-          this.actionItems.unshift(res);
-          this.actionLoading = false;
-          this.actionDialogVisible = false;
-          this.evaluationResults = [];
-          this.api.showSuccess("تم إضافة التقييم بنجاح");
-          this.loadEmployeeDetailsWithPayroll();
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.actionLoading = false;
-          this.api.showError("حدث خطأ أثناء حفظ التقييم");
-        },
-      });
-
+ saveAction() {
+  // ===== Evaluation =====
+  if (this.currentActionType === "evaluation") {
+    if (!this.actionForm.quarter || !this.actionForm.year) {
+      this.api.showError("يجب إدخال الربع والسنة");
       return;
     }
 
-    if (this.currentActionType === "responsibility") {
-      if (!this.actionForm.responsibilityName?.trim()) {
-        this.api.showError("يجب إدخال اسم العهدة");
-        return;
-      }
-      this.actionLoading = true;
-      this.api
-        .addResponsibility(this.actionForm.employeeId, {
-          name: this.actionForm.responsibilityName,
-        })
-        .subscribe({
-          next: (res: any) => {
-            this.actionLoading = false;
-            this.actionDialogVisible = false;
-            this.actionForm.responsibilityName = "";
-            if (this.employeeDetails) {
-              this.employeeDetails.responsibilities = [
-                ...(this.employeeDetails.responsibilities || []),
-                res,
-              ];
-            }
-            this.api.showSuccess("تم إضافة العهدة بنجاح");
-            this.cdr.detectChanges();
-          },
-          error: () => {
-            this.actionLoading = false;
-            this.api.showError("حدث خطأ أثناء إضافة العهدة");
-          },
-        });
+    if (!this.evaluationResults.length) {
+      this.api.showError("يجب إضافة بند تقييم واحد على الأقل");
       return;
     }
 
-    // ===== باقى الأنواع =====
-    if (
-      !this.actionForm.amount ||
-      !this.actionForm.reasonOfDiscount?.trim() ||
-      !this.actionForm.notes?.trim()
-    ) {
-      this.api.showError("يجب إدخال القيمة والسبب والملاحظات");
+    const invalidResult = this.evaluationResults.some(
+      (x) => !x.evaluationCriteriaId || !x.rating,
+    );
+
+    if (invalidResult) {
+      this.api.showError("يجب استكمال جميع معايير التقييم");
       return;
     }
 
     this.actionLoading = true;
 
-    const payload =
-      this.currentActionType === "bonus" || this.currentActionType === "borrow"
-        ? {
-            employeeId: this.actionForm.employeeId,
-            amount: this.actionForm.amount,
-            reason: this.actionForm.reasonOfDiscount,
-            notes: this.actionForm.notes,
-          }
-        : {
-            employeeId: this.actionForm.employeeId,
-            amount: this.actionForm.amount,
-            reasonOfDiscount: this.actionForm.reasonOfDiscount,
-            notes: this.actionForm.notes,
-          };
+    const evaluationPayload = {
+      employeeId: this.actionForm.employeeId,
+      quarter: this.actionForm.quarter,
+      year: this.actionForm.year,
+      results: this.evaluationResults.map((r) => ({
+        evaluationCriteriaId: r.evaluationCriteriaId,
+        rating: r.rating,
+      })),
+    };
 
-    const request =
-      this.currentActionType === "bonus"
-        ? this.api.addBonus(payload)
-        : this.currentActionType === "borrow"
-          ? this.api.addCashBorrow(payload)
-          : this.currentActionType === "discount"
-            ? this.api.addDiscount(payload)
-            : this.api.addContractDiscount(payload);
-
-    request.subscribe({
+    this.api.addEvaluations(evaluationPayload).subscribe({
       next: (res: any) => {
         this.actionItems.unshift(res);
+        this.actionLoading = false;
+        this.actionDialogVisible = false;
+        this.evaluationResults = [];
+        this.api.showSuccess("تم إضافة التقييم بنجاح");
+        this.loadEmployeeDetailsWithPayroll();
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.actionLoading = false;
+        this.api.showError("حدث خطأ أثناء حفظ التقييم");
+      },
+    });
+
+    return;
+  }
+
+  // ===== Responsibility =====
+  if (this.currentActionType === "responsibility") {
+    if (!this.actionForm.responsibilityName?.trim()) {
+      this.api.showError("يجب إدخال اسم العهدة");
+      return;
+    }
+
+    this.actionLoading = true;
+
+    this.api
+      .addResponsibility(this.actionForm.employeeId, {
+        name: this.actionForm.responsibilityName,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.actionLoading = false;
+          this.actionDialogVisible = false;
+          this.actionForm.responsibilityName = "";
+
+          if (this.employeeDetails) {
+            this.employeeDetails.responsibilities = [
+              ...(this.employeeDetails.responsibilities || []),
+              res,
+            ];
+          }
+
+          this.api.showSuccess("تم إضافة العهدة بنجاح");
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.actionLoading = false;
+          this.api.showError("حدث خطأ أثناء إضافة العهدة");
+        },
+      });
+
+    return;
+  }
+
+  // ===== Installment Borrow =====
+  if (this.currentActionType === "installmentBorrow") {
+    if (
+      !this.actionForm.totalAmount ||
+      !this.actionForm.totalMonths ||
+      !this.actionForm.startMonth ||
+      !this.actionForm.startYear
+    ) {
+      this.api.showError("يجب إدخال جميع بيانات السلفة");
+      return;
+    }
+
+    this.actionLoading = true;
+
+    const installmentPayload = {
+      employeeId: this.actionForm.employeeId,
+      totalAmount: this.actionForm.totalAmount,
+      totalMonths: this.actionForm.totalMonths,
+      startMonth: this.actionForm.startMonth,
+      startYear: this.actionForm.startYear,
+    };
+
+    this.api.addInstallmentsBorrow(installmentPayload).subscribe({
+      next: (res: any) => {
+        this.actionItems.unshift(res);
+
+        this.actionLoading = false;
+        this.actionDialogVisible = false;
+
         this.actionForm = {
           employeeId: this.actionForm.employeeId,
           amount: null,
           reasonOfDiscount: "",
           notes: "",
+          totalAmount: null,
+          totalMonths: null,
+          startMonth: null,
+          startYear: null,
         };
-        this.actionLoading = false;
+
+        this.api.showSuccess("تم إضافة السلفة المرحلة بنجاح");
         this.cdr.detectChanges();
-        this.api.showSuccess("تمت الإضافة بنجاح");
-        this.actionDialogVisible = false;
       },
       error: () => {
         this.actionLoading = false;
-        this.api.showError("حدث خطأ أثناء الحفظ");
+        this.api.showError("حدث خطأ أثناء إضافة السلفة المرحلة");
       },
     });
+
+    return;
   }
+
+  // ===== باقي الأنواع =====
+  if (
+    !this.actionForm.amount ||
+    !this.actionForm.reasonOfDiscount?.trim() ||
+    !this.actionForm.notes?.trim()
+  ) {
+    this.api.showError("يجب إدخال القيمة والسبب والملاحظات");
+    return;
+  }
+
+  this.actionLoading = true;
+
+  const payload =
+    this.currentActionType === "bonus" ||
+    this.currentActionType === "cashBorrow"
+      ? {
+          employeeId: this.actionForm.employeeId,
+          amount: this.actionForm.amount,
+          reason: this.actionForm.reasonOfDiscount,
+          notes: this.actionForm.notes,
+        }
+      : {
+          employeeId: this.actionForm.employeeId,
+          amount: this.actionForm.amount,
+          reasonOfDiscount: this.actionForm.reasonOfDiscount,
+          notes: this.actionForm.notes,
+        };
+
+  const request =
+    this.currentActionType === "bonus"
+      ? this.api.addBonus(payload)
+      : this.currentActionType === "cashBorrow"
+      ? this.api.addCashBorrow(payload)
+      : this.currentActionType === "discount"
+      ? this.api.addDiscount(payload)
+      : this.api.addContractDiscount(payload);
+
+  request.subscribe({
+    next: (res: any) => {
+      this.actionItems.unshift(res);
+
+      this.actionForm = {
+        employeeId: this.actionForm.employeeId,
+        amount: null,
+        reasonOfDiscount: "",
+        notes: "",
+      };
+
+      this.actionLoading = false;
+      this.cdr.detectChanges();
+      this.api.showSuccess("تمت الإضافة بنجاح");
+      this.actionDialogVisible = false;
+    },
+    error: () => {
+      this.actionLoading = false;
+      this.api.showError("حدث خطأ أثناء الحفظ");
+    },
+  });
+}
 
   deleteAction(id: number, type?: string) {
     const actionType = type || this.currentActionType;
@@ -1093,83 +1210,7 @@ export class Employees {
   }
 
   onFilterChange() {
-    const hasBranch = !!this.selectedBranchFilter;
-    const hasBank = !!this.selectedBankFilter;
-    const hasRole = !!this.selectedRoleFilter;
-
-    if (hasBranch && hasBank && hasRole) {
-      this.api
-        .getAllEmployessWithAllFilters(
-          this.page,
-          this.pageSize,
-          this.selectedBranchFilter,
-          this.selectedBankFilter,
-          this.selectedRoleFilter,
-        )
-        .subscribe({
-          next: (res: any) => {
-            this.employees = res.data ?? res;
-            this.totalRecords = res.totalCount ?? this.employees.length;
-            this.cdr.detectChanges();
-          },
-        });
-      return;
-    }
-
-    // لو فرع فقط
-    if (hasBranch && !hasBank && !hasRole) {
-      this.api
-        .getAllEmployeesByBranch(
-          this.page,
-          this.pageSize,
-          this.selectedBranchFilter,
-        )
-        .subscribe({
-          next: (res: any) => {
-            this.employees = res.data ?? res;
-            this.totalRecords = res.totalCount ?? this.employees.length;
-            this.cdr.detectChanges();
-          },
-        });
-      return;
-    }
-
-    // لو بنك فقط
-    if (hasBank && !hasBranch && !hasRole) {
-      this.api
-        .gettAllEmployessByBank(
-          this.page,
-          this.pageSize,
-          this.selectedBankFilter,
-        )
-        .subscribe({
-          next: (res: any) => {
-            this.employees = res.data ?? res;
-            this.totalRecords = res.totalCount ?? this.employees.length;
-            this.cdr.detectChanges();
-          },
-        });
-      return;
-    }
-
-    // لو دور فقط
-    if (hasRole && !hasBranch && !hasBank) {
-      this.api
-        .getAllEmployessByRole(
-          this.page,
-          this.pageSize,
-          this.selectedRoleFilter,
-        )
-        .subscribe({
-          next: (res: any) => {
-            this.employees = res.data ?? res;
-            this.totalRecords = res.totalCount ?? this.employees.length;
-            this.cdr.detectChanges();
-          },
-        });
-      return;
-    }
-
+    this.page = 1; // 👈 ارجع للصفحة الأولى دايمًا عند الفلترة
     this.loadEmployees();
   }
 
@@ -1177,6 +1218,7 @@ export class Employees {
     this.selectedBranchFilter = "";
     this.selectedBankFilter = "";
     this.selectedRoleFilter = "";
+    this.page = 1;
     this.loadEmployees();
   }
 

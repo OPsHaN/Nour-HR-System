@@ -1,20 +1,66 @@
-<div class="sticky-header">
-  <button
-    pButton
-    type="button"
-    class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
-    [class.btn-success]="!showCreateUser"
-    [class.btn-danger]="showCreateUser"
-    icon="pi pi-plus"
-    (click)="showCreateUser = !showCreateUser"
-  >
-    <i
-      class="pi"
-      [ngClass]="showCreateUser ? 'pi pi-times ' : 'pi-user-plus'"
-    ></i>
+<div
+  class="sticky-header d-flex justify-content-between align-items-center gap-2"
+>
+  <div class="d-flex justify-content-start align-items-center gap-2">
+    <button
+      pButton
+      type="button"
+      class="btn btn-sm btn-success mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+      [class.btn-success]="!showCreateUser"
+      [class.btn-danger]="showCreateUser"
+      icon="pi pi-plus"
+      (click)="showCreateUser = !showCreateUser"
+    >
+      <i
+        class="pi"
+        [ngClass]="showCreateUser ? 'pi pi-times ' : 'pi-user-plus'"
+      ></i>
 
-    {{ showCreateUser ? '' : 'مستخدم جديد' }}
-  </button>
+      {{ showCreateUser ? '' : 'مستخدم جديد' }}
+    </button>
+  </div>
+  <div class="d-flex justify-content-end gap-2 align-items-center">
+    <span
+      class="p-input-icon-right position-relative ms-1"
+      *ngIf="!showCreateUser"
+    >
+      <i
+        class="pi pi-search position-absolute"
+        style="
+          left: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          z-index: 1;
+        "
+        (click)="onSearchTermChange()"
+      ></i>
+
+      <i
+        *ngIf="searchTerm"
+        class="pi pi-times position-absolute"
+        style="
+          right: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          z-index: 1;
+          color: red;
+        "
+        (click)="clearSearch()"
+      ></i>
+
+      <input
+        type="text"
+        pInputText
+        placeholder="بحث..."
+        class="custom-input search-input"
+        style="padding-left: 1rem; padding-right: 2rem; width: 250px"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearchTermChange()"
+      />
+    </span>
+  </div>
 </div>
 
 <app-create-user *ngIf="showCreateUser" (created)="onEmployeeCreated()">
@@ -34,7 +80,8 @@
   [editingRowKeys]="editingRowKeys"
   (onLazyLoad)="onPageChange($event)"
   dir="rtl"
-  styleClass="p-datatable-sm p-datatable-gridlines">
+  styleClass="p-datatable-sm p-datatable-gridlines"
+>
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
