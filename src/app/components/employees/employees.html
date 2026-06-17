@@ -655,7 +655,6 @@
           </div>
 
           <div class="evaluation-card mb-0" *ngIf="showPayrollDetails">
-
             <!-- installment Borrows -->
             <div
               class="detail-item full-width mb-3"
@@ -926,6 +925,12 @@
             <!-- Payroll Summary -->
             <div class="details-grid mt-3">
               <div class="detail-item">
+                <label>إجمالى المرتب</label
+                ><span
+                  >{{ employeeDetails.totalSalary | number:'1.0-2' }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
                 <label>عدد الساعات</label
                 ><span>{{ employeeDetails.hours | number:'1.0-2' }} ساعة</span>
               </div>
@@ -938,9 +943,14 @@
                 ><span>{{ employeeDetails.salaryPerHour }} جنية</span>
               </div>
               <div class="detail-item">
-                <label>إجمالى المرتب</label
-                ><span
-                  >{{ employeeDetails.totalSalary | number:'1.0-2' }} جنية</span
+                <label>إجمالى عدد الساعات المطلوبة</label
+                ><span>{{ employeeDetails.target }} ساعة</span>
+              </div>
+
+              <div class="detail-item">
+                <label>إجمالى الزيادات</label
+                ><span class="text-success"
+                  >{{ employeeDetails.totalBouns }} جنية</span
                 >
               </div>
               <div class="detail-item">
@@ -956,9 +966,15 @@
                 >
               </div>
               <div class="detail-item">
-                <label>إجمالى الزيادات</label
-                ><span class="text-success"
-                  >{{ employeeDetails.totalBouns }} جنية</span
+                <label>إجمالى السلف النقدية</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalCashBorrows }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالى خصومات التعاقدات</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalContractDiscount }} جنية</span
                 >
               </div>
               <div class="detail-item">
@@ -977,19 +993,10 @@
                 <label>إجمالى التأمينات</label
                 ><span>{{ employeeDetails.insurence }} جنية</span>
               </div>
+
               <div class="detail-item">
-                <label>إجمالى عدد الساعات المطلوبة</label
-                ><span>{{ employeeDetails.target }} ساعة</span>
-              </div>
-              <div class="detail-item">
-                <label>إجمالى السلف النقدية</label
-                ><span class="text-danger"
-                  >{{ employeeDetails.totalCashBorrows }} جنية</span
-                >
-              </div>
-              <div class="detail-item">
-                <label>صافى المرتب</label>
-                <span
+                <label class="fs-5 text-center">صافى المرتب</label>
+                <span class="fs-6 text-center"
                   [class.text-danger]="employeeDetails.netSalary < 0"
                   [class.text-success]="employeeDetails.netSalary >= 0"
                 >
@@ -1690,23 +1697,26 @@
     </div>
 
     <div class="form">
-      <button
-        type="button"
-        [disabled]="
-        actionLoading ||
-        !actionForm.amount ||
-        !actionForm.reasonOfDiscount ||
-        !actionForm.notes
-      "
-        class="submit-btn full my-2"
-        (click)="saveAction()"
-      >
-        {{ actionLoading ? 'جارى الحفظ...' : ( currentActionType === 'bonus' ?
-        'إضافة زيادة' : currentActionType === 'installmentBorrow' ? ' إضافة سلفة
-        مرحلة' : currentActionType === 'discount' ? 'إضافة خصم' :
-        currentActionType === 'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة
-        نقدية' ) }}
-      </button>
+<button
+  type="button"
+  [disabled]="
+    actionLoading ||
+    !actionForm.amount ||
+    !actionForm.reasonOfDiscount ||
+    !actionForm.notes
+  "
+  class="submit-btn full my-2"
+  (click)="saveAction()"
+>
+  {{
+    actionLoading ? 'جارى الحفظ...' :
+    currentActionType === 'bonus' ? 'إضافة زيادة' :
+    currentActionType === 'installmentBorrow' ? 'إضافة سلفة مرحلة' :
+    currentActionType === 'discount' ? 'إضافة خصم' :
+    currentActionType === 'contract' ? 'إضافة خصم تعاقد' :
+    'إضافة سلفة نقدية'
+  }}
+</button>
     </div>
   </div>
   <!-- إضافة عهدة -->

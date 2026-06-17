@@ -351,6 +351,12 @@
             <!-- ملخص المرتب -->
             <div class="details-grid mt-3">
               <div class="detail-item">
+                <label>إجمالى المرتب</label
+                ><span
+                  >{{ employeeDetails.totalSalary | number:'1.0-2' }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
                 <label>عدد الساعات</label
                 ><span>{{ employeeDetails.hours | number:'1.0-2' }} ساعة</span>
               </div>
@@ -363,58 +369,60 @@
                 ><span>{{ employeeDetails.salaryPerHour }} جنية</span>
               </div>
               <div class="detail-item">
-                <label>إجمالي المرتب</label
-                ><span
-                  >{{ employeeDetails.totalSalary | number:'1.0-2' }} جنية</span
-                >
+                <label>إجمالى عدد الساعات المطلوبة</label
+                ><span>{{ employeeDetails.target }} ساعة</span>
               </div>
+
               <div class="detail-item">
-                <label>إجمالي الخصومات</label
-                ><span class="text-danger"
-                  >{{ employeeDetails.totalDiscounts }} جنية</span
-                >
-              </div>
-              <div class="detail-item">
-                <label>إجمالي السلف</label
-                ><span class="text-danger"
-                  >{{ employeeDetails.totalBorrows }} جنية</span
-                >
-              </div>
-              <div class="detail-item">
-                <label>إجمالي الزيادات</label
+                <label>إجمالى الزيادات</label
                 ><span class="text-success"
                   >{{ employeeDetails.totalBouns }} جنية</span
                 >
               </div>
               <div class="detail-item">
-                <label>إجمالي أيام الإجازات</label
-                ><span>{{ employeeDetails.holidaies }} يوم</span>
+                <label>إجمالى الخصومات</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalDiscounts }} جنية</span
+                >
               </div>
               <div class="detail-item">
-                <label>الساعات المنسية</label
-                ><span>{{ employeeDetails.forgetedHours }} ساعة</span>
+                <label>إجمالى السلف</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalBorrows }} جنية</span
+                >
               </div>
               <div class="detail-item">
-                <label>ساعات الإجازات</label
-                ><span>{{ employeeDetails.holidayHours }} ساعة</span>
-              </div>
-              <div class="detail-item">
-                <label>التأمينات</label
-                ><span>{{ employeeDetails.insurence }} جنية</span>
-              </div>
-              <div class="detail-item">
-                <label>الساعات المطلوبة</label
-                ><span>{{ employeeDetails.target }} ساعة</span>
-              </div>
-              <div class="detail-item">
-                <label>إجمالي السلف النقدية</label
+                <label>إجمالى السلف النقدية</label
                 ><span class="text-danger"
                   >{{ employeeDetails.totalCashBorrows }} جنية</span
                 >
               </div>
               <div class="detail-item">
-                <label>صافي المرتب</label>
-                <span
+                <label>إجمالى خصومات التعاقدات</label
+                ><span class="text-danger"
+                  >{{ employeeDetails.totalContractDiscount }} جنية</span
+                >
+              </div>
+              <div class="detail-item">
+                <label>إجمالى أيام الأجازات</label
+                ><span>{{ employeeDetails.holidaies }} يوم</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى الساعات المنسية</label
+                ><span>{{ employeeDetails.forgetedHours }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى ساعات الاجازات</label
+                ><span>{{ employeeDetails.holidayHours }} ساعة</span>
+              </div>
+              <div class="detail-item">
+                <label>إجمالى التأمينات</label
+                ><span>{{ employeeDetails.insurence }} جنية</span>
+              </div>
+
+              <div class="detail-item">
+                <label class="fs-5 text-center">صافى المرتب</label>
+                <span class="fs-6 text-center"
                   [class.text-danger]="employeeDetails.netSalary < 0"
                   [class.text-success]="employeeDetails.netSalary >= 0"
                 >

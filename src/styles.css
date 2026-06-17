@@ -708,7 +708,7 @@ input {
   height: 50px;
   min-width: 100px;
   border: none !important;
-  border-radius: 20px !important;
+  border-radius: 26px !important;
   background: linear-gradient(135deg,
       rgba(22, 119, 255, 0.95),
       rgba(88, 150, 255, 0.9)) !important;
