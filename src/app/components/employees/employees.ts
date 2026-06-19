@@ -191,17 +191,17 @@ export class Employees {
         this.openActionDialog("installmentBorrow", "إضافة سلفة مرحلة", this.selectedEmployee);
       },
     },
-    {
-      label: "إضافة تقييم",
-      icon: "pi pi-star",
-      command: () => {
-        this.openActionDialog(
-          "evaluation",
-          "إضافة تقييم",
-          this.selectedEmployee,
-        );
-      },
-    },
+    // {
+    //   label: "إضافة تقييم",
+    //   icon: "pi pi-star",
+    //   command: () => {
+    //     this.openActionDialog(
+    //       "evaluation",
+    //       "إضافة تقييم",
+    //       this.selectedEmployee,
+    //     );
+    //   },
+    // },
     {
       label: "إضافة عهدة",
       icon: "pi pi-box",
@@ -233,33 +233,49 @@ export class Employees {
   loadEmployees() {
     this.loading = true;
 
-    if (this.isAreaManager) {
-      const branchIds = this.branchIds;
+   if (this.isAreaManager) {
+    const branchIds = this.branchIds;
 
-      if (!branchIds.length) {
+    if (!branchIds.length) {
+      this.loading = false;
+      return;
+    }
+
+    // الخطوة 1: جيب أول صفحة من كل فرع عشان تعرف totalCount بتاعه
+    const firstRequests = branchIds.map((branchId) =>
+      this.api.getAllEmployees(1, 1, branchId), // pageSize=1 بس عشان أعرف العدد
+    );
+
+    forkJoin(firstRequests).subscribe({
+      next: (countResults: any[]) => {
+        // الخطوة 2: دلوقتي عندي العدد الحقيقي لكل فرع
+        const branchRequests = branchIds.map((branchId, i) => {
+          const total = countResults[i].totalCount;
+          return this.api.getAllEmployees(1, total || 1, branchId);
+        });
+
+        forkJoin(branchRequests).subscribe({
+          next: (results: any[]) => {
+            const allEmployees = results.flatMap((res: any) => res.data);
+            this.totalRecords = allEmployees.length;
+
+            const start = (this.page - 1) * this.pageSize;
+            const end = start + this.pageSize;
+            this.employees = allEmployees.slice(start, end);
+
+            this.loading = false;
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.loading = false;
+          },
+        });
+      },
+      error: () => {
         this.loading = false;
-        return;
-      }
-
-      const requests = branchIds.map((branchId) =>
-        this.api.getAllEmployees(this.page, this.pageSize, branchId),
-      );
-
-      forkJoin(requests).subscribe({
-        next: (results: any[]) => {
-          this.employees = results.flatMap((res: any) => res.data);
-          this.totalRecords = results.reduce(
-            (sum, res: any) => sum + res.totalCount,
-            0,
-          );
-          this.loading = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.loading = false;
-        },
-      });
-    } else {
+      },
+    });
+  } else {
       this.api
         .getAllEmployees(
           this.page,

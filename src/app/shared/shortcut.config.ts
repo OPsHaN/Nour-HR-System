@@ -99,7 +99,7 @@ export const SHORTCUTS_CONFIG = {
     title: "العهدة",
     icon: "work",
     bg: "#fa541c",
-    roles: ["HR", "Control", "Accountant"] as UserRole[],
+    roles: ["HR", "Control"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   orders: {
@@ -111,7 +111,6 @@ export const SHORTCUTS_CONFIG = {
       "Employee",
       "AreaManager",
       "Control",
-      "Accountant",
     ] as UserRole[],
     size: { width: 1200, height: 420 },
   },
