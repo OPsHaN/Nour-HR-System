@@ -127,20 +127,20 @@ export class Orders implements OnInit {
     public auth: AuthService,
   ) {}
 
-ngOnInit() {
-  if (this.auth.isHR || this.auth.isEmployee) {
-    this.loadMissedHours();
-  }
+  ngOnInit() {
+    if (this.auth.isHR || this.auth.isEmployee) {
+      this.loadMissedHours();
+    }
 
-  if (this.auth.isHR || this.auth.isEmployee || this.auth.isAreaManager) {
-    this.loadUnseenCounts();
-  }
+    if (this.auth.isHR || this.auth.isEmployee || this.auth.isAreaManager) {
+      this.loadUnseenCounts();
+    }
 
-  if (this.auth.isAreaManager) {
-    this.activeTabIndex = 1;
-    this.loadLeave();
+    if (this.auth.isAreaManager) {
+      this.activeTabIndex = 1;
+      this.loadLeave();
+    }
   }
-}
 
   get isEmployee(): boolean {
     return !(
@@ -178,125 +178,131 @@ ngOnInit() {
 
   // ---- Loaders ----
 
-  loadMissedHours() {
-    this.loadingMissedHours = true;
+ loadMissedHours() {
+  this.loadingMissedHours = true;
 
-    const request = this.isEmployee
-      ? this.api.getForgetedHoursRequestsForUser(
-          this.employeeId,
-          this.missedHoursPage,
-          10,
-        )
-      : this.api.getForgetedHoursRequests(this.missedHoursPage, 10);
+  const request = this.isEmployee
+    ? this.api.getForgetedHoursRequestsForUser(this.employeeId, this.missedHoursPage, 10)
+    : this.api.getForgetedHoursRequests(this.missedHoursPage, 10);
 
-    request.subscribe({
-      next: (res: any) => {
-        this.missedHoursRequests = res.data;
-        this.missedHoursTotalRecords = res.totalCount;
-        this.loadingMissedHours = false;
-        this.cdr.detectChanges();
-      },
-      error: () => (this.loadingMissedHours = false),
-    });
-  }
+  request.subscribe({
+    next: (res: any) => {
+      this.missedHoursRequests = res.data;
+      this.missedHoursTotalRecords = res.totalCount;
+      this.loadingMissedHours = false;
+      if (this.isEmployee) {
+        this.missedHoursRequests.forEach(req => this.markAsSeen('missedHours', req.id));
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingMissedHours = false),
+  });
+}
 
-  loadLeave() {
-    this.loadingLeave = true;
+loadLeave() {
+  this.loadingLeave = true;
 
-    const request = this.isEmployee
-      ? this.api.getAllHolidaysForUser(this.employeeId, this.leavePage, 10)
-      : this.api.getAllHolidays(this.leavePage, 10);
+  const request = this.isEmployee
+    ? this.api.getAllHolidaysForUser(this.employeeId, this.leavePage, 10)
+    : this.api.getAllHolidays(this.leavePage, 10);
 
-    request.subscribe({
-      next: (res: any) => {
-        this.leaveRequests = res.data;
-        this.leaveTotalRecords = res.totalCount;
-        this.loadingLeave = false;
-        this.cdr.detectChanges();
-      },
-      error: () => (this.loadingLeave = false),
-    });
-  }
+  request.subscribe({
+    next: (res: any) => {
+      this.leaveRequests = res.data;
+      this.leaveTotalRecords = res.totalCount;
+      this.loadingLeave = false;
+      if (this.isEmployee) {
+        this.leaveRequests.forEach(req => this.markAsSeen('leave', req.id));
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingLeave = false),
+  });
+}
 
-  loadLoan() {
-    this.loadingLoan = true;
+loadLoan() {
+  this.loadingLoan = true;
 
-    const request = this.isEmployee
-      ? this.api.getAllBorrowsForUser(this.employeeId, this.loanPage, 10)
-      : this.api.getAllBorrows(this.loanPage, 10);
+  const request = this.isEmployee
+    ? this.api.getAllBorrowsForUser(this.employeeId, this.loanPage, 10)
+    : this.api.getAllBorrows(this.loanPage, 10);
 
-    request.subscribe({
-      next: (res: any) => {
-        this.loanRequests = res.data;
-        this.loanTotalRecords = res.totalCount;
-        this.loadingLoan = false;
-        this.cdr.detectChanges();
-      },
-      error: () => (this.loadingLoan = false),
-    });
-  }
+  request.subscribe({
+    next: (res: any) => {
+      this.loanRequests = res.data;
+      this.loanTotalRecords = res.totalCount;
+      this.loadingLoan = false;
+      if (this.isEmployee) {
+        this.loanRequests.forEach(req => this.markAsSeen('loan', req.id));
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingLoan = false),
+  });
+}
 
-  loadOvertime() {
-    this.loadingOvertime = true;
+loadOvertime() {
+  this.loadingOvertime = true;
 
-    const request = this.isEmployee
-      ? this.api.getAllOvertimeForUser(this.employeeId, this.overtimePage, 10)
-      : this.api.getAllOvertime(this.overtimePage, 10);
+  const request = this.isEmployee
+    ? this.api.getAllOvertimeForUser(this.employeeId, this.overtimePage, 10)
+    : this.api.getAllOvertime(this.overtimePage, 10);
 
-    request.subscribe({
-      next: (res: any) => {
-        this.overtimeRequests = res.data;
-        this.overtimeTotalRecords = res.totalCount;
-        this.loadingOvertime = false;
-        this.cdr.detectChanges();
-      },
-      error: () => (this.loadingOvertime = false),
-    });
-  }
+  request.subscribe({
+    next: (res: any) => {
+      this.overtimeRequests = res.data;
+      this.overtimeTotalRecords = res.totalCount;
+      this.loadingOvertime = false;
+      if (this.isEmployee) {
+        this.overtimeRequests.forEach(req => this.markAsSeen('overtime', req.id));
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingOvertime = false),
+  });
+}
 
-  loadResignation() {
-    this.loadingResignation = true;
+loadResignation() {
+  this.loadingResignation = true;
 
-    const request = this.isEmployee
-      ? this.api.getAllResignationsForUser(
-          this.employeeId,
-          this.resignationPage,
-          10,
-        )
-      : this.api.getAllResignations(this.resignationPage, 10);
+  const request = this.isEmployee
+    ? this.api.getAllResignationsForUser(this.employeeId, this.resignationPage, 10)
+    : this.api.getAllResignations(this.resignationPage, 10);
 
-    request.subscribe({
-      next: (res: any) => {
-        this.resignationRequests = res.data;
-        this.resignationTotalRecords = res.totalCount;
-        this.loadingResignation = false;
-        this.cdr.detectChanges();
-      },
-      error: () => (this.loadingResignation = false),
-    });
-  }
+  request.subscribe({
+    next: (res: any) => {
+      this.resignationRequests = res.data;
+      this.resignationTotalRecords = res.totalCount;
+      this.loadingResignation = false;
+      if (this.isEmployee) {
+        this.resignationRequests.forEach(req => this.markAsSeen('resignation', req.id));
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingResignation = false),
+  });
+}
 
-  loadAppointment() {
-    this.loadingAppointment = true;
+loadAppointment() {
+  this.loadingAppointment = true;
 
-    const request = this.isEmployee
-      ? this.api.getAllAppointmentsForUser(
-          this.employeeId,
-          this.appointmentPage,
-          10,
-        )
-      : this.api.getAllAppointments(this.appointmentPage, 10);
+  const request = this.isEmployee
+    ? this.api.getAllAppointmentsForUser(this.employeeId, this.appointmentPage, 10)
+    : this.api.getAllAppointments(this.appointmentPage, 10);
 
-    request.subscribe({
-      next: (res: any) => {
-        this.appointmentRequests = res.data;
-        this.appointmentTotalRecords = res.totalCount;
-        this.loadingAppointment = false;
-        this.cdr.detectChanges();
-      },
-      error: () => (this.loadingAppointment = false),
-    });
-  }
+  request.subscribe({
+    next: (res: any) => {
+      this.appointmentRequests = res.data;
+      this.appointmentTotalRecords = res.totalCount;
+      this.loadingAppointment = false;
+      if (this.isEmployee) {
+        this.appointmentRequests.forEach(req => this.markAsSeen('appointment', req.id));
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => (this.loadingAppointment = false),
+  });
+}
 
   // ---- Pagination ----
 
@@ -627,6 +633,15 @@ ngOnInit() {
     }
 
     call.subscribe();
+  }
+
+  hasRejected(requests: any[]): boolean {
+    return requests.some((req) => req.status === "Rejected");
+  }
+
+  revealRejectionReason(req: any, type: string) {
+    req._seen = true;
+    this.markAsSeen(type, req.id);
   }
 
   loadUnseenCounts() {

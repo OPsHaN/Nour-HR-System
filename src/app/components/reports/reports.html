@@ -205,9 +205,14 @@
           [loading]="loadingAbsent"
           [paginator]="true"
           [rows]="10"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="absentTotalCount"
+          (onPage)="onAbsentPageChange($event)"
           styleClass="p-datatable-sm p-datatable-gridlines"
           [tableStyle]="{ 'min-width': '40rem' }"
           [paginatorDropdownAppendTo]="'body'"
+          dir="rtl"
         >
           <ng-template pTemplate="header">
             <tr>

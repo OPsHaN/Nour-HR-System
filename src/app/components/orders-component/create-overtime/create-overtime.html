@@ -1,6 +1,5 @@
 <div class="panel">
   <div class="form">
-
     <div class="field">
       <label>عدد الساعات <span class="text-danger">*</span></label>
       <input
@@ -13,13 +12,14 @@
     </div>
 
     <div class="field">
-      <label>ملاحظات</label>
-      <textarea
-        class="custom-input"
-        [(ngModel)]="form.notes"
-        rows="3"
-        placeholder="مثال: زميلي تأخر في الاستلام..."
-      ></textarea>
+      <label>السبب <span class="text-danger">*</span></label>
+      <select class="custom-input toolbar-select" [(ngModel)]="form.notes">
+        <option value="إستلام من زميل">إستلام من زميل</option>
+        <option value="تأخير حضور زميلى">تأخير حضور زميلى</option>
+        <option value="تكليف من مدير المنطقة">تكليف من مدير المنطقة</option>
+        <option value="تكليف من احد القيادات بالمجموعة">تكليف من احد القيادات بالمجموعة</option>
+        <option value="أخرى">اخرى</option>
+      </select>
     </div>
 
     <button
@@ -30,6 +30,5 @@
     >
       {{ loading ? 'جارى الإرسال...' : 'إرسال الطلب' }}
     </button>
-
   </div>
 </div>

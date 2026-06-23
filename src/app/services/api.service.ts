@@ -326,11 +326,11 @@ export class Apiservice {
     return this.http.get(`${this.baseUrl}attendance/reports?type=${type}`);
   }
 
-  getAbsentEmployees(fromDate: string, toDate: string) {
-    return this.http.get(
-      `${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}`,
-    );
-  }
+getAbsentEmployees(fromDate: string, toDate: string, page: number = 1, pageSize: number = 10) {
+  return this.http.get(
+    `${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}&page=${page}&pageSize=${pageSize}`,
+  );
+}
 
   startShift() {
     return this.http.post(`${this.baseUrl}attendance/start`, {});

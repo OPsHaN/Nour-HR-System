@@ -126,7 +126,12 @@
               <th>السبب</th>
               <th>ملاحظات</th>
               <th>الحالة</th>
-              <th *ngIf="this.auth.isHR ">الإجراءات</th>
+              <th
+                *ngIf="this.auth.isEmployee && hasRejected(missedHoursRequests)"
+              >
+                سبب الرفض
+              </th>
+              <th *ngIf="this.auth.isHR">الإجراءات</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
@@ -141,6 +146,23 @@
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
                   {{ getStatusLabel(req.status) }}
                 </span>
+              </td>
+              <td
+                *ngIf="this.auth.isEmployee && hasRejected(missedHoursRequests)"
+              >
+                <ng-container *ngIf="req.status === 'Rejected'">
+                  <button
+                    *ngIf="!req._seen"
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-warning"
+                    (click)="revealRejectionReason(req, 'missedHours')"
+                  >
+                    <i class="pi pi-eye d-flex"></i>
+                  </button>
+                  <span *ngIf="req._seen">{{ req.rejectionReason }}</span>
+                </ng-container>
+                <span *ngIf="req.status !== 'Rejected'">—</span>
               </td>
               <td *ngIf="this.auth.isHR">
                 <button
@@ -228,6 +250,9 @@
               <th>الموظف البديل</th>
               <th>موافقة المدير</th>
               <th>الحالة</th>
+              <th *ngIf="this.auth.isEmployee && hasRejected(leaveRequests)">
+                سبب الرفض
+              </th>
               <th *ngIf=" this.auth.isHR || this.auth.isAreaManager ">
                 الإجراءات
               </th>
@@ -256,6 +281,21 @@
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
                   {{ getStatusLabel(req.status) }}
                 </span>
+              </td>
+              <td *ngIf="this.auth.isEmployee && hasRejected(leaveRequests)">
+                <ng-container *ngIf="req.status === 'Rejected'">
+                  <button
+                    *ngIf="!req._seen"
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-warning"
+                    (click)="revealRejectionReason(req, 'leave')"
+                  >
+                    <i class="pi pi-eye d-flex"></i>
+                  </button>
+                  <span *ngIf="req._seen">{{ req.rejectionReason }}</span>
+                </ng-container>
+                <span *ngIf="req.status !== 'Rejected'">—</span>
               </td>
               <td *ngIf=" this.auth.isHR || this.auth.isAreaManager ">
                 <button
@@ -352,6 +392,9 @@
               <th>تاريخ الطلب</th>
               <th>تجاوز الربع؟</th>
               <th>الحالة</th>
+              <th *ngIf="this.auth.isEmployee && hasRejected(loanRequests)">
+                سبب الرفض
+              </th>
               <th *ngIf="this.auth.isHR">الإجراءات</th>
             </tr>
           </ng-template>
@@ -376,6 +419,21 @@
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
                   {{ getStatusLabel(req.status) }}
                 </span>
+              </td>
+              <td *ngIf="this.auth.isEmployee && hasRejected(loanRequests)">
+                <ng-container *ngIf="req.status === 'Rejected'">
+                  <button
+                    *ngIf="!req._seen"
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-warning"
+                    (click)="revealRejectionReason(req, 'loan')"
+                  >
+                    <i class="pi pi-eye d-flex"></i>
+                  </button>
+                  <span *ngIf="req._seen">{{ req.rejectionReason }}</span>
+                </ng-container>
+                <span *ngIf="req.status !== 'Rejected'">—</span>
               </td>
               <td *ngIf="this.auth.isHR">
                 <button
@@ -491,7 +549,7 @@
                 </span>
                 <span
                   *ngIf="req.hrApproval === null"
-                  class="badge bg-warning  text-warning"
+                  class="badge bg-warning text-warning"
                 >
                   قيد الانتظار
                 </span>
@@ -510,7 +568,7 @@
                 </span>
                 <span
                   *ngIf="req.areaManagerApproval === null"
-                  class="badge bg-warning  text-warning"
+                  class="badge bg-warning text-warning"
                 >
                   قيد الانتظار
                 </span>
@@ -528,7 +586,7 @@
                 </span>
                 <span
                   *ngIf="req.controlApproval === null"
-                  class="badge bg-warning  text-warning"
+                  class="badge bg-warning text-warning"
                 >
                   قيد الانتظار
                 </span>
@@ -654,6 +712,11 @@
               <th>السبب</th>
               <th>تاريخ الطلب</th>
               <th>الحالة</th>
+              <th
+                *ngIf="this.auth.isEmployee && hasRejected(resignationRequests)"
+              >
+                سبب الرفض
+              </th>
               <th *ngIf="this.auth.isHR">الإجراءات</th>
             </tr>
           </ng-template>
@@ -667,6 +730,23 @@
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
                   {{ getStatusLabel(req.status) }}
                 </span>
+              </td>
+              <td
+                *ngIf="this.auth.isEmployee && hasRejected(resignationRequests)"
+              >
+                <ng-container *ngIf="req.status === 'Rejected'">
+                  <button
+                    *ngIf="!req._seen"
+                    pButton
+                    type="button"
+                    class="btn btn-sm btn-warning"
+                    (click)="revealRejectionReason(req, 'resignation')"
+                  >
+                    <i class="pi pi-eye d-flex"></i>
+                  </button>
+                  <span *ngIf="req._seen">{{ req.rejectionReason }}</span>
+                </ng-container>
+                <span *ngIf="req.status !== 'Rejected'">—</span>
               </td>
               <td *ngIf="this.auth.isHR">
                 <button

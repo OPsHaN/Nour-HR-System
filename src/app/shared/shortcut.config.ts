@@ -85,7 +85,7 @@ export const SHORTCUTS_CONFIG = {
     title: "البنوك",
     icon: "account_balance",
     bg: "#eb2f96",
-    roles: ["Admin", "HR", "AreaManager"] as UserRole[],
+    roles: ["Admin", "HR"] as UserRole[],
     size: { width: 620, height: 480 },
   },
   reports: {

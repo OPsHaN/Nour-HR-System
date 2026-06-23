@@ -132,6 +132,7 @@ export class Reports implements OnInit {
   allShifts: ShiftRecord[] = [];
   shiftsTotalCount = 0;
   loadingShifts = false;
+  absentPageSize = 10;
 
   // ── Open / Late / Overtime Tab ──────────────────────────────────────────
   selectedShiftType: "open" | "late" | "overtime" = "open";
@@ -155,6 +156,7 @@ export class Reports implements OnInit {
   absentEmployees: AbsentRecord[] = [];
   absentTotalCount = 0;
   loadingAbsent = false;
+  absentPage = 1;
 
   // ── Payroll Tab ─────────────────────────────────────────────────────────
   selectedEmployeeId: number | null = null;
@@ -259,21 +261,28 @@ export class Reports implements OnInit {
     const from = this.formatDate(this.absentFromDate);
     const to = this.formatDate(this.absentToDate);
     this.loadingAbsent = true;
-    this.api.getAbsentEmployees(from, to).subscribe({
-      next: (res: any) => {
-        this.absentEmployees = res.data ?? [];
-        this.absentTotalCount = res.totalCount ?? 0;
-        this.loadingAbsent = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loadingAbsent = false;
-        this.cdr.detectChanges();
-        this.api.showError("فشل تحميل البيانات");
-      },
-    });
+    this.api
+      .getAbsentEmployees(from, to, this.absentPage, this.absentPageSize)
+      .subscribe({
+        next: (res: any) => {
+          this.absentEmployees = res.data;
+          this.absentTotalCount = res.totalCount;
+          this.loadingAbsent = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loadingAbsent = false;
+          this.cdr.detectChanges();
+          this.api.showError("فشل تحميل البيانات");
+        },
+      });
   }
 
+  onAbsentPageChange(event: any) {
+    this.absentPage = event.first / event.rows + 1;
+    this.absentPageSize = event.rows;
+    this.loadAbsentEmployees();
+  }
   loadPayroll(): void {
     if (!this.selectedEmployeeId || !this.payrollMonth) return;
     const month = this.payrollMonth.getMonth() + 1;
