@@ -40,7 +40,7 @@ export class Banks {
     this.api.getAllBanks().subscribe({
       next: (res: any) => {
         this.Banks = res;
-        this.totalRecords = res.totalCount;
+        this.totalRecords = res.length;
         this.loading = false;
         this.cdr.detectChanges();
       },
