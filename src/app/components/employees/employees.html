@@ -1839,7 +1839,7 @@
                   <input
                     type="radio"
                     [name]="'day_' + row.employeeId"
-                    value="halfDay"
+                    value="quarterDay"
                     [(ngModel)]="selectedDayPerEmployee[row.employeeId]"
                   />
                   {{ row.deductions.quarterDay | number:'1.0-0' }}
