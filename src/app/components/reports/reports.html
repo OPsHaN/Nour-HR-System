@@ -39,7 +39,7 @@
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"
-            (onClick)="loadAllShifts()"
+            (onClick)="applyShiftsFilter()"
           />
         </div>
 
@@ -69,6 +69,9 @@
           [paginator]="true"
           [rows]="10"
           [rowsPerPageOptions]="[10, 25, 50]"
+          [lazy]="true"
+          [totalRecords]="shiftsTotalCount"
+          (onPage)="onShiftsPageChange($event)"
           styleClass="p-datatable-sm p-datatable-gridlines"
           [tableStyle]="{ 'min-width': '55rem' }"
           [paginatorDropdownAppendTo]="'body'"
@@ -78,9 +81,9 @@
               <th>الموظف</th>
               <th>الفرع</th>
               <th>اليوم</th>
-              <th>دخول مجدول</th>
+              <th>موعد الحضور</th>
               <th>دخول فعلي</th>
-              <th>خروج مجدول</th>
+              <th>موعد الخروج</th>
               <th>خروج فعلي</th>
               <th>الحالة</th>
             </tr>
@@ -127,7 +130,7 @@
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"
-            (onClick)="loadOpenLateShifts()"
+            (onClick)="applyOpenLateFilter()"
           />
         </div>
 
@@ -136,6 +139,9 @@
           [loading]="loadingOpenLate"
           [paginator]="true"
           [rows]="10"
+          [lazy]="true"
+          [totalRecords]="openLateTotalCount"
+          (onPage)="onOpenLatePageChange($event)"
           styleClass="p-datatable-sm p-datatable-gridlines"
           [tableStyle]="{ 'min-width': '50rem' }"
           [paginatorDropdownAppendTo]="'body'"
@@ -196,7 +202,7 @@
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"
-            (onClick)="loadAbsentEmployees()"
+            (onClick)="applyAbsentFilter()"
           />
         </div>
 
@@ -219,8 +225,8 @@
               <th>الموظف</th>
               <th>الفرع</th>
               <th>اليوم</th>
-              <th>دخول مجدول</th>
-              <th>خروج مجدول</th>
+              <th>موعد الدخول</th>
+              <th>موعد الخروج</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-emp>
@@ -243,6 +249,17 @@
       <!-- ===== Tab 4: كشف الرواتب ===== -->
       <p-tabpanel [value]="3">
         <div class="filters-bar">
+          <div class="filter-item">
+            <label>الشهر</label>
+            <p-datepicker
+              [(ngModel)]="payrollMonth"
+              view="month"
+              dateFormat="mm/yy"
+              placeholder="اختر الشهر"
+              [appendTo]="'body'"
+              [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+            />
+          </div>
           <div class="filter-item">
             <label>الموظف</label>
             <p-select
@@ -272,17 +289,6 @@
       class: 'select-label'
     }
   }"
-            />
-          </div>
-          <div class="filter-item">
-            <label>الشهر</label>
-            <p-datepicker
-              [(ngModel)]="payrollMonth"
-              view="month"
-              dateFormat="mm/yy"
-              placeholder="اختر الشهر"
-              [appendTo]="'body'"
-              [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
             />
           </div>
           <p-button
@@ -415,16 +421,18 @@
               <ng-template pTemplate="header">
                 <tr>
                   <th>السبب</th>
-                  <th>التاريخ</th>
                   <th>ملاحظات</th>
+
+                  <th>التاريخ</th>
                   <th style="text-align: center">المبلغ (ج.م)</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-b>
                 <tr>
                   <td>{{ b.reason ?? '—' }}</td>
-                  <td>{{ formatDateDisplay(b.date) }}</td>
                   <td>{{ b.notes ?? '—' }}</td>
+
+                  <td>{{ formatDateDisplay(b.dateOfBorrow) }}</td>
                   <td style="color: var(--orange-600); font-weight: 500">
                     {{ b.amount | number }}
                   </td>
@@ -445,7 +453,7 @@
         <p-message
           *ngIf="!payrollDetails && !loadingPayroll"
           severity="info"
-          text="اختر موظف وشهر ثم اضغط تطبيق"
+          text="اختر شهر و موظف ثم اضغط تطبيق"
           styleClass="w-full"
         />
 
@@ -471,7 +479,7 @@
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn' } }"
-            (onClick)="loadMonthlyPayroll()"
+            (onClick)="applyMonthlyPayrollFilter()"
           />
         </div>
 
@@ -516,6 +524,9 @@
             [paginator]="true"
             [rows]="10"
             [rowsPerPageOptions]="[10, 25, 50]"
+            [lazy]="true"
+            [totalRecords]="monthlyPayrollTotalCount"
+            (onPage)="onMonthlyPayrollPageChange($event)"
             styleClass="p-datatable-sm p-datatable-gridlines"
             [tableStyle]="{ 'min-width': '60rem' }"
             [paginatorDropdownAppendTo]="'body'"
@@ -615,7 +626,7 @@
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn' } }"
-            (onClick)="loadBranchPayroll()"
+            (onClick)="applyBranchPayrollFilter()"
           />
         </div>
 
@@ -658,6 +669,9 @@
             [paginator]="true"
             [rows]="10"
             [rowsPerPageOptions]="[10, 25, 50]"
+            [lazy]="true"
+            [totalRecords]="branchPayrollTotalCount"
+            (onPage)="onBranchPayrollPageChange($event)"
             styleClass="p-datatable-sm p-datatable-gridlines"
             [tableStyle]="{ 'min-width': '60rem' }"
             [paginatorDropdownAppendTo]="'body'"
