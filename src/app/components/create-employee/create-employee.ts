@@ -38,7 +38,6 @@ export class CreateEmployee {
         [
           Validators.required,
           Validators.minLength(6),
-          Validators.pattern(this.PASSWORD_PATTERN),
         ],
       ],
       name: ["", Validators.required],

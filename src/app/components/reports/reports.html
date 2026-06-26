@@ -169,7 +169,7 @@
       <!-- ===== Tab 2: المتأخرون / المفتوحة / الأوفرتايم ===== -->
       <p-tabpanel [value]="1">
         <div class="filters-bar">
-                    <div class="filter-item">
+          <div class="filter-item">
             <label>من تاريخ</label>
             <p-datepicker
               [(ngModel)]="shiftsFromDate"
@@ -355,7 +355,7 @@
             [pt]="{ root: { class: 'apply-btn'}}"
             (onClick)="applyAbsentFilter()"
           />
-                              <p-button
+          <p-button
             label="تحميل "
             [pt]="{ root: { class: 'download-btn'}}"
             (onClick)="exportAllToExcel()"
@@ -452,7 +452,7 @@
             [pt]="{ root: { class: 'apply-btn'}}"
             (onClick)="loadPayroll()"
           />
-                              <p-button
+          <p-button
             label="تحميل "
             [pt]="{ root: { class: 'download-btn'}}"
             (onClick)="exportAllToExcel()"
@@ -642,7 +642,7 @@
             [pt]="{ root: { class: 'apply-btn' } }"
             (onClick)="applyMonthlyPayrollFilter()"
           />
-                              <p-button
+          <p-button
             label="تحميل "
             [pt]="{ root: { class: 'download-btn'}}"
             (onClick)="exportAllToExcel()"
@@ -689,7 +689,7 @@
             [loading]="loadingMonthlyPayroll"
             [paginator]="true"
             [rows]="10"
-          [rowsPerPageOptions]="[10, 25, 50 , 100]"
+            [rowsPerPageOptions]="[10, 25, 50 , 100]"
             [lazy]="true"
             [totalRecords]="monthlyPayrollTotalCount"
             (onPage)="onMonthlyPayrollPageChange($event)"
@@ -699,12 +699,23 @@
           >
             <ng-template pTemplate="header">
               <tr>
+                <th>كود الموظف</th>
                 <th>الموظف</th>
                 <th>الفرع</th>
+                <th>الشهر</th>
+                <th>السنة</th>
+                <th>التارجت</th>
+                <th>التأمين</th>
+                <th>ساعات العمل</th>
+                <th>الأوفر تايم</th>
+                <th>ساعات النسيان</th>
+                <th>ساعات الإجازات</th>
                 <th style="text-align: center">الراتب الأساسي</th>
                 <th style="text-align: center">الخصومات</th>
+                <th style="text-align: center">خصومات التعاقدات</th>
                 <th style="text-align: center">البونص</th>
                 <th style="text-align: center">السلف</th>
+                <th style="text-align: center">السلف النقدية</th>
                 <th style="text-align: center">صافي الراتب</th>
                 <th>البنك</th>
                 <th>رقم الحساب</th>
@@ -712,20 +723,34 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
+                <td>{{ row.employeeId }}</td>
                 <td>{{ row.employeeName }}</td>
                 <td>{{ row.branchName }}</td>
+                <td>{{ row.month }}</td>
+                <td>{{ row.year }}</td>
+                <td>{{ row.target }}</td>
+                <td>{{ row.insurence | number }}</td>
+                <td>{{ row.hours }}</td>
+                <td>{{ row.hoursOverTime }}</td>
+                <td>{{ row.forgetedHours }}</td>
+                <td>{{ row.holidayHours }}</td>
                 <td style="text-align: center">
                   {{ row.totalSalary | number }}
                 </td>
                 <td style="text-align: center; color: var(--red-600)">
-                  {{ (row.totalDiscounts + row.totalContractDiscount) | number
-                  }}
+                  {{ row.totalDiscounts | number }}
+                </td>
+                <td style="text-align: center; color: var(--red-600)">
+                  {{ row.totalContractDiscount | number }}
                 </td>
                 <td style="text-align: center; color: var(--green-600)">
                   {{ row.totalBouns | number }}
                 </td>
                 <td style="text-align: center; color: var(--orange-600)">
-                  {{ (row.totalBorrows + row.totalCashBorrows) | number }}
+                  {{ row.totalBorrows | number }}
+                </td>
+                <td style="text-align: center; color: var(--orange-600)">
+                  {{ row.totalCashBorrows | number }}
                 </td>
                 <td
                   style="
@@ -794,7 +819,7 @@
             [pt]="{ root: { class: 'apply-btn' } }"
             (onClick)="applyBranchPayrollFilter()"
           />
-                              <p-button
+          <p-button
             label="تحميل "
             [pt]="{ root: { class: 'download-btn'}}"
             (onClick)="exportAllToExcel()"
@@ -849,12 +874,23 @@
           >
             <ng-template pTemplate="header">
               <tr>
+                <th>كود الموظف</th>
                 <th>الموظف</th>
                 <th>الفرع</th>
+                <th>الشهر</th>
+                <th>السنة</th>
+                <th>التارجت</th>
+                <th>التأمين</th>
+                <th>ساعات العمل</th>
+                <th>الأوفر تايم</th>
+                <th>ساعات النسيان</th>
+                <th>ساعات الإجازات</th>
                 <th style="text-align: center">الراتب الأساسي</th>
                 <th style="text-align: center">الخصومات</th>
+                <th style="text-align: center">خصومات التعاقدات</th>
                 <th style="text-align: center">البونص</th>
                 <th style="text-align: center">السلف</th>
+                <th style="text-align: center">السلف النقدية</th>
                 <th style="text-align: center">صافي الراتب</th>
                 <th>البنك</th>
                 <th>رقم الحساب</th>
@@ -862,20 +898,34 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
+                <td>{{ row.employeeId }}</td>
                 <td>{{ row.employeeName }}</td>
                 <td>{{ row.branchName }}</td>
+                <td>{{ row.month }}</td>
+                <td>{{ row.year }}</td>
+                <td>{{ row.target }}</td>
+                <td>{{ row.insurence | number }}</td>
+                <td>{{ row.hours }}</td>
+                <td>{{ row.hoursOverTime }}</td>
+                <td>{{ row.forgetedHours }}</td>
+                <td>{{ row.holidayHours }}</td>
                 <td style="text-align: center">
                   {{ row.totalSalary | number }}
                 </td>
                 <td style="text-align: center; color: var(--red-600)">
-                  {{ (row.totalDiscounts + row.totalContractDiscount) | number
-                  }}
+                  {{ row.totalDiscounts | number }}
+                </td>
+                <td style="text-align: center; color: var(--red-600)">
+                  {{ row.totalContractDiscount | number }}
                 </td>
                 <td style="text-align: center; color: var(--green-600)">
                   {{ row.totalBouns | number }}
                 </td>
                 <td style="text-align: center; color: var(--orange-600)">
-                  {{ (row.totalBorrows + row.totalCashBorrows) | number }}
+                  {{ row.totalBorrows | number }}
+                </td>
+                <td style="text-align: center; color: var(--orange-600)">
+                  {{ row.totalCashBorrows | number }}
                 </td>
                 <td
                   style="
@@ -888,6 +938,11 @@
                 </td>
                 <td>{{ row.bankName ?? '—' }}</td>
                 <td>{{ row.bankAccount ?? '—' }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="9" class="text-center p-4">لا توجد بيانات</td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">

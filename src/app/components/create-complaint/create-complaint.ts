@@ -22,7 +22,7 @@ export class CreateComplaint {
   recipientRoles = [
     { label: "مدير المنطقة", value: "AreaManager" },
     { label: "الموارد البشرية", value: "HR" },
-    { label: "الإدارة", value: "Admin" },
+    { label: "المدير التنفيذى", value: "CEO" },
   ];
 
   constructor(private api: Apiservice) {}

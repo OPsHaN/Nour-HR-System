@@ -43,7 +43,6 @@ export class CreateUser {
         [
           Validators.required,
           Validators.minLength(6),
-          Validators.pattern(this.PASSWORD_PATTERN),
         ],
       ],
       Role: ["", Validators.required],
