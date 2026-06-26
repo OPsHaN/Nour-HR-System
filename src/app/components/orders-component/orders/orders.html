@@ -97,9 +97,9 @@
             {{ showCreateMissedHours ? '' : 'طلب جديد' }}
           </button>
           <p-message
-            *ngIf="missedHoursRequests.length >= 3"
+            *ngIf="missedHoursRequests.length >= 3 || showCreateMissedHours"
             severity="warn"
-            text="لا يمكن تقديم أكثر من 3 طلبات شيفتات منسية."
+            text="لا يمكن تقديم أكثر من 3 طلبات شيفتات منسية فى الشهر"
           ></p-message>
         </div>
 
@@ -363,6 +363,8 @@
             [class.btn-success]="!showCreateLoan"
             [class.btn-danger]="showCreateLoan"
             (click)="showCreateLoan = !showCreateLoan"
+              [disabled]="!isLoanRequestAllowed"
+
           >
             <i
               class="pi"
@@ -370,6 +372,11 @@
             ></i>
             {{ showCreateLoan ? '' : 'طلب جديد' }}
           </button>
+          <p-message
+          *ngIf="!showCreateLoan"
+            severity="info"
+            text="يمكن تقديم طلب السلفة من يوم 10 إلى يوم 25 فقط من كل شهر"
+          />
         </div>
 
         <app-create-borrow *ngIf="showCreateLoan" (created)="onLoanCreated()" />
