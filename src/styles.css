@@ -735,6 +735,41 @@ input {
   margin-inline-end: 6px;
 }
 
+
+
+
+
+.download-btn {
+  height: 50px;
+  min-width: 100px;
+  border: none !important;
+  border-radius: 26px !important;
+  background: linear-gradient(135deg,
+      rgba(22, 255, 65, 0.95),
+      ) !important;
+
+  color: #fff !important;
+
+  font-size: 20px !important;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 5px 10px rgba(22, 255, 76, 0.35);
+}
+
+/* hover */
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 24px rgba(22, 255, 76, 0.35);
+
+}
+
+/* icon */
+.download-btn .pi {
+  font-size: 14px;
+  margin-inline-end: 6px;
+}
+
 /*select*/
 
 .select-panel {

@@ -114,8 +114,7 @@ export class Apiservice {
     return this.http.get(`${this.baseUrl}employees`, { params });
   }
 
-
-    getAllUsersByName(page: number, pagesize: number , name: string) {
+  getAllUsersByName(page: number, pagesize: number, name: string) {
     const params = new HttpParams()
       .set("page", page)
       .set("pageSize", pagesize)
@@ -177,8 +176,8 @@ export class Apiservice {
     return this.http.post(`${this.baseUrl}borrows/installment`, data);
   }
 
-  getInstallmentsBorrow(employeeId:string){
-    return this.http.get(`${this.baseUrl}borrows/installment/${employeeId}`)
+  getInstallmentsBorrow(employeeId: string) {
+    return this.http.get(`${this.baseUrl}borrows/installment/${employeeId}`);
   }
 
   addBonus(data: any) {
@@ -208,13 +207,24 @@ export class Apiservice {
     return this.http.delete(`${this.baseUrl}payroll/cash-borrow/${id}`, {});
   }
 
-  getAllMonthlyData(month: number, year: number , page:number , pageSize:number) {
+  getAllMonthlyData(
+    month: number,
+    year: number,
+    page: number,
+    pageSize: number,
+  ) {
     return this.http.get(
       `${this.baseUrl}payroll/monthly-data?month=${month}&year=${year}&page=${page}&pageSize=${pageSize}`,
     );
   }
 
-  getAllMonthlyDatabyBranch(month: number, year: number, branchId: string , page:number , pageSize:number) {
+  getAllMonthlyDatabyBranch(
+    month: number,
+    year: number,
+    branchId: string,
+    page: number,
+    pageSize: number,
+  ) {
     return this.http.get(
       `${this.baseUrl}payroll/monthly-data?month=${month}&year=${year}&branchId=${branchId}&page=${page}&pageSize=${pageSize}`,
     );
@@ -315,21 +325,52 @@ export class Apiservice {
 
   //reports//
 
-  getAllShifts(fromDate: string, toDate?: string , page: number = 1, pageSize: number = 10) {
-    const endDate = toDate ?? fromDate;
-    return this.http.get(
-      `${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}&toDate=${endDate}&page=${page}&pageSize=${pageSize}`,
-    );
-  }
+getAllShifts(
+  fromDate: string,
+  toDate?: string,
+  page?: number,
+  pageSize?: number,
+  employeeId?: number,
+  branchId?: string
+) {
+  const endDate = toDate ?? fromDate;
+  let url = `${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}&toDate=${endDate}&page=${page}&pageSize=${pageSize}`;
+  
+  if (employeeId) url += `&employeeId=${employeeId}`;
+  if (branchId) url += `&branchId=${branchId}`;
 
-  getAllOpenAndLateShifts(type: string , page:number , pagesize:number) {
-    return this.http.get(`${this.baseUrl}attendance/reports?type=${type}&page=${page}&pageSize=${pagesize}`);
-  }
+  return this.http.get(url);
+}
 
-getAbsentEmployees(fromDate: string, toDate: string, page: number = 1, pageSize: number = 10) {
-  return this.http.get(
-    `${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}&page=${page}&pageSize=${pageSize}`,
-  );
+getAllOpenAndLateShifts(
+  type: string,
+  page: number,
+  pageSize: number,
+  employeeId?: number,
+  branchId?: string,
+) {
+  let url = `${this.baseUrl}attendance/reports?type=${type}&page=${page}&pageSize=${pageSize}`;
+
+  if (employeeId) url += `&employeeId=${employeeId}`;
+  if (branchId) url += `&branchId=${branchId}`;
+
+  return this.http.get(url);
+}
+
+getAbsentEmployees(
+  fromDate: string,
+  toDate: string,
+  page: number = 1,
+  pageSize: number = 10,
+  employeeId?: number,
+  branchId?: string,
+) {
+  let url = `${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}&page=${page}&pageSize=${pageSize}`;
+  
+  if (employeeId) url += `&employeeId=${employeeId}`;
+  if (branchId) url += `&branchId=${branchId}`;
+
+  return this.http.get(url);
 }
 
   startShift() {

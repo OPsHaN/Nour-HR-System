@@ -36,10 +36,63 @@
               [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
             />
           </div>
+          <div class="filter-item">
+            <label>الفرع</label>
+            <p-select
+              [(ngModel)]="selectedBranchId"
+              [options]="branches"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="اختر الفرع"
+              [showClear]="true"
+              [pt]="{
+          root: { class: 'select-panel' },
+          pcOverlay: { root: { class: 'select-overlay' } },
+          listContainer: { class: 'select-list-container' }
+        }"
+            />
+          </div>
+          <div class="filter-item">
+            <label>الموظف</label>
+            <p-select
+              [(ngModel)]="selectedEmployeeId"
+              [options]="employees"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="اختر موظف"
+              [showClear]="true"
+              [filter]="true"
+              filterPlaceholder="بحث..."
+              [pt]="{
+    root: {
+      class: 'select-panel'
+    },
+    pcOverlay: {
+      root: {
+        class: 'select-overlay'
+      }
+    },
+    listContainer: {
+      class: 'select-list-container'
+    },
+    header: {
+      class: 'select-header'
+    },
+    label: {
+      class: 'select-label'
+    }
+  }"
+            />
+          </div>
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"
             (onClick)="applyShiftsFilter()"
+          />
+          <p-button
+            label="تحميل "
+            [pt]="{ root: { class: 'download-btn'}}"
+            (onClick)="exportAllToExcel()"
           />
         </div>
 
@@ -127,10 +180,51 @@
               [pt]="{ root: { class: 'select-panel'} ,   pcOverlay: { root: { class: 'select-overlay'}} , listContainer: {class: 'select-list-container'},}"
             />
           </div>
+          <div class="filter-item">
+            <label>الفرع</label>
+            <p-select
+              [(ngModel)]="selectedBranchId"
+              [options]="branches"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="اختر الفرع"
+              [showClear]="true"
+              [pt]="{
+      root: { class: 'select-panel' },
+      pcOverlay: { root: { class: 'select-overlay' } },
+      listContainer: { class: 'select-list-container' }
+    }"
+            />
+          </div>
+          <div class="filter-item">
+            <label>الموظف</label>
+            <p-select
+              [(ngModel)]="selectedEmployeeId"
+              [options]="employees"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="اختر موظف"
+              [showClear]="true"
+              [filter]="true"
+              filterPlaceholder="بحث..."
+              [pt]="{
+      root: { class: 'select-panel' },
+      pcOverlay: { root: { class: 'select-overlay' } },
+      listContainer: { class: 'select-list-container' },
+      header: { class: 'select-header' },
+      label: { class: 'select-label' }
+    }"
+            />
+          </div>
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"
             (onClick)="applyOpenLateFilter()"
+          />
+          <p-button
+            label="تحميل "
+            [pt]="{ root: { class: 'download-btn'}}"
+            (onClick)="exportAllToExcel()"
           />
         </div>
 
@@ -199,10 +293,52 @@
               [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
             />
           </div>
+          <div class="filter-item">
+            <label>الفرع</label>
+            <p-select
+              [(ngModel)]="selectedBranchId"
+              [options]="branches"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="اختر الفرع"
+              [showClear]="true"
+              [pt]="{
+          root: { class: 'select-panel' },
+          pcOverlay: { root: { class: 'select-overlay' } },
+          listContainer: { class: 'select-list-container' }
+        }"
+            />
+          </div>
+          <div class="filter-item">
+            <label>الموظف</label>
+            <p-select
+              [(ngModel)]="selectedEmployeeId"
+              [options]="employees"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="اختر موظف"
+              [showClear]="true"
+              [filter]="true"
+              filterPlaceholder="بحث..."
+              [pt]="{
+          root: { class: 'select-panel' },
+          pcOverlay: { root: { class: 'select-overlay' } },
+          listContainer: { class: 'select-list-container' },
+          header: { class: 'select-header' },
+          label: { class: 'select-label' }
+        }"
+            />
+          </div>
+
           <p-button
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"
             (onClick)="applyAbsentFilter()"
+          />
+                              <p-button
+            label="تحميل "
+            [pt]="{ root: { class: 'download-btn'}}"
+            (onClick)="exportAllToExcel()"
           />
         </div>
 
@@ -295,6 +431,11 @@
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn'}}"
             (onClick)="loadPayroll()"
+          />
+                              <p-button
+            label="تحميل "
+            [pt]="{ root: { class: 'download-btn'}}"
+            (onClick)="exportAllToExcel()"
           />
         </div>
 
@@ -481,6 +622,11 @@
             [pt]="{ root: { class: 'apply-btn' } }"
             (onClick)="applyMonthlyPayrollFilter()"
           />
+                              <p-button
+            label="تحميل "
+            [pt]="{ root: { class: 'download-btn'}}"
+            (onClick)="exportAllToExcel()"
+          />
         </div>
 
         <ng-container
@@ -627,6 +773,11 @@
             label="تطبيق"
             [pt]="{ root: { class: 'apply-btn' } }"
             (onClick)="applyBranchPayrollFilter()"
+          />
+                              <p-button
+            label="تحميل "
+            [pt]="{ root: { class: 'download-btn'}}"
+            (onClick)="exportAllToExcel()"
           />
         </div>
 
