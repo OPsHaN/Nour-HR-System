@@ -4,18 +4,24 @@ import { FormsModule } from "@angular/forms";
 import { DatePickerModule } from "primeng/datepicker";
 import { Apiservice } from "src/app/services/api.service";
 
-
 @Component({
-  selector: 'app-create-missed-hours',
+  selector: "app-create-missed-hours",
   imports: [CommonModule, FormsModule, DatePickerModule],
-  templateUrl: './create-missed-hours.html',
-  styleUrl: './create-missed-hours.css',
+  templateUrl: "./create-missed-hours.html",
+  styleUrl: "./create-missed-hours.css",
 })
 export class CreateMissedHours {
-    @Output() created = new EventEmitter<void>();
+  @Output() created = new EventEmitter<void>();
 
   loading = false;
   form = { reason: "", notes: "", shiftDate: null as any };
+  today: Date = new Date();
+
+  yesterday: Date = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return d;
+  })();
 
   constructor(private api: Apiservice) {}
 
@@ -46,6 +52,4 @@ export class CreateMissedHours {
     const d = new Date(date);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   }
-
-
 }

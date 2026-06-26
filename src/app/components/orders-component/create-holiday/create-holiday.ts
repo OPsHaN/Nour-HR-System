@@ -17,7 +17,8 @@ export class CreateHoliday {
 
   loading = false;
   form = { fromDate: null as any, toDate: null as any };
-
+  today: Date = new Date();
+  
   constructor(private api: Apiservice) {}
 
   submit() {

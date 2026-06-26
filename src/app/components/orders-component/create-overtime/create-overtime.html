@@ -22,6 +22,19 @@
       </select>
     </div>
 
+        <div class="field">
+      <label>تاريخ الأوفر تايم<span class="text-danger">*</span></label>
+      <p-datepicker
+        [(ngModel)]="form.dateOfShift"
+        dateFormat="yy-mm-dd"
+        placeholder="اختر تاريخ"
+        [appendTo]="'body'"
+       [minDate]="yesterday"
+        [maxDate]="today"
+        [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+      />
+    </div>
+
     <button
       type="button"
       class="submit-btn full"

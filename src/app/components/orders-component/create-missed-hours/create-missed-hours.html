@@ -7,6 +7,8 @@
         dateFormat="yy-mm-dd"
         placeholder="اختر تاريخ"
         [appendTo]="'body'"
+        [minDate]="yesterday"
+        [maxDate]="today"
         [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
       />
     </div>
@@ -14,19 +16,10 @@
     <div class="field">
       <label>السبب <span class="text-danger">*</span></label>
       <select class="custom-input toolbar-select" [(ngModel)]="form.reason">
-        <option
-          value="سهو البصمة">سهو بصمة
-        </option>
-        <option
-          value="انقطاع التيار الكهربي"> انقطاع اليتار الكهربائى
-        </option>
-        <option
-          value="انقطاع الانترنت"> انقطاع خدمة الانترنت
-        </option>
-        <option
-          value="أخرى">
-          اخرى
-        </option>
+        <option value="سهو البصمة">سهو بصمة</option>
+        <option value="انقطاع التيار الكهربي">انقطاع اليتار الكهربائى</option>
+        <option value="انقطاع الانترنت">انقطاع خدمة الانترنت</option>
+        <option value="أخرى">اخرى</option>
       </select>
     </div>
 

@@ -531,6 +531,7 @@
               <th>الساعات</th>
               <th>ملاحظات</th>
               <th>تاريخ الطلب</th>
+              <th>تاريخ الشيفت</th>
               <th>HR</th>
               <th>مدير المنطقة</th>
               <th>الكنترول</th>
@@ -549,6 +550,7 @@
               <td>{{ req.hours }}</td>
               <td>{{ req.notes ?? '—' }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
+              <td>{{ req.dateOfShift | date: 'yyyy/MM/dd' }}</td>
               <!-- HR Approval -->
               <!-- HR Approval column -->
               <td>
