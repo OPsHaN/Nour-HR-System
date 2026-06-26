@@ -686,4 +686,10 @@ loadAppointment() {
       this.unseenCounts.forgotHours;
     this.cdr.detectChanges();
   }
+
+
+get disableCreateOvertime(): boolean {
+  return this.overtimeRequests.length >= 3;
+}
+
 }

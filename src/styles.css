@@ -736,9 +736,6 @@ input {
 }
 
 
-
-
-
 .download-btn {
   height: 50px;
   min-width: 100px;
@@ -768,6 +765,11 @@ input {
 .download-btn .pi {
   font-size: 14px;
   margin-inline-end: 6px;
+}
+
+
+.p-message-content {
+  padding: 0.3rem !important;
 }
 
 /*select*/
