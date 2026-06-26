@@ -688,8 +688,8 @@ loadAppointment() {
   }
 
 
-get disableCreateOvertime(): boolean {
-  return this.overtimeRequests.length >= 3;
+get disablemissedHoursRequests(): boolean {
+  return this.missedHoursRequests.length >= 3;
 }
 
 }

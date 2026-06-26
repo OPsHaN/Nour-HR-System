@@ -313,9 +313,13 @@ export class Reports implements OnInit {
   }
 
   loadOpenLateShifts(): void {
+    const fromDate = this.formatDate(this.shiftsFromDate);
+    const toDate = this.formatDate(this.shiftsToDate);
     this.loadingOpenLate = true;
     this.api
       .getAllOpenAndLateShifts(
+        fromDate,
+        toDate,
         this.selectedShiftType,
         this.openLatePage,
         this.openLatePageSize,
@@ -706,10 +710,14 @@ export class Reports implements OnInit {
     const pageSize = 100;
     const totalPages = Math.ceil(this.openLateTotalCount / pageSize);
     const requests: any[] = [];
+    const fromDate = this.formatDate(this.shiftsFromDate);
+    const toDate = this.formatDate(this.shiftsToDate);
 
     for (let page = 1; page <= totalPages; page++) {
       requests.push(
         this.api.getAllOpenAndLateShifts(
+          fromDate,
+          toDate,
           this.selectedShiftType,
           page,
           pageSize,

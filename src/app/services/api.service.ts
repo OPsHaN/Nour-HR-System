@@ -343,13 +343,15 @@ getAllShifts(
 }
 
 getAllOpenAndLateShifts(
+    fromDate: string,
+  toDate: string,
   type: string,
   page: number,
   pageSize: number,
   employeeId?: number,
   branchId?: string,
 ) {
-  let url = `${this.baseUrl}attendance/reports?type=${type}&page=${page}&pageSize=${pageSize}`;
+  let url = `${this.baseUrl}attendance/reports?fromDate=${fromDate}&toDate=${toDate}&type=${type}&page=${page}&pageSize=${pageSize}`;
 
   if (employeeId) url += `&employeeId=${employeeId}`;
   if (branchId) url += `&branchId=${branchId}`;

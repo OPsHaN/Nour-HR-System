@@ -88,6 +88,7 @@
             [class.btn-success]="!showCreateMissedHours"
             [class.btn-danger]="showCreateMissedHours"
             (click)="showCreateMissedHours = !showCreateMissedHours"
+            [disabled]="missedHoursRequests.length >= 3"
           >
             <i
               class="pi"
@@ -95,6 +96,11 @@
             ></i>
             {{ showCreateMissedHours ? '' : 'طلب جديد' }}
           </button>
+          <p-message
+            *ngIf="missedHoursRequests.length >= 3"
+            severity="warn"
+            text="لا يمكن تقديم أكثر من 3 طلبات شيفتات منسية."
+          ></p-message>
         </div>
 
         <app-create-missed-hours
@@ -480,7 +486,6 @@
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
             [class.btn-success]="!showCreateOvertime"
             [class.btn-danger]="showCreateOvertime"
-            [disabled]="overtimeRequests.length >= 3"
             (click)="showCreateOvertime = !showCreateOvertime"
           >
             <i
@@ -490,11 +495,6 @@
 
             {{ showCreateOvertime ? '' : 'طلب جديد' }}
           </button>
-          <p-message
-            *ngIf="overtimeRequests.length >= 3"
-            severity="warn"
-            text="لا يمكن تقديم أكثر من 3 طلبات أوفر تايم."
-          ></p-message>
         </div>
 
         <app-create-overtime
