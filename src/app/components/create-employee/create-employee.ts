@@ -37,7 +37,7 @@ export class CreateEmployee {
         "",
         [
           Validators.required,
-          Validators.minLength(6),
+          Validators.minLength(4),
         ],
       ],
       name: ["", Validators.required],

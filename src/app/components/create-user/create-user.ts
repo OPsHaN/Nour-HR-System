@@ -42,7 +42,7 @@ export class CreateUser {
         "",
         [
           Validators.required,
-          Validators.minLength(6),
+          Validators.minLength(4),
         ],
       ],
       Role: ["", Validators.required],

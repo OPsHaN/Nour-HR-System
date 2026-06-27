@@ -11,9 +11,14 @@
 html,
 body {
   font-family: 'Beiruti', sans-serif;
-  font-size: 25px;
+  font-size: 20px;
   height: 100%;
   margin: 0;
+}
+
+.pi {
+  font-size: 20px !important;
+
 }
 
 body {
@@ -27,6 +32,10 @@ body {
 button,
 input {
   font: inherit;
+}
+
+.btn-sm {
+  font-size: 20px !important;
 }
 
 .p-toast .p-toast-message-content {
@@ -743,7 +752,7 @@ input {
   border-radius: 26px !important;
   background: linear-gradient(135deg,
       rgba(22, 255, 65, 0.95),
-      ) !important;
+    ) !important;
 
   color: #fff !important;
 
@@ -832,5 +841,5 @@ input {
 }
 
 .p-tablist-tab-list {
-  gap:3px !important;
+  gap: 3px !important;
 }
