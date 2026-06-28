@@ -51,7 +51,7 @@ export const SHORTCUTS_CONFIG = {
       "AreaManager",
       "Control",
     ] as UserRole[],
-    size: { width: 500, height: 650 },
+    size: { width: 500, height: 500 },
   },
   users: {
     title: "المستخدمين",

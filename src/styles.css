@@ -792,9 +792,14 @@ input {
 .select-panel .p-select-label {
   /* font-weight: 600; */
   color: var(--text) !important;
-  font-size: 23px !important;
+  font-size: 20px !important;
 }
 
+
+.p-inputtext {
+    font-size: 20px !important;
+
+}
 
 .select-panel .p-select-option {
   color: var(--text) !important;
