@@ -78,7 +78,7 @@ export const SHORTCUTS_CONFIG = {
     title: "بنود التقييم",
     icon: "check_circle",
     bg: "#722ed1",
-    roles: ["Admin", "HR", "AreaManager"] as UserRole[],
+    roles: ["Admin", "HR"] as UserRole[],
     size: { width: 620, height: 480 },
   },
   banks: {

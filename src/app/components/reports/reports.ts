@@ -85,6 +85,12 @@ export interface MonthlyPayrollRecord {
   branchName: string;
   month: number;
   year: number;
+  target: number;
+  insurence: number;
+  hours: number;
+  hoursOverTime: number;
+  forgetedHours: number;
+  holidayHours: number;
   totalSalary: number;
   totalDiscounts: number;
   totalContractDiscount: number;
@@ -192,7 +198,7 @@ export class Reports implements OnInit {
   branchPayrollPage = 1;
   branchPayrollPageSize = 10;
   branchPayrollTotalCount = 0;
-
+branchPayrollFirst = 1
   branches: Branch[] = [];
 
   constructor(
@@ -258,22 +264,26 @@ export class Reports implements OnInit {
     this.loadAbsentEmployees();
   }
 
-
-
-onMonthlyPayrollPageChange(event: any): void {
-  // لو اتغير الـ pageSize، ارجع للأول
-  if (event.rows !== this.monthlyPayrollPageSize) {
-    this.monthlyPayrollFirst = 0;
-    this.monthlyPayrollPage = 1;
-  } else {
-    this.monthlyPayrollFirst = event.first;
-    this.monthlyPayrollPage = event.first / event.rows + 1;
+  onMonthlyPayrollPageChange(event: any): void {
+    if (event.rows !== this.monthlyPayrollPageSize) {
+      this.monthlyPayrollFirst = 0;
+      this.monthlyPayrollPage = 1;
+    } else {
+      this.monthlyPayrollFirst = event.first;
+      this.monthlyPayrollPage = event.first / event.rows + 1;
+    }
+    this.monthlyPayrollPageSize = event.rows;
+    this.loadMonthlyPayroll();
   }
-  this.monthlyPayrollPageSize = event.rows;
-  this.loadMonthlyPayroll();
-}
 
   onBranchPayrollPageChange(event: any): void {
+        if (event.rows !== this.branchPayrollPageSize) {
+      this.branchPayrollFirst = 0;
+      this.branchPayrollPage = 1;
+    } else {
+      this.branchPayrollFirst = event.first;
+      this.branchPayrollPage = event.first / event.rows + 1;
+    }
     this.branchPayrollPage = event.first / event.rows + 1;
     this.branchPayrollPageSize = event.rows;
     this.loadBranchPayroll();
@@ -579,11 +589,8 @@ onMonthlyPayrollPageChange(event: any): void {
     return this.monthlyPayrollData.reduce((s, x) => s + x.totalSalary, 0);
   }
 
-  get monthlyTotalDiscountsOnly (): number {
-        return this.monthlyPayrollData.reduce(
-      (s, x) => s + x.totalDiscounts,
-      0,
-    );
+  get monthlyTotalDiscountsOnly(): number {
+    return this.monthlyPayrollData.reduce((s, x) => s + x.totalDiscounts, 0);
   }
   get monthlyTotalDiscounts(): number {
     return this.monthlyPayrollData.reduce(
@@ -604,21 +611,21 @@ onMonthlyPayrollPageChange(event: any): void {
     return this.monthlyPayrollData.reduce((s, x) => s + x.netSalary, 0);
   }
 
-  get branchTotalSalary(): number {
-    return this.branchPayrollData.reduce((s, x) => s + x.totalSalary, 0);
-  }
-  get branchTotalDiscountsOnly (): number {
-        return this.branchPayrollData.reduce(
-      (s, x) => s + x.totalDiscounts + x.totalContractDiscount,
-      0,
-    );
-  }
-  get branchTotalDiscounts(): number {
+get branchTotalSalary(): number {
+  return this.branchPayrollData.reduce((s, x) => s + (x.totalSalary ?? 0), 0);
+}
+
+  get branchTotalDiscountsOnly(): number {
     return this.branchPayrollData.reduce(
       (s, x) => s + x.totalDiscounts + x.totalContractDiscount,
       0,
     );
   }
+get branchTotalDiscounts(): number {
+  return this.branchPayrollData.reduce(
+    (s, x) => s + (x.totalDiscounts ?? 0) + (x.totalContractDiscount ?? 0), 0
+  );
+}
   get branchTotalBonuses(): number {
     return this.branchPayrollData.reduce((s, x) => s + x.totalBouns, 0);
   }
@@ -628,13 +635,13 @@ onMonthlyPayrollPageChange(event: any): void {
       0,
     );
   }
-  get branchTotalNet(): number {
-    return this.branchPayrollData.reduce((s, x) => s + x.netSalary, 0);
-  }
+get branchTotalNet(): number {
+  return this.branchPayrollData.reduce((s, x) => s + (x.netSalary ?? 0), 0);
+}
 
   get monthlyTotalCashBorrows(): number {
-  return this.monthlyPayrollData.reduce((s, x) => s + x.totalCashBorrows, 0);
-}
+    return this.monthlyPayrollData.reduce((s, x) => s + x.totalCashBorrows, 0);
+  }
 
   // ── Monthly ──────────────────────────────────────────────
   get monthlyTotalContractDiscounts(): number {
@@ -661,8 +668,8 @@ onMonthlyPayrollPageChange(event: any): void {
   }
 
   get branchTotalCashBorrows(): number {
-  return this.branchPayrollData.reduce((s, x) => s + x.totalCashBorrows, 0);
-}
+    return this.branchPayrollData.reduce((s, x) => s + x.totalCashBorrows, 0);
+  }
 
   formatTime(time?: string): string {
     if (!time) return "—";
@@ -881,10 +888,16 @@ onMonthlyPayrollPageChange(event: any): void {
         const excelData = results
           .flatMap((res) => res.data ?? res)
           .map((x: MonthlyPayrollRecord) => ({
+            "كود الموظف": x.employeeId,
             "اسم الموظف": x.employeeName,
             الفرع: x.branchName,
-            الشهر: x.month,
-            السنة: x.year,
+            "شهر / سنة": `${x.month}/${x.year}`,
+            التأمينات: x.insurence,
+            "ساعات العمل": x.hours,
+            "الأوفر تايم": x.hoursOverTime,
+            "ساعات النسيان": x.forgetedHours,
+            "ساعات الإجازات": x.holidayHours,
+            "إجمالي الساعات": x.target,
             "إجمالي المرتب": x.totalSalary,
             الخصومات: x.totalDiscounts,
             "خصومات التعاقد": x.totalContractDiscount,
@@ -938,10 +951,16 @@ onMonthlyPayrollPageChange(event: any): void {
         const excelData = results
           .flatMap((res) => res.data ?? res)
           .map((x: MonthlyPayrollRecord) => ({
+            "كود الموظف": x.employeeId,
             "اسم الموظف": x.employeeName,
             الفرع: x.branchName,
-            الشهر: x.month,
-            السنة: x.year,
+            "شهر / سنة": `${x.month}/${x.year}`,
+            التأمينات: x.insurence,
+            "ساعات العمل": x.hours,
+            "الأوفر تايم": x.hoursOverTime,
+            "ساعات النسيان": x.forgetedHours,
+            "ساعات الإجازات": x.holidayHours,
+            "إجمالي الساعات": x.target,
             "إجمالي المرتب": x.totalSalary,
             الخصومات: x.totalDiscounts,
             "خصومات التعاقد": x.totalContractDiscount,
