@@ -859,7 +859,7 @@
                   {{ getStatusLabel(req.status) }}
                 </span>
               </td>
-              <td>
+              <td *ngIf="this.auth.isHR">
                 <button
                   pButton
                   type="button"
