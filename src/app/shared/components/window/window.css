@@ -115,3 +115,7 @@ iframe {
   left: 0;
   cursor: nesw-resize;
 }
+
+.windowTitle {
+  font-size: 25px;
+}
