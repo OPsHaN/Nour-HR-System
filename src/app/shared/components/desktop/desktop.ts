@@ -23,6 +23,7 @@ import { ButtonModule } from "primeng/button";
 import { Apiservice } from "src/app/services/api.service";
 import { ConfirmationService } from "primeng/api";
 import { finalize } from "rxjs/operators";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-desktop",
@@ -49,7 +50,7 @@ export class Desktop implements OnInit, OnDestroy {
   private shiftStartTime: Date | null = null;
   private timerInterval: any;
   managerBranches: string[] = [];
-    page = 1;
+  page = 1;
   pageSize = 999;
   loading = false;
   Branches: any[] = [];
@@ -72,7 +73,7 @@ export class Desktop implements OnInit, OnDestroy {
     return localStorage.getItem("role") === "HR";
   }
 
-    get isAreaManager(): boolean {
+  get isAreaManager(): boolean {
     return localStorage.getItem("role") === "AreaManager";
   }
 
@@ -105,7 +106,7 @@ export class Desktop implements OnInit, OnDestroy {
       this.loadUnseenCounts();
     }
 
-    if(this.isAreaManager){
+    if (this.isAreaManager) {
       this.loadBranches();
     }
 
@@ -139,7 +140,7 @@ export class Desktop implements OnInit, OnDestroy {
           branchIds.includes(b.id),
         ).map((b: any) => b.name);
 
-       this.cdr.detectChanges();
+        this.cdr.detectChanges();
 
         console.log(this.managerBranches);
       },
@@ -169,10 +170,11 @@ export class Desktop implements OnInit, OnDestroy {
           this.startTimer();
           this.api.showSuccess("تم بدء شيفتك بنجاح");
         },
-        error: () => {
-          this.api.showError(
-            "يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر",
-          );
+        error: (err: HttpErrorResponse) => {
+          const msg =
+            err?.error?.message ??
+            "يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر";
+          this.api.showError(msg);
         },
       });
   }
@@ -206,10 +208,11 @@ export class Desktop implements OnInit, OnDestroy {
 
               this.api.showSuccess("تم إنهاء شيفتك بنجاح");
             },
-            error: () => {
-              this.api.showError(
-                "يوجد مشكلة فى إنهاء الشيفت الخاص بك، تواصل مع مديرك المباشر",
-              );
+            error: (err: HttpErrorResponse) => {
+              const msg =
+                err?.error?.message ??
+                "يوجد مشكلة فى بدء الشيفت الخاص بك تواصل مع مديرك المباشر";
+              this.api.showError(msg);
             },
           });
       },
