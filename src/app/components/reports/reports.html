@@ -265,9 +265,9 @@
               <th>الموظف</th>
               <th>الفرع</th>
               <th>اليوم</th>
-              <th>دخول مجدول</th>
+              <th>موعد الدخول</th>
               <th>دخول فعلي</th>
-              <th>خروج مجدول</th>
+              <th>موعد الخروج</th>
               <th>خروج فعلي</th>
             </tr>
           </ng-template>
@@ -660,7 +660,7 @@
             </div>
             <div class="stat-card">
               <span class="stat-value danger"
-                >{{ monthlyTotalDiscounts | number }}</span
+                >{{ monthlyTotalDiscountsOnly | number }}</span
               >
               <span class="stat-label">إجمالي الخصومات (ج.م)</span>
             </div>
@@ -677,6 +677,25 @@
               <span class="stat-label">إجمالي السلف (ج.م)</span>
             </div>
             <div class="stat-card">
+              <span class="stat-value warning"
+                >{{ monthlyTotalCashBorrows | number }}</span
+              >
+              <span class="stat-label">إجمالي السلف النقدية (ج.م)</span>
+            </div>
+            <!-- في monthly stats grid -->
+            <div class="stat-card">
+              <span class="stat-value danger"
+                >{{ monthlyTotalContractDiscounts | number }}</span
+              >
+              <span class="stat-label">إجمالي خصومات التعاقد (ج.م)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value danger"
+                >{{ monthlyTotalDiscounts | number }}</span
+              >
+              <span class="stat-label">مجموع الخصومات (ج.م)</span>
+            </div>
+            <div class="stat-card">
               <span class="stat-value success"
                 >{{ monthlyTotalNet | number }}</span
               >
@@ -688,10 +707,11 @@
             [value]="monthlyPayrollData"
             [loading]="loadingMonthlyPayroll"
             [paginator]="true"
-            [rows]="10"
+            [rows]="monthlyPayrollPageSize"
             [rowsPerPageOptions]="[10, 25, 50 , 100]"
             [lazy]="true"
             [totalRecords]="monthlyPayrollTotalCount"
+            [first]="monthlyPayrollFirst"
             (onPage)="onMonthlyPayrollPageChange($event)"
             styleClass="p-datatable-sm p-datatable-gridlines"
             [tableStyle]="{ 'min-width': '60rem' }"
@@ -702,14 +722,13 @@
                 <th>كود الموظف</th>
                 <th>الموظف</th>
                 <th>الفرع</th>
-                <th>الشهر</th>
-                <th>السنة</th>
-                <th>التارجت</th>
-                <th>التأمين</th>
+                <th>شهر / سنة</th>
+                <th>التأمينات</th>
                 <th>ساعات العمل</th>
                 <th>الأوفر تايم</th>
                 <th>ساعات النسيان</th>
                 <th>ساعات الإجازات</th>
+                <th>إجمالى الساعات</th>
                 <th style="text-align: center">الراتب الأساسي</th>
                 <th style="text-align: center">الخصومات</th>
                 <th style="text-align: center">خصومات التعاقدات</th>
@@ -726,14 +745,13 @@
                 <td>{{ row.employeeId }}</td>
                 <td>{{ row.employeeName }}</td>
                 <td>{{ row.branchName }}</td>
-                <td>{{ row.month }}</td>
-                <td>{{ row.year }}</td>
-                <td>{{ row.target }}</td>
+                <td>{{ row.month }}/{{ row.year }}</td>
                 <td>{{ row.insurence | number }}</td>
                 <td>{{ row.hours }}</td>
                 <td>{{ row.hoursOverTime }}</td>
                 <td>{{ row.forgetedHours }}</td>
                 <td>{{ row.holidayHours }}</td>
+                <td>{{ row.target }}</td>
                 <td style="text-align: center">
                   {{ row.totalSalary | number }}
                 </td>
@@ -835,7 +853,7 @@
             </div>
             <div class="stat-card">
               <span class="stat-value danger"
-                >{{ branchTotalDiscounts | number }}</span
+                >{{ branchTotalDiscountsOnly | number }}</span
               >
               <span class="stat-label">إجمالي الخصومات (ج.م)</span>
             </div>
@@ -851,6 +869,25 @@
               >
               <span class="stat-label">إجمالي السلف (ج.م)</span>
             </div>
+            <!-- في monthly stats grid -->
+            <div class="stat-card">
+              <span class="stat-value danger"
+                >{{ branchTotalContractDiscounts | number }}</span
+              >
+              <span class="stat-label">إجمالي خصومات التعاقد (ج.م)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value danger"
+                >{{ branchTotalDiscounts | number }}</span
+              >
+              <span class="stat-label">مجموع الخصومات (ج.م)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value warning"
+                >{{ branchTotalCashBorrows | number }}</span
+              >
+              <span class="stat-label">إجمالي السلف النقدية (ج.م)</span>
+            </div>
             <div class="stat-card">
               <span class="stat-value success"
                 >{{ branchTotalNet | number }}</span
@@ -863,7 +900,7 @@
             [value]="branchPayrollData"
             [loading]="loadingBranchPayroll"
             [paginator]="true"
-            [rows]="10"
+            [rows]="branchPayrollPageSize"
             [rowsPerPageOptions]="[10, 25, 50 , 100]"
             [lazy]="true"
             [totalRecords]="branchPayrollTotalCount"
@@ -877,14 +914,13 @@
                 <th>كود الموظف</th>
                 <th>الموظف</th>
                 <th>الفرع</th>
-                <th>الشهر</th>
-                <th>السنة</th>
-                <th>التارجت</th>
-                <th>التأمين</th>
+                <th>شهر / سنة</th>
+                <th>التأمينات</th>
                 <th>ساعات العمل</th>
                 <th>الأوفر تايم</th>
                 <th>ساعات النسيان</th>
                 <th>ساعات الإجازات</th>
+                <th>إجمالى الساعات</th>
                 <th style="text-align: center">الراتب الأساسي</th>
                 <th style="text-align: center">الخصومات</th>
                 <th style="text-align: center">خصومات التعاقدات</th>
@@ -901,14 +937,14 @@
                 <td>{{ row.employeeId }}</td>
                 <td>{{ row.employeeName }}</td>
                 <td>{{ row.branchName }}</td>
-                <td>{{ row.month }}</td>
-                <td>{{ row.year }}</td>
-                <td>{{ row.target }}</td>
+                <td>{{ row.month }}/{{ row.year }}</td>
+
                 <td>{{ row.insurence | number }}</td>
                 <td>{{ row.hours }}</td>
                 <td>{{ row.hoursOverTime }}</td>
                 <td>{{ row.forgetedHours }}</td>
                 <td>{{ row.holidayHours }}</td>
+                <td>{{ row.target }}</td>
                 <td style="text-align: center">
                   {{ row.totalSalary | number }}
                 </td>

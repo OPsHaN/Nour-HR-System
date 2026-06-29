@@ -153,7 +153,7 @@ export class Reports implements OnInit {
   shiftTypeOptions = [
     { label: "مفتوحة", value: "open" },
     { label: "متأخرة", value: "late" },
-    { label: "أوفرتايم", value: "overtime" },
+    // { label: "أوفرتايم", value: "overtime" },
   ];
 
   // ── Absent Tab ──────────────────────────────────────────────────────────
@@ -183,7 +183,7 @@ export class Reports implements OnInit {
   monthlyPayrollPage = 1;
   monthlyPayrollPageSize = 10;
   monthlyPayrollTotalCount = 0;
-
+  monthlyPayrollFirst = 1;
   // ── Branch Payroll Tab ──────────────────────────────────────────────────
   branchPayrollMonth: Date = new Date();
   selectedBranchId: string | null = null;
@@ -258,11 +258,20 @@ export class Reports implements OnInit {
     this.loadAbsentEmployees();
   }
 
-  onMonthlyPayrollPageChange(event: any): void {
+
+
+onMonthlyPayrollPageChange(event: any): void {
+  // لو اتغير الـ pageSize، ارجع للأول
+  if (event.rows !== this.monthlyPayrollPageSize) {
+    this.monthlyPayrollFirst = 0;
+    this.monthlyPayrollPage = 1;
+  } else {
+    this.monthlyPayrollFirst = event.first;
     this.monthlyPayrollPage = event.first / event.rows + 1;
-    this.monthlyPayrollPageSize = event.rows;
-    this.loadMonthlyPayroll();
   }
+  this.monthlyPayrollPageSize = event.rows;
+  this.loadMonthlyPayroll();
+}
 
   onBranchPayrollPageChange(event: any): void {
     this.branchPayrollPage = event.first / event.rows + 1;
@@ -569,6 +578,13 @@ export class Reports implements OnInit {
   get monthlyTotalSalary(): number {
     return this.monthlyPayrollData.reduce((s, x) => s + x.totalSalary, 0);
   }
+
+  get monthlyTotalDiscountsOnly (): number {
+        return this.monthlyPayrollData.reduce(
+      (s, x) => s + x.totalDiscounts,
+      0,
+    );
+  }
   get monthlyTotalDiscounts(): number {
     return this.monthlyPayrollData.reduce(
       (s, x) => s + x.totalDiscounts + x.totalContractDiscount,
@@ -591,6 +607,12 @@ export class Reports implements OnInit {
   get branchTotalSalary(): number {
     return this.branchPayrollData.reduce((s, x) => s + x.totalSalary, 0);
   }
+  get branchTotalDiscountsOnly (): number {
+        return this.branchPayrollData.reduce(
+      (s, x) => s + x.totalDiscounts + x.totalContractDiscount,
+      0,
+    );
+  }
   get branchTotalDiscounts(): number {
     return this.branchPayrollData.reduce(
       (s, x) => s + x.totalDiscounts + x.totalContractDiscount,
@@ -609,6 +631,38 @@ export class Reports implements OnInit {
   get branchTotalNet(): number {
     return this.branchPayrollData.reduce((s, x) => s + x.netSalary, 0);
   }
+
+  get monthlyTotalCashBorrows(): number {
+  return this.monthlyPayrollData.reduce((s, x) => s + x.totalCashBorrows, 0);
+}
+
+  // ── Monthly ──────────────────────────────────────────────
+  get monthlyTotalContractDiscounts(): number {
+    return this.monthlyPayrollData.reduce(
+      (s, x) => s + x.totalContractDiscount,
+      0,
+    );
+  }
+
+  get monthlyRemaining(): number {
+    return this.monthlyTotalNet - this.monthlyTotalBorrows;
+  }
+
+  // ── Branch ───────────────────────────────────────────────
+  get branchTotalContractDiscounts(): number {
+    return this.branchPayrollData.reduce(
+      (s, x) => s + x.totalContractDiscount,
+      0,
+    );
+  }
+
+  get branchRemaining(): number {
+    return this.branchTotalNet - this.branchTotalBorrows;
+  }
+
+  get branchTotalCashBorrows(): number {
+  return this.branchPayrollData.reduce((s, x) => s + x.totalCashBorrows, 0);
+}
 
   formatTime(time?: string): string {
     if (!time) return "—";
