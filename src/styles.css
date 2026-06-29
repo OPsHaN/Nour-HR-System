@@ -709,8 +709,8 @@ input {
 }
 
 .badge {
-  color: white !important;
   background: rgba(222, 221, 221, 0.75);
+  color: var(--text) !important;
 }
 
 .apply-btn {
