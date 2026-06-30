@@ -133,7 +133,6 @@ input {
   outline: none;
   transition: 0.2s ease;
   /* font-size: 20px; */
-
   background: var(--surface-strong);
 }
 
@@ -146,6 +145,10 @@ input {
 .custom-input select {
   color: var(--text);
   background: var(--surface-strong);
+}
+
+.p-tag  {
+  font-size: 18px !important;
 }
 
 

@@ -112,8 +112,16 @@ export class Users {
 
   deleteEmployee(id: string) {
     console.log("Deleted ID:", id);
-    // API CALL
-    // this.api.deleteUser(id).subscribe(...)
+    // this.api.deleteEmpyee(id).subscribe({
+    //         next: () => {
+    //     this.api.showSuccess("تم حذف الموظف ");
+    //     this.cdr.detectChanges();
+    //   },
+    //   error: (err) => {
+    //     this.api.showError("حدث خطأ أثناء الحذف");
+    //     console.error(err);
+    //   },
+    // })
   }
 
   onEmployeeCreated() {

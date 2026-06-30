@@ -215,19 +215,6 @@
           ></i>
         </button>
 
-        <!-- Show -->
-
-        <button
-          *ngIf=" emp.role === 'AreaManager'"
-          pButton
-          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
-          (click)="openBranchesDialog(emp)"
-        >
-          <i
-            class="pi pi-building d-flex align-items-center justify-content-center"
-          ></i>
-        </button>
-
         <!-- Save -->
         <button
           *ngIf="editing"
@@ -255,7 +242,7 @@
         </button>
 
         <!-- Delete -->
-        <!-- <button
+        <button
           *ngIf="!editing"
           pButton
           icon="pi pi-trash"
@@ -265,7 +252,19 @@
           <i
             class="pi pi-trash d-flex align-items-center justify-content-center"
           ></i>
-        </button> -->
+        </button>
+
+        <!-- Show -->
+        <button
+          *ngIf=" emp.role === 'AreaManager'"
+          pButton
+          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          (click)="openBranchesDialog(emp)"
+        >
+          <i
+            class="pi pi-building d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
       </td>
     </tr>
   </ng-template>

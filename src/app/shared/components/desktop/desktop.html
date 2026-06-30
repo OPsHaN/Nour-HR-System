@@ -80,6 +80,21 @@
               </span>
             </div>
           </div>
+
+          <div *ngIf="isAdmin" class="mini-stats">
+            <div class="mini-stat">
+              <span>{{ this.totalUsers }}</span>
+              <p class="mb-0">إجمالى الموظفين</p>
+            </div>
+
+            <div class="mini-stat">
+              <span>{{ this.totalBranchs }}</span>
+              <p class="mb-0">إجمالى الفروع</p>
+            </div>
+
+
+
+          </div>
         </fieldset>
       </div>
 

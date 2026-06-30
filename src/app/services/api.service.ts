@@ -48,6 +48,10 @@ export class Apiservice {
     return this.http.put(`${this.baseUrl}employees/${id}`, employeeData);
   }
 
+  deleteEmpyee(employeeid:string){
+    return this.http.delete(`${this.baseUrl}employees/${employeeid}`)
+  }
+
   getEmployeeById(id: string) {
     return this.http.get(`${this.baseUrl}employees/${id}`);
   }

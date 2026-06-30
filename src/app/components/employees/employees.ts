@@ -707,9 +707,9 @@ export class Employees {
         }
       },
 
-      error: () => {
-        this.api.showError("لا يوجد بيانات لهذا الشهر");
-      },
+      // error: () => {
+      //   this.api.showError("لا يوجد بيانات لهذا الشهر");
+      // },
     });
   }
 

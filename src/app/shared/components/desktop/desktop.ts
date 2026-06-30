@@ -55,7 +55,8 @@ export class Desktop implements OnInit, OnDestroy {
   pageSize = 999;
   loading = false;
   Branches: any[] = [];
-
+  totalUsers = 0;
+  totalBranchs = 0;
   unseenCounts = {
     overtime: 0,
     borrows: 0,
@@ -78,6 +79,10 @@ export class Desktop implements OnInit, OnDestroy {
     return localStorage.getItem("role") === "AreaManager";
   }
 
+  get isAdmin(): boolean {
+    return localStorage.getItem("role") === "Admin";
+  }
+
   private get storageKey(): string {
     const employeeId = localStorage.getItem("employeeId") ?? "default";
     return `activeShift_${employeeId}`;
@@ -96,39 +101,44 @@ export class Desktop implements OnInit, OnDestroy {
     private api: Apiservice,
     private ngZone: NgZone,
     private confirmationService: ConfirmationService,
-    private unseenCountsService: UnseenCountsService
+    private unseenCountsService: UnseenCountsService,
   ) {}
 
- ngOnInit(): void {
-  this.userName = localStorage.getItem("name") || "مستخدم";
-  this.restoreShiftState();
-  this.openDefaultStartupWindows();
+  ngOnInit(): void {
+    this.userName = localStorage.getItem("name") || "مستخدم";
+    this.restoreShiftState();
+    this.openDefaultStartupWindows();
 
-  if (this.isHR) {
-    this.unseenCountsService.counts$.subscribe((counts) => {
-      this.unseenCounts = counts;
-      this.cdr.detectChanges();
-    });
-
-    this.loadUnseenCounts();
-  }
-
-  if (this.isAreaManager) {
-    this.loadBranches();
-  }
-
-  window.addEventListener("open-news-window", () => {
-    this.ngZone.run(() => {
-      this.openWindow({
-        action: "newsdetails",
-        title: "تفاصيل الخبر",
-        icon: "article",
+    if (this.isHR) {
+      this.unseenCountsService.counts$.subscribe((counts) => {
+        this.unseenCounts = counts;
+        this.cdr.detectChanges();
       });
 
-      this.cdr.detectChanges();
+      this.loadUnseenCounts();
+    }
+
+    if (this.isAreaManager) {
+      this.loadBranches();
+    }
+
+    if (this.isAdmin) {
+      this.loadUsers();
+      this.loadBranches();
+    }
+
+    window.addEventListener("open-news-window", () => {
+      this.ngZone.run(() => {
+        this.openWindow({
+          action: "newsdetails",
+          title: "تفاصيل الخبر",
+          icon: "article",
+        });
+
+        this.cdr.detectChanges();
+      });
     });
-  });
- }
+  }
 
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
@@ -147,9 +157,23 @@ export class Desktop implements OnInit, OnDestroy {
           branchIds.includes(b.id),
         ).map((b: any) => b.name);
 
+        this.totalBranchs = res.totalCount;
+
         this.cdr.detectChanges();
 
         console.log(this.managerBranches);
+      },
+      error: () => {
+        this.loading = false;
+      },
+    });
+  }
+
+  loadUsers() {
+    this.api.getAllUsers(this.page, this.pageSize).subscribe({
+      next: (res: any) => {
+        this.totalUsers = res.totalCount;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.loading = false;
@@ -491,7 +515,7 @@ export class Desktop implements OnInit, OnDestroy {
     return SHORTCUTS_CONFIG[action]?.size ?? { width: 520, height: 360 };
   }
 
-loadUnseenCounts() {
-  this.unseenCountsService.refreshAll();
-}
+  loadUnseenCounts() {
+    this.unseenCountsService.refreshAll();
+  }
 }
