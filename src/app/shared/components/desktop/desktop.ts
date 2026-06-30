@@ -24,6 +24,7 @@ import { Apiservice } from "src/app/services/api.service";
 import { ConfirmationService } from "primeng/api";
 import { finalize } from "rxjs/operators";
 import { HttpErrorResponse } from "@angular/common/http";
+import { UnseenCountsService } from "src/app/services/unseen-counts.service";
 
 @Component({
   selector: "app-desktop",
@@ -95,33 +96,39 @@ export class Desktop implements OnInit, OnDestroy {
     private api: Apiservice,
     private ngZone: NgZone,
     private confirmationService: ConfirmationService,
+    private unseenCountsService: UnseenCountsService
   ) {}
 
-  ngOnInit(): void {
-    this.userName = localStorage.getItem("name") || "مستخدم";
-    this.restoreShiftState();
-    this.openDefaultStartupWindows();
+ ngOnInit(): void {
+  this.userName = localStorage.getItem("name") || "مستخدم";
+  this.restoreShiftState();
+  this.openDefaultStartupWindows();
 
-    if (this.isHR) {
-      this.loadUnseenCounts();
-    }
-
-    if (this.isAreaManager) {
-      this.loadBranches();
-    }
-
-    window.addEventListener("open-news-window", () => {
-      this.ngZone.run(() => {
-        this.openWindow({
-          action: "newsdetails",
-          title: "تفاصيل الخبر",
-          icon: "article",
-        });
-
-        this.cdr.detectChanges();
-      });
+  if (this.isHR) {
+    this.unseenCountsService.counts$.subscribe((counts) => {
+      this.unseenCounts = counts;
+      this.cdr.detectChanges();
     });
+
+    this.loadUnseenCounts();
   }
+
+  if (this.isAreaManager) {
+    this.loadBranches();
+  }
+
+  window.addEventListener("open-news-window", () => {
+    this.ngZone.run(() => {
+      this.openWindow({
+        action: "newsdetails",
+        title: "تفاصيل الخبر",
+        icon: "article",
+      });
+
+      this.cdr.detectChanges();
+    });
+  });
+ }
 
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
@@ -484,33 +491,7 @@ export class Desktop implements OnInit, OnDestroy {
     return SHORTCUTS_CONFIG[action]?.size ?? { width: 520, height: 360 };
   }
 
-  loadUnseenCounts() {
-    this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.overtime = res.count;
-    });
-
-    this.api.getUnseenBorrowsCount().subscribe((res: any) => {
-      this.unseenCounts.borrows = res.count;
-    });
-
-    this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.holidays = res.count;
-    });
-
-    this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.resignations = res.count;
-    });
-
-    this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.appointments = res.count;
-    });
-
-    this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
-      this.unseenCounts.forgotHours = res.count;
-    });
-
-    this.api.getUnseenComplaintsCount().subscribe((res: any) => {
-      this.unseenCounts.complaints = res.count;
-    });
-  }
+loadUnseenCounts() {
+  this.unseenCountsService.refreshAll();
+}
 }

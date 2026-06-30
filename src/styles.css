@@ -54,11 +54,25 @@ input {
 
 .p-paginator {
   padding: 3px !important;
+    font-size: 20px;
+
 }
 
 .p-select-label {
   padding: 0.3rem 0.5rem !important;
+  border-radius: 50px;
 }
+
+.p-paginator .p-select {
+    border-radius: 50px;
+}
+
+.p-paginator-rpp-dropdown .p-select-label {
+  font-size: 20px;
+}
+
+
+
 
 /* 🎯 Table Wrapper */
 .p-datatable {
@@ -155,7 +169,7 @@ input {
 .p-paginator-page.p-paginator-page-selected {
   background-color: var(--accent) !important;
   color: #fff !important;
-  border-radius: 20px;
+  border-radius: 50px;
 }
 
 .p-select-option.p-select-option-selected.p-focus {

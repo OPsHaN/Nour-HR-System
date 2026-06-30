@@ -18,6 +18,7 @@ import {
 } from "../../shortcut.config";
 import { Apiservice } from "src/app/services/api.service";
 import { AuthService } from "src/app/services/auth.service";
+import { UnseenCountsService } from "src/app/services/unseen-counts.service";
 
 @Component({
   selector: "app-shortcuts",
@@ -28,37 +29,36 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class ShortcutsComponent {
   @Output() shortcutClick = new EventEmitter<Shortcut>();
-  private readonly POLLING_INTERVAL = 50000; 
+  private readonly POLLING_INTERVAL = 50000;
   private destroy$ = new Subject<void>();
 
   protected shortcuts: Shortcut[] = [];
   private readonly api = inject(Apiservice);
   private readonly cdr = inject(ChangeDetectorRef);
-  public readonly auth = inject(AuthService)
-  unseenCounts = {
-    overtime: 0,
-    borrows: 0,
-    holidays: 0,
-    resignations: 0,
-    appointments: 0,
-    forgotHours: 0,
-  };
+  public readonly auth = inject(AuthService);
+  private readonly unseenCountsService = inject(UnseenCountsService);
 
   ngOnInit() {
     const role = this.getUserRole();
     this.shortcuts = getShortcutsByRole(role);
 
     if (this.isHR || this.isEmployee || this.auth.isAreaManager) {
+      this.unseenCountsService.counts$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((counts) => {
+          this.updateOrdersBadge(counts);
+        });
+
       interval(this.POLLING_INTERVAL)
         .pipe(startWith(0), takeUntil(this.destroy$))
         .subscribe(() => {
-          this.loadUnseenCounts();
+          this.unseenCountsService.refreshAll(this.auth.isHR || this.auth.isEmployee);
           this.loadUnseenComplaint();
         });
     }
   }
 
-    ngOnDestroy() {
+  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -83,7 +83,14 @@ export class ShortcutsComponent {
   private getUserRole(): UserRole {
     const role = localStorage.getItem("role");
 
-    const allowed: UserRole[] = ["Admin", "HR", "Accountant", "Employee" , "AreaManager" , "Control"];
+    const allowed: UserRole[] = [
+      "Admin",
+      "HR",
+      "Accountant",
+      "Employee",
+      "AreaManager",
+      "Control",
+    ];
 
     return allowed.includes(role as UserRole) ? (role as UserRole) : "Employee";
   }
@@ -115,60 +122,31 @@ export class ShortcutsComponent {
     });
   }
 
-loadUnseenCounts() {
-  // الأوفر تايم - متاح لكل الأدوار المسموح لها (HR, Employee, AreaManager)
-  this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
-    this.unseenCounts.overtime = res.count ?? 0;
-    this.updateOrdersBadge();
-  });
+  private updateOrdersBadge(counts: {
+    overtime: number;
+    borrows: number;
+    holidays: number;
+    resignations: number;
+    appointments: number;
+    forgotHours: number;
+  }) {
+    let total = counts.overtime;
 
-  // باقي الـ APIs - بس لو الدور HR أو Employee (مش AreaManager)
-  if (this.isHR || this.isEmployee) {
-    this.api.getUnseenBorrowsCount().subscribe((res: any) => {
-      this.unseenCounts.borrows = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
+    if (this.isHR || this.isEmployee) {
+      total +=
+        counts.borrows +
+        counts.holidays +
+        counts.resignations +
+        counts.appointments +
+        counts.forgotHours;
+    }
 
-    this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.holidays = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
+    this.shortcuts = this.shortcuts.map((shortcut) =>
+      shortcut.action === "orders" ? { ...shortcut, badge: total } : shortcut,
+    );
 
-    this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.resignations = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-
-    this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.appointments = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-
-    this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
-      this.unseenCounts.forgotHours = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
+    this.cdr.detectChanges();
   }
-}
-
-private updateOrdersBadge() {
-  let total = this.unseenCounts.overtime;
-
-  if (this.isHR || this.isEmployee) {
-    total +=
-      this.unseenCounts.borrows +
-      this.unseenCounts.holidays +
-      this.unseenCounts.resignations +
-      this.unseenCounts.appointments +
-      this.unseenCounts.forgotHours;
-  }
-
-  this.shortcuts = this.shortcuts.map((shortcut) =>
-    shortcut.action === "orders" ? { ...shortcut, badge: total } : shortcut,
-  );
-
-  this.cdr.detectChanges();
-}
 }
 
 export { WindowAction };

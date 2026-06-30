@@ -21,6 +21,7 @@ import { AutoCompleteModule } from "primeng/autocomplete";
 import { Observable } from "rxjs";
 import { TooltipModule } from "primeng/tooltip";
 import { BadgeModule } from "primeng/badge";
+import { UnseenCountsService } from "src/app/services/unseen-counts.service";
 
 @Component({
   selector: "app-orders",
@@ -125,22 +126,28 @@ export class Orders implements OnInit {
     private api: Apiservice,
     private cdr: ChangeDetectorRef,
     public auth: AuthService,
+    private unseenCountsService: UnseenCountsService,
   ) {}
 
-  ngOnInit() {
-    if (this.auth.isHR || this.auth.isEmployee) {
-      this.loadMissedHours();
-    }
-
-    if (this.auth.isHR || this.auth.isEmployee || this.auth.isAreaManager) {
-      this.loadUnseenCounts();
-    }
-
-    if (this.auth.isAreaManager) {
-      this.activeTabIndex = 1;
-      this.loadLeave();
-    }
+ngOnInit() {
+  if (this.auth.isHR || this.auth.isEmployee) {
+    this.loadMissedHours();
   }
+
+  this.unseenCountsService.counts$.subscribe((counts) => {
+    this.unseenCounts = counts;
+    this.cdr.detectChanges();
+  });
+
+  if (this.auth.isHR || this.auth.isEmployee || this.auth.isAreaManager) {
+    this.loadUnseenCounts();
+  }
+
+  if (this.auth.isAreaManager) {
+    this.activeTabIndex = 1;
+    this.loadLeave();
+  }
+}
 
   get isEmployee(): boolean {
     return !(
@@ -390,8 +397,8 @@ export class Orders implements OnInit {
       next: () => {
         this.api.showSuccess("تم القبول بنجاح");
         this.markAsSeen(type, id);
-
         this.reloadByType(type);
+        this.loadUnseenCounts();
       },
       error: () => this.api.showError("حدث خطأ أثناء القبول"),
     });
@@ -407,6 +414,8 @@ export class Orders implements OnInit {
 
     if (type === "missedHours") {
       call = this.api.rejectForgetedHoursRequest(id, payload);
+    } else if (type === "leave") {
+      call = this.api.approveHolidayRequestByHr(id, payload);
     } else if (type === "loan") {
       call = this.api.approveOrRejectBorrowRequest(id, payload);
     } else if (type === "overtime") {
@@ -429,6 +438,7 @@ export class Orders implements OnInit {
         this.markAsSeen(type, id);
         setTimeout(() => {
           this.reloadByType(type);
+          this.loadUnseenCounts();
         }, 100);
       },
       error: () => this.api.showError("حدث خطأ أثناء الرفض"),
@@ -496,6 +506,7 @@ export class Orders implements OnInit {
           this.showCoverDialog = false;
           this.api.showSuccess("تمت الموافقة بنجاح");
           this.loadLeave();
+          this.loadUnseenCounts();
         },
       });
   }
@@ -511,6 +522,7 @@ export class Orders implements OnInit {
       next: () => {
         this.api.showSuccess("تم القبول بواسطة مدير المنطقة");
         this.loadOvertime();
+        this.loadUnseenCounts();
       },
       error: () => this.api.showError("حدث خطأ"),
     });
@@ -527,6 +539,7 @@ export class Orders implements OnInit {
       next: () => {
         this.api.showSuccess("تم القبول بواسطة الكنترول");
         this.loadOvertime();
+        this.loadUnseenCounts();
       },
       error: () => this.api.showError("حدث خطأ"),
     });
@@ -664,37 +677,9 @@ export class Orders implements OnInit {
     this.markAsSeen(type, req.id);
   }
 
-  loadUnseenCounts() {
-    this.api.getUnseenOvertimeRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.overtime = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-
-    this.api.getUnseenBorrowsCount().subscribe((res: any) => {
-      this.unseenCounts.borrows = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-
-    this.api.getUnseenHolidayRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.holidays = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-
-    this.api.getUnseenResignationRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.resignations = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-
-    this.api.getUnseenAppointmentRequestsCount().subscribe((res: any) => {
-      this.unseenCounts.appointments = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-
-    this.api.getUnseenForgetedHoursRequest().subscribe((res: any) => {
-      this.unseenCounts.forgotHours = res.count ?? 0;
-      this.updateOrdersBadge();
-    });
-  }
+ loadUnseenCounts() {
+  this.unseenCountsService.refreshAll();
+}
 
   private updateOrdersBadge() {
     const total =
