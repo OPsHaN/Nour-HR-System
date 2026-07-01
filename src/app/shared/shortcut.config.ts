@@ -92,7 +92,7 @@ export const SHORTCUTS_CONFIG = {
     title: "التقارير",
     icon: "bar_chart",
     bg: "#52c41a",
-    roles: ["HR", "Control", "Accountant"] as UserRole[],
+    roles: ["HR", "Control", "Accountant" , "AreaManager" , "CEO"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   responsibility: {

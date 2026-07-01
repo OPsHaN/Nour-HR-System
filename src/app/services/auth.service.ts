@@ -13,7 +13,7 @@ export interface LoginRequest {
   providedIn: "root",
 })
 export class AuthService {
-  private baseUrl = "https://hrnourtest.runasp.net/api/auth/";
+  private baseUrl = "https://opshaan-001-site1.gtempurl.com/api/auth/";
 
   private _isLoggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this._isLoggedIn.asObservable();

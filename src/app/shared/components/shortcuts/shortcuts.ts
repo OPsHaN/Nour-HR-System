@@ -90,6 +90,7 @@ export class ShortcutsComponent {
       "Employee",
       "AreaManager",
       "Control",
+      "CEO"
     ];
 
     return allowed.includes(role as UserRole) ? (role as UserRole) : "Employee";

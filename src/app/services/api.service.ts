@@ -6,7 +6,7 @@ import { MessageService } from "primeng/api";
   providedIn: "root",
 })
 export class Apiservice {
-  private baseUrl = "https://hrnourtest.runasp.net/api/";
+  private baseUrl = "https://opshaan-001-site1.gtempurl.com/api/";
   private readonly noSpinnerHeaders = new HttpHeaders({
     "ignore-spinner": "true",
   });

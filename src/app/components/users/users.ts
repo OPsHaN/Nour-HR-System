@@ -105,23 +105,22 @@ export class Users {
       rejectLabel: "إلغاء",
 
       accept: () => {
-        this.deleteEmployee(emp.id);
+        this.deleteEmployee(emp.employeeId);
       },
     });
   }
 
   deleteEmployee(id: string) {
-    console.log("Deleted ID:", id);
-    // this.api.deleteEmpyee(id).subscribe({
-    //         next: () => {
-    //     this.api.showSuccess("تم حذف الموظف ");
-    //     this.cdr.detectChanges();
-    //   },
-    //   error: (err) => {
-    //     this.api.showError("حدث خطأ أثناء الحذف");
-    //     console.error(err);
-    //   },
-    // })
+    this.api.deleteEmpyee(id).subscribe({
+            next: () => {
+        this.api.showSuccess("تم حذف الموظف ");
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.api.showError("حدث خطأ أثناء الحذف");
+        console.error(err);
+      },
+    })
   }
 
   onEmployeeCreated() {
