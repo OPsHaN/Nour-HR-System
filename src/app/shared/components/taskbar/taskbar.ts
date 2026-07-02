@@ -82,8 +82,6 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
     this.websiteClick.emit();
   }
 
-
-
   logout() {
     this.confirmationService.confirm({
       message: "هل تريد تسجيل الخروج؟",
@@ -92,10 +90,10 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
       acceptLabel: "نعم",
       rejectLabel: "لا",
       accept: () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      localStorage.removeItem("name");
-      localStorage.removeItem("employeeId");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        localStorage.removeItem("name");
+        localStorage.removeItem("employeeId");
 
         this.router.navigate(["/login"]);
         this.showSuccess("تم تسجيل الخروج بنجاح");
@@ -127,12 +125,15 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
     this.timeLabel = now.toLocaleTimeString(this.locale, {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Africa/Cairo",
     });
 
     this.dateLabel = now.toLocaleDateString(this.locale, {
       month: "short",
       day: "numeric",
       year: "numeric",
+      calendar: "gregory",
+      timeZone: "Africa/Cairo",
     });
   }
 }
