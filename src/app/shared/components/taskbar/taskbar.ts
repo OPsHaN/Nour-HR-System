@@ -119,21 +119,30 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  private updateClock(): void {
-    const now = new Date();
+private updateClock(): void {
+  const now = new Date();
 
-    this.timeLabel = now.toLocaleTimeString(this.locale, {
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "Africa/Cairo",
-    });
-
-    this.dateLabel = now.toLocaleDateString(this.locale, {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      calendar: "gregory",
-      timeZone: "Africa/Cairo",
-    });
+  const isDST = this.isEgyptDST(now);
+  if (isDST) {
+    now.setHours(now.getHours() + 1);
   }
+
+  this.timeLabel = now.toLocaleTimeString(this.locale, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  this.dateLabel = now.toLocaleDateString(this.locale, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    calendar: "gregory",
+  });
+}
+
+private isEgyptDST(date: Date): boolean {
+  const month = date.getMonth() + 1; 
+  return month > 4 && month < 11; 
+}
+
 }
