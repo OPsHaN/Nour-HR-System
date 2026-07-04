@@ -729,16 +729,18 @@
                 <th>الأوفر تايم</th>
                 <th>ساعات النسيان</th>
                 <th>ساعات الإجازات</th>
-                <th>إجمالى الساعات</th>
+                <th>التارجت</th>
+                <th>سعر الساعة</th>
                 <th>الراتب الأساسي</th>
                 <th>الخصومات</th>
                 <th>خصومات التعاقدات</th>
                 <th>البونص</th>
                 <th>السلف</th>
                 <th>السلف النقدية</th>
-                <th>صافي الراتب</th>
                 <th>البنك</th>
                 <th>رقم الحساب</th>
+                <th>صافي الراتب</th>
+
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row>
@@ -753,15 +755,17 @@
                 <td>{{ (row.forgetedHours ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.holidayHours ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.target ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ (row.salaryPerHour ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalDiscounts ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalContractDiscount ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBouns ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBorrows ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalCashBorrows ?? 0) | number:'1.0-0' }}</td>
-                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ row.bankName ?? '—' }}</td>
                 <td>{{ row.bankAccount ?? '—' }}</td>
+                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
+
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
@@ -903,16 +907,17 @@
                 <th>الأوفر تايم</th>
                 <th>ساعات النسيان</th>
                 <th>ساعات الإجازات</th>
-                <th>إجمالى الساعات</th>
+                <th>التارجت</th>
+                <th>سعر الساعة</th>
                 <th>الراتب الأساسي</th>
                 <th>الخصومات</th>
                 <th>خصومات التعاقدات</th>
                 <th>البونص</th>
                 <th>السلف</th>
                 <th>السلف النقدية</th>
-                <th>صافي الراتب</th>
                 <th>البنك</th>
                 <th>رقم الحساب</th>
+                <th>صافي الراتب</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row>
@@ -927,15 +932,16 @@
                 <td>{{ (row.forgetedHours ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.holidayHours ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.target ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ (row.salaryPerHour ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalDiscounts ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalContractDiscount ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBouns ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBorrows ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalCashBorrows ?? 0) | number:'1.0-0' }}</td>
-                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ row.bankName ?? '—' }}</td>
                 <td>{{ row.bankAccount ?? '—' }}</td>
+                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">

@@ -81,7 +81,7 @@
       <!-- ===== Tab 1: الساعات المنسية ===== -->
       <p-tabpanel [value]="0">
         <div class="filters-bar" *ngIf="this.auth.isEmployee">
-          <button
+          <!-- <button
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
@@ -95,7 +95,7 @@
               [ngClass]="showCreateMissedHours ? 'pi-times' : 'pi-plus'"
             ></i>
             {{ showCreateMissedHours ? '' : 'طلب جديد' }}
-          </button>
+          </button> -->
           <p-message
             *ngIf="missedHoursRequests.length >= 3 || showCreateMissedHours"
             severity="warn"

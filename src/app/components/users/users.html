@@ -243,7 +243,7 @@
 
         <!-- Delete -->
         <button
-          *ngIf="!editing"
+          *ngIf="emp.role === 'Employee' && !editing"
           pButton
           icon="pi pi-trash"
           class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
@@ -256,7 +256,7 @@
 
         <!-- Show -->
         <button
-          *ngIf=" emp.role === 'AreaManager'"
+          *ngIf="emp.role === 'AreaManager'"
           pButton
           class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
           (click)="openBranchesDialog(emp)"

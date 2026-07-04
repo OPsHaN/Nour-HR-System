@@ -13,7 +13,7 @@ export class Logs {
   logs: any[] = [];
   totalRecords = 0;
   page = 1;
-  pageSize = 10;
+  pageSize = 15;
   loading = false;
 
   constructor(
@@ -25,26 +25,28 @@ export class Logs {
     this.loadLogs();
   }
 
-  loadLogs() {
-    this.loading = true;
-    this.api.getAllLogs().subscribe({
-      next: (res: any) => {
-      console.log('Raw response:', res); // 👈 شوف الشكل الحقيقي في Console
-        this.allLogs = [...res.data ].sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+loadLogs(page: number = 1, pageSize: number = this.pageSize) {
+  this.loading = true;
+  this.api.getAllLogs(page, pageSize).subscribe({ // pass params to backend
+    next: (res: any) => {
+      this.logs = res.data.sort(
+        (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      this.totalRecords = res.totalCount;
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.loading = false;
+    },
+  });
+}
 
-        this.totalRecords = this.allLogs.length;
-        this.updatePage();
-
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.loading = false;
-      },
-    });
-  }
+onPageChange(event: any) {
+  this.page = event.first / event.rows + 1;
+  this.pageSize = event.rows;
+  this.loadLogs(this.page, this.pageSize);
+}
 
   updatePage() {
     const start = (this.page - 1) * this.pageSize;
@@ -52,12 +54,6 @@ export class Logs {
     this.logs = this.allLogs.slice(start, end);
   }
 
-  onPageChange(event: any) {
-    this.page = event.first / event.rows + 1;
-    this.pageSize = event.rows;
-    this.updatePage();
-    this.cdr.detectChanges();
-  }
 
     formatArabicDate(date: string | Date): string {
     const d = new Date(date);

@@ -274,6 +274,8 @@ branchPayrollFirst = 1
     }
     this.monthlyPayrollPageSize = event.rows;
     this.loadMonthlyPayroll();
+        this.cdr.detectChanges();
+
   }
 
   onBranchPayrollPageChange(event: any): void {
@@ -287,6 +289,8 @@ branchPayrollFirst = 1
     this.branchPayrollPage = event.first / event.rows + 1;
     this.branchPayrollPageSize = event.rows;
     this.loadBranchPayroll();
+        this.cdr.detectChanges();
+
   }
 
   // ── Loaders ──────────────────────────────────────────────────────────────

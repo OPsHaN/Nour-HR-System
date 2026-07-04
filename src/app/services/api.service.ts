@@ -48,7 +48,7 @@ export class Apiservice {
     return this.http.put(`${this.baseUrl}employees/${id}`, employeeData);
   }
 
-  deleteEmpyee(employeeid:string){
+  deleteEmpyee(employeeid:number){
     return this.http.delete(`${this.baseUrl}employees/${employeeid}`)
   }
 
@@ -735,8 +735,8 @@ getAbsentEmployees(
 
   //logs//
 
-  getAllLogs() {
-    return this.http.get(`${this.baseUrl}audit`);
+  getAllLogs(page: number, pageSize: number) {
+    return this.http.get(`${this.baseUrl}audit?page=${page}&pageSize=${pageSize}`);
   }
 
   //areamanagers//

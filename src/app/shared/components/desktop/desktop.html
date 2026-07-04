@@ -18,7 +18,6 @@
               [pt]="{ root: { style: 'padding: 0.3rem 0.3rem ; border-radius : 30px ; font-size: 22px'} }"
               label="بدء الشيفت"
               severity="success"
-              [disabled]="shiftStarted"
               [loading]="loadingStart"
               (onClick)="onStartShift()"
             />
@@ -30,7 +29,6 @@
               [pt]="{ root: { style: 'padding: 0.3rem 0.3rem ; border-radius : 30px ; font-size: 22px' } }"
               label="إنهاء الشيفت"
               severity="danger"
-              [disabled]="!shiftStarted"
               [loading]="loadingEnd"
               (onClick)="onEndShift()"
             />
