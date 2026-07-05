@@ -741,7 +741,6 @@
                 <th>البنك</th>
                 <th>رقم الحساب</th>
                 <th>صافي الراتب</th>
-
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row>
@@ -767,7 +766,6 @@
                 <td>{{ row.bankName ?? '—' }}</td>
                 <td>{{ row.bankAccount ?? '—' }}</td>
                 <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
-
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">

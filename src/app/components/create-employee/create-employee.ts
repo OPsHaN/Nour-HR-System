@@ -50,7 +50,8 @@ export class CreateEmployee {
       hiringDate: ["", Validators.required],
       qualification: ["", Validators.required],
       graduationYear: [0, Validators.required],
-      nationalId: ["", [Validators.required, Validators.minLength(14)]],
+      nationalId: ["", [Validators.required,   Validators.minLength(14),
+  Validators.maxLength(14)]],
       phoneNumber: [
         "",
         [Validators.required, Validators.pattern(/^01[0125][0-9]{8}$/), Validators.minLength(11)],
@@ -83,6 +84,17 @@ export class CreateEmployee {
     const control = this.form.get(controlName);
     return control?.hasValidator(Validators.required) ?? false;
   }
+
+  onNationalIdInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  // امسح أي حاجة مش رقم
+  let value = input.value.replace(/[^0-9]/g, '');
+  // اقطع لو زاد عن 14
+  if (value.length > 14) {
+    value = value.substring(0, 14);
+  }
+  this.form.get('nationalId')?.setValue(value, { emitEvent: false });
+}
 
   Submit() {
     if (this.form.invalid) {

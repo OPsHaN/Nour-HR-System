@@ -1401,10 +1401,11 @@ openActionDialog(type: string, title: string, employee: any) {
       rejectLabel: "إلغاء",
 
       accept: () => {
-        this.deleteEmployee(emp.employeeId);
+        this.deleteEmployee(emp.id);
       },
     });
   }
+  
   deleteEmployee(id: number) {
     this.api.deleteEmpyee(id).subscribe({
             next: () => {

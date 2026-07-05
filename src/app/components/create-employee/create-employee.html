@@ -186,7 +186,20 @@
             >*</span
           >
         </label>
-        <input type="text" formControlName="nationalId" maxlength="14" />
+        <input
+          type="text"
+          formControlName="nationalId"
+          maxlength="14"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          (input)="onNationalIdInput($event)"
+        />
+        <div
+          class="text-danger"
+          *ngIf="form.get('nationalId')?.invalid && form.get('nationalId')?.touched"
+        >
+          الرقم القومي لازم يكون 14 رقم
+        </div>
       </div>
 
       <!-- Phone Number -->
@@ -227,7 +240,7 @@
         </select>
       </div>
 
-   <!-- Holiday Number -->
+      <!-- Holiday Number -->
       <div class="field">
         <label>
           عدد أيام الإجازات
