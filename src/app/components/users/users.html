@@ -98,7 +98,7 @@
   <!-- BODY -->
   <ng-template pTemplate="body" let-emp let-editing="editing" let-ri="rowIndex">
     <tr [pEditableRow]="emp">
-      <td>{{ ri + 1 }}</td>
+      <td>{{ emp.employeeId }}</td>
 
       <!-- NAME -->
       <td>

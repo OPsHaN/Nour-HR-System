@@ -214,7 +214,7 @@
       <th>ساعات العمل</th>
       <th>الفرع</th>
       <th>حالة الموظف</th>
-      <th *ngIf="this.auth.isHR || this.auth.isAreaManager ">الإجراءات</th>
+      <th *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isAdmin">الإجراءات</th>
     </tr>
   </ng-template>
 
@@ -240,6 +240,19 @@
       <td>{{ emp.shiftHours }}</td>
       <td>{{ emp.branchName }}</td>
       <td>{{ emp.employeeType }}</td>
+      <td *ngIf="this.auth.isAdmin">
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
+          icon="pi pi-trash"
+          (click)="confirmDelete(emp)"
+        >
+          <i
+            class="pi pi-trash d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
+      </td>
       <td *ngIf="this.auth.isAreaManager">
         <button
           pButton

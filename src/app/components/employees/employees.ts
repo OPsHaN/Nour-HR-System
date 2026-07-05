@@ -1391,4 +1391,31 @@ openActionDialog(type: string, title: string, employee: any) {
       },
     });
   }
+
+    confirmDelete(emp: any) {
+    this.confirmationService.confirm({
+      message: "هل أنت متأكد من حذف بيانات الموظف ؟",
+      header: "تأكيد الحذف",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "نعم",
+      rejectLabel: "إلغاء",
+
+      accept: () => {
+        this.deleteEmployee(emp.employeeId);
+      },
+    });
+  }
+  deleteEmployee(id: number) {
+    this.api.deleteEmpyee(id).subscribe({
+            next: () => {
+        this.api.showSuccess("تم حذف بياناتة بنجاح");
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.api.showError("حدث خطأ أثناء الحذف");
+        console.error(err);
+      },
+    })
+}
+
 }
