@@ -48,6 +48,33 @@ input {
   text-align: right;
 }
 
+.p-toast .p-toast-message {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-success {
+  background: #e8f7ee !important;
+  border-color: #2e7d32 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-error {
+  background: #fdecea !important;
+  border-color: #d32f2f !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-warn {
+  background: #fff8e1 !important;
+  border-color: #f9a825 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-info {
+  background: #eaf3ff !important;
+  border-color: #1976d2 !important;
+}
+
 .p-datatable-tbody>tr>td {
   padding: 0.1rem !important;
 }
