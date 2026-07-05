@@ -6,7 +6,7 @@
     <p-tablist style="gap: 3px">
       <p-tab [value]="0" *ngIf="this.auth.isHR || this.auth.isEmployee">
         <span class="tab-with-badge">
-          الساعات المنسية
+          إبلاغ سهو بصمة إنصراف
           <p-badge
             *ngIf="unseenCounts.forgotHours > 0"
             [value]="unseenCounts.forgotHours.toString()"
@@ -130,7 +130,7 @@
               <th>تاريخ الشيفت</th>
               <th>تاريخ الطلب</th>
               <th>السبب</th>
-              <th>ملاحظات</th>
+              <!-- <th>ملاحظات</th> -->
               <th>الحالة</th>
               <th
                 *ngIf="this.auth.isEmployee && hasRejected(missedHoursRequests)"
@@ -147,7 +147,7 @@
               <td>{{ req.shiftDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.reason }}</td>
-              <td>{{ req.notes ?? '—' }}</td>
+              <!-- <td>{{ req.notes ?? '—' }}</td> -->
               <td>
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
                   {{ getStatusLabel(req.status) }}
