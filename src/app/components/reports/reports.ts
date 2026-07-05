@@ -593,6 +593,15 @@ branchPayrollFirst = 1
     return this.monthlyPayrollData.reduce((s, x) => s + x.totalSalary, 0);
   }
 
+  getTotalHours(row: MonthlyPayrollRecord): number {
+    return (
+      (row.hours ?? 0) +
+      (row.hoursOverTime ?? 0) +
+      (row.forgetedHours ?? 0) +
+      (row.holidayHours ?? 0)
+    );
+  }
+
   get monthlyTotalDiscountsOnly(): number {
     return this.monthlyPayrollData.reduce((s, x) => s + x.totalDiscounts, 0);
   }

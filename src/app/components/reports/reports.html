@@ -729,6 +729,7 @@
                 <th>الأوفر تايم</th>
                 <th>ساعات النسيان</th>
                 <th>ساعات الإجازات</th>
+                <th>إجمالي الساعات</th>
                 <th>التارجت</th>
                 <th>سعر الساعة</th>
                 <th>الراتب الأساسي</th>
@@ -754,6 +755,7 @@
                 <td>{{ (row.hoursOverTime ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.forgetedHours ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.holidayHours ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ getTotalHours(row) | number:'1.0-0' }}</td>
                 <td>{{ (row.target ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.salaryPerHour ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalSalary ?? 0) | number:'1.0-0' }}</td>
@@ -770,7 +772,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td colspan="19" class="text-center p-4">لا توجد بيانات</td>
+                <td colspan="20" class="text-center p-4">لا توجد بيانات</td>
               </tr>
             </ng-template>
           </p-table>
@@ -907,6 +909,7 @@
                 <th>الأوفر تايم</th>
                 <th>ساعات النسيان</th>
                 <th>ساعات الإجازات</th>
+                <th>إجمالي الساعات</th>
                 <th>التارجت</th>
                 <th>سعر الساعة</th>
                 <th>الراتب الأساسي</th>
@@ -931,6 +934,7 @@
                 <td>{{ (row.hoursOverTime ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.forgetedHours ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.holidayHours ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ getTotalHours(row) | number:'1.0-0' }}</td>
                 <td>{{ (row.target ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.salaryPerHour ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalSalary ?? 0) | number:'1.0-0' }}</td>
@@ -946,7 +950,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td colspan="19" class="text-center p-4">لا توجد بيانات</td>
+                <td colspan="20" class="text-center p-4">لا توجد بيانات</td>
               </tr>
             </ng-template>
           </p-table>
