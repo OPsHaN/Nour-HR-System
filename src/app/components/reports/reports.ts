@@ -244,6 +244,10 @@ branchPayrollFirst = 1
     return localStorage.getItem("role") === "Accountant";
   }
 
+  get isControl(): boolean {
+    return localStorage.getItem("role") === "Control";
+  }
+
   // ── Page Change Handlers ─────────────────────────────────────────────────
 
   onShiftsPageChange(event: any): void {

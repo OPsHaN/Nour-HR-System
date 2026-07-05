@@ -7,7 +7,7 @@
       <p-tab [value]="0" *ngIf="!isAccountant">الشيفتات</p-tab>
       <p-tab [value]="1" *ngIf="!isAccountant">المتأخرون / المفتوحة</p-tab>
       <p-tab [value]="2" *ngIf="!isAccountant">الغيابات</p-tab>
-      <p-tab [value]="3" *ngIf="!isAccountant">كشف الرواتب</p-tab>
+      <p-tab [value]="3" *ngIf="!isAccountant || isControl">كشف الرواتب</p-tab>
       <p-tab [value]="4" *ngIf="isAccountant">الرواتب الشهرية</p-tab>
       <p-tab [value]="5" *ngIf="isAccountant">رواتب الفرع</p-tab>
     </p-tablist>
