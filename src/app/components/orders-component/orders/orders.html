@@ -6,7 +6,7 @@
     <p-tablist style="gap: 3px">
       <p-tab [value]="0" *ngIf="this.auth.isHR || this.auth.isEmployee">
         <span class="tab-with-badge">
-          إبلاغ سهو بصمة إنصراف
+          إبلاغ سهو بصمة
           <p-badge
             *ngIf="unseenCounts.forgotHours > 0"
             [value]="unseenCounts.forgotHours.toString()"
@@ -80,27 +80,44 @@
     <p-tabpanels>
       <!-- ===== Tab 1: الساعات المنسية ===== -->
       <p-tabpanel [value]="0">
-        <div class="filters-bar" *ngIf="this.auth.isEmployee">
-          <!-- <button
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2"
+          style="direction: ltr"
+        >
+          <button
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
-            [class.btn-success]="!showCreateMissedHours"
-            [class.btn-danger]="showCreateMissedHours"
-            (click)="showCreateMissedHours = !showCreateMissedHours"
-            [disabled]="missedHoursRequests.length >= 3"
+            [class.btn-outline-secondary]="!showArchive"
+            [class.btn-secondary]="showArchive"
+            (click)="toggleArchiveView()"
           >
-            <i
-              class="pi"
-              [ngClass]="showCreateMissedHours ? 'pi-times' : 'pi-plus'"
-            ></i>
-            {{ showCreateMissedHours ? '' : 'طلب جديد' }}
-          </button> -->
-          <p-message
-            *ngIf="missedHoursRequests.length >= 3 || showCreateMissedHours"
-            severity="warn"
-            text="لا يمكن تقديم أكثر من 3 طلبات شيفتات منسية فى الشهر"
-          ></p-message>
+            {{ showArchive ? 'الطلبات العادية' : 'الأرشيف' }}
+          </button>
+
+          <div class="filters-bar" *ngIf="this.auth.isEmployee">
+            <div *ngIf="missedHoursRequests.length >= 3 || showCreateMissedHours" style="font-size: 20px;">
+              <p-message
+                severity="warn"
+                text="لا يمكن تقديم أكثر من 3 طلبات شيفتات منسية فى الشهر"
+              ></p-message>
+            </div>
+            <button
+              pButton
+              type="button"
+              class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+              [class.btn-success]="!showCreateMissedHours"
+              [class.btn-danger]="showCreateMissedHours"
+              (click)="showCreateMissedHours = !showCreateMissedHours"
+              [disabled]="true"
+            >
+              <i
+                class="pi"
+                [ngClass]="showCreateMissedHours ? 'pi-times' : 'pi-plus'"
+              ></i>
+              {{ showCreateMissedHours ? '' : 'طلب جديد' }}
+            </button>
+          </div>
         </div>
 
         <app-create-missed-hours
@@ -208,8 +225,22 @@
 
       <!-- ===== Tab 2: الإجازات ===== -->
       <p-tabpanel [value]="1">
-        <div class="filters-bar" *ngIf="this.auth.isEmployee">
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2"
+          style="direction: ltr"
+        >
           <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-outline-secondary]="!showArchive"
+            [class.btn-secondary]="showArchive"
+            (click)="toggleArchiveView()"
+          >
+            {{ showArchive ? 'الطلبات العادية' : 'الأرشيف' }}
+          </button>
+          <button
+            *ngIf="this.auth.isEmployee"
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
@@ -355,16 +386,36 @@
 
       <!-- ===== Tab 3: السلف ===== -->
       <p-tabpanel [value]="2">
-        <div class="filters-bar" *ngIf="this.auth.isEmployee">
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2"
+          style="direction: ltr"
+        >
           <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-outline-secondary]="!showArchive"
+            [class.btn-secondary]="showArchive"
+            (click)="toggleArchiveView()"
+          >
+            {{ showArchive ? 'الطلبات العادية' : 'الأرشيف' }}
+          </button>
+          <p-message
+            *ngIf="!showCreateLoan"
+            severity="info"
+            text="يمكن تقديم طلب السلفة من يوم 10 إلى يوم 25 فقط من كل شهر"
+                          [style]="{ 'font-size': '20px' }"
+
+          />
+          <button
+            *ngIf="this.auth.isEmployee"
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
             [class.btn-success]="!showCreateLoan"
             [class.btn-danger]="showCreateLoan"
             (click)="showCreateLoan = !showCreateLoan"
-              [disabled]="!isLoanRequestAllowed"
-
+            [disabled]="!isLoanRequestAllowed"
           >
             <i
               class="pi"
@@ -372,11 +423,6 @@
             ></i>
             {{ showCreateLoan ? '' : 'طلب جديد' }}
           </button>
-          <p-message
-          *ngIf="!showCreateLoan"
-            severity="info"
-            text="يمكن تقديم طلب السلفة من يوم 10 إلى يوم 25 فقط من كل شهر"
-          />
         </div>
 
         <app-create-borrow *ngIf="showCreateLoan" (created)="onLoanCreated()" />
@@ -486,8 +532,22 @@
 
       <!-- ===== Tab 4: الأوفر تايم ===== -->
       <p-tabpanel [value]="3">
-        <div class="filters-bar" *ngIf="this.auth.isEmployee">
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2"
+          style="direction: ltr"
+        >
           <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-outline-secondary]="!showArchive"
+            [class.btn-secondary]="showArchive"
+            (click)="toggleArchiveView()"
+          >
+            {{ showArchive ? 'الطلبات العادية' : 'الأرشيف' }}
+          </button>
+          <button
+            *ngIf="this.auth.isEmployee"
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
@@ -684,8 +744,22 @@
 
       <!-- ===== Tab 5: الاستقالات ===== -->
       <p-tabpanel [value]="4">
-        <div class="filters-bar" *ngIf="this.auth.isEmployee">
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2"
+          style="direction: ltr"
+        >
           <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-outline-secondary]="!showArchive"
+            [class.btn-secondary]="showArchive"
+            (click)="toggleArchiveView()"
+          >
+            {{ showArchive ? 'الطلبات العادية' : 'الأرشيف' }}
+          </button>
+          <button
+            *ngIf="this.auth.isEmployee"
             pButton
             type="button"
             class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
@@ -802,7 +876,21 @@
 
       <!-- ===== Tab 6: التعيينات ===== -->
       <p-tabpanel [value]="5">
-        <div class="filters-bar">
+        <div
+          class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2"
+          style="direction: ltr"
+        >
+          <button
+            pButton
+            type="button"
+            class="btn btn-sm my-1 d-flex align-items-center justify-content-center gap-2"
+            [class.btn-outline-secondary]="!showArchive"
+            [class.btn-secondary]="showArchive"
+            (click)="toggleArchiveView()"
+          >
+            {{ showArchive ? 'الطلبات العادية' : 'الأرشيف' }}
+          </button>
+
           <button
             *ngIf="this.auth.isAreaManager"
             pButton

@@ -55,10 +55,10 @@ export class Complaint implements OnInit {
 
   loadComplaints() {
     this.loading = true;
-    this.api.getAllComplaints().subscribe({
+    this.api.getAllComplaints(this.page, this.pageSize).subscribe({
       next: (res: any) => {
-        this.complaints = res.data;
-        this.totalRecords = res.totalCount;
+        this.complaints = res.data || [];
+        this.totalRecords = res.totalCount ?? this.complaints.length;
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -71,10 +71,10 @@ export class Complaint implements OnInit {
   loadComplaintsForUser() {
     this.loading = true;
     const employeeId = localStorage.getItem("employeeId") || "";
-    this.api.getAllComplaintsForUser(employeeId).subscribe({
+    this.api.getAllComplaintsForUser(employeeId, this.page, this.pageSize).subscribe({
       next: (res: any) => {
-        this.complaints = res.data;
-        this.totalRecords = res.totalCount;
+        this.complaints = res.data || [];
+        this.totalRecords = res.totalCount ?? this.complaints.length;
         this.loading = false;
         this.cdr.detectChanges();
       },

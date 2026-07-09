@@ -437,12 +437,12 @@ getAbsentEmployees(
     return this.http.post(`${this.baseUrl}complaints`, complaintData);
   }
 
-  getAllComplaints() {
-    return this.http.get(`${this.baseUrl}complaints`);
+  getAllComplaints(page: number = 1, pageSize: number = 10) {
+    return this.http.get(`${this.baseUrl}complaints?page=${page}&pageSize=${pageSize}`);
   }
 
-  getAllComplaintsForUser(employeeId: string) {
-    return this.http.get(`${this.baseUrl}complaints?employeeId=${employeeId}`);
+  getAllComplaintsForUser(employeeId: string, page: number = 1, pageSize: number = 10) {
+    return this.http.get(`${this.baseUrl}complaints?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
   }
 
   respondToComplaint(complaintId: string, respond: any) {
@@ -467,10 +467,12 @@ getAbsentEmployees(
 
   //forgeted-hours-requests//
 
-  getForgetedHoursRequests(page: number, pageSize: number) {
-    return this.http.get(
-      `${this.baseUrl}forgeted-hours?page=${page}&pageSize=${pageSize}`,
-    );
+  getForgetedHoursRequests(page: number, pageSize: number, isSeenByHR?: boolean) {
+    let url = `${this.baseUrl}forgeted-hours?page=${page}&pageSize=${pageSize}`;
+    if (typeof isSeenByHR !== "undefined") {
+      url += `&isSeenByHR=${isSeenByHR}`;
+    }
+    return this.http.get(url);
   }
 
   getForgetedHoursRequestsForUser(
@@ -517,10 +519,12 @@ getAbsentEmployees(
     return this.http.post(`${this.baseUrl}holidays`, holidayData);
   }
 
-  getAllHolidays(page: number, pageSize: number) {
-    return this.http.get(
-      `${this.baseUrl}holidays?page=${page}&pageSize=${pageSize}`,
-    );
+  getAllHolidays(page: number, pageSize: number, isSeenByHR?: boolean) {
+    let url = `${this.baseUrl}holidays?page=${page}&pageSize=${pageSize}`;
+    if (typeof isSeenByHR !== "undefined") {
+      url += `&isSeenByHR=${isSeenByHR}`;
+    }
+    return this.http.get(url);
   }
 
   getAllHolidaysForUser(employeeId: string, page: number, pageSize: number) {
@@ -559,10 +563,12 @@ getAbsentEmployees(
     return this.http.post(`${this.baseUrl}borrows`, borrowData);
   }
 
-  getAllBorrows(page: number, pageSize: number) {
-    return this.http.get(
-      `${this.baseUrl}borrows?page=${page}&pageSize=${pageSize}`,
-    );
+  getAllBorrows(page: number, pageSize: number, isSeenByHR?: boolean) {
+    let url = `${this.baseUrl}borrows?page=${page}&pageSize=${pageSize}`;
+    if (typeof isSeenByHR !== "undefined") {
+      url += `&isSeenByHR=${isSeenByHR}`;
+    }
+    return this.http.get(url);
   }
 
   getAllBorrowsForUser(employeeId: string, page: number, pageSize: number) {
@@ -594,10 +600,12 @@ getAbsentEmployees(
     return this.http.post(`${this.baseUrl}overtime`, overtimeData);
   }
 
-  getAllOvertime(page: number, pageSize: number) {
-    return this.http.get(
-      `${this.baseUrl}overtime?page=${page}&pageSize=${pageSize}`,
-    );
+  getAllOvertime(page: number, pageSize: number, isSeenByHR?: boolean) {
+    let url = `${this.baseUrl}overtime?page=${page}&pageSize=${pageSize}`;
+    if (typeof isSeenByHR !== "undefined") {
+      url += `&isSeenByHR=${isSeenByHR}`;
+    }
+    return this.http.get(url);
   }
 
   getAllOvertimeForUser(employeeId: string, page: number, pageSize: number) {
@@ -643,10 +651,12 @@ getAbsentEmployees(
     return this.http.post(`${this.baseUrl}resignations`, resignationData);
   }
 
-  getAllResignations(page: number, pageSize: number) {
-    return this.http.get(
-      `${this.baseUrl}resignations?page=${page}&pageSize=${pageSize}`,
-    );
+  getAllResignations(page: number, pageSize: number, isSeenByHR?: boolean) {
+    let url = `${this.baseUrl}resignations?page=${page}&pageSize=${pageSize}`;
+    if (typeof isSeenByHR !== "undefined") {
+      url += `&isSeenByHR=${isSeenByHR}`;
+    }
+    return this.http.get(url);
   }
 
   getAllResignationsForUser(
@@ -685,10 +695,12 @@ getAbsentEmployees(
     return this.http.post(`${this.baseUrl}appointments`, appointmentData);
   }
 
-  getAllAppointments(page: number, pageSize: number) {
-    return this.http.get(
-      `${this.baseUrl}appointments?page=${page}&pageSize=${pageSize}`,
-    );
+  getAllAppointments(page: number, pageSize: number, isSeenByHR?: boolean) {
+    let url = `${this.baseUrl}appointments?page=${page}&pageSize=${pageSize}`;
+    if (typeof isSeenByHR !== "undefined") {
+      url += `&isSeenByHR=${isSeenByHR}`;
+    }
+    return this.http.get(url);
   }
 
   getAllAppointmentsForUser(

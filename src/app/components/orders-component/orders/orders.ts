@@ -101,6 +101,7 @@ export class Orders implements OnInit {
   selectedRequestId = "";
   selectedRequestType = "";
   rejectionReason = "";
+  showArchive = false;
 
   unseenCounts = {
     overtime: 0,
@@ -194,12 +195,16 @@ ngOnInit() {
           this.missedHoursPage,
           10,
         )
-      : this.api.getForgetedHoursRequests(this.missedHoursPage, 10);
+      : this.api.getForgetedHoursRequests(
+          this.missedHoursPage,
+          10,
+          this.auth.isHR ? this.showArchive : undefined,
+        );
 
     request.subscribe({
       next: (res: any) => {
-        this.missedHoursRequests = res.data;
-        this.missedHoursTotalRecords = res.totalCount;
+        this.missedHoursRequests = this.normalizeRequests(res.data || []);
+        this.missedHoursTotalRecords = res.totalCount ?? this.missedHoursRequests.length;
         this.loadingMissedHours = false;
         if (this.isEmployee) {
           this.missedHoursRequests.forEach((req) =>
@@ -217,12 +222,16 @@ ngOnInit() {
 
     const request = this.isEmployee
       ? this.api.getAllHolidaysForUser(this.employeeId, this.leavePage, 10)
-      : this.api.getAllHolidays(this.leavePage, 10);
+      : this.api.getAllHolidays(
+          this.leavePage,
+          10,
+          this.auth.isHR ? this.showArchive : undefined,
+        );
 
     request.subscribe({
       next: (res: any) => {
-        this.leaveRequests = res.data;
-        this.leaveTotalRecords = res.totalCount;
+        this.leaveRequests = this.normalizeRequests(res.data || []);
+        this.leaveTotalRecords = res.totalCount ?? this.leaveRequests.length;
         this.loadingLeave = false;
         if (this.isEmployee) {
           this.leaveRequests.forEach((req) => this.markAsSeen("leave", req.id));
@@ -238,12 +247,16 @@ ngOnInit() {
 
     const request = this.isEmployee
       ? this.api.getAllBorrowsForUser(this.employeeId, this.loanPage, 10)
-      : this.api.getAllBorrows(this.loanPage, 10);
+      : this.api.getAllBorrows(
+          this.loanPage,
+          10,
+          this.auth.isHR ? this.showArchive : undefined,
+        );
 
     request.subscribe({
       next: (res: any) => {
-        this.loanRequests = res.data;
-        this.loanTotalRecords = res.totalCount;
+        this.loanRequests = this.normalizeRequests(res.data || []);
+        this.loanTotalRecords = res.totalCount ?? this.loanRequests.length;
         this.loadingLoan = false;
         if (this.isEmployee) {
           this.loanRequests.forEach((req) => this.markAsSeen("loan", req.id));
@@ -259,12 +272,16 @@ ngOnInit() {
 
     const request = this.isEmployee
       ? this.api.getAllOvertimeForUser(this.employeeId, this.overtimePage, 10)
-      : this.api.getAllOvertime(this.overtimePage, 10);
+      : this.api.getAllOvertime(
+          this.overtimePage,
+          10,
+          this.auth.isHR ? this.showArchive : undefined,
+        );
 
     request.subscribe({
       next: (res: any) => {
-        this.overtimeRequests = res.data;
-        this.overtimeTotalRecords = res.totalCount;
+        this.overtimeRequests = this.normalizeRequests(res.data || []);
+        this.overtimeTotalRecords = res.totalCount ?? this.overtimeRequests.length;
         this.loadingOvertime = false;
         if (this.isEmployee) {
           this.overtimeRequests.forEach((req) =>
@@ -286,12 +303,16 @@ ngOnInit() {
           this.resignationPage,
           10,
         )
-      : this.api.getAllResignations(this.resignationPage, 10);
+      : this.api.getAllResignations(
+          this.resignationPage,
+          10,
+          this.auth.isHR ? this.showArchive : undefined,
+        );
 
     request.subscribe({
       next: (res: any) => {
-        this.resignationRequests = res.data;
-        this.resignationTotalRecords = res.totalCount;
+        this.resignationRequests = this.normalizeRequests(res.data || []);
+        this.resignationTotalRecords = res.totalCount ?? this.resignationRequests.length;
         this.loadingResignation = false;
         if (this.isEmployee) {
           this.resignationRequests.forEach((req) =>
@@ -313,12 +334,16 @@ ngOnInit() {
           this.appointmentPage,
           10,
         )
-      : this.api.getAllAppointments(this.appointmentPage, 10);
+      : this.api.getAllAppointments(
+          this.appointmentPage,
+          10,
+          this.auth.isHR ? this.showArchive : undefined,
+        );
 
     request.subscribe({
       next: (res: any) => {
-        this.appointmentRequests = res.data;
-        this.appointmentTotalRecords = res.totalCount;
+        this.appointmentRequests = this.normalizeRequests(res.data || []);
+        this.appointmentTotalRecords = res.totalCount ?? this.appointmentRequests.length;
         this.loadingAppointment = false;
         if (this.isEmployee) {
           this.appointmentRequests.forEach((req) =>
@@ -332,6 +357,45 @@ ngOnInit() {
   }
 
   // ---- Pagination ----
+
+  private normalizeRequests<T extends { isSeenByHR?: boolean }>(items: T[] = []): T[] {
+    return items.map((item) => ({
+      ...item,
+      isSeenByHR: item.isSeenByHR ?? false,
+    }));
+  }
+
+  toggleArchiveView() {
+    if (!this.auth.isHR) {
+      return;
+    }
+
+    this.showArchive = !this.showArchive;
+    this.reloadCurrentTab();
+  }
+
+  private reloadCurrentTab() {
+    switch (this.activeTabIndex) {
+      case 0:
+        this.loadMissedHours();
+        break;
+      case 1:
+        this.loadLeave();
+        break;
+      case 2:
+        this.loadLoan();
+        break;
+      case 3:
+        this.loadOvertime();
+        break;
+      case 4:
+        this.loadResignation();
+        break;
+      case 5:
+        this.loadAppointment();
+        break;
+    }
+  }
 
   onMissedHoursPageChange(event: any) {
     this.missedHoursPage = event.first / event.rows + 1;
