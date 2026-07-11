@@ -96,7 +96,10 @@
           </button>
 
           <div class="filters-bar" *ngIf="this.auth.isEmployee">
-            <div *ngIf="missedHoursRequests.length >= 3 || showCreateMissedHours" style="font-size: 20px;">
+            <div
+              *ngIf="missedHoursRequests.length >= 3 || showCreateMissedHours"
+              style="font-size: 20px"
+            >
               <p-message
                 severity="warn"
                 text="لا يمكن تقديم أكثر من 3 طلبات شيفتات منسية فى الشهر"
@@ -144,6 +147,7 @@
             <tr>
               <th>#</th>
               <th>اسم الموظف</th>
+              <th>اسم الفرع</th>
               <th>تاريخ الشيفت</th>
               <th>تاريخ الطلب</th>
               <th>السبب</th>
@@ -161,6 +165,7 @@
             <tr>
               <td>{{ ri + 1 + (missedHoursPage - 1) * 10 }}</td>
               <td>{{ req.employeeName }}</td>
+              <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.shiftDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.reason }}</td>
@@ -280,6 +285,7 @@
             <tr>
               <th>#</th>
               <th>اسم الموظف</th>
+              <th>اسم الفرع</th>
               <th>من تاريخ</th>
               <th>إلى تاريخ</th>
               <th>عدد الأيام</th>
@@ -299,6 +305,7 @@
             <tr>
               <td>{{ ri + 1 + (leavePage - 1) * 10 }}</td>
               <td>{{ req.employeeName }}</td>
+              <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.fromDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.toDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.totalDays }}</td>
@@ -404,8 +411,7 @@
             *ngIf="!showCreateLoan"
             severity="info"
             text="يمكن تقديم طلب السلفة من يوم 10 إلى يوم 25 فقط من كل شهر"
-                          [style]="{ 'font-size': '20px' }"
-
+            [style]="{ 'font-size': '20px' }"
           />
           <button
             *ngIf="this.auth.isEmployee"
@@ -446,6 +452,7 @@
             <tr>
               <th>#</th>
               <th>اسم الموظف</th>
+              <th>اسم الفرع</th>
               <th>المبلغ (ج.م)</th>
               <th>ملاحظات</th>
               <th>تاريخ الطلب</th>
@@ -461,6 +468,7 @@
             <tr>
               <td>{{ ri + 1 + (loanPage - 1) * 10 }}</td>
               <td>{{ req.employeeName }}</td>
+              <td>{{ req.branchName || '—' }}</td>
               <td style="color: var(--orange-600); font-weight: 500">
                 {{ req.amount | number }}
               </td>
@@ -524,7 +532,7 @@
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="8" class="text-center p-4">لا توجد بيانات</td>
+              <td colspan="10" class="text-center p-4">لا توجد بيانات</td>
             </tr>
           </ng-template>
         </p-table>
@@ -588,6 +596,7 @@
             <tr>
               <th>#</th>
               <th>اسم الموظف</th>
+              <th>اسم الفرع</th>
               <th>الساعات</th>
               <th>ملاحظات</th>
               <th>تاريخ الطلب</th>
@@ -606,7 +615,10 @@
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
               <td>{{ ri + 1 + (overtimePage - 1) * 10 }}</td>
-              <td>{{ req.employeeName }}</td>
+              <td>
+                {{ req.employeeName }}
+              </td>
+              <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.hours }}</td>
               <td>{{ req.notes ?? '—' }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
@@ -736,7 +748,7 @@
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="11" class="text-center p-4">لا توجد بيانات</td>
+              <td colspan="12" class="text-center p-4">لا توجد بيانات</td>
             </tr>
           </ng-template>
         </p-table>
@@ -799,6 +811,7 @@
             <tr>
               <th>#</th>
               <th>اسم الموظف</th>
+              <th>اسم الفرع</th>
               <th>السبب</th>
               <th>تاريخ الطلب</th>
               <th>الحالة</th>
@@ -813,7 +826,10 @@
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
               <td>{{ ri + 1 + (resignationPage - 1) * 10 }}</td>
-              <td>{{ req.employeeName }}</td>
+              <td>
+                {{ req.employeeName }}
+              </td>
+              <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.reason }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <td>
@@ -868,7 +884,7 @@
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="6" class="text-center p-4">لا توجد بيانات</td>
+              <td colspan="7" class="text-center p-4">لا توجد بيانات</td>
             </tr>
           </ng-template>
         </p-table>
@@ -932,6 +948,7 @@
             <tr>
               <th>#</th>
               <th>اسم الموظف</th>
+              <th>اسم الفرع</th>
               <th>تاريخ الطلب</th>
               <th>الحالة</th>
               <th *ngIf="this.auth.isHR">الإجراءات</th>
@@ -940,7 +957,10 @@
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
               <td>{{ ri + 1 + (appointmentPage - 1) * 10 }}</td>
-              <td>{{ req.employeeName || '—' }}</td>
+              <td>
+                {{ req.employeeName || '—' }}
+              </td>
+              <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <td>
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
@@ -977,7 +997,7 @@
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="5" class="text-center p-4">لا توجد بيانات</td>
+              <td colspan="7" class="text-center p-4">لا توجد بيانات</td>
             </tr>
           </ng-template>
         </p-table>

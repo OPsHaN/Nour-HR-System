@@ -264,6 +264,10 @@ export class Apiservice {
     );
   }
 
+  updateBranch(id: string, branchData: any) {
+    return this.http.put(`${this.baseUrl}branches/${id}`, branchData);
+  }
+
   //criteria
 
   getAllCriteria(page: number, pagesize: number) {

@@ -19,6 +19,8 @@ export class Branches {
   loading = false;
   Branches: any[] = [];
   showCreateBranch = false;
+  showEditBranch = false;
+  selectedBranch: any = null;
   totalRecords = 0;
 
   constructor(
@@ -80,8 +82,20 @@ export class Branches {
     this.loadBranches();
   }
 
+  editBranch(branch: any) {
+    this.selectedBranch = branch;
+    this.showCreateBranch = false;
+    this.showEditBranch = true;
+  }
+
   onBranchCreated() {
     this.showCreateBranch = false;
+    this.loadBranches();
+  }
+
+  onBranchUpdated() {
+    this.showEditBranch = false;
+    this.selectedBranch = null;
     this.loadBranches();
   }
 }

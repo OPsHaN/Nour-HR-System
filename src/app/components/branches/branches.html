@@ -16,9 +16,18 @@
 <app-create-branch *ngIf="showCreateBranch" (created)="onBranchCreated()">
 </app-create-branch>
 
+<!-- EDIT BRANCH -->
+<app-create-branch
+  *ngIf="showEditBranch"
+  [mode]="'edit'"
+  [branchToEdit]="selectedBranch"
+  (edited)="onBranchUpdated()"
+>
+</app-create-branch>
+
 <!-- TABLE -->
 <p-table
-  *ngIf="!showCreateBranch"
+  *ngIf="!showCreateBranch && !showEditBranch"
   [value]="Branches"
   [paginator]="true"
   [rows]="pageSize"
@@ -38,6 +47,9 @@
     <tr>
       <th>#</th>
       <th>اسم الفرع</th>
+      <th>إجمالي الموظفين</th>
+      <th>إجمالي المرتبات</th>
+      <th>إجمالي الساعات</th>
       <th>الإجراءات</th>
     </tr>
   </ng-template>
@@ -49,8 +61,23 @@
       <td>{{ branch.id }}</td>
       <!-- Branch Name -->
       <td>{{ branch.name }}</td>
+      <td>{{ branch.targetNumberOfEmployees ?? '—' }}</td>
+      <td>{{ branch.targetSalaries ?? '—' }}</td>
+      <td>{{ branch.targetHours ?? '—' }}</td>
       <!-- Actions -->
       <td>
+        <!-- Edit -->
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+          (click)="editBranch(branch)"
+        >
+          <i
+            class="pi pi-pencil d-flex align-items-center justify-content-center"
+          ></i>
+        </button>
+
         <!-- Delete -->
         <button
           pButton
@@ -67,7 +94,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="3" class="text-center py-4">لاتوجد أى بيانات</td>
+      <td colspan="6" class="text-center py-4">لاتوجد أى بيانات</td>
     </tr>
   </ng-template>
 </p-table>

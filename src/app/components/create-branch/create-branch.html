@@ -11,7 +11,49 @@
       <input
         type="text"
         formControlName="Name"
-        placeholder="أدخل اسم الفرع"
+        placeholder="اسم الفرع"
+      />
+    </div>
+
+    <!-- Target Number Of Employees -->
+    <div class="field">
+      <label>
+        إجمالي عدد الموظفين فى الفرع
+      </label>
+
+      <input
+        type="number"
+        formControlName="TargetNumberOfEmployees"
+        min="0"
+        placeholder="إجمالي عدد الموظفين"
+      />
+    </div>
+
+    <!-- Target Salaries -->
+    <div class="field">
+      <label>
+        إجمالي المرتبات
+      </label>
+
+      <input
+        type="number"
+        formControlName="TargetSalaries"
+        min="0"
+        placeholder="إجمالي المرتبات"
+      />
+    </div>
+
+    <!-- Target Hours -->
+    <div class="field">
+      <label>
+        إجمالي الساعات
+      </label>
+
+      <input
+        type="number"
+        formControlName="TargetHours"
+        min="0"
+        placeholder="إجمالي الساعات"
       />
     </div>
 
@@ -21,7 +63,7 @@
       [disabled]="loading || form.invalid"
       class="submit-btn full"
     >
-      {{ loading ? 'جارى الحفظ...' : 'حفظ' }}
+      {{ loading ? 'جارى الحفظ...' : (mode === 'edit' ? 'تعديل' : 'حفظ') }}
     </button>
 
   </form>
