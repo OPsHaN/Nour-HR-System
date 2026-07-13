@@ -1,16 +1,15 @@
 <div class="news-details" *ngIf="news">
-
   <!-- لو النوع إعلان -->
   <ng-container *ngIf="news.type === 'ad'; else newsBlock">
-<div class="ad-wrapper">
-  <div class="ad-detail-image">
-    <img [src]="news.image" [alt]="news.title" />
-  </div>
-  <div class="ad-content">
-<h2 class="ad-title">{{ news.title }}</h2>
-    <p class="ad-description">{{ news.description }}</p>
-  </div>
-</div>
+    <div class="ad-wrapper">
+      <div class="ad-detail-image">
+        <img [src]="news.image" [alt]="news.title" />
+      </div>
+      <div class="ad-content">
+        <h2 class="ad-title">{{ news.title }}</h2>
+        <p class="ad-description">{{ news.description }}</p>
+      </div>
+    </div>
   </ng-container>
 
   <!-- لو خبر عادي -->
@@ -20,22 +19,16 @@
         <span class="material-icons">campaign</span>
         {{ news.source }}
       </div>
-
-<h1 class="news-title">{{ news.title }}</h1>
-
+      <h1 class="news-title">{{ news.title }}</h1>
       <div class="news-meta">
         <span class="material-icons">schedule</span>
         {{ news.publishedAt | date:'yyyy/MM/dd HH:mm' }}
       </div>
     </div>
-
     <div class="news-cover" *ngIf="news.imageUrl">
       <img [src]="news.imageUrl" alt="news image" />
     </div>
 
-    <div class="news-content">
-      {{ news.body }}
-    </div>
+    <div class="news-content">{{ news.body }}</div>
   </ng-template>
-
 </div>
