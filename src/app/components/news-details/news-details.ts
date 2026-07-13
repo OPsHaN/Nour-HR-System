@@ -11,7 +11,7 @@ import { NewsWindow } from "src/app/services/news-window.service";
 })
 export class NewsDetails {
   news: any;
-newsList: any[] = [];
+  newsList: any[] = [];
 
   constructor(private newsWindow: NewsWindow , private newsService: Apiservice) {}
   ngOnInit() {

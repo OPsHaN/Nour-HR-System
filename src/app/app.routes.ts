@@ -13,6 +13,7 @@ export const routes: Routes = [
       import('./components/login/login').then((m) => m.Login),
     
   },
+
   {
     path: 'desktop',
     loadComponent: () =>

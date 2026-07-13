@@ -79,3 +79,51 @@
 
     white-space: pre-line;
 }
+
+/* ===== شكل الإعلان ===== */
+.ad-wrapper {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface-strong) !important;
+  box-shadow: 0 0px 10px var(--text);
+}
+
+.ad-detail-image {
+  width: 100%;
+  overflow: hidden;
+  margin: 0 auto;         /* عشان تتوسط لو الكارت أعرض */
+  border-radius: 12px;
+}
+
+.ad-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.ad-content {
+  padding: 20px;
+}
+
+.ad-title {
+  font-size: 22px;
+  font-weight: 700;
+    color: var(--text);
+  margin-bottom: 10px;
+}
+
+.news-content,
+.ad-description {
+  white-space: pre-line;
+  line-height: 1.9;
+}
+
+.ad-description {
+  font-size: 20px;
+  line-height: 1.8;
+    color: var(--text);
+}

@@ -15,6 +15,7 @@ import { News } from "../components/news/news";
 import { NewsDetails } from "../components/news-details/news-details";
 import {Logs} from "../components/logs/logs";
 import { MyDetails } from "../components/my-details/my-details";
+import { Ads } from "../components/ads/ads";
 
 export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   calendar: CalendarComponent,
@@ -33,4 +34,5 @@ export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   newsdetails:NewsDetails,
   logs:Logs,
   mydetails:MyDetails,
+  ads:Ads,
 };

@@ -1,0 +1,32 @@
+<div class="ads-page">
+  <div class="slider-card">
+    <button type="button" class="nav-btn" (click)="prev()">‹</button>
+
+    <div class="slider-image" (click)="openAd(ads[currentIndex])">
+      <img [src]="ads[currentIndex].image" [alt]="ads[currentIndex].title" />
+    </div>
+
+    <button type="button" class="nav-btn" (click)="next()">›</button>
+  </div>
+
+  <div class="dots">
+    <button
+      *ngFor="let ad of ads; let i = index"
+      type="button"
+      class="dot"
+      [class.active]="i === currentIndex"
+      (click)="openAd(ad)"
+    ></button>
+  </div>
+
+  <!-- <div class="thumbnails">
+    <img
+      *ngFor="let ad of ads"
+      [src]="ad.image"
+      [alt]="ad.title"
+      [class.active]="selectedAd?.id === ad.id"
+      (click)="openAd(ad)"
+    />
+  </div> -->
+
+</div>

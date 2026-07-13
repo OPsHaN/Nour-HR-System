@@ -6,6 +6,7 @@ import { TagModule } from "primeng/tag";
 import { CreateBranch } from "../create-branch/create-branch";
 import { ConfirmationService } from "primeng/api";
 import { Apiservice } from "src/app/services/api.service";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-branches",
@@ -27,6 +28,8 @@ export class Branches {
     private api: Apiservice,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
+        public auth: AuthService,
+    
   ) {}
 
   ngOnInit() {
@@ -86,6 +89,12 @@ export class Branches {
     this.selectedBranch = branch;
     this.showCreateBranch = false;
     this.showEditBranch = true;
+  }
+
+  closeBranchForm() {
+    this.showCreateBranch = false;
+    this.showEditBranch = false;
+    this.selectedBranch = null;
   }
 
   onBranchCreated() {

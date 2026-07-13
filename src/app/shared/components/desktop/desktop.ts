@@ -350,9 +350,9 @@ export class Desktop implements OnInit, OnDestroy {
 
     const viewportWidth = globalThis.innerWidth || 250;
     const viewportHeight = globalThis.innerHeight || 250;
-    const gap = 150;
-    const sideWidth = Math.max(100, Math.floor((viewportWidth - gap * 3) / 2));
-    const height = Math.min(190, viewportHeight - 140);
+    const gap = 190;
+    const sideWidth = Math.max(100, Math.floor((viewportWidth - gap * 4) / 2));
+    const height = Math.min(300, viewportHeight - 140);
     const top = Math.max(12, viewportHeight - 80 - height - 12);
 
     const [leftShortcut, rightShortcut] = startupShortcuts;

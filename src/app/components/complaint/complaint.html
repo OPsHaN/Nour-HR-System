@@ -41,6 +41,7 @@
     <tr>
       <th>#</th>
       <th>اسم الموظف</th>
+      <th>اسم الفرع</th>
       <th>المحتوى</th>
       <th>الجهة المُرسَل إليها</th>
       <th>الحالة</th>
@@ -54,6 +55,7 @@
     <tr>
       <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
       <td>{{ complaint.employeeName }}</td>
+      <td>{{ complaint.branchName }}</td>
       <td>{{ complaint.content }}</td>
       <td>{{ complaint.recipientRole }}</td>
       <td>

@@ -1,14 +1,25 @@
 <div class="sticky-header">
   <button
+    *ngIf="!showCreateBranch && !showEditBranch"
     pButton
     type="button"
     class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
-    [class.btn-success]="!showCreateBranch"
-    [class.btn-danger]="showCreateBranch"
-    (click)="showCreateBranch = !showCreateBranch"
+    [class.btn-success]="true"
+    (click)="showCreateBranch = true"
   >
-    <i class="pi" [ngClass]="showCreateBranch ? 'pi-times' : 'pi-sitemap'"></i>
-    {{ showCreateBranch ? '' : 'فرع جديد' }}
+    <i class="pi pi-sitemap"></i>
+    فرع جديد
+  </button>
+
+  <button
+    *ngIf="showCreateBranch || showEditBranch"
+    pButton
+    type="button"
+    class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+    [class.btn-danger]="true"
+    (click)="closeBranchForm()"
+  >
+    <i class="pi pi-times"></i>
   </button>
 </div>
 
@@ -50,7 +61,7 @@
       <th>إجمالي الموظفين</th>
       <th>إجمالي المرتبات</th>
       <th>إجمالي الساعات</th>
-      <th>الإجراءات</th>
+      <th *ngIf="this.auth.isAdmin">الإجراءات</th>
     </tr>
   </ng-template>
 
@@ -65,7 +76,7 @@
       <td>{{ branch.targetSalaries ?? '—' }}</td>
       <td>{{ branch.targetHours ?? '—' }}</td>
       <!-- Actions -->
-      <td>
+      <td *ngIf="this.auth.isAdmin">
         <!-- Edit -->
         <button
           pButton

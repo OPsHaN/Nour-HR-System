@@ -92,7 +92,7 @@ export const SHORTCUTS_CONFIG = {
     title: "التقارير",
     icon: "bar_chart",
     bg: "#52c41a",
-    roles: ["HR", "Control", "Accountant" , "AreaManager" , "CEO"] as UserRole[],
+    roles: ["HR", "Control", "Accountant", "AreaManager", "CEO"] as UserRole[],
     size: { width: 1100, height: 500 },
   },
   responsibility: {
@@ -106,12 +106,7 @@ export const SHORTCUTS_CONFIG = {
     title: "الطلبات",
     icon: "assignment",
     bg: "#fa8c16",
-    roles: [
-      "HR",
-      "Employee",
-      "AreaManager",
-      "Control",
-    ] as UserRole[],
+    roles: ["HR", "Employee", "AreaManager", "Control"] as UserRole[],
     size: { width: 1200, height: 420 },
   },
   complaints: {
@@ -133,8 +128,6 @@ export const SHORTCUTS_CONFIG = {
     icon: "language",
     bg: "#1677ff",
     roles: [] as UserRole[],
-    startup: true,
-
     size: { width: 980, height: 620 },
   },
   news: {
@@ -148,8 +141,9 @@ export const SHORTCUTS_CONFIG = {
       "Employee",
       "AreaManager",
       "Control",
+      "CEO",
     ] as UserRole[],
-    startup: true,
+    
     size: { width: 650, height: 230 },
   },
   newsdetails: {
@@ -157,7 +151,7 @@ export const SHORTCUTS_CONFIG = {
     icon: "article",
     bg: "#3b82f6",
     roles: [] as UserRole[],
-    size: { width: 1000, height: 700 },
+    size: { width: 800, height: 500 },
   },
   logs: {
     title: "سجل العمليات",
@@ -165,6 +159,22 @@ export const SHORTCUTS_CONFIG = {
     bg: "#8b5cf6",
     roles: ["Admin"] as UserRole[],
     size: { width: 1000, height: 700 },
+  },
+  ads: {
+    title: "الإعلانات",
+    icon: "campaign",
+    bg: "#f59e0b",
+    roles: [
+      "Admin",
+      "HR",
+      "Accountant",
+      "Employee",
+      "AreaManager",
+      "Control",
+      "CEO",
+    ] as UserRole[],
+    startup: true,
+    size: { width: 650, height: 300 },
   },
 } satisfies Record<string, ShortcutConfig>;
 
