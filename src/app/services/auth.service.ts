@@ -118,6 +118,10 @@ export class AuthService {
     return localStorage.getItem("role") === "AreaManager";
   }
 
+  get isCEO():boolean {
+    return localStorage.getItem("role") === "CEO";
+  }
+
   setUserType(type: number) {
     this._userType.next(type);
   }

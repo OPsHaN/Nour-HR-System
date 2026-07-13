@@ -208,7 +208,7 @@ branchPayrollFirst = 1
   ) {}
 
   ngOnInit(): void {
-    if (this.auth.isAdmin || this.auth.isHR || this.auth.isControl) {
+    if (this.auth.isAdmin || this.auth.isHR || this.auth.isControl || this.auth.isCEO || this.auth.isAreaManager) {
       this.loadAllShifts();
       this.loadEmployees();
       this.loadBranches();
