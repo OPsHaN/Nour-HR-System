@@ -147,9 +147,9 @@ export const SHORTCUTS_CONFIG = {
     size: { width: 650, height: 230 },
   },
   newsdetails: {
-    title: "تفاصيل الخبر",
+    title: "تفاصيل الإعلان",
     icon: "article",
-    bg: "#3b82f6",
+    bg: "#f59e0b",
     roles: [] as UserRole[],
     size: { width: 800, height: 500 },
   },

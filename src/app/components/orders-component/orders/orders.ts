@@ -60,6 +60,7 @@ export class Orders implements OnInit {
   loadingMissedHours = false;
   missedHoursTotalRecords = 0;
   missedHoursPage = 1;
+   missedHoursPageSize = 10;
   showCreateMissedHours = false;
 
   // --- Leave (Holidays) ---
@@ -67,6 +68,7 @@ export class Orders implements OnInit {
   loadingLeave = false;
   leaveTotalRecords = 0;
   leavePage = 1;
+  leavePageSize = 10;
   showCreateLeave = false;
 
   // --- Loan (Borrows) ---
@@ -74,6 +76,7 @@ export class Orders implements OnInit {
   loadingLoan = false;
   loanTotalRecords = 0;
   loanPage = 1;
+  loanPageSize = 10;
   showCreateLoan = false;
 
   // --- Overtime ---
@@ -81,6 +84,7 @@ export class Orders implements OnInit {
   loadingOvertime = false;
   overtimeTotalRecords = 0;
   overtimePage = 1;
+  overtimePageSize = 10; 
   showCreateOvertime = false;
 
   // --- Resignation ---
@@ -88,6 +92,7 @@ export class Orders implements OnInit {
   loadingResignation = false;
   resignationTotalRecords = 0;
   resignationPage = 1;
+  resignationPageSize = 10;
   showCreateResignation = false;
 
   // --- Appointment ---
@@ -95,6 +100,7 @@ export class Orders implements OnInit {
   loadingAppointment = false;
   appointmentTotalRecords = 0;
   appointmentPage = 1;
+  appointmentPageSize = 10;
   showCreateAppointment = false;
 
   showRejectDialog = false;
@@ -193,11 +199,11 @@ ngOnInit() {
       ? this.api.getForgetedHoursRequestsForUser(
           this.employeeId,
           this.missedHoursPage,
-          10,
+        this.missedHoursPageSize,   // بدل 10
         )
       : this.api.getForgetedHoursRequests(
           this.missedHoursPage,
-          10,
+          this.missedHoursPageSize,
           this.auth.isHR ? this.showArchive : undefined,
         );
 
@@ -224,7 +230,7 @@ ngOnInit() {
       ? this.api.getAllHolidaysForUser(this.employeeId, this.leavePage, 10)
       : this.api.getAllHolidays(
           this.leavePage,
-          10,
+          this.leavePageSize,
           this.auth.isHR ? this.showArchive : undefined,
         );
 
@@ -246,10 +252,11 @@ ngOnInit() {
     this.loadingLoan = true;
 
     const request = this.isEmployee
-      ? this.api.getAllBorrowsForUser(this.employeeId, this.loanPage, 10)
+      ? this.api.getAllBorrowsForUser(this.employeeId, this.loanPage, this.loanPageSize,
+)
       : this.api.getAllBorrows(
           this.loanPage,
-          10,
+          this.loanPageSize,
           this.auth.isHR ? this.showArchive : undefined,
         );
 
@@ -271,10 +278,10 @@ ngOnInit() {
     this.loadingOvertime = true;
 
     const request = this.isEmployee
-      ? this.api.getAllOvertimeForUser(this.employeeId, this.overtimePage, 10)
+      ? this.api.getAllOvertimeForUser(this.employeeId, this.overtimePage, this.overtimePageSize)
       : this.api.getAllOvertime(
           this.overtimePage,
-          10,
+          this.overtimePageSize,
           this.auth.isHR ? this.showArchive : undefined,
         );
 
@@ -301,11 +308,11 @@ ngOnInit() {
       ? this.api.getAllResignationsForUser(
           this.employeeId,
           this.resignationPage,
-          10,
+          this.resignationPageSize,
         )
       : this.api.getAllResignations(
           this.resignationPage,
-          10,
+          this.resignationPageSize,
           this.auth.isHR ? this.showArchive : undefined,
         );
 
@@ -332,11 +339,11 @@ ngOnInit() {
       ? this.api.getAllAppointmentsForUser(
           this.employeeId,
           this.appointmentPage,
-          10,
+          this.appointmentPageSize,
         )
       : this.api.getAllAppointments(
           this.appointmentPage,
-          10,
+          this.appointmentPageSize,
           this.auth.isHR ? this.showArchive : undefined,
         );
 
@@ -398,32 +405,38 @@ ngOnInit() {
   }
 
   onMissedHoursPageChange(event: any) {
-    this.missedHoursPage = event.first / event.rows + 1;
+  this.missedHoursPageSize = event.rows;
+  this.missedHoursPage = event.first / event.rows + 1;
     this.loadMissedHours();
   }
 
   onLeavePageChange(event: any) {
-    this.leavePage = event.first / event.rows + 1;
+  this.leavePageSize = event.rows;
+  this.leavePage = event.first / event.rows + 1;
     this.loadLeave();
   }
 
   onLoanPageChange(event: any) {
-    this.loanPage = event.first / event.rows + 1;
+  this.loanPageSize = event.rows;
+  this.loanPage = event.first / event.rows + 1;
     this.loadLoan();
   }
 
   onOvertimePageChange(event: any) {
-    this.overtimePage = event.first / event.rows + 1;
+  this.overtimePageSize = event.rows;
+  this.overtimePage = event.first / event.rows + 1;
     this.loadOvertime();
   }
 
   onResignationPageChange(event: any) {
-    this.resignationPage = event.first / event.rows + 1;
+  this.resignationPageSize = event.rows;
+  this.resignationPage = event.first / event.rows + 1;
     this.loadResignation();
   }
 
   onAppointmentPageChange(event: any) {
-    this.appointmentPage = event.first / event.rows + 1;
+  this.appointmentPageSize = event.rows;
+  this.appointmentPage = event.first / event.rows + 1;
     this.loadAppointment();
   }
 
@@ -745,16 +758,6 @@ ngOnInit() {
   this.unseenCountsService.refreshAll();
 }
 
-  private updateOrdersBadge() {
-    const total =
-      this.unseenCounts.overtime +
-      this.unseenCounts.borrows +
-      this.unseenCounts.holidays +
-      this.unseenCounts.resignations +
-      this.unseenCounts.appointments +
-      this.unseenCounts.forgotHours;
-    this.cdr.detectChanges();
-  }
 
   get disablemissedHoursRequests(): boolean {
     return this.missedHoursRequests.length >= 3;

@@ -133,7 +133,7 @@
           [value]="missedHoursRequests"
           [loading]="loadingMissedHours"
           [paginator]="true"
-          [rows]="10"
+          [rows]="missedHoursPageSize"
           [rowsPerPageOptions]="[10, 25, 50]"
           [lazy]="true"
           [totalRecords]="missedHoursTotalRecords"
@@ -163,7 +163,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (missedHoursPage - 1) * 10 }}</td>
+              <td>{{ ri + 1 + (missedHoursPage - 1) * missedHoursPageSize }}</td>
               <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.shiftDate | date: 'yyyy/MM/dd' }}</td>
@@ -271,7 +271,7 @@
           [value]="leaveRequests"
           [loading]="loadingLeave"
           [paginator]="true"
-          [rows]="10"
+          [rows]="leavePageSize"
           [rowsPerPageOptions]="[10, 25, 50]"
           [lazy]="true"
           [totalRecords]="leaveTotalRecords"
@@ -303,7 +303,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (leavePage - 1) * 10 }}</td>
+              <td>{{ ri + 1 + (leavePage - 1) * leavePageSize  }}</td>
               <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.fromDate | date: 'yyyy/MM/dd' }}</td>
@@ -438,7 +438,7 @@
           [value]="loanRequests"
           [loading]="loadingLoan"
           [paginator]="true"
-          [rows]="10"
+          [rows]="loanPageSize"
           [rowsPerPageOptions]="[10, 25, 50]"
           [lazy]="true"
           [totalRecords]="loanTotalRecords"
@@ -466,7 +466,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (loanPage - 1) * 10 }}</td>
+              <td>{{ ri + 1 + (loanPage - 1) * loanPageSize  }}</td>
               <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td style="color: var(--orange-600); font-weight: 500">
@@ -582,7 +582,7 @@
           [value]="overtimeRequests"
           [loading]="loadingOvertime"
           [paginator]="true"
-          [rows]="10"
+          [rows]="overtimePageSize"
           [rowsPerPageOptions]="[10, 25, 50]"
           [lazy]="true"
           [totalRecords]="overtimeTotalRecords"
@@ -614,7 +614,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (overtimePage - 1) * 10 }}</td>
+              <td>{{ ri + 1 + (overtimePage - 1) * overtimePageSize  }}</td>
               <td>
                 {{ req.employeeName }}
               </td>
@@ -797,7 +797,7 @@
           [value]="resignationRequests"
           [loading]="loadingResignation"
           [paginator]="true"
-          [rows]="10"
+          [rows]="resignationPageSize"
           [rowsPerPageOptions]="[10, 25, 50]"
           [lazy]="true"
           [totalRecords]="resignationTotalRecords"
@@ -825,7 +825,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (resignationPage - 1) * 10 }}</td>
+              <td>{{ ri + 1 + (resignationPage - 1) * resignationPageSize }}</td>
               <td>
                 {{ req.employeeName }}
               </td>
@@ -934,7 +934,7 @@
           [value]="appointmentRequests"
           [loading]="loadingAppointment"
           [paginator]="true"
-          [rows]="10"
+          [rows]="appointmentPageSize"
           [rowsPerPageOptions]="[10, 25, 50]"
           [lazy]="true"
           [totalRecords]="appointmentTotalRecords"
@@ -956,7 +956,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (appointmentPage - 1) * 10 }}</td>
+              <td>{{ ri + 1 + (appointmentPage - 1) * appointmentPageSize  }}</td>
               <td>
                 {{ req.employeeName || '—' }}
               </td>
