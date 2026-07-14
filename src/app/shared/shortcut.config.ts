@@ -134,16 +134,7 @@ export const SHORTCUTS_CONFIG = {
     title: "النشرة الإخبارية",
     icon: "campaign",
     bg: "#f59e0b",
-    roles: [
-      "Admin",
-      "HR",
-      "Accountant",
-      "Employee",
-      "AreaManager",
-      "Control",
-      "CEO",
-    ] as UserRole[],
-    
+     roles: [] as UserRole[],
     size: { width: 650, height: 230 },
   },
   newsdetails: {

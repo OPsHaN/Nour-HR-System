@@ -214,7 +214,11 @@
       <th>ساعات العمل</th>
       <th>الفرع</th>
       <th>حالة الموظف</th>
-      <th *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isAdmin">الإجراءات</th>
+      <th
+        *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isAdmin"
+      >
+        الإجراءات
+      </th>
     </tr>
   </ng-template>
 
@@ -428,7 +432,15 @@
             <div class="details-grid">
               <div class="detail-item">
                 <label>اسم الموظف</label>
-                <span>{{ employeeDetails.name || '-' }}</span>
+                <input
+                  *ngIf="isEditMode"
+                  type="text"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.name"
+                />
+                <span *ngIf="!isEditMode"
+                  >{{ employeeDetails.name || '-' }}</span
+                >
               </div>
 
               <div class="detail-item">
@@ -590,6 +602,22 @@
                 <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
               </div>
 
+<div class="detail-item">
+  <label>شيفت ليلى</label>
+
+  <span *ngIf="!isEditMode">
+    {{ employeeDetails.isHaveNightShift ? 'نعم' : 'لا' }}
+  </span>
+
+  <select
+    class="custom-input"
+    *ngIf="isEditMode"
+    [(ngModel)]="employeeDetails.isHaveNightShift"
+  >
+    <option [ngValue]="true">نعم</option>
+    <option [ngValue]="false">لا</option>
+  </select>
+</div>
               <div class="detail-item">
                 <label>وضع الموظف</label>
                 <select
@@ -1009,7 +1037,8 @@
 
               <div class="detail-item">
                 <label class="fs-5 text-center">صافى المرتب</label>
-                <span class="fs-6 text-center"
+                <span
+                  class="fs-6 text-center"
                   [class.text-danger]="employeeDetails.netSalary < 0"
                   [class.text-success]="employeeDetails.netSalary >= 0"
                 >
@@ -1710,26 +1739,23 @@
     </div>
 
     <div class="form">
-<button
-  type="button"
-  [disabled]="
+      <button
+        type="button"
+        [disabled]="
     actionLoading ||
     !actionForm.amount ||
     !actionForm.reasonOfDiscount ||
     !actionForm.notes
   "
-  class="submit-btn full my-2"
-  (click)="saveAction()"
->
-  {{
-    actionLoading ? 'جارى الحفظ...' :
-    currentActionType === 'bonus' ? 'إضافة زيادة' :
-    currentActionType === 'installmentBorrow' ? 'إضافة سلفة مرحلة' :
-    currentActionType === 'discount' ? 'إضافة خصم' :
-    currentActionType === 'contract' ? 'إضافة خصم تعاقد' :
-    'إضافة سلفة نقدية'
-  }}
-</button>
+        class="submit-btn full my-2"
+        (click)="saveAction()"
+      >
+        {{ actionLoading ? 'جارى الحفظ...' : currentActionType === 'bonus' ?
+        'إضافة زيادة' : currentActionType === 'installmentBorrow' ? 'إضافة سلفة
+        مرحلة' : currentActionType === 'discount' ? 'إضافة خصم' :
+        currentActionType === 'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة
+        نقدية' }}
+      </button>
     </div>
   </div>
   <!-- إضافة عهدة -->

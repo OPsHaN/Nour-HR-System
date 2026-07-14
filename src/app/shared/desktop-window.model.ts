@@ -20,4 +20,5 @@ export interface DesktopWindow {
     width: number;
     height: number;
   };
+  hideControls?: boolean;
 }

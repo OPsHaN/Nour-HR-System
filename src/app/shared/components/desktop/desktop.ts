@@ -319,6 +319,7 @@ export class Desktop implements OnInit, OnDestroy {
       width?: number;
       height?: number;
       active?: boolean;
+      hideControls?: boolean
     },
   ): void {
     const size = this.defaultSize(shortcut.action);
@@ -335,6 +336,7 @@ export class Desktop implements OnInit, OnDestroy {
       minimized: false,
       maximized: false,
       active: options?.active ?? true,
+      hideControls: options?.hideControls ?? false,
     };
 
     this.windows = this.windows.map((w) => ({ ...w, active: false }));
@@ -363,6 +365,7 @@ export class Desktop implements OnInit, OnDestroy {
       width: sideWidth,
       height,
       active: true,
+      hideControls: true,
     });
 
     if (rightShortcut) {
@@ -372,6 +375,7 @@ export class Desktop implements OnInit, OnDestroy {
         width: sideWidth,
         height,
         active: false,
+        hideControls: true,
       });
     }
   }

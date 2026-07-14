@@ -19,7 +19,7 @@
       </span>
       <span class="windowTitle">{{ window.title }}</span>
     </div>
-    <div class="app-window__actions">
+    <div class="app-window__actions" *ngIf="!window.hideControls">
       <button type="button" (click)="onMinimize()">_</button>
       <button type="button" (click)="onMaximize()">
         {{ window.maximized ? "❐" : "☐" }}

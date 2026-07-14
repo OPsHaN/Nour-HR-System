@@ -484,6 +484,8 @@ export class Employees {
       nationalId: this.employeeDetails.nationalId,
       phoneNumber: this.employeeDetails.phoneNumber,
       EmployeeType: this.employeeDetails.employeeType,
+      Name:this.employeeDetails.name,
+      isHaveNightShift: this.employeeDetails.isHaveNightShift
     };
 
     this.api.editEmployee(this.employeeDetails.id, payload).subscribe({
