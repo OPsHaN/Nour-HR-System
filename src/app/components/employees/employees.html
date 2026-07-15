@@ -83,7 +83,7 @@
       تصدير Excel
     </button> -->
     <div
-      *ngIf="(this.auth.isHR || this.auth.isAdmin) && !showCreateEmployee"
+      *ngIf="(this.auth.isHR || this.auth.isAdmin || this.auth.isCEO) && !showCreateEmployee"
       class="gap-2"
     >
       <select
@@ -609,7 +609,7 @@
     {{ employeeDetails.isHaveNightShift ? 'نعم' : 'لا' }}
   </span>
 
-  <select
+  <select 
     class="custom-input"
     *ngIf="isEditMode"
     [(ngModel)]="employeeDetails.isHaveNightShift"

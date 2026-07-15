@@ -50,6 +50,7 @@ export const SHORTCUTS_CONFIG = {
       "Employee",
       "AreaManager",
       "Control",
+      "CEO"
     ] as UserRole[],
     size: { width: 500, height: 500 },
   },
@@ -64,7 +65,7 @@ export const SHORTCUTS_CONFIG = {
     title: "الموظفين",
     icon: "people",
     bg: "#13c2c2",
-    roles: ["Admin", "HR", "AreaManager"] as UserRole[],
+    roles: ["Admin", "HR", "AreaManager" , "CEO"] as UserRole[],
     size: { width: 1350, height: 600 },
   },
   branches: {
