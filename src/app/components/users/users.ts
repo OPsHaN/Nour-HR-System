@@ -11,6 +11,7 @@ import { DialogModule } from "primeng/dialog";
 import { forkJoin, of } from "rxjs";
 import { MultiSelect } from "primeng/multiselect";
 import { ChipModule } from "primeng/chip";
+import { HttpErrorResponse } from "@angular/common/http";
 
 interface User {
   id: string;
@@ -30,7 +31,7 @@ interface User {
     CreateUser,
     DialogModule,
     MultiSelect,
-    ChipModule
+    ChipModule,
   ],
   templateUrl: "./users.html",
   styleUrl: "./users.css",
@@ -60,8 +61,6 @@ export class Users {
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
   ) {}
-
-
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -112,7 +111,7 @@ export class Users {
 
   deleteEmployee(id: number) {
     this.api.deleteEmpyee(id).subscribe({
-            next: () => {
+      next: () => {
         this.api.showSuccess("تم حذف بياناتة بنجاح");
         this.cdr.detectChanges();
       },
@@ -120,7 +119,7 @@ export class Users {
         this.api.showError("حدث خطأ أثناء الحذف");
         console.error(err);
       },
-    })
+    });
   }
 
   onEmployeeCreated() {
@@ -156,7 +155,7 @@ export class Users {
     this.api.getAllBranches(1, 100).subscribe({
       next: (res: any) => {
         this.allBranches = res.data || [];
-        console.log(this.allBranches)
+        console.log(this.allBranches);
       },
       error: (err) => console.error(err),
     });
@@ -164,8 +163,8 @@ export class Users {
 
   openBranchesDialog(emp: User) {
     this.selectedManager = emp;
-    console.log(emp.id)
-       this.selectedBranchToAdd = null;
+    console.log(emp.id);
+    this.selectedBranchToAdd = null;
     this.branchesDialogVisible = true;
     this.loadAllBranches();
     this.loadManagerBranches(emp.id);
@@ -246,20 +245,20 @@ export class Users {
         this.branchesDialogVisible = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        this.api.showError("حدث خطأ أثناء تحديث الفروع");
-        console.error(err);
+      error: (err: HttpErrorResponse) => {
+        const msg = err?.error?.message ?? "حدث خطأ أثناء تحديث الفروع";
+        this.api.showError(msg);
         this.savingBranches = false;
         this.cdr.detectChanges();
       },
     });
   }
 
-    onSearchTermChange() {
+  onSearchTermChange() {
     this.page = 1;
 
     if (!this.searchTerm.trim()) {
-    this.getEmployees();
+      this.getEmployees();
       return;
     }
 
@@ -281,5 +280,4 @@ export class Users {
     this.searchTerm = "";
     this.getEmployees();
   }
-
 }

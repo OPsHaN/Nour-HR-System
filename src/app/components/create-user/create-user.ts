@@ -8,6 +8,7 @@ import {
 } from "@angular/forms";
 import { Apiservice } from "src/app/services/api.service";
 import { MultiSelect } from 'primeng/multiselect';
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-create-user",
@@ -150,9 +151,11 @@ export class CreateUser {
         this.loading = false;
         this.created.emit();
       },
-      error: (err) => {
-        this.api.showError("يوجد مشكلة فى التسجيل");
-        console.error(err);
+      error: (err: HttpErrorResponse) => {
+        const msg =
+                err?.error?.message ??
+                "يوجد مشكلة فى التسجيل، يرجى المحاولة مرة أخرى";
+              this.api.showError(msg);
         this.loading = false;
       },
     });
