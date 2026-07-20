@@ -4,21 +4,25 @@ import { FormsModule } from "@angular/forms";
 import { DatePickerModule } from "primeng/datepicker";
 import { Apiservice } from "src/app/services/api.service";
 
-
 @Component({
-  selector: 'app-create-holiday',
+  selector: "app-create-holiday",
   imports: [CommonModule, FormsModule, DatePickerModule],
-  templateUrl: './create-holiday.html',
-  styleUrl: './create-holiday.css',
+  templateUrl: "./create-holiday.html",
+  styleUrl: "./create-holiday.css",
 })
 export class CreateHoliday {
-
-    @Output() created = new EventEmitter<void>();
+  @Output() created = new EventEmitter<void>();
 
   loading = false;
   form = { fromDate: null as any, toDate: null as any };
-  today: Date = new Date();
-  
+  yesterday: Date = new Date();
+
+    ngOnInit(): void {
+    const today = new Date();
+    this.yesterday = new Date(today);
+    this.yesterday.setDate(today.getDate() - 1);
+  }
+
   constructor(private api: Apiservice) {}
 
   submit() {
@@ -48,6 +52,3 @@ export class CreateHoliday {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   }
 }
-
-
-

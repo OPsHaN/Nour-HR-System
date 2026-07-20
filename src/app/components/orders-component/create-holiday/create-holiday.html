@@ -7,7 +7,7 @@
         dateFormat="yy-mm-dd"
         placeholder="اختر تاريخ"
         [appendTo]="'body'"
-        [minDate]="today"
+        [minDate]="yesterday"
         [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
       />
     </div>
@@ -18,7 +18,7 @@
         [(ngModel)]="form.toDate"
         dateFormat="yy-mm-dd"
         placeholder="اختر تاريخ"
-        [minDate]="today"
+        [minDate]="yesterday"
         [appendTo]="'body'"
         [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
       />
