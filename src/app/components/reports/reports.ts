@@ -198,8 +198,12 @@ export class Reports implements OnInit {
   branchPayrollPage = 1;
   branchPayrollPageSize = 10;
   branchPayrollTotalCount = 0;
-branchPayrollFirst = 1
+  branchPayrollFirst = 1;
   branches: Branch[] = [];
+  managerBranches: any;
+  page = 1;
+  pageSize = 999;
+  loading = false;
 
   constructor(
     private api: Apiservice,
@@ -208,7 +212,13 @@ branchPayrollFirst = 1
   ) {}
 
   ngOnInit(): void {
-    if (this.auth.isAdmin || this.auth.isHR || this.auth.isControl || this.auth.isCEO || this.auth.isAreaManager) {
+    if (
+      this.auth.isAdmin ||
+      this.auth.isHR ||
+      this.auth.isControl ||
+      this.auth.isCEO ||
+      this.auth.isAreaManager
+    ) {
       this.loadAllShifts();
       this.loadEmployees();
       this.loadBranches();
@@ -278,12 +288,11 @@ branchPayrollFirst = 1
     }
     this.monthlyPayrollPageSize = event.rows;
     this.loadMonthlyPayroll();
-        this.cdr.detectChanges();
-
+    this.cdr.detectChanges();
   }
 
   onBranchPayrollPageChange(event: any): void {
-        if (event.rows !== this.branchPayrollPageSize) {
+    if (event.rows !== this.branchPayrollPageSize) {
       this.branchPayrollFirst = 0;
       this.branchPayrollPage = 1;
     } else {
@@ -293,8 +302,7 @@ branchPayrollFirst = 1
     this.branchPayrollPage = event.first / event.rows + 1;
     this.branchPayrollPageSize = event.rows;
     this.loadBranchPayroll();
-        this.cdr.detectChanges();
-
+    this.cdr.detectChanges();
   }
 
   // ── Loaders ──────────────────────────────────────────────────────────────
@@ -501,6 +509,13 @@ branchPayrollFirst = 1
     this.api.getAllBranches(1, 999).subscribe({
       next: (res: any) => {
         this.branches = res.data ?? res ?? [];
+        const branchIds = (localStorage.getItem("branchId") || "")
+          .split(",")
+          .map((id) => +id.trim());
+
+        this.managerBranches = this.branches.filter((b: any) =>
+          branchIds.includes(b.id),
+        );
         this.cdr.detectChanges();
       },
       error: () => {
@@ -511,19 +526,56 @@ branchPayrollFirst = 1
     });
   }
 
-  loadEmployees(): void {
-    this.api.getAllEmployees(1, 999).subscribe({
-      next: (res: any) => {
-        this.employees = res.data;
-        this.cdr.detectChanges();
+  
+
+  get branchIds(): string[] {
+    const raw = localStorage.getItem("branchId"); // نفس نمط "role"
+    return raw ? raw.split(",").map((id: string) => id.trim()) : [];
+  }
+
+  loadEmployees() {
+
+    const branchIds = this.branchIds;
+
+    if (!branchIds.length) {
+      return;
+    }
+
+    // الخطوة 1: جيب أول صفحة من كل فرع عشان تعرف totalCount بتاعه
+    const firstRequests = branchIds.map((branchId) =>
+      this.api.getAllEmployees(1, 1, branchId), // pageSize=1 بس عشان أعرف العدد
+    );
+
+    forkJoin(firstRequests).subscribe({
+      next: (countResults: any[]) => {
+        // الخطوة 2: دلوقتي عندي العدد الحقيقي لكل فرع
+        const branchRequests = branchIds.map((branchId, i) => {
+          const total = countResults[i].totalCount;
+          return this.api.getAllEmployees(1, total || 1, branchId);
+        });
+
+        forkJoin(branchRequests).subscribe({
+          next: (results: any[]) => {
+            const allEmployees = results.flatMap((res: any) => res.data);
+
+            const start = (this.page - 1) * this.pageSize;
+            const end = start + this.pageSize;
+            this.employees = allEmployees.slice(start, end);
+
+            this.loading = false;
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.loading = false;
+          },
+        });
       },
       error: () => {
-        this.employees = [];
-        this.cdr.detectChanges();
-        this.api.showError("فشل تحميل البيانات");
+        this.loading = false;
       },
     });
   }
+  
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -628,9 +680,9 @@ branchPayrollFirst = 1
     return this.monthlyPayrollData.reduce((s, x) => s + x.netSalary, 0);
   }
 
-get branchTotalSalary(): number {
-  return this.branchPayrollData.reduce((s, x) => s + (x.totalSalary ?? 0), 0);
-}
+  get branchTotalSalary(): number {
+    return this.branchPayrollData.reduce((s, x) => s + (x.totalSalary ?? 0), 0);
+  }
 
   get branchTotalDiscountsOnly(): number {
     return this.branchPayrollData.reduce(
@@ -638,11 +690,12 @@ get branchTotalSalary(): number {
       0,
     );
   }
-get branchTotalDiscounts(): number {
-  return this.branchPayrollData.reduce(
-    (s, x) => s + (x.totalDiscounts ?? 0) + (x.totalContractDiscount ?? 0), 0
-  );
-}
+  get branchTotalDiscounts(): number {
+    return this.branchPayrollData.reduce(
+      (s, x) => s + (x.totalDiscounts ?? 0) + (x.totalContractDiscount ?? 0),
+      0,
+    );
+  }
   get branchTotalBonuses(): number {
     return this.branchPayrollData.reduce((s, x) => s + x.totalBouns, 0);
   }
@@ -652,9 +705,9 @@ get branchTotalDiscounts(): number {
       0,
     );
   }
-get branchTotalNet(): number {
-  return this.branchPayrollData.reduce((s, x) => s + (x.netSalary ?? 0), 0);
-}
+  get branchTotalNet(): number {
+    return this.branchPayrollData.reduce((s, x) => s + (x.netSalary ?? 0), 0);
+  }
 
   get monthlyTotalCashBorrows(): number {
     return this.monthlyPayrollData.reduce((s, x) => s + x.totalCashBorrows, 0);
