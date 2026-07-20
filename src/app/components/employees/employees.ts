@@ -459,6 +459,7 @@ export class Employees {
           hiringDate: res.employee.hiringDate
             ? new Date(res.employee.hiringDate)
             : null,
+            hoursOverTime: 0,
         };
         this.loadingResponsibilities = false;
         this.showEmployeeDetailsDialog = true;
