@@ -509,15 +509,11 @@ export class Employees {
           .subscribe({
             next: () => {
               this.api.showSuccess("تم حفظ جميع التعديلات بنجاح");
-
               this.showEmployeeDetailsDialog = false;
-
               this.loadEmployees();
             },
-
             error: (err) => {
               console.log(err);
-
               this.api.showError(
                 "تم حفظ بيانات الموظف ولكن فشل تحديث بيانات المرتب",
               );
@@ -527,7 +523,6 @@ export class Employees {
 
       error: (err) => {
         console.log(err);
-
         this.api.showError("حدث خطأ أثناء حفظ بيانات الموظف");
       },
     });
@@ -539,7 +534,6 @@ export class Employees {
       return;
     }
     this.activeEmployeeId = emp.id;
-
     this.confirmationService.confirm({
       message: `هل أنت متأكد من إنهاء خدمة ${emp.name} نهائياً؟`,
       header: "تأكيد إنهاء الخدمة",
@@ -615,7 +609,6 @@ export class Employees {
 
   onPayrollFilterChange() {
     this.isCurrentMonth = this.payrollViewType === "current";
-
     if (this.isCurrentMonth) {
       this.selectedMonth = new Date().getMonth() + 1;
       this.selectedYear = new Date().getFullYear();
@@ -642,7 +635,6 @@ export class Employees {
     this.selectedEmployeeForPayroll = emp;
     this.employeeName = emp.name;
     this.showEmployeeDetailsDialog = true;
-
     if (this.isAreaManager) {
       this.activeTabIndex = "2";
       this.loadEvaluationsOnly(emp.id);
