@@ -83,7 +83,7 @@
       تصدير Excel
     </button> -->
     <div
-      *ngIf="(this.auth.isHR || this.auth.isAdmin || this.auth.isCEO) && !showCreateEmployee"
+      *ngIf="(this.auth.isHR || this.auth.isAdmin || this.auth.isCEO || this.auth.isAccountant) && !showCreateEmployee"
       class="gap-2"
     >
       <select
@@ -215,7 +215,7 @@
       <th>الفرع</th>
       <th>حالة الموظف</th>
       <th
-        *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isAdmin"
+        *ngIf="this.auth.isHR || this.auth.isAreaManager || this.auth.isAdmin || this.auth.isAccountant"
       >
         الإجراءات
       </th>
@@ -602,22 +602,22 @@
                 <span>{{ employeeDetails.endOfServiceReason || '-' }}</span>
               </div>
 
-<div class="detail-item">
-  <label>شيفت ليلى</label>
+              <div class="detail-item">
+                <label>شيفت ليلى</label>
 
-  <span *ngIf="!isEditMode">
-    {{ employeeDetails.isHaveNightShift ? 'نعم' : 'لا' }}
-  </span>
+                <span *ngIf="!isEditMode">
+                  {{ employeeDetails.isHaveNightShift ? 'نعم' : 'لا' }}
+                </span>
 
-  <select 
-    class="custom-input"
-    *ngIf="isEditMode"
-    [(ngModel)]="employeeDetails.isHaveNightShift"
-  >
-    <option [ngValue]="true">نعم</option>
-    <option [ngValue]="false">لا</option>
-  </select>
-</div>
+                <select
+                  class="custom-input"
+                  *ngIf="isEditMode"
+                  [(ngModel)]="employeeDetails.isHaveNightShift"
+                >
+                  <option [ngValue]="true">نعم</option>
+                  <option [ngValue]="false">لا</option>
+                </select>
+              </div>
               <div class="detail-item">
                 <label>وضع الموظف</label>
                 <select
@@ -1089,6 +1089,22 @@
                   type="number"
                   class="custom-input"
                   [(ngModel)]="employeeDetails.forgetedHours"
+                />
+              </div>
+              <div class="detail-item">
+                <label>ساعات الأجازات</label>
+                <input
+                  type="number"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.holidayHours"
+                />
+              </div>
+                <div class="detail-item">
+                <label>أيام الأجازات السنوية</label>
+                <input
+                  type="number"
+                  class="custom-input"
+                  [(ngModel)]="employeeDetails.holidaies "
                 />
               </div>
             </div>
@@ -1745,16 +1761,23 @@
     actionLoading ||
     !actionForm.amount ||
     !actionForm.reasonOfDiscount ||
-    !actionForm.notes
-  "
+    !actionForm.notes"
         class="submit-btn full my-2"
         (click)="saveAction()"
       >
-        {{ actionLoading ? 'جارى الحفظ...' : currentActionType === 'bonus' ?
-        'إضافة زيادة' : currentActionType === 'installmentBorrow' ? 'إضافة سلفة
-        مرحلة' : currentActionType === 'discount' ? 'إضافة خصم' :
-        currentActionType === 'contract' ? 'إضافة خصم تعاقد' : 'إضافة سلفة
-        نقدية' }}
+{{
+  actionLoading
+    ? 'جارى الحفظ...'
+    : currentActionType === 'bonus'
+    ? 'إضافة زيادة'
+    : currentActionType === 'installmentBorrow'
+    ? 'إضافة سلفة مرحلة'
+    : currentActionType === 'discount'
+    ? 'إضافة خصم'
+    : currentActionType === 'contract'
+    ? 'إضافة خصم تعاقد'
+    : 'إضافة سلفة نقدية'
+}}
       </button>
     </div>
   </div>

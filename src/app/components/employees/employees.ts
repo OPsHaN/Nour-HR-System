@@ -500,6 +500,8 @@ export class Employees {
           insurence: this.employeeDetails.insurence,
           hoursOverTime: this.employeeDetails.hoursOverTime,
           forgetedHours: this.employeeDetails.forgetedHours,
+          holidayHours: this.employeeDetails.holidayHours,
+          holidaies: this.employeeDetails.holidaies,
         };
 
         this.api

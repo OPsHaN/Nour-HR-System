@@ -50,7 +50,7 @@ export const SHORTCUTS_CONFIG = {
       "Employee",
       "AreaManager",
       "Control",
-      "CEO"
+      "CEO",
     ] as UserRole[],
     size: { width: 500, height: 500 },
   },
@@ -65,7 +65,7 @@ export const SHORTCUTS_CONFIG = {
     title: "الموظفين",
     icon: "people",
     bg: "#13c2c2",
-    roles: ["Admin", "HR", "AreaManager" , "CEO"] as UserRole[],
+    roles: ["Admin", "HR", "AreaManager", "CEO", "Accountant"] as UserRole[],
     size: { width: 1350, height: 600 },
   },
   branches: {
@@ -135,7 +135,7 @@ export const SHORTCUTS_CONFIG = {
     title: "النشرة الإخبارية",
     icon: "campaign",
     bg: "#f59e0b",
-     roles: [] as UserRole[],
+    roles: [] as UserRole[],
     size: { width: 650, height: 230 },
   },
   newsdetails: {

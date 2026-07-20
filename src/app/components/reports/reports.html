@@ -739,9 +739,9 @@
                 <th>البونص</th>
                 <th>السلف</th>
                 <th>السلف النقدية</th>
+                <th>صافي الراتب</th>
                 <th>البنك</th>
                 <th>رقم الحساب</th>
-                <th>صافي الراتب</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row>
@@ -764,9 +764,9 @@
                 <td>{{ (row.totalBouns ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBorrows ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalCashBorrows ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ row.bankName ?? '—' }}</td>
                 <td>{{ row.bankAccount ?? '—' }}</td>
-                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
@@ -917,9 +917,9 @@
                 <th>البونص</th>
                 <th>السلف</th>
                 <th>السلف النقدية</th>
+                <th>صافي الراتب</th>
                 <th>البنك</th>
                 <th>رقم الحساب</th>
-                <th>صافي الراتب</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row>
@@ -942,9 +942,9 @@
                 <td>{{ (row.totalBouns ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBorrows ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalCashBorrows ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ row.bankName ?? '—' }}</td>
                 <td>{{ row.bankAccount ?? '—' }}</td>
-                <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
