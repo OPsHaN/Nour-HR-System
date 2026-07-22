@@ -738,6 +738,7 @@
                 <th>خصومات التعاقدات</th>
                 <th>البونص</th>
                 <th>السلف</th>
+                <th>السلف المرحلة</th>
                 <th>السلف النقدية</th>
                 <th>صافي الراتب</th>
                 <th>البنك</th>
@@ -763,6 +764,7 @@
                 <td>{{ (row.totalContractDiscount ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBouns ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBorrows ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ (row.totalInstallmentBorrow ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalCashBorrows ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ row.bankName ?? '—' }}</td>
@@ -916,6 +918,7 @@
                 <th>خصومات التعاقدات</th>
                 <th>البونص</th>
                 <th>السلف</th>
+                <th>السلف المرحلة</th>
                 <th>السلف النقدية</th>
                 <th>صافي الراتب</th>
                 <th>البنك</th>
@@ -941,6 +944,7 @@
                 <td>{{ (row.totalContractDiscount ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBouns ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalBorrows ?? 0) | number:'1.0-0' }}</td>
+                <td>{{ (row.totalInstallmentBorrow ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.totalCashBorrows ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ (row.netSalary ?? 0) | number:'1.0-0' }}</td>
                 <td>{{ row.bankName ?? '—' }}</td>

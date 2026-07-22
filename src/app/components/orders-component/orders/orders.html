@@ -311,16 +311,20 @@
               <td>{{ req.totalDays }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.areaManagerCover }}</td>
-              <td>
-                <span
-                  *ngIf="req.areaManagerApproval !== null"
-                  class="badge"
-                  [ngClass]="req.areaManagerApproval ? 'bg-success  text-success' : 'bg-danger  text-danger'"
-                >
-                  {{ req.areaManagerApproval ? 'موافق' : 'مرفوض' }}
-                </span>
-                <span *ngIf="req.areaManagerApproval === null">—</span>
-              </td>
+<td>
+  <span
+    *ngIf="req.areaManagerApproval"
+    class="badge"
+    [ngClass]="{
+      'bg-success text-success': req.areaManagerApproval === 'Approved',
+      'bg-danger text-danger': req.areaManagerApproval === 'Rejected',
+      'bg-warning text-warning': req.areaManagerApproval === 'Pending'
+    }"
+  >
+    {{ getApprovalLabel(req.areaManagerApproval) }}
+  </span>
+  <span *ngIf="!req.areaManagerApproval">—</span>
+</td>
               <td>
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
                   {{ getStatusLabel(req.status) }}
@@ -369,6 +373,20 @@
                   ></i>
                 </button>
                 <button
+                  *ngIf="this.auth.isHR"
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  (click)="openRejectDialog('leave', req.id)"
+                  [disabled]="req.status !== 'Pending'"
+                  title="رفض"
+                >
+                  <i
+                    class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                *ngIf="this.auth.isAreaManager"
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"

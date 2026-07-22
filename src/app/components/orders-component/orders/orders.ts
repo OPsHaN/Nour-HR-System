@@ -60,7 +60,7 @@ export class Orders implements OnInit {
   loadingMissedHours = false;
   missedHoursTotalRecords = 0;
   missedHoursPage = 1;
-   missedHoursPageSize = 10;
+  missedHoursPageSize = 10;
   showCreateMissedHours = false;
 
   // --- Leave (Holidays) ---
@@ -84,7 +84,7 @@ export class Orders implements OnInit {
   loadingOvertime = false;
   overtimeTotalRecords = 0;
   overtimePage = 1;
-  overtimePageSize = 10; 
+  overtimePageSize = 10;
   showCreateOvertime = false;
 
   // --- Resignation ---
@@ -136,25 +136,25 @@ export class Orders implements OnInit {
     private unseenCountsService: UnseenCountsService,
   ) {}
 
-ngOnInit() {
-  if (this.auth.isHR || this.auth.isEmployee) {
-    this.loadMissedHours();
-  }
+  ngOnInit() {
+    if (this.auth.isHR || this.auth.isEmployee) {
+      this.loadMissedHours();
+    }
 
-  this.unseenCountsService.counts$.subscribe((counts) => {
-    this.unseenCounts = counts;
-    this.cdr.detectChanges();
-  });
+    this.unseenCountsService.counts$.subscribe((counts) => {
+      this.unseenCounts = counts;
+      this.cdr.detectChanges();
+    });
 
-  if (this.auth.isHR || this.auth.isEmployee || this.auth.isAreaManager) {
-    this.loadUnseenCounts();
-  }
+    if (this.auth.isHR || this.auth.isEmployee || this.auth.isAreaManager) {
+      this.loadUnseenCounts();
+    }
 
-  if (this.auth.isAreaManager) {
-    this.activeTabIndex = 1;
-    this.loadLeave();
+    if (this.auth.isAreaManager) {
+      this.activeTabIndex = 1;
+      this.loadLeave();
+    }
   }
-}
 
   get isEmployee(): boolean {
     return !(
@@ -199,7 +199,7 @@ ngOnInit() {
       ? this.api.getForgetedHoursRequestsForUser(
           this.employeeId,
           this.missedHoursPage,
-        this.missedHoursPageSize,   // بدل 10
+          this.missedHoursPageSize, // بدل 10
         )
       : this.api.getForgetedHoursRequests(
           this.missedHoursPage,
@@ -210,7 +210,8 @@ ngOnInit() {
     request.subscribe({
       next: (res: any) => {
         this.missedHoursRequests = this.normalizeRequests(res.data || []);
-        this.missedHoursTotalRecords = res.totalCount ?? this.missedHoursRequests.length;
+        this.missedHoursTotalRecords =
+          res.totalCount ?? this.missedHoursRequests.length;
         this.loadingMissedHours = false;
         if (this.isEmployee) {
           this.missedHoursRequests.forEach((req) =>
@@ -252,8 +253,11 @@ ngOnInit() {
     this.loadingLoan = true;
 
     const request = this.isEmployee
-      ? this.api.getAllBorrowsForUser(this.employeeId, this.loanPage, this.loanPageSize,
-)
+      ? this.api.getAllBorrowsForUser(
+          this.employeeId,
+          this.loanPage,
+          this.loanPageSize,
+        )
       : this.api.getAllBorrows(
           this.loanPage,
           this.loanPageSize,
@@ -278,7 +282,11 @@ ngOnInit() {
     this.loadingOvertime = true;
 
     const request = this.isEmployee
-      ? this.api.getAllOvertimeForUser(this.employeeId, this.overtimePage, this.overtimePageSize)
+      ? this.api.getAllOvertimeForUser(
+          this.employeeId,
+          this.overtimePage,
+          this.overtimePageSize,
+        )
       : this.api.getAllOvertime(
           this.overtimePage,
           this.overtimePageSize,
@@ -288,7 +296,8 @@ ngOnInit() {
     request.subscribe({
       next: (res: any) => {
         this.overtimeRequests = this.normalizeRequests(res.data || []);
-        this.overtimeTotalRecords = res.totalCount ?? this.overtimeRequests.length;
+        this.overtimeTotalRecords =
+          res.totalCount ?? this.overtimeRequests.length;
         this.loadingOvertime = false;
         if (this.isEmployee) {
           this.overtimeRequests.forEach((req) =>
@@ -319,7 +328,8 @@ ngOnInit() {
     request.subscribe({
       next: (res: any) => {
         this.resignationRequests = this.normalizeRequests(res.data || []);
-        this.resignationTotalRecords = res.totalCount ?? this.resignationRequests.length;
+        this.resignationTotalRecords =
+          res.totalCount ?? this.resignationRequests.length;
         this.loadingResignation = false;
         if (this.isEmployee) {
           this.resignationRequests.forEach((req) =>
@@ -350,7 +360,8 @@ ngOnInit() {
     request.subscribe({
       next: (res: any) => {
         this.appointmentRequests = this.normalizeRequests(res.data || []);
-        this.appointmentTotalRecords = res.totalCount ?? this.appointmentRequests.length;
+        this.appointmentTotalRecords =
+          res.totalCount ?? this.appointmentRequests.length;
         this.loadingAppointment = false;
         if (this.isEmployee) {
           this.appointmentRequests.forEach((req) =>
@@ -365,7 +376,9 @@ ngOnInit() {
 
   // ---- Pagination ----
 
-  private normalizeRequests<T extends { isSeenByHR?: boolean }>(items: T[] = []): T[] {
+  private normalizeRequests<T extends { isSeenByHR?: boolean }>(
+    items: T[] = [],
+  ): T[] {
     return items.map((item) => ({
       ...item,
       isSeenByHR: item.isSeenByHR ?? false,
@@ -405,38 +418,38 @@ ngOnInit() {
   }
 
   onMissedHoursPageChange(event: any) {
-  this.missedHoursPageSize = event.rows;
-  this.missedHoursPage = event.first / event.rows + 1;
+    this.missedHoursPageSize = event.rows;
+    this.missedHoursPage = event.first / event.rows + 1;
     this.loadMissedHours();
   }
 
   onLeavePageChange(event: any) {
-  this.leavePageSize = event.rows;
-  this.leavePage = event.first / event.rows + 1;
+    this.leavePageSize = event.rows;
+    this.leavePage = event.first / event.rows + 1;
     this.loadLeave();
   }
 
   onLoanPageChange(event: any) {
-  this.loanPageSize = event.rows;
-  this.loanPage = event.first / event.rows + 1;
+    this.loanPageSize = event.rows;
+    this.loanPage = event.first / event.rows + 1;
     this.loadLoan();
   }
 
   onOvertimePageChange(event: any) {
-  this.overtimePageSize = event.rows;
-  this.overtimePage = event.first / event.rows + 1;
+    this.overtimePageSize = event.rows;
+    this.overtimePage = event.first / event.rows + 1;
     this.loadOvertime();
   }
 
   onResignationPageChange(event: any) {
-  this.resignationPageSize = event.rows;
-  this.resignationPage = event.first / event.rows + 1;
+    this.resignationPageSize = event.rows;
+    this.resignationPage = event.first / event.rows + 1;
     this.loadResignation();
   }
 
   onAppointmentPageChange(event: any) {
-  this.appointmentPageSize = event.rows;
-  this.appointmentPage = event.first / event.rows + 1;
+    this.appointmentPageSize = event.rows;
+    this.appointmentPage = event.first / event.rows + 1;
     this.loadAppointment();
   }
 
@@ -492,7 +505,11 @@ ngOnInit() {
     if (type === "missedHours") {
       call = this.api.rejectForgetedHoursRequest(id, payload);
     } else if (type === "leave") {
-      call = this.api.approveHolidayRequestByHr(id, payload);
+      if (this.auth.isHR) {
+        call = this.api.approveHolidayRequestByHr(id, payload);
+      } else if (this.auth.isAreaManager) {
+        call = this.api.approveHolidayRequestByAreaManager(id, payload);
+      }
     } else if (type === "loan") {
       call = this.api.approveOrRejectBorrowRequest(id, payload);
     } else if (type === "overtime") {
@@ -754,10 +771,9 @@ ngOnInit() {
     this.markAsSeen(type, req.id);
   }
 
- loadUnseenCounts() {
-  this.unseenCountsService.refreshAll();
-}
-
+  loadUnseenCounts() {
+    this.unseenCountsService.refreshAll();
+  }
 
   get disablemissedHoursRequests(): boolean {
     return this.missedHoursRequests.length >= 3;
@@ -767,4 +783,14 @@ ngOnInit() {
     const today = new Date().getDate();
     return today >= 10 && today <= 25;
   }
+
+  getApprovalLabel(status: string): string {
+  const map: Record<string, string> = {
+    Approved: 'موافق',
+    Rejected: 'مرفوض',
+    Pending: 'قيد الانتظار',
+  };
+  return map[status] ?? status;
+}
+
 }

@@ -505,26 +505,31 @@ export class Reports implements OnInit {
       });
   }
 
-  loadBranches(): void {
+loadBranches(): void {
     this.api.getAllBranches(1, 999).subscribe({
       next: (res: any) => {
         this.branches = res.data ?? res ?? [];
-        const branchIds = (localStorage.getItem("branchId") || "")
-          .split(",")
-          .map((id) => +id.trim());
+        const ids = this.branchIds; // string[]
 
-        this.managerBranches = this.branches.filter((b: any) =>
-          branchIds.includes(b.id),
-        );
+        if (ids.length) {
+          const numericIds = ids.map((id) => +id);
+          this.managerBranches = this.branches.filter((b: any) =>
+            numericIds.includes(+b.id),
+          );
+        } else {
+          // مفيش قيد فروع (HR / Admin / CEO / Control / Accountant) => كل الفروع
+          this.managerBranches = this.branches;
+        }
         this.cdr.detectChanges();
       },
       error: () => {
         this.branches = [];
+        this.managerBranches = [];
         this.cdr.detectChanges();
         this.api.showError("فشل تحميل البيانات");
       },
     });
-  }
+}
 
   
 
@@ -533,35 +538,45 @@ export class Reports implements OnInit {
     return raw ? raw.split(",").map((id: string) => id.trim()) : [];
   }
 
-  loadEmployees() {
 
+  loadEmployees() {
     const branchIds = this.branchIds;
 
     if (!branchIds.length) {
+      // مفيش قيد فروع => هات كل الموظفين على مستوى النظام
+      this.loading = true;
+      this.api.getAllEmployees(1, 9999).subscribe({
+        next: (res: any) => {
+          this.employees = res.data ?? res ?? [];
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.detectChanges();
+          this.api.showError("فشل تحميل البيانات");
+        },
+      });
       return;
     }
 
-    // الخطوة 1: جيب أول صفحة من كل فرع عشان تعرف totalCount بتاعه
+    // مقيّد بفروع معينة (Area Manager) => نفس المنطق القديم
     const firstRequests = branchIds.map((branchId) =>
-      this.api.getAllEmployees(1, 1, branchId), // pageSize=1 بس عشان أعرف العدد
+      this.api.getAllEmployees(1, 1, branchId),
     );
 
     forkJoin(firstRequests).subscribe({
       next: (countResults: any[]) => {
-        // الخطوة 2: دلوقتي عندي العدد الحقيقي لكل فرع
         const branchRequests = branchIds.map((branchId, i) => {
           const total = countResults[i].totalCount;
           return this.api.getAllEmployees(1, total || 1, branchId);
         });
-
         forkJoin(branchRequests).subscribe({
           next: (results: any[]) => {
             const allEmployees = results.flatMap((res: any) => res.data);
-
             const start = (this.page - 1) * this.pageSize;
             const end = start + this.pageSize;
             this.employees = allEmployees.slice(start, end);
-
             this.loading = false;
             this.cdr.detectChanges();
           },
@@ -574,7 +589,7 @@ export class Reports implements OnInit {
         this.loading = false;
       },
     });
-  }
+}
   
 
   // ── Helpers ──────────────────────────────────────────────────────────────
