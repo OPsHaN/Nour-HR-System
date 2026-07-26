@@ -83,6 +83,14 @@ export class Desktop implements OnInit, OnDestroy {
     return localStorage.getItem("role") === "Admin";
   }
 
+  get isCEO(): boolean {
+    return localStorage.getItem("role") === "CEO";
+  }
+
+  get isAccountant(): boolean {
+    return localStorage.getItem("role") === "Accountant";
+  }
+
   private get storageKey(): string {
     const employeeId = localStorage.getItem("employeeId") ?? "default";
     return `activeShift_${employeeId}`;
@@ -319,7 +327,7 @@ export class Desktop implements OnInit, OnDestroy {
       width?: number;
       height?: number;
       active?: boolean;
-      hideControls?: boolean
+      hideControls?: boolean;
     },
   ): void {
     const size = this.defaultSize(shortcut.action);

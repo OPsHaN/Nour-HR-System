@@ -222,6 +222,8 @@ export class Reports implements OnInit {
       this.loadAllShifts();
       this.loadEmployees();
       this.loadBranches();
+      this.loadMonthlyPayroll();
+
     }
 
     if (this.auth.isAccountant) {
@@ -256,6 +258,10 @@ export class Reports implements OnInit {
 
   get isControl(): boolean {
     return localStorage.getItem("role") === "Control";
+  }
+
+  get isCEO(): boolean {
+    return localStorage.getItem("role") === "CEO";
   }
 
   // ── Page Change Handlers ─────────────────────────────────────────────────

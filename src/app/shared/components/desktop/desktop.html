@@ -89,9 +89,26 @@
               <span>{{ this.totalBranchs }}</span>
               <p class="mb-0">إجمالى الفروع</p>
             </div>
+          </div>
 
+          <div *ngIf="isCEO" class="ceo-badge">
+            <div class="ceo-icon">
+              <i class="pi pi-crown"></i>
+            </div>
 
+            <div class="ceo-info">
+              <strong>المدير التنفيذي للمجموعة</strong>
+            </div>
+          </div>
 
+          <div *ngIf="isAccountant" class="accountant-badge">
+            <div class="accountant-icon">
+              <i class="pi pi-calculator"></i>
+            </div>
+
+            <div class="accountant-info">
+              <strong>المحاسب المالى للمجموعة</strong>
+            </div>
           </div>
         </fieldset>
       </div>

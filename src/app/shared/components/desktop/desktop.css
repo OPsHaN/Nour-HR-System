@@ -155,7 +155,14 @@
   border-radius: 20px;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
+  transition: all 0.3s ease;
 }
+
+.mini-stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(180, 140, 40, 0.18);
+}
+
 
 .mini-stat span {
   display: block;
@@ -172,3 +179,103 @@
   color: var(--text-color-secondary);
 }
 
+.ceo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: var(--shortcut-bg);
+  border: 1px solid var(--text);
+  box-shadow: 0 6px 18px rgba(180, 140, 40, 0.12);
+  direction: rtl;
+  transition: all 0.3s ease;
+}
+
+.ceo-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(180, 140, 40, 0.18);
+}
+
+.ceo-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #d4a72c, #f5d76e);
+  color: #fff;
+  font-size: 20px;
+  box-shadow: 0 4px 10px rgba(180, 140, 40, 0.25);
+}
+
+.ceo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: right;
+}
+
+.ceo-label {
+  font-size: 11px;
+  color: #9a7b20;
+  font-weight: 600;
+}
+
+.ceo-info strong {
+  font-size: 20px;
+  color: var(--text-color-secondary);
+  font-weight: 700;
+}
+
+
+.accountant-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: var(--shortcut-bg);
+  border: 1px solid var(--text);
+  box-shadow: 0 6px 18px rgba(30, 130, 100, 0.12);
+  direction: rtl;
+  transition: all 0.3s ease;
+}
+
+.accountant-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(30, 130, 100, 0.18);
+}
+
+.accountant-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #168f70, #38b894);
+  color: #fff;
+  font-size: 19px;
+  box-shadow: 0 4px 10px rgba(22, 143, 112, 0.25);
+}
+
+.accountant-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: right;
+}
+
+.accountant-label {
+  font-size: 11px;
+  color: #16745d;
+  font-weight: 600;
+}
+
+.accountant-info strong {
+  font-size: 20px;
+  color: var(--text-color-secondary);
+  font-weight: 700;
+}
