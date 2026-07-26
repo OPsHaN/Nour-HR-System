@@ -314,7 +314,7 @@ export class Desktop implements OnInit, OnDestroy {
   protected openWebsiteWindow(): void {
     this.openWindow({
       action: "website",
-      title: "أوبشن لتطوير البرمجيات",
+      title: "أوبشن لتطوير البرمجيات و التسويق الرقمي",
       icon: "language",
     });
   }
