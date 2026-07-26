@@ -206,7 +206,7 @@
           *ngIf="!editing"
           pButton
           icon="pi pi-pencil"
-          class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
           (click)="editingRowKeys[emp.id] = true"
           pInitEditableRow
         >
@@ -220,7 +220,7 @@
           *ngIf="editing"
           pButton
           icon="pi pi-check"
-          class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
           (click)="onRowEditSave(emp)"
         >
           <i
@@ -233,7 +233,7 @@
           *ngIf="editing"
           pButton
           icon="pi pi-times"
-          class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
           pCancelEditableRow
         >
           <i
@@ -246,7 +246,7 @@
           *ngIf="emp.role === 'Employee' && !editing"
           pButton
           icon="pi pi-trash"
-          class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
           (click)="confirmDelete(emp)"
         >
           <i
@@ -258,7 +258,7 @@
         <button
           *ngIf="emp.role === 'AreaManager'"
           pButton
-          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
           (click)="openBranchesDialog(emp)"
         >
           <i

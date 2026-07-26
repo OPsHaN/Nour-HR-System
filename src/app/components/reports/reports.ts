@@ -216,20 +216,23 @@ export class Reports implements OnInit {
       this.auth.isAdmin ||
       this.auth.isHR ||
       this.auth.isControl ||
-      this.auth.isCEO ||
       this.auth.isAreaManager
     ) {
       this.loadAllShifts();
       this.loadEmployees();
       this.loadBranches();
-      this.loadMonthlyPayroll();
-
     }
 
     if (this.auth.isAccountant) {
       this.loadMonthlyPayroll();
       this.loadBranches();
       this.activeTabIndex = 4;
+    } else if (this.auth.isCEO) {
+      this.loadAllShifts();
+      this.loadEmployees();
+      this.loadBranches();
+      this.loadMonthlyPayroll();
+      this.activeTabIndex = 0;
     }
   }
 
@@ -511,7 +514,7 @@ export class Reports implements OnInit {
       });
   }
 
-loadBranches(): void {
+  loadBranches(): void {
     this.api.getAllBranches(1, 999).subscribe({
       next: (res: any) => {
         this.branches = res.data ?? res ?? [];
@@ -535,15 +538,12 @@ loadBranches(): void {
         this.api.showError("فشل تحميل البيانات");
       },
     });
-}
-
-  
+  }
 
   get branchIds(): string[] {
     const raw = localStorage.getItem("branchId"); // نفس نمط "role"
     return raw ? raw.split(",").map((id: string) => id.trim()) : [];
   }
-
 
   loadEmployees() {
     const branchIds = this.branchIds;
@@ -595,8 +595,7 @@ loadBranches(): void {
         this.loading = false;
       },
     });
-}
-  
+  }
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
