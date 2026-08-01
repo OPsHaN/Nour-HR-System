@@ -196,7 +196,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('missedHours', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="قبول"
@@ -208,7 +208,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('missedHours', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
@@ -350,7 +350,7 @@
                   *ngIf="this.auth.isHR"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('leave', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="قبول HR"
@@ -363,7 +363,7 @@
                   *ngIf="this.auth.isAreaManager"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-warning mx-1 my-1 p-1 rounded-circle"
                   (click)="approveLeaveByAreaManager(req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="قبول مدير المنطقة"
@@ -376,7 +376,7 @@
                   *ngIf="this.auth.isHR"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('leave', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
@@ -389,7 +389,7 @@
                 *ngIf="this.auth.isAreaManager"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('leave', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
@@ -524,7 +524,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('loan', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="قبول"
@@ -536,7 +536,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('loan', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
@@ -709,7 +709,7 @@
                   *ngIf="this.auth.isHR"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('overtime', req.id)"
                   [disabled]="req.hrApproval !== null"
                   title="قبول HR"
@@ -723,7 +723,7 @@
                   *ngIf="this.auth.isAreaManager"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-warning mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-warning mx-1 my-1 p-1 rounded-circle"
                   (click)="approveOvertimeByAreaManager(req.id)"
                   [disabled]="req.areaManagerApproval !== null"
                   title="قبول مدير المنطقة"
@@ -737,7 +737,7 @@
                   *ngIf="this.auth.isControl"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
                   (click)="approveOvertimeByControl(req.id)"
                   [disabled]="req.controlApproval !== null"
                   title="قبول الكنترول"
@@ -750,7 +750,7 @@
                   *ngIf="this.auth.isHR  || this.auth.isAreaManager || this.auth.isControl"
                   pButton
                   type="button"
-                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('overtime', req.id)"
                   [disabled]="(this.auth.isHR && req.hrApproval !== null) || 
               (this.auth.isAreaManager && req.areaManagerApproval !== null) || 
@@ -876,7 +876,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('resignation', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="قبول"
@@ -888,7 +888,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('resignation', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
@@ -989,7 +989,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-success mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('appointment', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="قبول"
@@ -1001,7 +1001,7 @@
                 <button
                   pButton
                   type="button"
-                  class="btn btn-sm btn-danger mx-1 my-1 rounded-circle"
+                  class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('appointment', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"

@@ -77,7 +77,7 @@
           *ngIf="!isEmployee"
           pButton
           type="button"
-          class="btn btn-sm btn-secondary mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-secondary mx-1 my-1 p-1 rounded-circle"
           (click)="openRespondDialog(complaint)"
           [disabled]="complaint.status !== 'Pending'"
           title="الرد على الشكوى"
@@ -92,7 +92,7 @@
           *ngIf="complaint.response"
           pButton
           type="button"
-          class="btn btn-sm btn-info mx-1 my-1 rounded-circle"
+          class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
           (click)="viewResponse(complaint)"
           title="عرض الرد"
         >
@@ -129,12 +129,10 @@
   dir="rtl"
   class="data-employee-dialog"
 >
-  <fieldset
-    class="shift-fieldset d-flex align-items-center justify-content-center"
-  >
-    <legend>
-      <h6 class="desktop__greeting m-0">{{ selectedComplaint?.content }}</h6>
-    </legend>
-    <p>{{ selectedComplaint?.response }}</p>
-  </fieldset>
+<div class="shift-fieldset">
+  <p class="complaint-response">{{ selectedComplaint?.response }}</p>
+  <div class="shift-legend">
+    <h6 class="desktop__greeting m-0">{{ selectedComplaint?.content }}</h6>
+  </div>
+</div>
 </p-dialog>
