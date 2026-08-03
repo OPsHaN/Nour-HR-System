@@ -163,7 +163,9 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (missedHoursPage - 1) * missedHoursPageSize }}</td>
+              <td>
+                {{ req.id }}
+              </td>
               <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.shiftDate | date: 'yyyy/MM/dd' }}</td>
@@ -198,7 +200,7 @@
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('missedHours', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="قبول"
                 >
                   <i
@@ -210,11 +212,24 @@
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('missedHours', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="رفض"
                 >
                   <i
                     class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  *ngIf="!showArchive"
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
+                  (click)="markAsViewed('missedHours', req.id)"
+                  title="تم قراءة الطلب"
+                  [disabled]="req.status === 'Pending'"
+                >
+                  <i
+                    class="pi pi-eye d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
               </td>
@@ -303,7 +318,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (leavePage - 1) * leavePageSize  }}</td>
+              <td>{{ req.id }}</td>
               <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.fromDate | date: 'yyyy/MM/dd' }}</td>
@@ -311,20 +326,20 @@
               <td>{{ req.totalDays }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <td>{{ req.areaManagerCover }}</td>
-<td>
-  <span
-    *ngIf="req.areaManagerApproval"
-    class="badge"
-    [ngClass]="{
+              <td>
+                <span
+                  *ngIf="req.areaManagerApproval"
+                  class="badge"
+                  [ngClass]="{
       'bg-success text-success': req.areaManagerApproval === 'Approved',
       'bg-danger text-danger': req.areaManagerApproval === 'Rejected',
       'bg-warning text-warning': req.areaManagerApproval === 'Pending'
     }"
-  >
-    {{ getApprovalLabel(req.areaManagerApproval) }}
-  </span>
-  <span *ngIf="!req.areaManagerApproval">—</span>
-</td>
+                >
+                  {{ getApprovalLabel(req.areaManagerApproval) }}
+                </span>
+                <span *ngIf="!req.areaManagerApproval">—</span>
+              </td>
               <td>
                 <span class="badge" [ngClass]="getStatusClass(req.status)">
                   {{ getStatusLabel(req.status) }}
@@ -352,8 +367,8 @@
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('leave', req.id)"
-                  [disabled]="req.status !== 'Pending'"
                   title="قبول HR"
+                  [disabled]="req.isSeenByHR === true"
                 >
                   <i
                     class="pi pi-check d-flex align-items-center justify-content-center"
@@ -365,8 +380,8 @@
                   type="button"
                   class="btn btn-sm btn-warning mx-1 my-1 p-1 rounded-circle"
                   (click)="approveLeaveByAreaManager(req.id)"
-                  [disabled]="req.status !== 'Pending'"
                   title="قبول مدير المنطقة"
+                  [disabled]="req.isSeenByHR === true"
                 >
                   <i
                     class="pi pi-verified d-flex align-items-center justify-content-center"
@@ -378,24 +393,38 @@
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('leave', req.id)"
-                  [disabled]="req.status !== 'Pending'"
                   title="رفض"
+                  [disabled]="req.isSeenByHR === true"
                 >
                   <i
                     class="pi pi-times d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
                 <button
-                *ngIf="this.auth.isAreaManager"
+                  *ngIf="this.auth.isAreaManager"
                   pButton
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('leave', req.id)"
                   [disabled]="req.status !== 'Pending'"
                   title="رفض"
+                  [disabled]="req.isSeenByHR === true"
                 >
                   <i
                     class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  *ngIf="!showArchive"
+                  type="button"
+                  class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
+                  (click)="markAsViewed('leave', req.id)"
+                  title="تم قراءة الطلب"
+                  [disabled]="req.status === 'Pending'"
+                >
+                  <i
+                    class="pi pi-eye d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
               </td>
@@ -403,7 +432,7 @@
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="10" class="text-center p-4">لا توجد بيانات</td>
+              <td colspan="11" class="text-center p-4">لا توجد بيانات</td>
             </tr>
           </ng-template>
         </p-table>
@@ -484,7 +513,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (loanPage - 1) * loanPageSize  }}</td>
+              <td>{{ req.id }}</td>
               <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td style="color: var(--orange-600); font-weight: 500">
@@ -526,7 +555,7 @@
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('loan', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="قبول"
                 >
                   <i
@@ -538,11 +567,24 @@
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('loan', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="رفض"
                 >
                   <i
                     class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  *ngIf="!showArchive"
+                  pButton
+                  type="button"
+                  class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
+                  (click)="markAsViewed('loan', req.id)"
+                  title="تم قراءة الطلب"
+                  [disabled]="req.status === 'Pending'"
+                >
+                  <i
+                    class="pi pi-eye d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
               </td>
@@ -632,10 +674,8 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (overtimePage - 1) * overtimePageSize  }}</td>
-              <td>
-                {{ req.employeeName }}
-              </td>
+              <td>{{ req.id }}</td>
+              <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.hours }}</td>
               <td>{{ req.notes ?? '—' }}</td>
@@ -711,7 +751,7 @@
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('overtime', req.id)"
-                  [disabled]="req.hrApproval !== null"
+                  [disabled]="req.isSeenByHR === true"
                   title="قبول HR"
                 >
                   <i
@@ -725,7 +765,7 @@
                   type="button"
                   class="btn btn-sm btn-warning mx-1 my-1 p-1 rounded-circle"
                   (click)="approveOvertimeByAreaManager(req.id)"
-                  [disabled]="req.areaManagerApproval !== null"
+                  [disabled]="req.isSeenByHR === true"
                   title="قبول مدير المنطقة"
                 >
                   <i
@@ -739,7 +779,7 @@
                   type="button"
                   class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
                   (click)="approveOvertimeByControl(req.id)"
-                  [disabled]="req.controlApproval !== null"
+                  [disabled]="req.isSeenByHR === true"
                   title="قبول الكنترول"
                 >
                   <i
@@ -759,6 +799,19 @@
                 >
                   <i
                     class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  *ngIf="!showArchive"
+                  type="button"
+                  class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
+                  (click)="markAsViewed('overtime', req.id)"
+                  title="تم قراءة الطلب"
+                  [disabled]="req.status === 'Pending'"
+                >
+                  <i
+                    class="pi pi-eye d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
               </td>
@@ -843,10 +896,8 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (resignationPage - 1) * resignationPageSize }}</td>
-              <td>
-                {{ req.employeeName }}
-              </td>
+              <td>{{ req.id }}</td>
+              <td>{{ req.employeeName }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.reason }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
@@ -878,7 +929,7 @@
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('resignation', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="قبول"
                 >
                   <i
@@ -890,11 +941,24 @@
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('resignation', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="رفض"
                 >
                   <i
                     class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  *ngIf="!showArchive"
+                  type="button"
+                  class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
+                  (click)="markAsViewed('resignation', req.id)"
+                  title="تم قراءة الطلب"
+                  [disabled]="req.status === 'Pending'"
+                >
+                  <i
+                    class="pi pi-eye d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
               </td>
@@ -974,10 +1038,8 @@
           </ng-template>
           <ng-template pTemplate="body" let-req let-ri="rowIndex">
             <tr>
-              <td>{{ ri + 1 + (appointmentPage - 1) * appointmentPageSize  }}</td>
-              <td>
-                {{ req.employeeName || '—' }}
-              </td>
+              <td>{{ req.id }}</td>
+              <td>{{ req.employeeName || '—' }}</td>
               <td>{{ req.branchName || '—' }}</td>
               <td>{{ req.requestDate | date: 'yyyy/MM/dd' }}</td>
               <td>
@@ -991,7 +1053,7 @@
                   type="button"
                   class="btn btn-sm btn-success mx-1 my-1 p-1 rounded-circle"
                   (click)="approveRequest('appointment', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="قبول"
                 >
                   <i
@@ -1003,11 +1065,24 @@
                   type="button"
                   class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
                   (click)="openRejectDialog('appointment', req.id)"
-                  [disabled]="req.status !== 'Pending'"
+                  [disabled]="req.isSeenByHR === true"
                   title="رفض"
                 >
                   <i
                     class="pi pi-times d-flex align-items-center justify-content-center"
+                  ></i>
+                </button>
+                <button
+                  pButton
+                  *ngIf="!showArchive"
+                  type="button"
+                  class="btn btn-sm btn-info mx-1 my-1 p-1 rounded-circle"
+                  (click)="markAsViewed('appointment', req.id)"
+                  title="تم قراءة الطلب"
+                  [disabled]="req.status === 'Pending'"
+                >
+                  <i
+                    class="pi pi-eye d-flex align-items-center justify-content-center"
                   ></i>
                 </button>
               </td>

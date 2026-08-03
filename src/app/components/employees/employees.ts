@@ -115,6 +115,9 @@ export class Employees {
   selectedSingleDay: string = "";
   loadingEvaluations = false;
   evaluations: any[] = [];
+actionMonthType: "current" | "custom" = "current";
+actionMonth: number = new Date().getMonth() + 1;
+actionYear: number = new Date().getFullYear();
 
   dayOptions = [
     { key: "quarterDay", label: "ربع يوم" },
@@ -230,6 +233,23 @@ export class Employees {
     return raw ? raw.split(",").map((id: string) => id.trim()) : [];
   }
 
+  get actionSubmitLabel(): string {
+  if (this.actionLoading) return "جارى الحفظ...";
+
+  switch (this.currentActionType) {
+    case "bonus":
+      return "إضافة زيادة";
+    case "installmentBorrow":
+      return "إضافة سلفة مرحلة";
+    case "discount":
+      return "إضافة خصم";
+    case "contract":
+      return "إضافة خصم تعاقد";
+    default:
+      return "إضافة سلفة نقدية";
+  }
+}
+
   loadEmployees() {
     this.loading = true;
 
@@ -307,6 +327,13 @@ export class Employees {
   getEmployeeName(id: number): string {
     return this.employees.find((e: any) => e.id === id)?.name ?? "";
   }
+
+  onActionMonthTypeChange(): void {
+  if (this.actionMonthType === "current") {
+    this.actionMonth = new Date().getMonth() + 1;
+    this.actionYear = new Date().getFullYear();
+  }
+}
 
   exportAllToExcel(): void {
     const pageSize = 100;
@@ -1110,52 +1137,68 @@ openActionDialog(type: string, title: string, employee: any) {
 
   this.actionLoading = true;
 
-  const payload =
-    this.currentActionType === "bonus" ||
-    this.currentActionType === "cashBorrow"
-      ? {
-          employeeId: this.actionForm.employeeId,
-          amount: this.actionForm.amount,
-          reason: this.actionForm.reasonOfDiscount,
-          notes: this.actionForm.notes,
-        }
-      : {
-          employeeId: this.actionForm.employeeId,
-          amount: this.actionForm.amount,
-          reasonOfDiscount: this.actionForm.reasonOfDiscount,
-          notes: this.actionForm.notes,
-        };
+const monthYear = {
+  month: this.actionMonthType === "current"
+    ? new Date().getMonth() + 1
+    : this.actionMonth,
+  year: this.actionMonthType === "current"
+    ? new Date().getFullYear()
+    : this.actionYear,
+};
 
-  const request =
-    this.currentActionType === "bonus"
-      ? this.api.addBonus(payload)
-      : this.currentActionType === "cashBorrow"
-      ? this.api.addCashBorrow(payload)
-      : this.currentActionType === "discount"
-      ? this.api.addDiscount(payload)
-      : this.api.addContractDiscount(payload);
-
-  request.subscribe({
-    next: (res: any) => {
-      this.actionItems.unshift(res);
-
-      this.actionForm = {
+const payload =
+  this.currentActionType === "bonus" ||
+  this.currentActionType === "cashBorrow"
+    ? {
         employeeId: this.actionForm.employeeId,
-        amount: null,
-        reasonOfDiscount: "",
-        notes: "",
+        amount: this.actionForm.amount,
+        reason: this.actionForm.reasonOfDiscount,
+        notes: this.actionForm.notes,
+        ...monthYear,
+      }
+    : {
+        employeeId: this.actionForm.employeeId,
+        amount: this.actionForm.amount,
+        reasonOfDiscount: this.actionForm.reasonOfDiscount,
+        notes: this.actionForm.notes,
+        ...monthYear,
       };
 
-      this.actionLoading = false;
-      this.cdr.detectChanges();
-      this.api.showSuccess("تمت الإضافة بنجاح");
-      this.actionDialogVisible = false;
-    },
-    error: () => {
-      this.actionLoading = false;
-      this.api.showError("حدث خطأ أثناء الحفظ");
-    },
-  });
+const request =
+  this.currentActionType === "bonus"
+    ? this.api.addBonus(payload)
+    : this.currentActionType === "cashBorrow"
+    ? this.api.addCashBorrow(payload)
+    : this.currentActionType === "discount"
+    ? this.api.addDiscount(payload)
+    : this.api.addContractDiscount(payload);
+
+request.subscribe({
+  next: (res: any) => {
+    this.actionItems.unshift(res);
+
+    this.actionForm = {
+      employeeId: this.actionForm.employeeId,
+      amount: null,
+      reasonOfDiscount: "",
+      notes: "",
+    };
+
+    // reset month/year state after successful save
+    this.actionMonthType = "current";
+    this.actionMonth = new Date().getMonth() + 1;
+    this.actionYear = new Date().getFullYear();
+
+    this.actionLoading = false;
+    this.cdr.detectChanges();
+    this.api.showSuccess("تمت الإضافة بنجاح");
+    this.actionDialogVisible = false;
+  },
+  error: () => {
+    this.actionLoading = false;
+    this.api.showError("حدث خطأ أثناء الحفظ");
+  },
+});
 }
 
   deleteAction(id: number, type?: string) {

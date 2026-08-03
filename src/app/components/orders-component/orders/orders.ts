@@ -22,6 +22,7 @@ import { Observable } from "rxjs";
 import { TooltipModule } from "primeng/tooltip";
 import { BadgeModule } from "primeng/badge";
 import { UnseenCountsService } from "src/app/services/unseen-counts.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-orders",
@@ -386,9 +387,9 @@ export class Orders implements OnInit {
   }
 
   toggleArchiveView() {
-    if (!this.auth.isHR) {
-      return;
-    }
+    // if (!this.auth.isHR || this.isEmployee || this.auth.isAreaManager || this.auth.isManager || this.auth.isControl) {
+    //   return;
+    // }
 
     this.showArchive = !this.showArchive;
     this.reloadCurrentTab();
@@ -490,7 +491,11 @@ export class Orders implements OnInit {
         this.reloadByType(type);
         this.loadUnseenCounts();
       },
-      error: () => this.api.showError("حدث خطأ أثناء القبول"),
+      error: (err: HttpErrorResponse) => {
+        const msg =
+          err?.error?.message ?? "يوجد مشكلة في القبول، يرجى المحاولة لاحقًا";
+        this.api.showError(msg);
+      },
     });
   }
 
@@ -535,7 +540,11 @@ export class Orders implements OnInit {
           this.loadUnseenCounts();
         }, 100);
       },
-      error: () => this.api.showError("حدث خطأ أثناء الرفض"),
+      error: (err: HttpErrorResponse) => {
+        const msg =
+          err?.error?.message ?? "يوجد مشكلة في الرفض، يرجى المحاولة لاحقًا";
+        this.api.showError(msg);
+      },
     });
   }
 
@@ -618,7 +627,12 @@ export class Orders implements OnInit {
         this.loadOvertime();
         this.loadUnseenCounts();
       },
-      error: () => this.api.showError("حدث خطأ"),
+      error: (err: HttpErrorResponse) => {
+        const msg =
+          err?.error?.message ??
+          "يوجد مشكلة في القبول بواسطة مدير المنطقة، يرجى المحاولة لاحقًا";
+        this.api.showError(msg);
+      },
     });
   }
 
@@ -727,40 +741,46 @@ export class Orders implements OnInit {
     };
   }
 
-  private markAsSeen(type: string, id: string) {
-    let call;
-
+  private markAsSeen(type: string, id: string): Observable<any> | null {
     switch (type) {
       case "missedHours":
-        call = this.api.markForgetedHoursRequestAsSeen(id);
-        break;
+        return this.api.markForgetedHoursRequestAsSeen(id);
 
       case "leave":
-        call = this.api.markHolidayRequestAsSeen(id);
-        break;
+        return this.api.markHolidayRequestAsSeen(id);
 
       case "loan":
-        call = this.api.markBorrowAsSeen(id);
-        break;
+        return this.api.markBorrowAsSeen(id);
 
       case "overtime":
-        call = this.api.markOvertimeRequestAsSeen(id);
-        break;
+        return this.api.markOvertimeRequestAsSeen(id);
 
       case "resignation":
-        call = this.api.markResignationRequestAsSeen(id);
-        break;
+        return this.api.markResignationRequestAsSeen(id);
 
       case "appointment":
-        call = this.api.markAppointmentRequestAsSeen(id);
-        break;
+        return this.api.markAppointmentRequestAsSeen(id);
 
       default:
-        return;
+        return null;
     }
-
-    call.subscribe();
   }
+
+markAsViewed(type: string, id: string) {
+  const call = this.markAsSeen(type, id);
+  if (!call) return;
+
+  call.subscribe({
+    next: () => {
+      this.api.showSuccess("تم قراءة الطلب و أرشفته");
+      this.reloadByType(type);
+      this.loadUnseenCounts();
+    },
+    error: () => {
+      this.api.showError("حدث خطأ أثناء تحديث حالة الطلب");
+    },
+  });
+}
 
   hasRejected(requests: any[]): boolean {
     return requests.some((req) => req.status === "Rejected");
@@ -785,12 +805,11 @@ export class Orders implements OnInit {
   }
 
   getApprovalLabel(status: string): string {
-  const map: Record<string, string> = {
-    Approved: 'موافق',
-    Rejected: 'مرفوض',
-    Pending: 'قيد الانتظار',
-  };
-  return map[status] ?? status;
-}
-
+    const map: Record<string, string> = {
+      Approved: "موافق",
+      Rejected: "مرفوض",
+      Pending: "قيد الانتظار",
+    };
+    return map[status] ?? status;
+  }
 }

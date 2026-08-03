@@ -1102,7 +1102,7 @@
                   [(ngModel)]="employeeDetails.holidayHours"
                 />
               </div>
-                <div class="detail-item">
+              <div class="detail-item">
                 <label>أيام الأجازات السنوية</label>
                 <input
                   type="number"
@@ -1115,7 +1115,7 @@
         </p-tabpanel>
 
         <!-- ===== Tab 3: التقييمات ===== -->
-        <p-tabpanel value="2" *ngIf="employeeDetails?.evaluations?.length">
+        <p-tabpanel value="2">
           <div
             class="evaluation-card mb-2"
             *ngFor="let evaluation of employeeDetails.evaluations"
@@ -1171,11 +1171,17 @@
               <ng-template pTemplate="emptymessage">
                 <tr>
                   <td colspan="2" class="text-center py-4">
-                    لا توجد نتائج تقييم
+                   لا يوجد تقييمات للموظف فى الوقت الحالى
                   </td>
                 </tr>
               </ng-template>
             </p-table>
+          </div>
+          <div
+            class="text-center py-2 text-muted"
+            *ngIf="!employeeDetails?.evaluations?.length"
+          >
+            لا يوجد تقييمات للموظف فى الوقت الحالى
           </div>
         </p-tabpanel>
 
@@ -1599,7 +1605,7 @@
 
       <div class="field">
         <label>شهر البداية <span class="text-danger">*</span></label>
-        <select class="custom-input py-2" [(ngModel)]="actionForm.startMonth">
+        <select class="custom-input" [(ngModel)]="actionForm.startMonth">
           <option [ngValue]="1">يناير</option>
           <option [ngValue]="2">فبراير</option>
           <option [ngValue]="3">مارس</option>
@@ -1651,6 +1657,52 @@
 "
   >
     <div class="end-service-content">
+
+      <!-- الشهر/السنة (لكل الأنواع ما عدا evaluation, responsibility, installmentBorrow) -->
+<div
+  class="field"
+  *ngIf="['discount','bonus','contract','cashBorrow'].includes(currentActionType)"
+>
+  <label class="fw-light">إختر الشهر</label>
+  <select
+    class="custom-input"
+    [(ngModel)]="actionMonthType"
+    (ngModelChange)="onActionMonthTypeChange()"
+  >
+    <option value="current">الشهر الحالى</option>
+    <option value="custom">شهر وسنة أخرى</option>
+  </select>
+</div>
+
+<div class="row" *ngIf="actionMonthType === 'custom' && ['discount','bonus','contract','cashBorrow'].includes(currentActionType)">
+  <div class="field col-6">
+    <label class="fw-light">اختر الشهر</label>
+    <select class="custom-input" [(ngModel)]="actionMonth">
+      <option [ngValue]="1">يناير</option>
+      <option [ngValue]="2">فبراير</option>
+      <option [ngValue]="3">مارس</option>
+      <option [ngValue]="4">أبريل</option>
+      <option [ngValue]="5">مايو</option>
+      <option [ngValue]="6">يونيو</option>
+      <option [ngValue]="7">يوليو</option>
+      <option [ngValue]="8">أغسطس</option>
+      <option [ngValue]="9">سبتمبر</option>
+      <option [ngValue]="10">أكتوبر</option>
+      <option [ngValue]="11">نوفمبر</option>
+      <option [ngValue]="12">ديسمبر</option>
+    </select>
+  </div>
+
+  <div class="field col-6">
+    <label class="fw-light">السنة</label>
+    <input
+      type="number"
+      class="custom-input"
+      [(ngModel)]="actionYear"
+    />
+  </div>
+</div>
+
       <!-- نوع القيمة (فقط للخصم والزيادة) -->
       <div
         class="field"
@@ -1757,32 +1809,21 @@
       </div>
     </div>
 
-    <div class="form">
-      <button
-        type="button"
-        [disabled]="
-    actionLoading ||
-    !actionForm.amount ||
-    !actionForm.reasonOfDiscount ||
-    !actionForm.notes"
-        class="submit-btn full my-2"
-        (click)="saveAction()"
-      >
-{{
-  actionLoading
-    ? 'جارى الحفظ...'
-    : currentActionType === 'bonus'
-    ? 'إضافة زيادة'
-    : currentActionType === 'installmentBorrow'
-    ? 'إضافة سلفة مرحلة'
-    : currentActionType === 'discount'
-    ? 'إضافة خصم'
-    : currentActionType === 'contract'
-    ? 'إضافة خصم تعاقد'
-    : 'إضافة سلفة نقدية'
-}}
-      </button>
-    </div>
+<div class="form">
+  <button
+    type="button"
+    [disabled]="
+      actionLoading ||
+      !actionForm.amount ||
+      !actionForm.reasonOfDiscount ||
+      !actionForm.notes
+    "
+    class="submit-btn full my-2"
+    (click)="saveAction()"
+  >
+    {{ actionSubmitLabel }}
+  </button>
+</div>
   </div>
   <!-- إضافة عهدة -->
   <div *ngIf="currentActionType === 'responsibility'">

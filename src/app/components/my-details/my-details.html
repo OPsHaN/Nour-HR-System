@@ -425,7 +425,8 @@
               </div>
               <div class="detail-item">
                 <label class="fs-5 text-center">صافى المرتب</label>
-                <span class="fs-6 text-center"
+                <span
+                  class="fs-6 text-center"
                   [class.text-danger]="employeeDetails.netSalary < 0"
                   [class.text-success]="employeeDetails.netSalary >= 0"
                 >
@@ -500,7 +501,11 @@
             [value]="employeeDetails.employeeHistory"
             styleClass="p-datatable-sm p-datatable-gridlines"
             responsiveLayout="scroll"
-          >
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20]"
+            [showCurrentPageReport]="true"
+            >
             <ng-template pTemplate="header">
               <tr>
                 <th>تاريخ البدء</th>

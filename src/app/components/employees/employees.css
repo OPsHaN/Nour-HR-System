@@ -96,7 +96,7 @@
 .end-service-content select,
 .end-service-content textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 8px 10px;
   border: 1px solid var(--surface-border);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.08);

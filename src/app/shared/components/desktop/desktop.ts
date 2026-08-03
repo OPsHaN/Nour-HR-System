@@ -169,7 +169,6 @@ export class Desktop implements OnInit, OnDestroy {
 
         this.cdr.detectChanges();
 
-        console.log(this.managerBranches);
       },
       error: () => {
         this.loading = false;

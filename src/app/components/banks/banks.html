@@ -34,14 +34,13 @@
   dataKey="id"
   dir="rtl"
   styleClass="p-datatable-sm p-datatable-gridlines"
-
 >
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
       <th>#</th>
       <th>اسم البنك</th>
-      <th>الإجراءات</th>
+      <th *ngIf="this.auth.isAdmin">الإجراءات</th>
     </tr>
   </ng-template>
 
@@ -55,7 +54,7 @@
       <td>{{ bank.name }}</td>
 
       <!-- Actions -->
-      <td>
+      <td *ngIf="this.auth.isAdmin">
         <!-- Delete -->
         <button
           pButton
