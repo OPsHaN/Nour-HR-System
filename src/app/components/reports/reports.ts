@@ -11,7 +11,8 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "primeng/tabs";
 import { Apiservice } from "src/app/services/api.service";
 import { AuthService } from "src/app/services/auth.service";
-import { forkJoin } from "rxjs";
+import { forkJoin, of } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -487,7 +488,7 @@ export class Reports implements OnInit {
     this.cdr.detectChanges();
   }
 
-  loadBranchPayroll(): void {
+  private loadBranchPayroll(): void {
     if (!this.selectedBranchId || !this.branchPayrollMonth) return;
     const month = this.branchPayrollMonth.getMonth() + 1;
     const year = this.branchPayrollMonth.getFullYear();

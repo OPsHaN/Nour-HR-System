@@ -1,10 +1,16 @@
+import {
+  TimesIcon
+} from "./chunk-6OHEX6VO.js";
 import "./chunk-WODD5JVG.js";
 import {
   Ripple
 } from "./chunk-Z2H2MVGK.js";
 import {
-  TimesIcon
-} from "./chunk-6OHEX6VO.js";
+  animate,
+  style,
+  transition,
+  trigger
+} from "./chunk-42VGZS34.js";
 import {
   BaseComponent,
   PARENT_INSTANCE
@@ -20,12 +26,6 @@ import {
   SharedModule
 } from "./chunk-5DMWIRBC.js";
 import "./chunk-TIK557PQ.js";
-import {
-  animate,
-  style,
-  transition,
-  trigger
-} from "./chunk-42VGZS34.js";
 import {
   CommonModule,
   NgClass,
@@ -87,8 +87,8 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate
 } from "./chunk-7TLMVOLW.js";
-import "./chunk-5UG2FXJ4.js";
 import "./chunk-EKEPJHDJ.js";
+import "./chunk-5UG2FXJ4.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
 import "./chunk-3OV72XIM.js";

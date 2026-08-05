@@ -1,17 +1,17 @@
 import {
-  Badge,
-  BadgeModule
-} from "./chunk-BE2UHOGH.js";
-import {
-  Ripple
-} from "./chunk-Z2H2MVGK.js";
-import {
   AutoFocus,
   Fluid
 } from "./chunk-GOOUZEJY.js";
 import {
   SpinnerIcon
 } from "./chunk-6OHEX6VO.js";
+import {
+  Ripple
+} from "./chunk-Z2H2MVGK.js";
+import {
+  Badge,
+  BadgeModule
+} from "./chunk-BE2UHOGH.js";
 import {
   BaseComponent,
   PARENT_INSTANCE
@@ -2135,4 +2135,4 @@ export {
   Button,
   ButtonModule
 };
-//# sourceMappingURL=chunk-6QV6QHD6.js.map
+//# sourceMappingURL=chunk-CZYGE2KE.js.map

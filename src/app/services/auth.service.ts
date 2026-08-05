@@ -90,36 +90,40 @@ export class AuthService {
     return Number(localStorage.getItem("branchId")) ?? 0;
   }
 
+  private get currentRole(): string {
+    return (localStorage.getItem("role") || "").trim().toLowerCase();
+  }
+
   get isEmployee(): boolean {
-    return localStorage.getItem("role") === "Employee";
+    return this.currentRole === "employee";
   }
 
   get isAdmin(): boolean {
-    return localStorage.getItem("role") === "Admin";
+    return this.currentRole === "admin";
   }
 
   get isHR(): boolean {
-    return localStorage.getItem("role") === "HR";
+    return this.currentRole === "hr";
   }
 
   get isAccountant(): boolean {
-    return localStorage.getItem("role") === "Accountant";
+    return this.currentRole === "accountant";
   }
 
   get isControl(): boolean {
-    return localStorage.getItem("role") === "Control";
+    return this.currentRole === "control";
   }
 
   get isManager(): boolean {
-    return localStorage.getItem("role") === "Manager";
+    return this.currentRole === "manager";
   }
 
   get isAreaManager(): boolean {
-    return localStorage.getItem("role") === "AreaManager";
+    return this.currentRole === "areamanager";
   }
 
-  get isCEO():boolean {
-    return localStorage.getItem("role") === "CEO";
+  get isCEO(): boolean {
+    return this.currentRole === "ceo";
   }
 
   setUserType(type: number) {

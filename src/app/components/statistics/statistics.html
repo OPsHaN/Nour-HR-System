@@ -1,0 +1,454 @@
+<div class="statistics-page">
+  <div *ngIf="showBranchComparison">
+    <h3>{{ comparisonTitle }}</h3>
+    <div class="filters-bar">
+      <div class="filter-item">
+        <label>الفرع :</label>
+        <p-select
+          [(ngModel)]="selectedBranchId"
+          [options]="branches"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="اختر الفرع"
+          [showClear]="true"
+          [pt]="{
+          root: { class: 'select-panel' },
+          pcOverlay: { root: { class: 'select-overlay' } },
+          listContainer: { class: 'select-list-container' }
+        }"
+        />
+      </div>
+      <div class="filter-item">
+        <label>الشهر الأول :</label>
+        <p-datepicker
+          [(ngModel)]="branchPayrollMonth1"
+          view="month"
+          dateFormat="mm/yy"
+          placeholder="اختر الشهر الأول"
+          [appendTo]="'body'"
+          [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+        />
+      </div>
+      <div class="filter-item">
+        <label>الشهر الثاني :</label>
+        <p-datepicker
+          [(ngModel)]="branchPayrollMonth2"
+          view="month"
+          dateFormat="mm/yy"
+          placeholder="اختر الشهر الثاني"
+          [appendTo]="'body'"
+          [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+        />
+      </div>
+      <div class="filter-item action-item compare-actions">
+        <p-button
+          label="مقارنة"
+          [loading]="loadingComparison"
+          [pt]="{ root: { class: 'apply-btn' } }"
+          (onClick)="compareBranchPayroll()"
+        />
+        <p-button
+          label="مسح"
+          [disabled]="!comparisonState"
+          [pt]="{ root: { class: 'clear-btn' } }"
+          (onClick)="clearBranchComparison()"
+        />
+      </div>
+    </div>
+    <div class="chart-card">
+      <!-- <div class="chart-header">
+        <div class="chart-type-switch form ">
+        <button
+          type="button"
+                class="submit-btn mx-1"
+
+          [class.active]="chartType === 'bar'"
+          (click)="setChartType('bar')"
+        >شريطي</button>
+        <button
+          type="button"
+                class="submit-btn  mx-1"
+
+          [class.active]="chartType === 'line'"
+          (click)="setChartType('line')"
+        >خطي</button>
+      </div>
+      </div> -->
+
+      <canvas
+        baseChart
+        [data]="branchChartData"
+        [options]="branchChartOptions"
+      style="display: block; width: 100%; margin: 0.5rem 0 ; background: var(--surface-border); border-radius: 12px; padding: 1rem"
+        [type]="chartType"
+      ></canvas>
+
+      <div *ngIf="!comparisonState" class="chart-empty">
+        <p>لا توجد بيانات مقارنة بعد. اختر الفرع والشهرين ثم اضغط مقارنة.</p>
+      </div>
+    </div>
+
+    <ng-container *ngIf="comparisonState">
+      <div class="stats-grid" style="margin-bottom: 1.5rem">
+        <div class="stat-card">
+          <span class="stat-label">إجمالي رواتب الشهر الأول : </span>
+
+          <span class="stat-value"
+            >{{ comparisonTotalSalary1 | number:'1.0-0' }} ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">إجمالي رواتب الشهر الثاني : </span>
+
+          <span class="stat-value"
+            >{{ comparisonTotalSalary2 | number:'1.0-0' }} ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">الفرق في الإجمالي : </span>
+
+          <span class="stat-value"
+            >{{ comparisonTotalDiff | number:'1.0-0' }} ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">نسبة التغير : </span>
+          <span class="stat-value"
+            >{{ comparisonPercentChange | number:'1.0-2' }}%</span
+          >
+        </div>
+      </div>
+
+      <p-table
+        [value]="comparisonState.rows"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50, 100]"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        [tableStyle]="{ 'min-width': '55rem' }"
+        [paginatorDropdownAppendTo]="'body'"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>كود الموظف</th>
+            <th>الموظف</th>
+            <th>الفرع</th>
+            <th>راتب الشهر الأول</th>
+            <th>راتب الشهر الثاني</th>
+            <th>الفرق</th>
+            <th>النسبة %</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.employeeId }}</td>
+            <td>{{ row.employeeName }}</td>
+            <td>{{ row.branchName }}</td>
+            <td>{{ row.salary1 | number:'1.0-0' }} ج.م</td>
+            <td>{{ row.salary2 | number:'1.0-0' }} ج.م</td>
+            <td>{{ row.diff | number:'1.0-0' }} ج.م</td>
+            <td>{{ row.percent | number:'1.0-2' }}%</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" class="text-center p-4">لا توجد بيانات للمقارنة</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-container>
+  </div>
+
+  <section class="employee-comparison-section" *ngIf="showEmployeeComparison">
+    <h3>{{ employeeComparisonTitle }}</h3>
+    <div class="filters-bar">
+      <div class="filter-item">
+        <label>الموظف :</label>
+        <p-select
+          [(ngModel)]="selectedEmployeeId"
+          [options]="employees"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="اختر الموظف"
+          [showClear]="true"
+          [filter]="true"
+          filterPlaceholder="بحث..."
+          [pt]="{
+            root: { class: 'select-panel' },
+            pcOverlay: { root: { class: 'select-overlay' } },
+            listContainer: { class: 'select-list-container' }
+          }"
+        />
+      </div>
+      <div class="filter-item">
+        <label>الشهر الأول :</label>
+        <p-datepicker
+          [(ngModel)]="employeePayrollMonth1"
+          view="month"
+          dateFormat="mm/yy"
+          placeholder="اختر الشهر الأول"
+          [appendTo]="'body'"
+          [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+        />
+      </div>
+      <div class="filter-item">
+        <label>الشهر الثاني :</label>
+        <p-datepicker
+          [(ngModel)]="employeePayrollMonth2"
+          view="month"
+          dateFormat="mm/yy"
+          placeholder="اختر الشهر الثاني"
+          [appendTo]="'body'"
+          [pt]="{ pcInputText: { root: { style: 'padding: 0.3rem' } } }"
+        />
+      </div>
+      <div class="filter-item action-item compare-actions">
+        <p-button
+          label="مقارنة"
+          [loading]="loadingEmployeeComparison"
+          [pt]="{ root: { class: 'apply-btn' } }"
+          (onClick)="compareEmployeePayroll()"
+        />
+        <p-button
+          label="مسح"
+          [disabled]="!employeeComparisonState"
+          [pt]="{ root: { class: 'clear-btn' } }"
+          (onClick)="clearEmployeeComparison()"
+        />
+      </div>
+    </div>
+
+    <div class="chart-header" style="margin: 1rem 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+      <!-- <div>
+        <h4 style="margin: 0">مخطط مقارنة كشف الموظف</h4>
+      </div>
+      <div class="chart-type-switch form">
+        <button
+          type="button"
+          class="submit-btn mx-1"
+          [class.active]="chartType === 'bar'"
+          (click)="setChartType('bar')"
+        >شريطي</button>
+        <button
+          type="button"
+          class="submit-btn mx-1"
+          [class.active]="chartType === 'line'"
+          (click)="setChartType('line')"
+        >خطي</button>
+      </div> -->
+    </div>
+
+    <canvas
+      baseChart
+      [data]="employeeChartData"
+      [options]="employeeChartOptions"
+      style="display: block; width: 100%; margin: 0.5rem 0 ; background: var(--surface-border); border-radius: 12px; padding: 1rem"
+      [type]="chartType"
+    ></canvas>
+
+    <ng-container *ngIf="employeeComparisonState">
+      <div class="stats-grid" style="margin-bottom: 1.5rem">
+        <div class="stat-card">
+          <span class="stat-label">خصومات الشهر الأول :</span>
+          <span class="stat-value"
+            >{{ employeeComparisonState.totals1.discounts | number:'1.0-0' }}
+            ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">خصومات الشهر الثاني :</span>
+          <span class="stat-value"
+            >{{ employeeComparisonState.totals2.discounts | number:'1.0-0' }}
+            ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">البونص الشهر الأول :</span>
+          <span class="stat-value"
+            >{{ employeeComparisonState.totals1.bonuses | number:'1.0-0' }}
+            ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">البونص الشهر الثاني :</span>
+          <span class="stat-value"
+            >{{ employeeComparisonState.totals2.bonuses | number:'1.0-0' }}
+            ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">السلف الشهر الأول :</span>
+          <span class="stat-value"
+            >{{ employeeComparisonState.totals1.borrows | number:'1.0-0' }}
+            ج.م</span
+          >
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">السلف الشهر الثاني :</span>
+          <span class="stat-value"
+            >{{ employeeComparisonState.totals2.borrows | number:'1.0-0' }}
+            ج.م</span
+          >
+        </div>
+      </div>
+
+      <div class="payroll-compare-grid">
+        <div class="payroll-column border border-3 rounded p-2">
+          <h4>شهر {{ employeeComparisonState.month1.label }}</h4>
+          <ng-container *ngIf="employeeComparisonState.details1.discounts.length > 0; else noDiscounts1">
+            <p-table
+              [value]="employeeComparisonState.details1.discounts"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>نوع الخصم</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.reasonOfDiscount }}</td>
+                  <td>{{ item.amount | number:'1.0-0' }}</td>
+                  <td>{{ formatDateDisplay(item.date) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noDiscounts1>
+            <!-- <div class="no-data-card">لا توجد بيانات خصومات للشهر الأول</div> -->
+          </ng-template>
+
+          <ng-container *ngIf="employeeComparisonState.details1.bonuses.length > 0; else noBonuses1">
+            <p-table
+              [value]="employeeComparisonState.details1.bonuses"
+              styleClass="p-datatable-sm p-datatable-gridlines mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>نوع البونص</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.reason ?? '—' }}</td>
+                  <td>{{ item.amount | number:'1.0-0' }}</td>
+                  <td>{{ formatDateDisplay(item.dateOfBonus) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noBonuses1>
+            <!-- <div class="no-data-card">لا توجد بيانات بونص للشهر الأول</div> -->
+          </ng-template>
+
+          <ng-container *ngIf="employeeComparisonState.details1.cashBorrows.length > 0; else noBorrows1">
+            <p-table
+              [value]="employeeComparisonState.details1.cashBorrows"
+              styleClass="p-datatable-sm p-datatable-gridlines mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>نوع السلفة</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.reason ?? '—' }}</td>
+                  <td>{{ item.amount | number:'1.0-0' }}</td>
+                  <td>{{ formatDateDisplay(item.dateOfBorrow) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noBorrows1>
+              <!-- <div class="no-data-card">لا توجد بيانات سلف للشهر الأول</div> -->
+          </ng-template>
+        </div>
+
+        <div class="payroll-column border border-3 rounded p-2 mt-2">
+          <h4>شهر {{ employeeComparisonState.month2.label }}</h4>
+          <ng-container *ngIf="employeeComparisonState.details2.discounts.length > 0; else noDiscounts2">
+            <p-table
+              [value]="employeeComparisonState.details2.discounts"
+              styleClass="p-datatable-sm p-datatable-gridlines"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>نوع الخصم</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.reasonOfDiscount }}</td>
+                  <td>{{ item.amount | number:'1.0-0' }}</td>
+                  <td>{{ formatDateDisplay(item.date) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noDiscounts2>
+            <!-- <div class="no-data-card">لا توجد بيانات خصومات للشهر الثاني</div> -->
+          </ng-template>
+
+          <ng-container *ngIf="employeeComparisonState.details2.bonuses.length > 0; else noBonuses2">
+            <p-table
+              [value]="employeeComparisonState.details2.bonuses"
+              styleClass="p-datatable-sm p-datatable-gridlines mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>نوع البونص</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.reason ?? '—' }}</td>
+                  <td>{{ item.amount | number:'1.0-0' }}</td>
+                  <td>{{ formatDateDisplay(item.dateOfBonus) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noBonuses2>
+            <!-- <div class="no-data-card">لا توجد بيانات بونص للشهر الثاني</div> -->
+          </ng-template>
+
+          <ng-container *ngIf="employeeComparisonState.details2.cashBorrows.length > 0; else noBorrows2">
+            <p-table
+              [value]="employeeComparisonState.details2.cashBorrows"
+              styleClass="p-datatable-sm p-datatable-gridlines mt-4"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>نوع السلفة</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-item>
+                <tr>
+                  <td>{{ item.reason ?? '—' }}</td>
+                  <td>{{ item.amount | number:'1.0-0' }}</td>
+                  <td>{{ formatDateDisplay(item.dateOfBorrow) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noBorrows2>
+            <!-- <div class="no-data-card">لا توجد بيانات سلف للشهر الثاني</div> -->
+          </ng-template>
+        </div>
+      </div>
+    </ng-container>
+  </section>
+</div>

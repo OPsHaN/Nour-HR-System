@@ -1,11 +1,11 @@
 import {
-  Ripple,
-  RippleModule
-} from "./chunk-Z2H2MVGK.js";
-import {
   ChevronLeftIcon,
   ChevronRightIcon
 } from "./chunk-6OHEX6VO.js";
+import {
+  Ripple,
+  RippleModule
+} from "./chunk-Z2H2MVGK.js";
 import {
   BaseComponent,
   PARENT_INSTANCE
@@ -100,8 +100,8 @@ import {
   ɵɵtemplateRefExtractor,
   ɵɵviewQuery
 } from "./chunk-7TLMVOLW.js";
-import "./chunk-5UG2FXJ4.js";
 import "./chunk-EKEPJHDJ.js";
+import "./chunk-5UG2FXJ4.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
 import "./chunk-3OV72XIM.js";

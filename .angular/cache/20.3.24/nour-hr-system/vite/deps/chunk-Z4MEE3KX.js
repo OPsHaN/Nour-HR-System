@@ -7,6 +7,14 @@ import {
   DomHandler
 } from "./chunk-Z4GVF5BI.js";
 import {
+  animate,
+  animation,
+  style,
+  transition,
+  trigger,
+  useAnimation
+} from "./chunk-42VGZS34.js";
+import {
   BaseComponent,
   PARENT_INSTANCE
 } from "./chunk-MDU26JFA.js";
@@ -28,14 +36,6 @@ import {
   bt,
   j
 } from "./chunk-TIK557PQ.js";
-import {
-  animate,
-  animation,
-  style,
-  transition,
-  trigger,
-  useAnimation
-} from "./chunk-42VGZS34.js";
 import {
   CommonModule,
   NgIf,
@@ -1096,4 +1096,4 @@ var OverlayModule = class _OverlayModule {
 export {
   Overlay
 };
-//# sourceMappingURL=chunk-XHCYKWDJ.js.map
+//# sourceMappingURL=chunk-Z4MEE3KX.js.map

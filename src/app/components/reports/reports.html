@@ -7,7 +7,7 @@
       <p-tab [value]="0" *ngIf="!isAccountant">الشيفتات</p-tab>
       <p-tab [value]="1" *ngIf="!isAccountant">المتأخرون / المفتوحة</p-tab>
       <p-tab [value]="2" *ngIf="!isAccountant">الغيابات</p-tab>
-      <p-tab [value]="3" *ngIf="isControl">كشف الرواتب</p-tab>
+      <p-tab [value]="3" *ngIf="!isAccountant">كشف الرواتب</p-tab>
       <p-tab [value]="4" *ngIf="isAccountant || isCEO">الرواتب الشهرية</p-tab>
       <p-tab [value]="5" *ngIf="isAccountant || isCEO">رواتب الفرع</p-tab>
     </p-tablist>
@@ -484,7 +484,7 @@
           </div>
 
           <!-- Discounts Table -->
-          <div class="payroll-section" *ngIf="payrollDetails.discounts?.length">
+          <div class="payroll-section" *ngIf="payrollDetails.discounts.length">
             <h4 class="section-title">الخصومات</h4>
             <p-table
               [value]="payrollDetails.discounts"
@@ -514,7 +514,7 @@
           <!-- Contract Discounts Table -->
           <div
             class="payroll-section"
-            *ngIf="payrollDetails.contractDiscounts?.length"
+            *ngIf="payrollDetails.contractDiscounts.length"
           >
             <h4 class="section-title">خصومات العقد</h4>
             <p-table
@@ -543,7 +543,7 @@
           </div>
 
           <!-- Bonuses Table -->
-          <div class="payroll-section" *ngIf="payrollDetails.bonuses?.length">
+          <div class="payroll-section" *ngIf="payrollDetails.bonuses.length">
             <h4 class="section-title">البونص</h4>
             <p-table
               [value]="payrollDetails.bonuses"
@@ -573,7 +573,7 @@
           <!-- Cash Borrows Table -->
           <div
             class="payroll-section"
-            *ngIf="payrollDetails.cashBorrows?.length"
+            *ngIf="payrollDetails.cashBorrows.length"
           >
             <h4 class="section-title">السلف</h4>
             <p-table
@@ -605,7 +605,7 @@
 
           <!-- Empty payroll state -->
           <p-message
-            *ngIf="!payrollDetails.discounts?.length && !payrollDetails.bonuses?.length && !payrollDetails.cashBorrows?.length"
+            *ngIf="!payrollDetails.discounts.length && !payrollDetails.bonuses.length && !payrollDetails.cashBorrows.length"
             severity="info"
             text="لا توجد حركات مالية لهذا الشهر"
             styleClass="w-full"
@@ -837,21 +837,21 @@
           <div class="stats-grid" style="margin-bottom: 1.5rem">
             <div class="stat-card">
               <span class="stat-value"
-                >{{ branchTotalSalary | number:'1.0-0' }}</span
+                >{{ branchTotalSalary | number:'1.0-0' }} ج.م</span
               >
-              <span class="stat-label">إجمالي الرواتب (ج.م)</span>
+              <span class="stat-label">إجمالي الرواتب</span>
             </div>
             <div class="stat-card">
               <span class="stat-value danger"
-                >{{ branchTotalDiscountsOnly | number:'1.0-0' }}</span
+                >{{ branchTotalDiscountsOnly | number:'1.0-0' }} ج.م</span
               >
-              <span class="stat-label">إجمالي الخصومات (ج.م)</span>
+              <span class="stat-label">إجمالي الخصومات</span>
             </div>
             <div class="stat-card">
               <span class="stat-value success"
-                >{{ branchTotalBonuses | number:'1.0-0' }}</span
+                >{{ branchTotalBonuses | number:'1.0-0' }} ج.م</span
               >
-              <span class="stat-label">إجمالي البونص (ج.م)</span>
+              <span class="stat-label">إجمالي البونص</span>
             </div>
             <div class="stat-card">
               <span class="stat-value warning"
@@ -959,12 +959,6 @@
           </p-table>
         </ng-container>
 
-        <p-message
-          *ngIf="!branchPayrollData.length && !loadingBranchPayroll"
-          severity="info"
-          text="اختر الفرع والشهر ثم اضغط تطبيق"
-          styleClass="w-full"
-        />
 
         <div class="spinner-wrap" *ngIf="loadingBranchPayroll">
           <p-progressSpinner styleClass="w-4rem h-4rem" />

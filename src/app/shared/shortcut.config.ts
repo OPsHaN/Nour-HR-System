@@ -131,12 +131,15 @@ export const SHORTCUTS_CONFIG = {
     roles: [] as UserRole[],
     size: { width: 980, height: 620 },
   },
-  news: {
-    title: "النشرة الإخبارية",
-    icon: "campaign",
-    bg: "#f59e0b",
-    roles: [] as UserRole[],
-    size: { width: 650, height: 230 },
+  statistics: {
+    title: "الإحصائيات",
+    icon: "insights",
+    bg: "#13c2c2",
+    roles: [
+      "HR",
+      "Accountant",
+    ] as UserRole[],
+    size: { width: 800, height: 230 },
   },
   newsdetails: {
     title: "تفاصيل الإعلان",
