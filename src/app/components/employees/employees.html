@@ -1036,9 +1036,10 @@
               </div>
               <div class="detail-item">
                 <label>إجمالى السف المرحلة</label
-                ><span>{{ employeeDetails.totalInstallmentBorrow }} جنية</span>
+                ><span>{{ employeeDetails.totalInstallmentBorrow || '0' }} جنية</span>
               </div>
-              <div class="detail-item">
+            </div>
+                <div class="net-salary">
                 <label class="fs-5 text-center">صافى المرتب</label>
                 <span
                   class="fs-6 text-center"
@@ -1048,7 +1049,6 @@
                   {{ employeeDetails.netSalary | number:'1.0-2' }} جنية
                 </span>
               </div>
-            </div>
           </div>
           <!-- Edit Payroll (isEditMode only) -->
           <div class="section-block mt-3" *ngIf="isEditMode">

@@ -98,7 +98,7 @@ export interface MonthlyPayrollRecord {
   totalContractDiscount: number;
   totalBouns: number;
   totalBorrows: number;
-  totalInstallmentBorrow: number;
+  totalInstallmentsBorrow: number;
   totalCashBorrows: number;
   netSalary: number;
   bankName?: string;
@@ -998,7 +998,7 @@ export class Reports implements OnInit {
             "خصومات التعاقدات": x.totalContractDiscount ?? 0,
             البونص: x.totalBouns ?? 0,
             السلف: x.totalBorrows ?? 0,
-            "السلف المرحلة": x.totalInstallmentBorrow ?? 0,
+            "السلف المرحلة": x.totalInstallmentsBorrow ?? 0,
             "السلف النقدية": x.totalCashBorrows ?? 0,
             "صافي الراتب": x.netSalary ?? 0,
             البنك: x.bankName ?? "—",
@@ -1064,7 +1064,7 @@ export class Reports implements OnInit {
             "خصومات التعاقدات": x.totalContractDiscount ?? 0,
             البونص: x.totalBouns ?? 0,
             السلف: x.totalBorrows ?? 0,
-            "السلف المرحلة": x.totalInstallmentBorrow ?? 0,
+            "السلف المرحلة": x.totalInstallmentsBorrow ?? 0,
             "السلف النقدية": x.totalCashBorrows ?? 0,
             "صافي الراتب": x.netSalary ?? 0,
             البنك: x.bankName ?? "—",

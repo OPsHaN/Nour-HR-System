@@ -36,4 +36,5 @@ export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   logs:Logs,
   mydetails:MyDetails,
   ads:Ads,
+  news:News
 };

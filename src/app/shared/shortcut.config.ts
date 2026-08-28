@@ -152,8 +152,8 @@ export const SHORTCUTS_CONFIG = {
     roles: ["Admin"] as UserRole[],
     size: { width: 1000, height: 700 },
   },
-  ads: {
-    title: "الإعلانات",
+  news: {
+    title: "آخر الاخبار",
     icon: "campaign",
     bg: "#f59e0b",
     roles: [
@@ -166,7 +166,7 @@ export const SHORTCUTS_CONFIG = {
       "CEO",
     ] as UserRole[],
     startup: true,
-    size: { width: 650, height: 300 },
+    size: { width: 600, height: 200 },
   },
 } satisfies Record<string, ShortcutConfig>;
 

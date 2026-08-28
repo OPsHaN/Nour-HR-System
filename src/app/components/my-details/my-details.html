@@ -421,18 +421,21 @@
               </div>
               <div class="detail-item">
                 <label>إجمالى السف المرحلة</label
-                ><span>{{ employeeDetails.totalInstallmentBorrow }} جنية</span>
-              </div>
-              <div class="detail-item">
-                <label class="fs-5 text-center">صافى المرتب</label>
-                <span
-                  class="fs-6 text-center"
-                  [class.text-danger]="employeeDetails.netSalary < 0"
-                  [class.text-success]="employeeDetails.netSalary >= 0"
+                ><span
+                  >{{ employeeDetails.totalInstallmentBorrow || '0' }}
+                  جنية</span
                 >
-                  {{ employeeDetails.netSalary | number:'1.0-2' }} جنية
-                </span>
               </div>
+            </div>
+            <div class="net-salary">
+              <label class="fs-5 text-center">صافى المرتب</label>
+              <span
+                class="fs-6 text-center"
+                [class.text-danger]="employeeDetails.netSalary < 0"
+                [class.text-success]="employeeDetails.netSalary >= 0"
+              >
+                {{ employeeDetails.netSalary | number:'1.0-2' }} جنية
+              </span>
             </div>
           </div>
         </p-tabpanel>
@@ -505,7 +508,7 @@
             [rows]="10"
             [rowsPerPageOptions]="[5, 10, 20]"
             [showCurrentPageReport]="true"
-            >
+          >
             <ng-template pTemplate="header">
               <tr>
                 <th>تاريخ البدء</th>

@@ -81,7 +81,7 @@ input {
 
 .p-paginator {
   padding: 3px !important;
-    font-size: 20px;
+  font-size: 20px;
 
 }
 
@@ -91,7 +91,7 @@ input {
 }
 
 .p-paginator .p-select {
-    border-radius: 50px;
+  border-radius: 50px;
 }
 
 .p-paginator-rpp-dropdown .p-select-label {
@@ -174,7 +174,7 @@ input {
   background: var(--surface-strong);
 }
 
-.p-tag  {
+.p-tag {
   font-size: 18px !important;
 }
 
@@ -880,7 +880,7 @@ input {
 
 
 .p-inputtext {
-    font-size: 20px !important;
+  font-size: 20px !important;
 
 }
 
@@ -930,4 +930,15 @@ input {
 
 .p-tablist-tab-list {
   gap: 3px !important;
+}
+
+.net-salary {
+  display: flex;
+  margin: .5rem auto;
+  width: 20%;
+  flex-direction: column;
+  padding: 0.3rem;
+  border-radius: 10px;
+  background: var(--surface-strong);
+  border: 0.1rem solid var(--surface-border);
 }

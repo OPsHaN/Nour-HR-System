@@ -84,24 +84,5 @@ export class News {
     });
   }
 
-openAllNews() {
 
-  this.newsService
-      .getNews(this.currentPage, this.pageSize)
-    .subscribe((res: any) => {
-
-      this.newsList = res.data;
-
-      this.newsWindow.openNews({
-        type: 'all-news',
-        news: this.newsList
-      });
-
-      window.dispatchEvent(
-        new CustomEvent('open-news-window')
-      );
-
-    });
-
-}
 }
