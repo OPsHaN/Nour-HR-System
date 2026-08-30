@@ -177,12 +177,12 @@ actionYear: number = new Date().getFullYear();
     },
 
     {
-      label: "إضافة سلفة نقدية",
+      label: "إضافة سلفة",
       icon: "pi pi-money-bill",
       command: () => {
         this.openActionDialog(
           "cashBorrow",
-          "إضافة سلفة نقدية",
+          "إضافة سلفة",
           this.selectedEmployee,
         );
       },
