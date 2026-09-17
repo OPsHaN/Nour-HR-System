@@ -691,6 +691,7 @@ input {
 .p-confirmdialog-message {
   color: var(--text) !important;
   line-height: 1.8;
+  font-size: 1rem;
 }
 
 /* footer */
@@ -703,6 +704,8 @@ input {
 /* buttons */
 .p-confirmdialog .p-button {
   border-radius: 16px !important;
+      padding: 5px 30px;
+    width: 60px;
 }
 
 /* cancel button */
