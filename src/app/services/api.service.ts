@@ -494,7 +494,7 @@ getAbsentEmployees(
   }
 
   approveForgetedHoursRequest(id: string, data: any) {
-    return this.http.put(`${this.baseUrl}forgeted-hours/${id}/approve`, data);
+    return this.http.put(`${this.baseUrl}forgeted-hours/${id}/approve-reject`, data);
   }
 
   rejectForgetedHoursRequest(requestId: string, data: any) {
