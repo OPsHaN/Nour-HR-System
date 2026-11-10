@@ -37,7 +37,7 @@ export class BiometricDevices implements OnInit {
     private readonly formBuilder: FormBuilder,
   ) {
     this.form = this.formBuilder.nonNullable.group({
-      apiKey: ["", [Validators.required, Validators.pattern(/\S/)]],
+      apiKey: ["", [Validators.required ]],
     });
   }
 
