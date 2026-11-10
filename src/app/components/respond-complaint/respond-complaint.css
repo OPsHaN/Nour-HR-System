@@ -1,19 +1,19 @@
-::ng-deep.data-employee-dialog .p-dialog {
+::ng-deep.respond-complaint-dialog .p-dialog {
   height: auto !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog-header {
+::ng-deep.respond-complaint-dialog .p-dialog-header {
   flex-direction: unset !important;
   padding: 0.2rem 1rem !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog-content {
+::ng-deep.respond-complaint-dialog .p-dialog-content {
   padding: 0.5rem 0.5rem !important;
   border-radius: 0 0 0.0rem 0.0rem !important;
   height: 65%
 }
 
-::ng-deep.data-employee-dialog .p-dialog-footer {
+::ng-deep.respond-complaint-dialog .p-dialog-footer {
   flex-direction: unset !important;
   padding: 0.2rem 0.2rem !important;
   border-radius: 0 0 0.5rem 0.5rem !important;

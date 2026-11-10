@@ -522,6 +522,7 @@ input {
   outline: none;
   font-size: 20px;
   transition: 0.2s ease;
+  direction: rtl ;
 }
 
 /* focus زي modern glass UI */
@@ -542,6 +543,7 @@ input {
   font-weight: 500;
   cursor: pointer;
   transition: 0.2s ease;
+  width: 100px;
 }
 
 .form button:hover {

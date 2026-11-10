@@ -7,27 +7,27 @@
   padding: 5px 0;
 }
 
-::ng-deep.end-service-dialog .p-dialog-header {
+::ng-deep.employees-action-dialog .p-dialog-header {
   flex-direction: unset !important;
   padding: 0.2rem 1rem !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog {
+::ng-deep.employees-data-dialog .p-dialog {
   height: 100vh !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog-header {
+::ng-deep.employees-data-dialog .p-dialog-header {
   flex-direction: unset !important;
   padding: 0.2rem 1rem !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog-content {
+::ng-deep.employees-data-dialog .p-dialog-content {
   padding: 0.5rem 0.5rem !important;
   border-radius: 0 0 0.0rem 0.0rem !important;
   height: 100%
 }
 
-::ng-deep.data-employee-dialog .p-dialog-footer {
+::ng-deep.employees-data-dialog .p-dialog-footer {
   flex-direction: unset !important;
   padding: 0.2rem 0.2rem !important;
   border-radius: 0 0 0.5rem 0.5rem !important;
@@ -72,13 +72,6 @@
 }
 
 
-::ng-deep.end-service-content .p-dialog-content {
-  display: grid;
-  gap: 5px;
-  padding-top: 10px;
-  padding: 5px;
-}
-
 /* fields */
 .end-service-content .field {
   display: flex;
@@ -120,17 +113,17 @@
   color: var(--text);
 }
 
-::ng-deep.schedule-dialog .p-dialog-header {
+::ng-deep.employees-schedule-dialog .p-dialog-header {
   flex-direction: unset !important;
   padding: 0.3rem 0.3rem !important;
 }
 
-::ng-deep.schedule-dialog .p-dialog-content {
+::ng-deep.employees-schedule-dialog .p-dialog-content {
   padding: 0.5rem !important;
 }
 
 
-::ng-deep .custom .p-inputtext {
+:host ::ng-deep .custom .p-inputtext {
   padding: 5px 5px !important;
 }
 

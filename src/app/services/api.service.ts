@@ -2,6 +2,15 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MessageService } from "primeng/api";
 
+export interface BiometricDevice {
+  id: number;
+  apiKey: string;
+}
+
+export interface AddBiometricDeviceRequest {
+  apiKey: string;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -48,8 +57,8 @@ export class Apiservice {
     return this.http.put(`${this.baseUrl}employees/${id}`, employeeData);
   }
 
-  deleteEmpyee(employeeid:number){
-    return this.http.delete(`${this.baseUrl}employees/${employeeid}`)
+  deleteEmpyee(employeeid: number) {
+    return this.http.delete(`${this.baseUrl}employees/${employeeid}`);
   }
 
   getEmployeeById(id: string) {
@@ -333,55 +342,55 @@ export class Apiservice {
 
   //reports//
 
-getAllShifts(
-  fromDate: string,
-  toDate?: string,
-  page?: number,
-  pageSize?: number,
-  employeeId?: number,
-  branchId?: string
-) {
-  const endDate = toDate ?? fromDate;
-  let url = `${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}&toDate=${endDate}&page=${page}&pageSize=${pageSize}`;
-  
-  if (employeeId) url += `&employeeId=${employeeId}`;
-  if (branchId) url += `&branchId=${branchId}`;
-
-  return this.http.get(url);
-}
-
-getAllOpenAndLateShifts(
+  getAllShifts(
     fromDate: string,
-  toDate: string,
-  type: string,
-  page: number,
-  pageSize: number,
-  employeeId?: number,
-  branchId?: string,
-) {
-  let url = `${this.baseUrl}attendance/reports?fromDate=${fromDate}&toDate=${toDate}&type=${type}&page=${page}&pageSize=${pageSize}`;
+    toDate?: string,
+    page?: number,
+    pageSize?: number,
+    employeeId?: number,
+    branchId?: string,
+  ) {
+    const endDate = toDate ?? fromDate;
+    let url = `${this.baseUrl}attendance/reports?type=all&fromDate=${fromDate}&toDate=${endDate}&page=${page}&pageSize=${pageSize}`;
 
-  if (employeeId) url += `&employeeId=${employeeId}`;
-  if (branchId) url += `&branchId=${branchId}`;
+    if (employeeId) url += `&employeeId=${employeeId}`;
+    if (branchId) url += `&branchId=${branchId}`;
 
-  return this.http.get(url);
-}
+    return this.http.get(url);
+  }
 
-getAbsentEmployees(
-  fromDate: string,
-  toDate: string,
-  page: number = 1,
-  pageSize: number = 10,
-  employeeId?: number,
-  branchId?: string,
-) {
-  let url = `${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}&page=${page}&pageSize=${pageSize}`;
-  
-  if (employeeId) url += `&employeeId=${employeeId}`;
-  if (branchId) url += `&branchId=${branchId}`;
+  getAllOpenAndLateShifts(
+    fromDate: string,
+    toDate: string,
+    type: string,
+    page: number,
+    pageSize: number,
+    employeeId?: number,
+    branchId?: string,
+  ) {
+    let url = `${this.baseUrl}attendance/reports?fromDate=${fromDate}&toDate=${toDate}&type=${type}&page=${page}&pageSize=${pageSize}`;
 
-  return this.http.get(url);
-}
+    if (employeeId) url += `&employeeId=${employeeId}`;
+    if (branchId) url += `&branchId=${branchId}`;
+
+    return this.http.get(url);
+  }
+
+  getAbsentEmployees(
+    fromDate: string,
+    toDate: string,
+    page: number = 1,
+    pageSize: number = 10,
+    employeeId?: number,
+    branchId?: string,
+  ) {
+    let url = `${this.baseUrl}attendance/reports/absent?fromDate=${fromDate}&toDate=${toDate}&page=${page}&pageSize=${pageSize}`;
+
+    if (employeeId) url += `&employeeId=${employeeId}`;
+    if (branchId) url += `&branchId=${branchId}`;
+
+    return this.http.get(url);
+  }
 
   startShift() {
     return this.http.post(`${this.baseUrl}attendance/start`, {});
@@ -442,11 +451,19 @@ getAbsentEmployees(
   }
 
   getAllComplaints(page: number = 1, pageSize: number = 10) {
-    return this.http.get(`${this.baseUrl}complaints?page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}complaints?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
-  getAllComplaintsForUser(employeeId: string, page: number = 1, pageSize: number = 10) {
-    return this.http.get(`${this.baseUrl}complaints?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`);
+  getAllComplaintsForUser(
+    employeeId: string,
+    page: number = 1,
+    pageSize: number = 10,
+  ) {
+    return this.http.get(
+      `${this.baseUrl}complaints?employeeId=${employeeId}&page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   respondToComplaint(complaintId: string, respond: any) {
@@ -471,7 +488,11 @@ getAbsentEmployees(
 
   //forgeted-hours-requests//
 
-  getForgetedHoursRequests(page: number, pageSize: number, isSeenByHR?: boolean) {
+  getForgetedHoursRequests(
+    page: number,
+    pageSize: number,
+    isSeenByHR?: boolean,
+  ) {
     let url = `${this.baseUrl}forgeted-hours?page=${page}&pageSize=${pageSize}`;
     if (typeof isSeenByHR !== "undefined") {
       url += `&isSeenByHR=${isSeenByHR}`;
@@ -494,7 +515,10 @@ getAbsentEmployees(
   }
 
   approveForgetedHoursRequest(id: string, data: any) {
-    return this.http.put(`${this.baseUrl}forgeted-hours/${id}/approve-reject`, data);
+    return this.http.put(
+      `${this.baseUrl}forgeted-hours/${id}/approve-reject`,
+      data,
+    );
   }
 
   rejectForgetedHoursRequest(requestId: string, data: any) {
@@ -752,7 +776,9 @@ getAbsentEmployees(
   //logs//
 
   getAllLogs(page: number, pageSize: number) {
-    return this.http.get(`${this.baseUrl}audit?page=${page}&pageSize=${pageSize}`);
+    return this.http.get(
+      `${this.baseUrl}audit?page=${page}&pageSize=${pageSize}`,
+    );
   }
 
   //areamanagers//
@@ -771,6 +797,27 @@ getAbsentEmployees(
   deleteBracnhesAreaManagers(uuid: string, banchId: number) {
     return this.http.delete(
       `${this.baseUrl}auth/users/${uuid}/branches/${banchId}`,
+    );
+  }
+
+  //biometric devices//
+
+  getAllBiometricDevices() {
+    return this.http.get<BiometricDevice[]>(
+      `${this.baseUrl}attendance/device-api-keys`,
+    );
+  }
+
+  addBiometricDevice(apiKey: string) {
+    return this.http.post<{ message: string }>(
+      `${this.baseUrl}attendance/device-api-keys`,
+      { apiKey },
+    );
+  }
+
+  deleteBiometricDevice(id: number) {
+    return this.http.delete<{ message: string }>(
+      `${this.baseUrl}attendance/device-api-keys/${id}`,
     );
   }
 

@@ -124,7 +124,7 @@ export const SHORTCUTS_CONFIG = {
   website: {
     title: "أوبشن لتطوير البرمجيات",
     icon: "language",
-    bg: "#1677ff",
+    bg: "#ffd016",
     roles: [] as UserRole[],
     size: { width: 980, height: 620 },
   },
@@ -167,6 +167,15 @@ export const SHORTCUTS_CONFIG = {
     ] as UserRole[],
     startup: true,
     size: { width: 600, height: 200 },
+  },
+  devices: {
+    title: "أجهزة البصمة",
+    icon: "fingerprint",
+    bg: "#239923",
+    roles: [
+      "Admin",
+    ] as UserRole[],
+    size: { width: 1000, height: 700 },
   },
 } satisfies Record<string, ShortcutConfig>;
 

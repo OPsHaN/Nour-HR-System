@@ -1,6 +1,6 @@
 import {
   Button
-} from "./chunk-CZYGE2KE.js";
+} from "./chunk-LK3VC4CF.js";
 import {
   zindexutils
 } from "./chunk-PSJOJ324.js";
@@ -15,20 +15,9 @@ import {
   WindowMinimizeIcon
 } from "./chunk-6OHEX6VO.js";
 import {
-  animate,
-  animation,
-  style,
-  transition,
-  trigger,
-  useAnimation
-} from "./chunk-42VGZS34.js";
-import {
   BaseComponent,
   PARENT_INSTANCE
 } from "./chunk-MDU26JFA.js";
-import {
-  Bind
-} from "./chunk-PTLVBNX5.js";
 import {
   BaseStyle
 } from "./chunk-YN36FFF2.js";
@@ -37,6 +26,9 @@ import {
   SharedModule,
   TranslationKeys
 } from "./chunk-5DMWIRBC.js";
+import {
+  Bind
+} from "./chunk-PTLVBNX5.js";
 import {
   C,
   Lt,
@@ -52,6 +44,14 @@ import {
   v,
   vt
 } from "./chunk-TIK557PQ.js";
+import {
+  animate,
+  animation,
+  style,
+  transition,
+  trigger,
+  useAnimation
+} from "./chunk-42VGZS34.js";
 import {
   CommonModule,
   NgClass,
@@ -2092,4 +2092,4 @@ export {
   Dialog,
   DialogModule
 };
-//# sourceMappingURL=chunk-V4UTUHV4.js.map
+//# sourceMappingURL=chunk-AWADK6D2.js.map

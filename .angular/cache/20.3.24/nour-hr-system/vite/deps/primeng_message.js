@@ -6,18 +6,9 @@ import {
   Ripple
 } from "./chunk-Z2H2MVGK.js";
 import {
-  animate,
-  style,
-  transition,
-  trigger
-} from "./chunk-42VGZS34.js";
-import {
   BaseComponent,
   PARENT_INSTANCE
 } from "./chunk-MDU26JFA.js";
-import {
-  Bind
-} from "./chunk-PTLVBNX5.js";
 import {
   BaseStyle
 } from "./chunk-YN36FFF2.js";
@@ -25,7 +16,16 @@ import {
   PrimeTemplate,
   SharedModule
 } from "./chunk-5DMWIRBC.js";
+import {
+  Bind
+} from "./chunk-PTLVBNX5.js";
 import "./chunk-TIK557PQ.js";
+import {
+  animate,
+  style,
+  transition,
+  trigger
+} from "./chunk-42VGZS34.js";
 import {
   CommonModule,
   NgClass,
@@ -87,8 +87,8 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate
 } from "./chunk-7TLMVOLW.js";
-import "./chunk-EKEPJHDJ.js";
 import "./chunk-5UG2FXJ4.js";
+import "./chunk-EKEPJHDJ.js";
 import "./chunk-RVQBJDFJ.js";
 import "./chunk-B276BPXK.js";
 import "./chunk-3OV72XIM.js";

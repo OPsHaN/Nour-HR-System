@@ -281,7 +281,7 @@
   [modal]="true"
   [style]="{ width: '650px' }"
   [draggable]="false"
-  styleClass="branches-dialog"
+  styleClass="users-branches-dialog"
   dir="rtl"
 >
   <div *ngIf="loadingBranches" class="text-center py-3">جاري التحميل...</div>
@@ -296,6 +296,7 @@
       optionValue="id"
       placeholder="اختر الفروع"
       display="chip"
+      panelStyleClass="users-branches-panel"
     ></p-multiSelect>
     <!-- 👇 عرض الفروع المختارة تحت -->
 

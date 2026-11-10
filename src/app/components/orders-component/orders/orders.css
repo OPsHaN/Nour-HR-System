@@ -4,6 +4,10 @@
   direction: rtl;
 }
 
+:host ::ng-deep .p-datatable-tbody > tr > td:has(button) {
+  white-space: nowrap;
+}
+
 /* ── Tabs badges ───────────────────────────────────────────────────────── */
 
 
@@ -147,27 +151,27 @@
   width: 100%;
 }
 
-::ng-deep.end-service-dialog .p-dialog-header {
+::ng-deep.orders-data-dialog .p-dialog-header {
   flex-direction: unset !important;
   padding: 0.2rem 1rem !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog {
+::ng-deep.orders-data-dialog .p-dialog {
   height: auto !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog-header {
+::ng-deep.orders-data-dialog .p-dialog-header {
   flex-direction: unset !important;
   padding: 0.2rem 1rem !important;
 }
 
-::ng-deep.data-employee-dialog .p-dialog-content {
+::ng-deep.orders-data-dialog .p-dialog-content {
   padding: 0.5rem 0.5rem !important;
   /* border-radius: 0 0 0.0rem 0.0rem !important; */
   height: 100%
 }
 
-::ng-deep.data-employee-dialog .p-dialog-footer {
+::ng-deep.orders-data-dialog .p-dialog-footer {
   flex-direction: unset !important;
   padding: 0.2rem 0.2rem !important;
   border-radius: 0 0 0.5rem 0.5rem !important;
@@ -176,10 +180,10 @@
   justify-content: center !important;
 }
 
-::ng-deep .p-tablist,
-.p-tablist-tab-list,
-.p-tabs,
-.p-ripple {
+:host ::ng-deep .p-tablist,
+:host ::ng-deep .p-tablist-tab-list,
+:host ::ng-deep .p-tabs,
+:host ::ng-deep .reports-page .p-ripple {
   overflow: visible !important;
   position: relative !important;
 }

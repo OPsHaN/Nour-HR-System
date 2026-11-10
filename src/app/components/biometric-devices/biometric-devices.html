@@ -1,0 +1,100 @@
+<div class="sticky-header">
+  <button
+    pButton
+    type="button"
+    class="btn btn-sm mx-1 my-1 d-flex align-items-center justify-content-center gap-2"
+    [class.btn-success]="!showAddForm"
+    [class.btn-danger]="showAddForm"
+    (click)="showAddForm = !showAddForm"
+  >
+    <i class="pi" [ngClass]="showAddForm ? 'pi-times' : 'pi-fingerprint'"></i>
+    {{ showAddForm ? "" : "جهاز جديد" }}
+  </button>
+</div>
+
+<form
+  *ngIf="showAddForm"
+  class="panel"
+  [formGroup]="form"
+  (ngSubmit)="addDevice()"
+>
+  <div class="form">
+    <div class="field">
+      <label for="device-api-key">
+        مفتاح الجهاز
+        <span class="required text-danger">*</span>
+      </label>
+      <input
+        id="device-api-key"
+        type="text"
+        formControlName="apiKey"
+        placeholder="أدخل مفتاح جهاز البصمة"
+        autocomplete="off"
+        dir="ltr"
+      />
+      <small
+        *ngIf="form.controls.apiKey.touched && form.controls.apiKey.invalid"
+        class="text-danger"
+      >
+        أدخل مفتاح جهاز صحيحًا
+      </small>
+    </div>
+    <button
+      type="submit"
+      class="submit-btn full"
+      [disabled]="saving || form.invalid"
+    >
+      {{ saving ? "جارى الحفظ..." : "حفظ" }}
+    </button>
+  </div>
+</form>
+
+<p-table
+  *ngIf="!showAddForm"
+  [value]="devices"
+  [paginator]="true"
+  [rows]="pageSize"
+  [rowsPerPageOptions]="[5, 10, 20, 50]"
+  [loading]="loading"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
+  (onPage)="onPageChange($event)"
+  [responsiveLayout]="'scroll'"
+  [paginatorDropdownAppendTo]="'body'"
+  dataKey="id"
+  dir="rtl"
+  styleClass="p-datatable-sm p-datatable-gridlines"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>#</th>
+      <th>مفتاح الجهاز</th>
+      <th>الإجراءات</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-device let-ri="rowIndex">
+    <tr>
+      <td>{{ ri + 1 + (page - 1) * pageSize }}</td>
+      <td class="api-key">{{ device.apiKey }}</td>
+      <td>
+        <button
+          pButton
+          type="button"
+          class="btn btn-sm btn-danger mx-1 my-1 p-1 rounded-circle"
+          aria-label="حذف جهاز البصمة"
+          [disabled]="deletingDeviceId !== null"
+          (click)="confirmDelete(device)"
+        >
+          <i class="pi pi-trash d-flex align-items-center justify-content-center"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="3" class="text-center py-4">لا توجد أى بيانات</td>
+    </tr>
+  </ng-template>
+</p-table>

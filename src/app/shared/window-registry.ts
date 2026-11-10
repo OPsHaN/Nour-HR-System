@@ -17,6 +17,7 @@ import {Logs} from "../components/logs/logs";
 import { MyDetails } from "../components/my-details/my-details";
 import { Ads } from "../components/ads/ads";
 import { Statistics } from "../components/statistics/statistics";
+import { BiometricDevices } from "../components/biometric-devices/biometric-devices";
 
 export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   calendar: CalendarComponent,
@@ -36,5 +37,6 @@ export const WINDOW_REGISTRY: Record<string, Type<any>> = {
   logs:Logs,
   mydetails:MyDetails,
   ads:Ads,
-  news:News
+  news:News,
+  devices:BiometricDevices
 };

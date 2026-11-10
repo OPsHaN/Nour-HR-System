@@ -330,20 +330,32 @@ export class Desktop implements OnInit, OnDestroy {
     },
   ): void {
     const size = this.defaultSize(shortcut.action);
+    const initialRect = {
+      width: options?.width ?? size.width,
+      height: options?.height ?? size.height,
+      top: options?.top ?? 72 + this.windows.length * 24,
+      left: options?.left ?? 120 + this.windows.length * 32,
+    };
+    const autoMaximize = !options?.hideControls;
     const baseWindow: DesktopWindow = {
       id: this.nextId++,
       action: shortcut.action,
       component: this.registry[shortcut.action],
       title: shortcut.title,
       icon: shortcut.icon,
-      width: options?.width ?? size.width,
-      height: options?.height ?? size.height,
-      top: options?.top ?? 72 + this.windows.length * 24,
-      left: options?.left ?? 120 + this.windows.length * 32,
+      width: autoMaximize
+        ? Math.max(300, globalThis.innerWidth - 20)
+        : initialRect.width,
+      height: autoMaximize
+        ? Math.max(200, globalThis.innerHeight - 100)
+        : initialRect.height,
+      top: autoMaximize ? 9 : initialRect.top,
+      left: autoMaximize ? 10 : initialRect.left,
       minimized: false,
-      maximized: false,
+      maximized: autoMaximize,
       active: options?.active ?? true,
       hideControls: options?.hideControls ?? false,
+      previousRect: autoMaximize ? initialRect : undefined,
     };
 
     this.windows = this.windows.map((w) => ({ ...w, active: false }));
@@ -448,8 +460,8 @@ export class Desktop implements OnInit, OnDestroy {
         },
         top: 9,
         left: 10,
-        width: Math.max(w.width, globalThis.innerWidth - 20),
-        height: globalThis.innerHeight - 100,
+        width: Math.max(300, globalThis.innerWidth - 20),
+        height: Math.max(200, globalThis.innerHeight - 100),
         maximized: true,
         active: true,
         minimized: false,

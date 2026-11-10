@@ -294,7 +294,7 @@
 
       <div class="payroll-compare-grid">
         <div class="payroll-column border border-3 rounded p-2">
-          <h4>شهر {{ employeeComparisonState.month1.label }}</h4>
+          <h6>شهر {{ employeeComparisonState.month1.label }}</h6>
           <ng-container *ngIf="employeeComparisonState.details1.discounts.length > 0; else noDiscounts1">
             <p-table
               [value]="employeeComparisonState.details1.discounts"
@@ -372,7 +372,7 @@
         </div>
 
         <div class="payroll-column border border-3 rounded p-2 mt-2">
-          <h4>شهر {{ employeeComparisonState.month2.label }}</h4>
+          <h6>شهر {{ employeeComparisonState.month2.label }}</h6>
           <ng-container *ngIf="employeeComparisonState.details2.discounts.length > 0; else noDiscounts2">
             <p-table
               [value]="employeeComparisonState.details2.discounts"

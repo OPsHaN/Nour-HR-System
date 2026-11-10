@@ -348,7 +348,7 @@
   [(visible)]="showEndServiceDialog"
   [modal]="true"
   [draggable]="false"
-  class="end-service-dialog"
+  class="employees-action-dialog"
   [style]="{ width: '24rem' }"
 >
   <div class="end-service-content">
@@ -403,7 +403,7 @@
   [modal]="true"
   [draggable]="false"
   [style]="{ width: '100rem', 'max-height': '100%'}"
-  class="data-employee-dialog"
+  class="employees-data-dialog"
 >
   <div *ngIf="employeeDetails">
     <p-tabs [(value)]="activeTabIndex">
@@ -1289,7 +1289,7 @@
   [modal]="true"
   [draggable]="false"
   [style]="{ width: '40rem' }"
-  class="schedule-dialog"
+  class="employees-schedule-dialog"
 >
   <button
     pButton
@@ -1447,7 +1447,7 @@
   [(visible)]="actionDialogVisible"
   [modal]="true"
   [draggable]="false"
-  class="end-service-dialog"
+  class="employees-action-dialog"
   [style]="{
   width: currentActionType === 'evaluation'
     ? '35rem'
@@ -1857,7 +1857,7 @@
   [modal]="true"
   [draggable]="false"
   [style]="{ width: groupSubType === 'days' ? '55rem' : '35rem' }"
-  class="data-employee-dialog"
+  class="employees-data-dialog"
 >
   <div class="group-grid">
     <!-- الموظفين المختارين -->
