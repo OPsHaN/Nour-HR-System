@@ -30,7 +30,15 @@
   </div>
 
   <div class="taskbar__tray">
-
+    <button
+      type="button"
+      class="fullscreen-btn"
+      (click)="toggleFullscreen()"
+      [attr.aria-label]="isFullscreen ? 'الخروج من وضع ملء الشاشة' : 'ملء الشاشة'"
+      [attr.title]="isFullscreen ? 'الخروج من وضع ملء الشاشة' : 'ملء الشاشة'"
+    >
+      <i [class]="isFullscreen ? 'bi bi-fullscreen-exit' : 'bi bi-arrows-fullscreen'"></i>
+    </button>
     <label class="w11-toggle">
       <input
         type="checkbox"

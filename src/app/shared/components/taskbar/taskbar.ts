@@ -9,6 +9,7 @@ import {
   OnChanges,
   SimpleChanges,
   ChangeDetectorRef,
+  HostListener,
 } from "@angular/core";
 import { DesktopWindow } from "../../desktop-window.model";
 import { MessageService } from "primeng/api";
@@ -34,6 +35,7 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
   protected timeLabel = "";
   protected dateLabel = "";
   protected readonly locale = "ar-SA";
+  protected isFullscreen = false;
 
   protected themeToggle = false;
 
@@ -59,6 +61,24 @@ export class TaskbarComponent implements OnInit, OnDestroy, OnChanges {
     if (changes["isDark"]) {
       this.themeToggle = this.isDark;
     }
+  }
+
+  protected async toggleFullscreen(): Promise<void> {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch (error) {
+      console.error("Could not toggle fullscreen mode.", error);
+      this.showError("تعذر تغيير وضع ملء الشاشة");
+    }
+  }
+
+  @HostListener("document:fullscreenchange")
+  protected onFullscreenChange(): void {
+    this.isFullscreen = Boolean(document.fullscreenElement);
   }
 
   ngOnDestroy(): void {
